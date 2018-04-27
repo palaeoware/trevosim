@@ -1,2 +1,12 @@
-# trevosim
-TREvoSim - The [Tr]ee [Evo]lutionary [Sim]ulator program
+
+TREvoSim
+=======
+**[Tr]ee [Evo]lutionary [Sim]ulator program**
+ 
+Coded by:
+ - Russell Garwood (russell.garwood@manchester.ac.uk)
+
+
+======
+
+Coming soon....
