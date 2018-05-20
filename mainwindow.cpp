@@ -98,7 +98,7 @@ MainWindow::MainWindow(QWidget *parent) :
     startButton = new QAction(QIcon(QPixmap(":/darkstyle/icon_play_button_green.png")), QString("Run"), this);
     pauseButton = new QAction(QIcon(QPixmap(":/darkstyle/icon_pause_button_orange.png")), QString("Pause"), this);
     resetButton = new QAction(QIcon(QPixmap(":/darkstyle/icon_reset_button_red.png")), QString("Reset"), this);
-    runForButton = new QAction(QIcon(QPixmap(":/darkstyle/icon_play_n_button_green.png")), QString("Run For..."), this);
+    runForButton = new QAction(QIcon(QPixmap(":/darkstyle/icon_play_n_button_green.png")), QString("Batch..."), this);
     settingsButton = new QAction(QIcon(QPixmap(":/darkstyle/icon_settings_2_button.png")), QString("Settings"), this);
     logButton = new QAction(QIcon(QPixmap(":/darkstyle/icon_log_button.png")), QString("Output"), this);
 
