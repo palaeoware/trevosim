@@ -8,28 +8,14 @@ randoms *simulation_randoms;
 
 /*********** To do
  *
- * -- Parallellise fitness - if required for speed down line
- *
- * -- Then I'll implement multiple playing fields - at first two, but I'll try and code this so it is expandable if we so wish
- * -- The playing fields will have three options for their masks, namely 1) they have separate masks 2) they have the same masks at the start but they evolve separately and 3) they have the same masks
- * -- I'll add an option which, with multiple playing fields will allow a set probability of overwriting an individual in playing field 1, with one from playing field 2 (which can be set to zero to prevent swapping)
- * -- I'll add an extinction option, which will involve swapping out the masks for playing fields one and two with randome replacements when the simulation hits 50% of the total requested species number (50% being ~hard coded). The duration of this swap, before returning to the original maks will be a user-definable as a percentage of the total time up to that point
- *
- * I'll make sure that it outputs for you:
- * -- A full matrix of all species that ever lived, and the true tree linking them
- * -- And a list of species alive at a given time every ~100 iterations for playing field 1
- *
- * --Update file save and load to include fitness target, multiple playing fields, etc.
- *
- * -- Add innaplicable data (one clumn defines whether the next is applicable or not).
- *
  *
  * -- TO REMOVE:
- * ----fitness and select size;
  * ----option for non-Sansomian speciation;
  * ----option for discarding deleterious mutations;
+ *
  * ----multiple environments.
  * ----multiple playing fields
+ * ----fitness and select size;
  * ----fitness target
  * ---- Keatonian
  * ---- Species curve
