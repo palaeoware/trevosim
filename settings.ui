@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>459</width>
+    <width>463</width>
     <height>453</height>
    </rect>
   </property>
@@ -34,12 +34,12 @@
     <rect>
      <x>9</x>
      <y>11</y>
-     <width>429</width>
+     <width>441</width>
      <height>391</height>
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="organism_tab">
     <attribute name="title">
