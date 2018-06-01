@@ -69,6 +69,7 @@ void Settings::s_genome_size_changed()
 {
 //Set sensible maxima on the fly
 ui->s_species_difference->setMaximum(ui->s_genome_size->value());
+ui->s_species_difference->setValue(ui->s_genome_size->value()/10);
 }
 
 void Settings::s_taxon_number_changed()
