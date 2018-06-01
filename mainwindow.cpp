@@ -416,7 +416,7 @@ void MainWindow::start_triggered()
          path->setText(program_path);
     }
     //RJG - Set up save directory
-    if(!save_path.mkpath(QString(PRODUCTNAME)+"_output")){QMessageBox::warning(this,"Error","Cant save images. Permissions issue?");return;}
+    if(!save_path.mkpath(QString(PRODUCTNAME)+"_output")){QMessageBox::warning(this,"Error","Cant save output files. Permissions issue?");return;}
     else save_path.cd(QString(PRODUCTNAME)+"_output");
 
     //To check all works as expected there is a work log that writes everything to a text file
@@ -1811,7 +1811,7 @@ void MainWindow::count_peaks()
 
        //RJG - Set up save directory
        QDir save_path(path->text());
-       if(!save_path.mkpath(QString(PRODUCTNAME)+"_output")){QMessageBox::warning(this,"Error","Cant save images. Permissions issue?");return;}
+       if(!save_path.mkpath(QString(PRODUCTNAME)+"_output")){QMessageBox::warning(this,"Error","Cant save output files. Permissions issue?");return;}
        else save_path.cd(QString(PRODUCTNAME)+"_output");
 
         QString peaks_filename = (QString(PRODUCTNAME)+"_peak_counting.txt");
