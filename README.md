@@ -1,6 +1,5 @@
 # TREvoSim
 ## **[Tr]ee [Evo]lutionary [Sim]ulator program**
-_____
  
 Coded by:
  - Russell Garwood (russell.garwood@gmail.com)
@@ -18,4 +17,5 @@ Coming soon....
 _____
 
 t:@palaeoware
+
 w:https://github.com/palaeoware
