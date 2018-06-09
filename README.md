@@ -1,5 +1,5 @@
 # TREvoSim
-## **[Tr]ee [Evo]lutionary [Sim]ulator program**
+## [Tr]ee [Evo]lutionary [Sim]ulator program
  
 Coded by:
  - Russell Garwood (russell.garwood@gmail.com)
