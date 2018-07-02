@@ -6,25 +6,18 @@
 MainWindow *MainWin;
 randoms *simulation_randoms;
 
-/*********** To do
+/***********
  *
+ * Thanks for checking out the TREvoSim source code. The software was written by Russell Garwood, athough it employs a GUI designed by Alan Spencer.
+ * Many of the underlying concepts are shared with REvoSim, which was coded by Mark Sutton, Alan Spencer and Russell Garwood.
  *
- * -- TO REMOVE:
- * ----option for non-Sansomian speciation;
- * ----option for discarding deleterious mutations;
+ * I hope the software is useful to you: if there are modifications you would like to suggest to use this in your work, please feel free to email me:
  *
- * ----multiple environments.
- * ----multiple playing fields
- * ----fitness and select size;
- * ----fitness target
- * ---- Keatonian
- * ---- Species curve
+ * russell.garwood@gmail.com
  *
- * To implement:
- * ----Set number of masks?
+ * and I'll happily look into these.
  *
- *
- * ******/
+ ***********/
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -550,7 +543,7 @@ void MainWindow::start_triggered()
         tnt_string="This isn't going to work, I'm afraid.";
         }
 
-    //In case someone has hit escape whilst not running loop
+    //In case user has hit escape whilst not running loop
     escape_pressed=false;
 
     /************* Start simulation *************/
@@ -609,23 +602,12 @@ void MainWindow::start_triggered()
                    work_out<<"\n";
               }
 
-             /******** Sort playing field by fitness *****/
-            //std::sort(playing_field.begin(),playing_field.end(),[](const organism* OL, const organism* OR){return OL->fitness<OR->fitness;});
-            //qSort(playing_field.begin(),playing_field.end());
-            //This has been removed, because sorting not strictly required - quicker option selected of going doing dice toss, then going down list, finding fittest, etc.
-            //If recycled needs to be updted to work with multiple playing fields.
-
-            //Do the iteration for both playing fields if there are two
-
-            //If we have enough species from speciation in playing field one, no need to run this all again (and causes a crash thanks to printing to screen)
-            if (species_count==taxon_number-1) break;
+             /******** Equivalent of sort playing field by fitness *****/
             //Move down the list and select one - make it likely it is near the top, so has good fitness (i.e. near level zero)
             //Currently 50% chance it'll choose the first, and so on, a la coin toss
             int marker=0;
 
-            //If other figures, may be worth doing maths using floats, a la: (int((float)MAX_RAND/3.)))marker++;
             while(simulation_randoms->gen_random()>(MAX_RAND/2))if(marker++ >=pfield_size)marker=0;
-             //while(simulation_randoms->gen_random()>(int((float)MAX_RAND/4.)))if(marker++ >=pfield_size)marker=0;
 
              //Do this by using marker to work out which nth value from fittest we want to select, then find where this is in playing field and assign to array
             QVector <bool> ignore_list;
