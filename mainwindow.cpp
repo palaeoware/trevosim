@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     version.sprintf("%d.%d.%d",MAJORVERSION,MINORVERSION,PATCHVERSION);
     setWindowTitle(QString(PRODUCTNAME)+" v"+version+" - compiled - "+__DATE__);
 
-    //Set global(ish) variables for simulation
+    //Set settings variables for simulation
     genome_size=128;
     taxon_number=32;
     pfield_size=12;
@@ -132,7 +132,6 @@ MainWindow::MainWindow(QWidget *parent) :
     aboutButton = new QAction(QIcon(QPixmap(":/darkstyle/icon_about_button.png")), QString("About"), this);
     ui->mainToolBar->addAction(aboutButton);
     QObject::connect(aboutButton, SIGNAL (triggered()), this, SLOT (about_triggered()));
-    //ui->mainToolBar->addSeparator();
 
     //Formatting of table font then colour
     QFont fnt;
@@ -395,7 +394,7 @@ void MainWindow::changepath_triggered()
 
 void MainWindow::start_triggered()
 {
-    //Clear table/gui
+    //Clear table/GUI
     reset_triggered();
 
     //Sort out path
@@ -408,7 +407,7 @@ void MainWindow::start_triggered()
          program_path.append(QDir::separator());
          path->setText(program_path);
     }
-    //RJG - Set up save directory
+    //Set up save directory
     if(!save_path.mkpath(QString(PRODUCTNAME)+"_output")){QMessageBox::warning(this,"Error","Cant save output files. Permissions issue?");return;}
     else save_path.cd(QString(PRODUCTNAME)+"_output");
 
