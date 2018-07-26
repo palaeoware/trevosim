@@ -25,6 +25,8 @@ _____
 1. Copyright and Licence
 2. Installation
 3. Usage
+4. Contributing to the code
+5. Bug reporting and feature requests
 
 ______
 
@@ -92,6 +94,16 @@ Output nex tree file: This will output a .nex tree file in standard formatting f
 
 Output working log: This outputs a text file reporting the status of TREvoSim at different points during each iteration and outlining the actions it is taking throughout. This can be used to check the software is working as intended, and record a fill history of runs, but be aware that with all but the smallest runs it will create a sizable text file. 
 _____
+
+## 4. Contributing to the code
+
+Contribution to the code in this repository is welcome. Please read the [Repository Contribution](https://github.com/palaeoware/repoconventions)  document for a guide to our coding style and repository structure before submitting any code updates.
+_____
+
+## 5. Bug reporting and feature requests
+
+Bug reporting and feature requests should be made through the [GitHub Issues](../../issues) page for this repository. We will aim to respond to all issues and feature requests in a timely manner. 
+
 
 t:@palaeoware
 
