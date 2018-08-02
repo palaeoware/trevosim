@@ -2,6 +2,8 @@
 #include "ui_about.h"
 #include "version.h"
 
+#include <QDesktopServices>
+
 About::About(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::About)
@@ -21,17 +23,22 @@ About::About(QWidget *parent) :
       ui->textLabel_1->setAlignment(Qt::AlignCenter);
 
       ui->textLabel_2->setWordWrap(true);
-      ui->textLabel_2->setText("This version of " + QString(PRODUCTNAME) + " was compiled on the date shown above. It was coded by:"
-                         "<br><br><b>Russell Garwood</b> (russell.garwood@gmail.com)"
-                         "<br><br>It uses a GUI theme designed by:<br><b>Alan R.T. Spencer</b> (alan.spencer@imperial.ac.uk)"
-                         "<br><br>Input from <b>Mark Sutton</b> (m.sutton@imperial.ac.uk) has been integral to its development."
-                         "<br><br>Invaluable ideas and disucssion were provided by: Robert Sansom; Joe Keating; Chris Knight; Roger Benson; Thomas Halliday, and a great number of other people."
+      ui->textLabel_2->setText("This version of " + QString(PRODUCTNAME) + " was compiled on the date shown above. <br><br>"
+                         "It was coded by <b>Russell Garwood</b> (russell.garwood@gmail.com) and uses a GUI theme designed by <b>Alan R.T. Spencer</b> (alan.spencer@imperial.ac.uk)."
+                         "<br><br>Input from <b>Mark Sutton</b> (m.sutton@imperial.ac.uk) has been integral to its development. Invaluable ideas and disucssion were provided by: Robert Sansom; Joe Keating; Chris Knight; Roger Benson; Thomas Halliday, and a great number of other people."
                          "<br><br>Reports are appreciated, and comments, suggestions, and feature requests are welcome.");
       ui->textLabel_2->setAlignment(Qt::AlignCenter);
 
+      QPushButton *codePushButton = new  QPushButton("&Code on GitHub",this);
+      ui->pushButtonHorizontalLayout->addWidget(codePushButton);
+      connect(codePushButton , SIGNAL (clicked()), this, SLOT(codeOnGitHub()));
+
+     QPushButton *bugPushButton = new  QPushButton("&Report Bug/Issue/Feature Request",this);
+      ui->pushButtonHorizontalLayout->addWidget(bugPushButton);
+     connect(bugPushButton , SIGNAL (clicked()), this, SLOT(bugReport()));
 
       ui->textLabel_3->setWordWrap(true);
-      ui->textLabel_3->setText("<b>Copyright and License:</b>"
+      ui->textLabel_3->setText("<br><br><b>Copyright and License:</b>"
                                "<br><br>" + QString(COPYRIGHT) +
                                "<br><br>"+ QString(LICENCE) +" (see below).");
       ui->textLabel_3->setAlignment(Qt::AlignCenter);
@@ -49,12 +56,25 @@ About::About(QWidget *parent) :
       ui->footer2->setAlignment(Qt::AlignCenter);
 
       ui->buttonBox->setStandardButtons(QDialogButtonBox::Close);
+      ui->buttonBox->setFocus();
 }
 
 About::~About()
 {
     delete ui;
 }
+
+void About::codeOnGitHub()
+{
+    QDesktopServices::openUrl(QUrl(QString(GITURL) + QString(GITREPOSITORY)));
+}
+
+void About::bugReport()
+{
+    QDesktopServices::openUrl(QUrl(QString(GITURL) + QString(GITREPOSITORY) + QString(GITISSUE)));
+}
+
+
 
 QString About::returnLicense()
 {

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>680</height>
+    <width>750</width>
+    <height>800</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,8 +18,8 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>581</width>
-     <height>661</height>
+     <width>731</width>
+     <height>781</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -43,6 +43,9 @@
        <string>TextLabel</string>
       </property>
      </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="pushButtonHorizontalLayout"/>
     </item>
     <item>
      <widget class="QLabel" name="textLabel_3">

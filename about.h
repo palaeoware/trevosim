@@ -19,6 +19,10 @@ public:
 private:
     Ui::About *ui;
     QString returnLicense();
+
+ private slots:
+    void codeOnGitHub();
+    void bugReport();
 };
 
 #endif // ABOUT_H

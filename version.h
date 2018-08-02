@@ -10,7 +10,7 @@
 #define FILEVERSION 1
 
 //Legal Stuff
-#define COPYRIGHT "Copyright © 2018 Russell J. Garwood, Mark Sutton, Alan R.T.Spencer"
+#define COPYRIGHT "Copyright © 2018 Russell J. Garwood, Mark D. Sutton, Alan R.T. Spencer"
 #define LICENCE "This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under the conditions of the GPL v3  license"
 
 //Programme Name
@@ -18,10 +18,11 @@
 #define PRODUCTTAG "The [Tr]ee [Evo]lutionary [Sim]ulator "
 
 //Github
-#define GITHUB_URL "https://github.com/"
+#define GITURL "https://github.com/"
 #define GITREPOSITORY "palaeoware/trevosim"
+#define GITISSUE "/issues"
 
-//Readthedocs
-#define READTHEDOCS_URL "To be confirmed"
+//Email
+#define EMAIL "palaeoware@gmail.com"
 
 #endif // VERSION_H
