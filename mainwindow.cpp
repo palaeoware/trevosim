@@ -1599,13 +1599,17 @@ QString MainWindow::print_newick_bl(int species, QVector <organism*> &species_li
     for(int i=0;i<offspring;i++)tree_out<<"("<<print_newick_bl(species_list[species]->children[i],species_list);
 
     //Write offspring
-    tree_out<<species_ID<<":"<<branch_length;
+    tree_out<<species_ID<<":"<<branch_length;  
 
     //Close all brackets and sort out branch lengths
     for  (int i=offspring-1;i>=0;i--)
         {
         int child = species_list[species]->children[i];
-        if(i>0)branch_length=species_list[child]->born-species_list[child-1]->born;
+        if (i > 0)
+        {
+            int older_sibling = species_list[species]->children[i - 1];
+            branch_length = species_list[child]->born - species_list[older_sibling]->born;
+        }
         else branch_length=species_list[child]->born-species_list[species]->born;
         tree_out<<"):"<<branch_length;
         }
