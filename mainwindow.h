@@ -78,7 +78,7 @@ private:
 
      //Print to string for files
      QString print_newick(int species, QVector<organism *> &species_list);
-     QString print_newick_bl(int species, QVector<organism *> &species_list);
+     QString print_newick_bl(int species, QVector<organism *> &species_list, bool phangorn_tree);
      QString print_Time();
      QString print_Settings();
      QString print_matrix(const QVector<organism *> species_list, int run_genome_size);

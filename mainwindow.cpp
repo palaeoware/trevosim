@@ -1244,7 +1244,7 @@ void MainWindow::start_triggered()
 
     filestring_01_write.replace("||Matrix||",print_matrix(species_list, run_genome_size));
     filestring_01_write.replace("||TNT_Tree||",tnt_string);
-    filestring_01_write.replace("||MrBayes_Tree||",print_newick_bl(0,species_list));
+    filestring_01_write.replace("||MrBayes_Tree||",print_newick_bl(0,species_list,false));
     filestring_01_write.replace("||Time||",print_Time());
     filestring_01_write.replace("||Settings||",print_Settings());
     filestring_01_write.replace("||Alive_Record||",alive_record);
@@ -1273,7 +1273,7 @@ void MainWindow::start_triggered()
 
     filestring_02_write.replace("||Matrix||",print_matrix(species_list, run_genome_size));
     filestring_02_write.replace("||TNT_Tree||",tnt_string);
-    filestring_02_write.replace("||MrBayes_Tree||",print_newick_bl(0,species_list));
+    filestring_02_write.replace("||MrBayes_Tree||",print_newick_bl(0,species_list,false));
     filestring_02_write.replace("||Time||",print_Time());
     filestring_02_write.replace("||Settings||",print_Settings());
     filestring_02_write.replace("||Alive_Record||",alive_record);
@@ -1316,14 +1316,14 @@ void MainWindow::start_triggered()
             }
             file_03_out<<"\t\t;\n\ntree tree1 = [&U]";
 
-            file_03_out<<print_newick_bl(0,species_list)<<";\n\nEND;";
+            file_03_out<<print_newick_bl(0,species_list,true)<<";\n\nEND;";
 
             file_03.close();
         }
 
     if(work_log)
      {
-        work_out<<"On exit, "<<(QString(PRODUCTNAME))<<" thinks tree is "<<print_newick_bl(0,species_list)<<"\n or in TNT format: "<<tnt_string;
+        work_out<<"On exit, "<<(QString(PRODUCTNAME))<<" thinks tree is "<<print_newick_bl(0,species_list,false)<<"\n or in TNT format: "<<tnt_string;
         work_log_file.close();
      }
 
@@ -1572,7 +1572,7 @@ QString MainWindow::print_newick(int species, QVector <organism*> &species_list)
 }
 
 //Recursive function for writing trees with branch lengths in Newick format
-QString MainWindow::print_newick_bl(int species, QVector <organism*> &species_list)
+QString MainWindow::print_newick_bl(int species, QVector <organism*> &species_list, bool phangorn_tree)
 {
     QString tree;
     QTextStream tree_out(&tree);
@@ -1581,8 +1581,16 @@ QString MainWindow::print_newick_bl(int species, QVector <organism*> &species_li
 
     //Zero padding
     QString species_ID;
-    if(taxon_number<100) species_ID=QString("S_%1").arg(species_list[species]->species_id+1, 2, 10, QChar('0'));
-    else species_ID=QString("S_%1").arg(species_list[species]->species_id+1, 3, 10, QChar('0'));
+    if (phangorn_tree)
+       {
+        if(taxon_number<100) species_ID=QString("S_%1").arg(species_list[species]->species_id+1, 2, 10, QChar('0'));
+        else species_ID=QString("S_%1").arg(species_list[species]->species_id+1, 3, 10, QChar('0'));
+        }
+    else
+        {
+        if(taxon_number<100) species_ID=QString("S_%1").arg(species_list[species]->species_id, 2, 10, QChar('0'));
+        else species_ID=QString("S_%1").arg(species_list[species]->species_id, 3, 10, QChar('0'));
+        }
 
     //For terminal cases (reused for branches to nodes below)
     int branch_length=species_list[species]->extinct-species_list[species]->cladogenesis;
@@ -1596,7 +1604,7 @@ QString MainWindow::print_newick_bl(int species, QVector <organism*> &species_li
             }
 
     //Then sort where taxa have offpsring - recurse
-    for(int i=0;i<offspring;i++)tree_out<<"("<<print_newick_bl(species_list[species]->children[i],species_list);
+    for(int i=0;i<offspring;i++)tree_out<<"("<<print_newick_bl(species_list[species]->children[i],species_list,phangorn_tree);
 
     //Write offspring
     tree_out<<species_ID<<":"<<branch_length;  
