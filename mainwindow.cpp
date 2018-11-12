@@ -11,11 +11,7 @@ randoms *simulation_randoms;
  * Thanks for checking out the TREvoSim source code. The software was written by Russell Garwood, athough it employs a GUI designed by Alan Spencer.
  * Many of the underlying concepts are shared with REvoSim, which was coded by Mark Sutton, Alan Spencer and Russell Garwood.
  *
- * I hope the software is useful to you: if there are modifications you would like to suggest to use this in your work, please feel free to email me:
- *
- * russell.garwood@gmail.com
- *
- * and I'll happily look into these.
+ * I hope the software is useful to you: if there are modifications you would like to suggest to use this in your work, please open an issue on GitHub and I'll happily look into these.
  *
  ***********/
 
@@ -1296,7 +1292,7 @@ void MainWindow::start_triggered()
 
     if(write_tree)
         {
-            //File 03 is tree file in .nex format - withour zero padding
+            //File 03 is tree file in .nex format - without zero padding
             QFile file_03(filename_03);
             if(!file_03.open(QIODevice::WriteOnly|QIODevice::Text)){QMessageBox::warning(0, "Error!", "Error opening treefile to write to.");gui_finish_run(); clear_vectors(playing_field, species_list, masks);return;}
 
@@ -1309,14 +1305,16 @@ void MainWindow::start_triggered()
 
             for (int i=0;i<taxon_number;i++)
             {
-                if(taxon_number<100)file_03_out<<(QString("S_%1").arg(i+1, 2, 10, QChar('0')));
-                else file_03_out<<(QString("S_%1").arg(i+1, 3, 10, QChar('0')));
-
+                file_03_out<<(QString("%1").arg(i + 1));
                 file_03_out<<"\t\t"<<"Species_"<<i<<",\n";
             }
             file_03_out<<"\t\t;\n\ntree tree1 = [&U]";
 
-            file_03_out<<print_newick_bl(0,species_list,true)<<";\n\nEND;";
+            QString newick_string(print_newick_bl(0,species_list,true));
+            newick_string.remove("S_0");
+            newick_string.remove("S_");
+
+            file_03_out<<newick_string<<";\n\nEND;";
 
             file_03.close();
         }
