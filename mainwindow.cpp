@@ -1311,6 +1311,8 @@ void MainWindow::start_triggered()
             file_03_out<<"\t\t;\n\ntree tree1 = [&U]";
 
             QString newick_string(print_newick_bl(0,species_list,true));
+            // Remove text for phangorn
+            newick_string.remove("S_00");
             newick_string.remove("S_0");
             newick_string.remove("S_");
 
