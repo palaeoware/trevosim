@@ -1442,7 +1442,10 @@ void MainWindow::resize_grid()
     //Populate table, and then modify these items as required when needed - think this is  better as less faffing with memory that creating and deleting new ones
     for (int i=0;i<taxon_number;i++)
         for(int j=0;j<genome_size;j++)
-            if(ui->character_Display->item(i,j)==0)ui->character_Display->setItem(i, j, new QTableWidgetItem(" "));
+            if(ui->character_Display->item(i,j)==nullptr)ui->character_Display->setItem(i, j, new QTableWidgetItem(" "));
+
+    //Qt 5.12 seems to resize the columns on compile on some operating systems. This resize ensures they appear the same across all operating systems
+    for (int i = 0; i < ui->character_Display->columnCount(); i++)ui->character_Display->setColumnWidth(i, 25);
 
     qApp->processEvents();
 
