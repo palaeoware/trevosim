@@ -8,7 +8,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = RG_Tree_Generator
+TARGET = TREvoSim
 TEMPLATE = app
 
 
@@ -43,9 +43,8 @@ RESOURCES += \
 #Needed to use C++ sort algorithm with lamda function
 CONFIG += c++11
 
-
 #Mac icon
-ICON = ../resources/revosim.icns
+ICON = ../resources/icon.icns
 
 #Needed to make binaries launchable from file in Ubuntu - GCC default link flag -pie on newer Ubuntu versions this so otherwise recognised as shared library
 QMAKE_LFLAGS += -no-pie
