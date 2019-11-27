@@ -44,7 +44,7 @@ RESOURCES += \
 CONFIG += c++11
 
 #Mac icon
-ICON = ../resources/icon.icns
+ICON = ./resources/icon.icns
 
 #Needed to make binaries launchable from file in Ubuntu - GCC default link flag -pie on newer Ubuntu versions this so otherwise recognised as shared library
 QMAKE_LFLAGS += -no-pie
