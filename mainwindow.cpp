@@ -1747,10 +1747,9 @@ void MainWindow::count_peaks()
 
        // Load masks
        QVector<QVector<bool> > masks;
-
        for (int j=0;j<mask_number;j++)
             {
-                masks[j].append(QVector <bool>());
+                masks.append(QVector <bool>());
                 for (int i=0;i<genome_size;i++)
                     {
                     if (simulation_randoms->gen_random() > (MAX_RAND/2)) masks[j].append(bool(false));

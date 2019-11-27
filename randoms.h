@@ -1,7 +1,6 @@
 #ifndef RANDOMS_H
 #define RANDOMS_H
 
-#include "mainwindow.h"
 #include <QTime>
 #include <QFile>
 #include <QMessageBox>

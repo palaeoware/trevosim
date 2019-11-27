@@ -40,7 +40,8 @@
 //Forward declaration to avoid circular dependencies in print_genome declaration
 class organism;
 
-namespace Ui {
+namespace Ui
+{
 class MainWindow;
 }
 

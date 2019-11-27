@@ -1,4 +1,3 @@
-
 #ifndef DARKSTYLETHEME_H
 #define DARKSTYLETHEME_H
 
