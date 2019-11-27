@@ -37,12 +37,12 @@ void randoms::load_randoms()
     int intseedoffset = (int)seedoffset;
 
     QFile rfile("://resources/randoms.dat");
-    if (!rfile.exists())QMessageBox::warning(0,"Damn","Error loading randoms. Contact RJG in the hope he can sort this out.");
+    if (!rfile.exists())QMessageBox::warning(nullptr,"Damn","Error loading randoms. Contact RJG in the hope he can sort this out.");
     rfile.open(QIODevice::ReadOnly);
     rfile.seek(intseedoffset);
 
     // multiply by two here as char * is 8bit, and randoms are 16 - no error if array is unfilled, randoms are just zero...
     int i=rfile.read((char *)random_array,(65536*2));
-    if (i!=(65536*2)) QMessageBox::warning(0,"Oops","Failed to read 131072 bytes from randoms file - random numbers may be compromised - Contact RJG");
+    if (i!=(65536*2)) QMessageBox::warning(nullptr,"Oops","Failed to read 131072 bytes from randoms file - random numbers may be compromised - Contact RJG");
     rfile.close();
 }

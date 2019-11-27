@@ -49,7 +49,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
 
@@ -83,7 +83,7 @@ private:
      QString print_Settings();
      QString print_matrix(const QVector<organism *> species_list, int run_genome_size);
      QString print_genome_string(const organism *org, int genome_size_local);
-     QString print_genome_int(int genome_local, int genome_size_local, const quint64 *lookups_local);
+     QString print_genome_int(quint64 genome_local, int genome_size_local, const quint64 *lookups_local);
 
  private slots:
     void start_triggered();

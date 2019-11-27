@@ -46,12 +46,12 @@ void Output::on_buttonBox_accepted()
        write_tree=ui->c_write_tree->isChecked();
        work_log=ui->c_work_log->isChecked();
 
-       if(work_log)QMessageBox::warning(0,"Heads up","Work log outputs text every operation the programme performs, allowing its behaviour to be validated. Be aware that this creates very large text files, very quickly. You may want to run your tests with limited taxon and character numbers.");
+       if(work_log)QMessageBox::warning(nullptr,"Heads up","Work log outputs text every operation the programme performs, allowing its behaviour to be validated. Be aware that this creates very large text files, very quickly. You may want to run your tests with limited taxon and character numbers.");
 
        base_01=ui->file_01_base->text();
        base_01.replace(" ","_");
        QString user_ext=ui->file_01_extension->text();
-       if(user_ext.at(0)!=QChar('.') || user_ext.length()!=4) QMessageBox::warning(0,"Oops","I don't think extension 1 is valid. If it is, email RJG and he can sort.");
+       if(user_ext.at(0)!=QChar('.') || user_ext.length()!=4) QMessageBox::warning(nullptr,"Oops","I don't think extension 1 is valid. If it is, email RJG and he can sort.");
        else {
                ext_01=user_ext;
                ext_01.replace(" ","");
@@ -63,7 +63,7 @@ void Output::on_buttonBox_accepted()
        base_02.replace(" ","_");
 
        user_ext=ui->file_02_extension->text();
-       if(user_ext.at(0)!=QChar('.') || user_ext.length()!=4) QMessageBox::warning(0,"Oops","I don't think extension 2 is valid. If it is, email RJG and he can sort.");
+       if(user_ext.at(0)!=QChar('.') || user_ext.length()!=4) QMessageBox::warning(nullptr,"Oops","I don't think extension 2 is valid. If it is, email RJG and he can sort.");
        else {
                ext_02=user_ext;
                ext_02.replace(" ","");

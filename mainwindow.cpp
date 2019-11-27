@@ -223,7 +223,7 @@ void MainWindow::load()
                   }
             }
         // Error
-        if(settings_file_in.hasError()) QMessageBox::warning(0,"Erk","There seems to have been an error reading in the XML file. Not all settings will have been loaded.");
+        if(settings_file_in.hasError()) QMessageBox::warning(nullptr,"Erk","There seems to have been an error reading in the XML file. Not all settings will have been loaded.");
         settings_file.close();
         ui->statusBar->showMessage("Loaded settings file");
     }
@@ -235,7 +235,7 @@ void MainWindow::open()
     settings_filename=QFileDialog::getOpenFileName(this, tr("Open File"));
     if(settings_filename.length()<3)
             {
-            QMessageBox::warning(0,"Erk","There seems to have been an error - no filename.");
+            QMessageBox::warning(nullptr,"Erk","There seems to have been an error - no filename.");
             settings_filename=(QString(PRODUCTNAME)+"_settings.xml");
             return;
             }
@@ -250,7 +250,7 @@ void MainWindow::save_as()
      settings_filename=QFileDialog::getSaveFileName(this, tr("Save File"));
      if(settings_filename.length()<3)
              {
-             QMessageBox::warning(0,"Erk","There seems to have been an error - no filename.");
+             QMessageBox::warning(nullptr,"Erk","There seems to have been an error - no filename.");
              settings_filename=(QString(PRODUCTNAME)+"_settings.xml");
              return;
              }
@@ -264,7 +264,7 @@ void MainWindow::save()
     QFile settings_file(settings_filename);
     if(!settings_file.open(QIODevice::WriteOnly|QIODevice::Text))
     {
-        QMessageBox::warning(0, "Error!", "Error opening settings file to write to.");
+        QMessageBox::warning(nullptr, "Error!", "Error opening settings file to write to.");
         return;
     }
 
@@ -398,7 +398,7 @@ void MainWindow::start_triggered()
 
     if (!save_path.exists())
     {
-         QMessageBox::warning(0, "Error!", "The program doesn't think the save directory exists, so is going to default back to the direcctory in which the executable is.");
+         QMessageBox::warning(nullptr, "Error!", "The program doesn't think the save directory exists, so is going to default back to the direcctory in which the executable is.");
          QString program_path(QCoreApplication::applicationDirPath());
          program_path.append(QDir::separator());
          path->setText(program_path);
@@ -419,7 +419,7 @@ void MainWindow::start_triggered()
 
     if(work_log)
     {
-        if(!work_log_file.open(QIODevice::QIODevice::WriteOnly|QIODevice::Text))QMessageBox::warning(0, "Error!", "Error opening working log file to write to.");
+        if(!work_log_file.open(QIODevice::QIODevice::WriteOnly|QIODevice::Text))QMessageBox::warning(nullptr, "Error!", "Error opening working log file to write to.");
         else work_out.setDevice(&work_log_file);
     }
 
@@ -438,7 +438,7 @@ void MainWindow::start_triggered()
         if(((factor_settings!=print_Settings()) || strip_uninformative_factor<1.)
                         && !calc_factor_running && !factor_settings_batch)
             {
-            if (QMessageBox::question(0, "Hmmm", "It looks like you have not calculated the strip uninformative factor for these settings. Would you like to?", QMessageBox::Yes|QMessageBox::No, QMessageBox::Yes)==QMessageBox::Yes)recalculate_strip_uniformative_factor();
+            if (QMessageBox::question(nullptr, "Hmmm", "It looks like you have not calculated the strip uninformative factor for these settings. Would you like to?", QMessageBox::Yes|QMessageBox::No, QMessageBox::Yes)==QMessageBox::Yes)recalculate_strip_uniformative_factor();
                 else if (strip_uninformative_factor<1.)strip_uninformative_factor=2.;
             if(batch_running)factor_settings_batch=true;
             }
@@ -496,7 +496,7 @@ void MainWindow::start_triggered()
     //Worth thinking about anyway...
 
     //Record min (best) fitness
-    quint32 min_fitness=-1;
+    quint32 min_fitness=static_cast<quint32>(-1);
     organism best_org=*playing_field[0];
     int count=0;
     do{
@@ -506,15 +506,15 @@ void MainWindow::start_triggered()
         if(playing_field[0]->fitness<min_fitness)
                 {
                 best_org=*playing_field[0];
-                min_fitness=best_org.fitness;
+                min_fitness=static_cast<quint32>(best_org.fitness);
                 }
         count++;
      }while(count<200);
 
 
     //Populate playing field with clones
-    quint32 not_found=-1;
-    if (min_fitness==not_found){QMessageBox::warning(0,"Oops","I've not managed to initialise this correctly. Please try different settings or email RJG.");gui_finish_run();return;}
+    quint32 not_found=static_cast<quint32>(-1);
+    if (min_fitness==not_found){QMessageBox::warning(nullptr,"Oops","I've not managed to initialise this correctly. Please try different settings or email RJG.");gui_finish_run();return;}
     for (int i=0;i<pfield_size;i++)*playing_field[i]=best_org;
 
     //Species list to store details of each new species
@@ -534,7 +534,7 @@ void MainWindow::start_triggered()
     if (taxon_number>1000)
         {
         //Not actually an issue because of spin box limits. But still...
-        QMessageBox::warning(0,"Well","I guess you were pitching for more than 1000 terminals. Best email RJG.");
+        QMessageBox::warning(nullptr,"Well","I guess you were pitching for more than 1000 terminals. Best email RJG.");
         tnt_string="This isn't going to work, I'm afraid.";
         }
 
@@ -645,7 +645,8 @@ void MainWindow::start_triggered()
             int select=0;
 
             //Scale random number to size of pool
-            double point_select=(double)simulation_randoms->gen_random()/((double)MAX_RAND/(double)found_pool.count());
+            double point_select=static_cast<double>(simulation_randoms->gen_random() ) / ( static_cast<double>(MAX_RAND) /static_cast<double>(found_pool.count()));
+
             int int_point_select=int(point_select);
 
             //Avoid rounding crash when random is rand max.
@@ -659,10 +660,10 @@ void MainWindow::start_triggered()
             //Mutate
             int temp_fitness=progeny.fitness;
 
-            double mutations=((float)run_genome_size/100.)*organism_mutation;
-            double organism_mutation_integral=(int) mutations;
+            double mutations=(static_cast<double>(run_genome_size)/100.)*organism_mutation;
+            double organism_mutation_integral=static_cast<int>(mutations);
             double fractional = modf(mutations, &organism_mutation_integral);
-            int organism_mutation_int= (int) organism_mutation_integral;
+            int organism_mutation_int=static_cast<int>(organism_mutation_integral);
             if(simulation_randoms->gen_random()<(fractional*MAX_RAND))organism_mutation_int++;
 
             QVector <int> SNPs;
@@ -670,7 +671,7 @@ void MainWindow::start_triggered()
             for(int i=0;i<organism_mutation_int;i++)
                 {
                    //Scale random number to genome size
-                   double point_mut=(double)simulation_randoms->gen_random()/((double)MAX_RAND/(double)run_genome_size);
+                   double point_mut=static_cast<double>(simulation_randoms->gen_random()) / (static_cast<double>(MAX_RAND)/static_cast<double>(run_genome_size));
                    int int_point_mut=int(point_mut);
 
                    //Sanity check as due to rounding, very occasionally, int_point_mut > genome_size and this causes a crash as trying to access, e.g. 500th entry in 500 array (where max is 499)
@@ -755,7 +756,7 @@ void MainWindow::start_triggered()
                             int position = tnt_string.indexOf(prog_species_ID);
 
                             //You should never find a bracket or not find anything
-                            if (position<1) QMessageBox::warning(0,"Eesh","You shouldn't see this. There's been an error writing the tree string. Please contact RJG in the hope he can sort this out.");
+                            if (position<1) QMessageBox::warning(nullptr,"Eesh","You shouldn't see this. There's been an error writing the tree string. Please contact RJG in the hope he can sort this out.");
 
                             // Split tree file at this point, into left, and right of position.
                             QString tre_left=tnt_string.left(position);
@@ -773,7 +774,7 @@ void MainWindow::start_triggered()
                         //Update display
                         ui->tree_Display->setText(tnt_string);
                         //resize as required
-                        int h = (int) ui->tree_Display->document()->size().height();
+                        int h = static_cast<int>(ui->tree_Display->document()->size().height());
                         ui->tree_Display->setFixedHeight(h);
                         ui->tree_Display->updateGeometry();
 
@@ -801,7 +802,7 @@ void MainWindow::start_triggered()
            else
             {
                //Scale random number to size of pool
-               double point_delete=(double)simulation_randoms->gen_random()/((double)MAX_RAND/(double)delete_pool.count());
+               double point_delete=static_cast<double>(simulation_randoms->gen_random()) / (static_cast<double>(MAX_RAND) /static_cast<double>(delete_pool.count()));
                int int_point_delete=int(point_delete);
                //Deal with case where max rand gives value of size of delete pool (and max of array is delete pool -1)
                if(int_point_delete==delete_pool.count())int_point_delete--;
@@ -854,12 +855,12 @@ void MainWindow::start_triggered()
             /************* Mutate environment *************/
 
             //Calculate mutation # as previously, and using same variables for ease - this is the number of mutations total for each mask
-            double env_mutations=((float)run_genome_size/100.)*environment_mutation;
-            double env_mutation_integral=(int) env_mutations;
+            double env_mutations=(static_cast<double>(run_genome_size)/100.)*environment_mutation;
+            double env_mutation_integral=static_cast<int>(env_mutations);
 
             //Sort out the probabilities of mextra mutation given remainder
             double env_fractional = modf(env_mutations, &env_mutation_integral);
-            int env_mutation_int= (int) env_mutation_integral;
+            int env_mutation_int= static_cast<int>(env_mutation_integral);
             if(simulation_randoms->gen_random()<(env_fractional*MAX_RAND))env_mutation_int++;
 
             //Mutate irrespective of playing field mode settings if there are multiple ones
@@ -867,7 +868,7 @@ void MainWindow::start_triggered()
                         for (int i=0; i<mask_number; i++)
                             {
                                 //Scale random number to genome size - doubles then convert to avoid rounding errors creating number out of bounds
-                                double mut=(double)simulation_randoms->gen_random()/((double)MAX_RAND/(double)run_genome_size);
+                                double mut=static_cast<double>(simulation_randoms->gen_random()) / (static_cast<double>(MAX_RAND)/static_cast<double>(run_genome_size));
 
                                 int mutint=int(mut);
 
@@ -1204,8 +1205,8 @@ void MainWindow::start_triggered()
     filename_01.prepend(save_path.absolutePath()+QDir::separator());
 
     QFile file_01(filename_01);
-    if(!append){if(!file_01.open(QIODevice::WriteOnly|QIODevice::Text)){QMessageBox::warning(0, "Error!", "Error opening file 1 to write to.");gui_finish_run(); clear_vectors(playing_field, species_list, masks);return;}}
-    else {if (!file_01.open(QIODevice::Append|QIODevice::Text)){QMessageBox::warning(0, "Error!", "Error opening file 1 to write to.");gui_finish_run(); clear_vectors(playing_field, species_list, masks);return;}}
+    if(!append){if(!file_01.open(QIODevice::WriteOnly|QIODevice::Text)){QMessageBox::warning(nullptr, "Error!", "Error opening file 1 to write to.");gui_finish_run(); clear_vectors(playing_field, species_list, masks);return;}}
+    else {if (!file_01.open(QIODevice::Append|QIODevice::Text)){QMessageBox::warning(nullptr, "Error!", "Error opening file 1 to write to.");gui_finish_run(); clear_vectors(playing_field, species_list, masks);return;}}
 
     //File 02 - if needed this can be expanded and run from a loop to include more files...
     QString filename_02;
@@ -1225,8 +1226,8 @@ void MainWindow::start_triggered()
     filename_02.prepend(save_path.absolutePath()+QDir::separator());
 
     QFile file_02(filename_02);
-    if(!append){if(!file_02.open(QIODevice::WriteOnly|QIODevice::Text)){QMessageBox::warning(0, "Error!", "Error opening file 2 to write to.");gui_finish_run(); clear_vectors(playing_field, species_list, masks);return;}}
-    else {if (!file_02.open(QIODevice::Append|QIODevice::Text)){QMessageBox::warning(0, "Error!", "Error opening file 2 to write to.");gui_finish_run(); clear_vectors(playing_field, species_list, masks);return;}}
+    if(!append){if(!file_02.open(QIODevice::WriteOnly|QIODevice::Text)){QMessageBox::warning(nullptr, "Error!", "Error opening file 2 to write to.");gui_finish_run(); clear_vectors(playing_field, species_list, masks);return;}}
+    else {if (!file_02.open(QIODevice::Append|QIODevice::Text)){QMessageBox::warning(nullptr, "Error!", "Error opening file 2 to write to.");gui_finish_run(); clear_vectors(playing_field, species_list, masks);return;}}
 
     QString filename_03;
     filename_03 = base_03;
@@ -1294,7 +1295,7 @@ void MainWindow::start_triggered()
         {
             //File 03 is tree file in .nex format - without zero padding
             QFile file_03(filename_03);
-            if(!file_03.open(QIODevice::WriteOnly|QIODevice::Text)){QMessageBox::warning(0, "Error!", "Error opening treefile to write to.");gui_finish_run(); clear_vectors(playing_field, species_list, masks);return;}
+            if(!file_03.open(QIODevice::WriteOnly|QIODevice::Text)){QMessageBox::warning(nullptr, "Error!", "Error opening treefile to write to.");gui_finish_run(); clear_vectors(playing_field, species_list, masks);return;}
 
             QTextStream file_03_out(&file_03);
 
@@ -1675,7 +1676,7 @@ void MainWindow::recalculate_strip_uniformative_factor()
                 informative_characters=0;
                 progress.setValue(i);
                 start_triggered();
-                strip_uninformative_factor_av+=(float)(genome_size*strip_uninformative_factor)/(float)informative_characters;
+                strip_uninformative_factor_av+=static_cast<double>((genome_size*strip_uninformative_factor))/static_cast<double>(informative_characters);
             }
 
         //Based on some experimentation, multiplying this by 1.3 will mean that ~90% of runs have enough characters - do this to keep number as low as possible for speed and branch length considerations, plus minimising number identical taxa post strip
@@ -1769,10 +1770,10 @@ void MainWindow::count_peaks()
        lookups[0]=1;
        for (int i=1;i<64;i++)lookups[i]=lookups[i-1]*2;
 
-       quint64 max = (quint64) pow(2.,(double)genome_size);
+       quint64 max = static_cast<quint64>(pow(2.,static_cast<double>(genome_size)));
 
        //Progress bar max value is 2^16 - scale to this
-       quint16 pmax = -1;
+       quint16 pmax = static_cast<quint16>(-1);
        QProgressBar progress;
        progress.setRange(0,pmax);
        ui->statusBar->addPermanentWidget(&progress);
@@ -1795,14 +1796,14 @@ void MainWindow::count_peaks()
                //Update GUI every now and then to show not crashed
                if ((x%9999)==0)print_genome(&org,0);
                if((x%1000)==0){
-                                double prog=((double)x/(double)max)*pmax;
-                                progress.setValue((int)prog);
+                                double prog=(static_cast<double>(x)/static_cast<double>(max))*pmax;
+                                progress.setValue(static_cast<int>(prog));
                                 }
 
                org.fitness=fitness(&org,masks);
 
                totals[org.fitness]++;
-               if(record_genomes)genomes[org.fitness].append(x);
+               if(record_genomes)genomes[org.fitness].append(static_cast<int>(x));
                 }
 
        //RJG - Set up save directory
@@ -1813,7 +1814,7 @@ void MainWindow::count_peaks()
         QString peaks_filename = (QString(PRODUCTNAME)+"_peak_counting.txt");
         peaks_filename.prepend(save_path.absolutePath()+QDir::separator());
         QFile peaks_file(peaks_filename);
-        if (!peaks_file.open(QIODevice::Append|QIODevice::Text))QMessageBox::warning(0, "Error!", "Error opening curve file to write to.");
+        if (!peaks_file.open(QIODevice::Append|QIODevice::Text))QMessageBox::warning(nullptr, "Error!", "Error opening curve file to write to.");
         QTextStream peaks_out(&peaks_file);
 
         peaks_out<<QString(PRODUCTNAME)<<" peak count for the settings: "<<print_Settings()<<"\n";
@@ -1834,7 +1835,7 @@ void MainWindow::count_peaks()
                     {
                     peaks_out<<"Fit to environment "<<i<<"\n";
                     for (int j=0;j<genomes[i].length();j++)
-                        peaks_out<<print_genome_int(genomes[i][j],genome_size,lookups)<<"\n";
+                        peaks_out<<print_genome_int(static_cast<quint64>(genomes[i][j]),genome_size,lookups)<<"\n";
                     }
         peaks_out<<"\n";
         peaks_file.close();
@@ -1854,7 +1855,7 @@ QString MainWindow::print_genome_string(const organism *org, int genome_size_loc
     return genome;
 }
 
-QString MainWindow::print_genome_int(int genome_local, int genome_size_local, const quint64 *lookups_local)
+QString MainWindow::print_genome_int(quint64 genome_local, int genome_size_local, const quint64 *lookups_local)
 {
     QString genome;
     for(int i=0;i<genome_size_local;i++)
