@@ -1758,7 +1758,6 @@ void MainWindow::count_peaks()
                     }
             }
 
-
        resize_grid();
 
        organism org(genome_size);
