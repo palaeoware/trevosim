@@ -21,14 +21,14 @@ import sphinx_rtd_theme
 
 # -- Project information -----------------------------------------------------
 
-project = 'REvoSim'
-copyright = '2018, Mark Sutton, Russell Garwood, Alan R.T. Spencer'
-author = 'Mark Sutton, Russell Garwood, Alan R.T. Spencer'
+project = 'TREvoSim'
+copyright = '2019, Russell J. Garwood, Alan R.T. Spencer, Mark D. Sutton'
+author = 'Russell J. Garwood, Alan R.T. Spencer, Mark D. Sutton'
 
 # The short X.Y version
-version = '2.0.0'
+version = '1.0.0'
 # The full version, including alpha/beta/rc tags
-release = '2.0.0'
+release = '1.0.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -171,7 +171,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'REvoSimdoc'
+htmlhelp_basename = 'TREvoSimdoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -198,8 +198,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'REvoSim.tex', 'REvoSim Documentation',
-     'Mark Sutton, Russell Garwood, Alan R.T. Spencer', 'manual'),
+    (master_doc, 'TREvoSim.tex', 'TREvoSim Documentation',
+     'Russell J. Garwood, Alan R.T. Spencer, Mark D. Sutton', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -227,7 +227,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'revosim', 'REvoSim Documentation',
+    (master_doc, 'TREvoSim', 'TREvoSim Documentation',
      [author], 1)
 ]
 
@@ -240,8 +240,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'REvoSim', 'REvoSim Documentation',
-     author, 'REvoSim', 'One line description of project.',
+    (master_doc, 'TREvoSim', 'TREvoSim Documentation',
+     author, 'TREvoSim', 'One line description of project.',
      'Miscellaneous'),
 ]
 

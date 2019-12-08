@@ -17,7 +17,7 @@ w:https://github.com/palaeoware.
 Relevant references
 -------------------
 
-Keating, J.N., Sansom, R.S., Sutton, M.D., Knight, C.G. and Garwood, R.J. 2018. Morphological phylogenetics evaluated using novel evolutionary simulations. 
+Keating, J.N., Sansom, R.S., Sutton, M.D., Knight, C.G. and Garwood, R.J. 2018. Morphological phylogenetics evaluated using novel evolutionary simulations.
 
 
 Table of Contents
@@ -25,14 +25,8 @@ Table of Contents
 .. toctree::
    :maxdepth: 3
    :numbered:
-
-   introduction
+   
    requirements
+   settings
    windowlayout
-   settingsorganisms
-   settingssiumlation
-   settingsoutput
    loggingsim
-   genomecomparison
-   advanced
-   commandline
