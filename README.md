@@ -104,7 +104,8 @@ _____
 
 Bug reporting and feature requests should be made through the [GitHub Issues](../../issues) page for this repository. We will aim to respond to all issues and feature requests in a timely manner. 
 
-
 t:@palaeoware
+
+e:palaeoware@gmail.com
 
 w:https://github.com/palaeoware

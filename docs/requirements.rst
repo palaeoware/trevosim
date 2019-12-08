@@ -25,25 +25,58 @@ We recommend you install and use MSYS2 (64-bit) a Windows package manager, based
 #. You should now be able to find the required libraries under "{install location}/mingw64/bin" and the required header (.h) files for QT v5.x.
 #. Open the .pro file in QT Creator, and then use the information above to setup a new 64-bit ming64 kit. Follow standard QT Creator debug/release procedure.
 
-**Ubuntu 18.04 64-bit**
-*QT Creator + QT v5.x and using GCC (64-bit)*
+**Ubuntu 18.04 64-bit - QT Creator + QT v5.x using GCC (64-bit)**
 
-#. The simplest way to install Q5.X on your system is to download and run the installer from `Qt <https://www.qt.io/download>`_. Further instructions are available `from the Qt website <https://wiki.qt.io/Install_Qt_5_on_Ubuntu>`_
-#. Open the .pro file in QT Creator, set up an appropriate kit using the installed version of QT, and follow the standard debug/release procedure.
+*To compile from command line.*
+
+1. Install GCC and Qt using system packages:
+
+.. code-block:: console
+
+  sudo apt-get install build-essential libgl1-mesa-dev
+  sudo apt install qt5-default
+
+2. Download source code and navigate to folder, or alternatively clone using Git:
+
+.. code-block:: console
+
+  git clone https://github.com/palaeoware/trevosim.git
+  cd trevosim
+
+3. Within REvoSim folder create makefile:
+
+.. code-block:: console
+
+  qmake ./trevosim.pro
+
+4. Build by running the make command:
+
+.. code-block:: console
+
+  make
+
+5. Navigate to bin folder (e.g. trevosim/bin) and launch software by double clicking on file.
+
+*Using Qt creator.*
+
+1. Install Q5.X on your system by running the installer from Qt: https://www.qt.io/download Further instructions are available here: https://wiki.qt.io/Install_Qt_5_on_Ubuntu
+2. Download source code, launch Qt Creator, and open the .pro file. Configure build and follow standard debug/release procedure.
 
 **MacOS**
+
 *QT Creator + QT v5.x*
 
-The above (Linux) approach should also work for MacOS builds.
+The above (Linux, using qtcreator) approach should also work for MacOS builds. This will require xcode to be installed, which you can do using the app store, followed by QtCreator, which can be achieved through the Qt online installer. To build the software, download source code, launch Qt Creator, and open the .pro file. Configure build and follow standard debug/release procedure.
+
 
 Installation
 ------------
 
-From the REvoSim GitHub repository pre-compiled binary releases and packaged installers can be downloaded. For Windows users we provide both a portable binary release (.zip) - which just needs extracting to a convinent location - and a self contained installer.
+From the TREvoSim GitHub repository pre-compiled binary releases and packaged installers can be downloaded. For Windows users we provide both a portable binary release (.zip) - which just needs extracting to a convenient location - and a self contained installer. For Mac we provide a zip containing the TREvoSim program that can be downloaded from the TREvoSim GitHub repository. To install the software, drag and drop the required .app folder(s) into the Applications folder. You may be required to the approve the software in security and privacy settings before it will launch. For Linux users, the above instructions will allow the software to be built using a limited number of lines of bash. Please contact palaeoware@gmail.com if you encounter any issues.
 
 Requirements
 ------------
 
-REvoSim has no minimum requirements as such, and will run on most standard systems (Windows/Linux/Mac); it however has not been tested on versions of Windows older than Windows 10, Ubuntu 16.04, and macOS High Sierra. Performance will benefit from high processor speed and increased number of processor cores, with large amounts (>4GB) of available RAM recommended for large simulations. Graphics card performance is not relevant as GPUs are not currently used in the program's calculation pipeline. A fast hard drive (e.g. SSD) is recommend when intensive logging is enabled; as slow I/O response time can affect the iteration cycle speed.
+TREvoSim has no minimum requirements as such, and will run on most standard systems (Windows/Linux/Mac); it however has not been tested on versions of Windows older than Windows 10, Ubuntu 16.04, and macOS High Sierra. Performance will benefit from high processor speed and increased number of processor cores, with large amounts (>4GB) of available RAM recommended for large simulations. Graphics card performance is not relevant as GPUs are not currently used in the program's calculation pipeline. A fast hard drive (e.g. SSD) is recommend when intensive logging is enabled; as slow I/O response time can affect the iteration cycle speed.
 
-We recommend a minimum of 1GB RAM and a 1.8 GHz or faster, ideally multicore processor. We also recommend a minimum screen resolution of 1280x720 if using the software without the genome comparison docker (and 1920x1080 if this is enabled).
+We recommend a minimum of 1GB RAM and a 1.8 GHz or faster, ideally multicore processor.
