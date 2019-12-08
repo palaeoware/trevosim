@@ -16,7 +16,7 @@ GUI theme by:
 _____
 
 ## Relevant references:
-Keating, J.N., Sansom, R.S., Sutton, M.D., Knight, C.G. and Garwood, R.J. 2018. Comparing methods of morphological phylogenetic estimation using novel evolutionary simulations. 
+Keating, J.N., Sansom, R.S., Sutton, M.D., Knight, C.G. and Garwood, R.J. 2018. Morphological phylogenetics evaluated using novel evolutionary simulations. 
 _____
 
 
