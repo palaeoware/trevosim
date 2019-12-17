@@ -27,14 +27,14 @@ randoms::~randoms()
 void randoms::load_randoms()
 {
     //Seed pseudorandom numbers
-    qsrand(QTime::currentTime().msec());
+    qsrand(static_cast<uint>(QTime::currentTime().msec()));
 
     //Load randoms into program - get random
     int seed_random = qrand();
 
     //Make sure 16 bit random so not too large for the randoms file
-    float seedoffset = ((float)seed_random/(float)RAND_MAX)*(65536.);
-    int intseedoffset = (int)seedoffset;
+    double seedoffset = (static_cast<double>(seed_random)/static_cast<double>(RAND_MAX))*(65536.);
+    int intseedoffset = static_cast<int>(seedoffset);
 
     QFile rfile("://resources/randoms.dat");
     if (!rfile.exists())QMessageBox::warning(nullptr,"Damn","Error loading randoms. Contact RJG in the hope he can sort this out.");
