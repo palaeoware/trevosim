@@ -432,7 +432,7 @@ void MainWindow::start_triggered()
     int run_species_difference=species_difference;
 
     // If stripping uninformative characters, in order to have the requested char # need to over-generate, and then subsample to requested value
-    if(strip_uninformative)
+    if(strip_uninformative && !calc_factor_running)
     {
 
         if(((factor_settings!=print_Settings()) || strip_uninformative_factor<1.)
@@ -445,10 +445,14 @@ void MainWindow::start_triggered()
 
         if(strip_uninformative_factor>20)strip_uninformative_factor=20.;
 
-        run_genome_size *=strip_uninformative_factor;
+        double f_run_genome_size = static_cast<double>(run_genome_size);
+        f_run_genome_size *= strip_uninformative_factor;
+        run_genome_size = static_cast<int>(f_run_genome_size);
+
         //I suspect it makes sense to do this so it still hits expected behaviour - but note that that means we can't guaruntee species difference if stripping uninformative characters
-        //Based on experimentation, doesn't need to be scaled by quite so much - 1/3 seems fine most of time
-        run_species_difference*=(strip_uninformative_factor/3.);
+        double f_run_species_difference = static_cast<double>(run_species_difference);
+        f_run_species_difference *= strip_uninformative_factor;
+        run_species_difference = static_cast<int>(f_run_species_difference);
     }
 
     // Load masks
@@ -475,7 +479,7 @@ void MainWindow::start_triggered()
                    for (int i=0;i<run_genome_size;i++)
                        {
                        if (masks[j][i])work_out<<"1";
-                       else  work_out<<"0";;
+                       else  work_out<<"0";
                        }
                 work_out<<"\n";
                 }
@@ -503,7 +507,7 @@ void MainWindow::start_triggered()
         //First organism - initialise and fill playing field with it
         playing_field[0]->initialise(run_genome_size);
         playing_field[0]->fitness=fitness(playing_field[0],masks);
-        if(playing_field[0]->fitness<min_fitness)
+        if(static_cast<quint32>(playing_field[0]->fitness)<min_fitness)
                 {
                 best_org=*playing_field[0];
                 min_fitness=static_cast<quint32>(best_org.fitness);
@@ -919,7 +923,7 @@ void MainWindow::start_triggered()
                    for (int i=0;i<run_genome_size;i++)
                        {
                        if (masks[j][i])work_out<<"1";
-                       else  work_out<<"0";;
+                       else  work_out<<"0";
                        }
                 work_out<<"\n";
                 }
