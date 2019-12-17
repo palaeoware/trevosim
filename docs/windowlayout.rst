@@ -26,7 +26,7 @@ The buttons control the simulation, as well as launching dialogues, and defining
 :Batch: For repeated runs using the same settings, TREvoSim provides a batch mode. The number of runs is requested on launching batch mode, and output files are labelled accordingly.
 :Settings: Launches :ref:`settings` dialogue.
 :Output: Launches :ref:`loggingsim` dialogue.
-:Save path: All files created by the program are written to a folder titled *TREvoSim output*, created in this location.
+:Save path: All files created by the program are written to a folder titled *TREvoSim_output*, created in this location.
 :Change: Launches a file explorer to change the save path.
 :About: Opens a dialogue with information about TREvoSim, and links to the code and for bug reporting.
 
@@ -43,4 +43,4 @@ This text box updates with a Newick string showing the tree of the current simul
 Status bar
 ----------
 
-The status bar is updated with messages during and after a run: for example, during a run it displays the iteration number, and afterwards it can provide messages about the data (e.g. number of uninformative characters, if these are not set to be stripped out, number of identical terminals). It also displays progress bars where one is required.  
+The status bar is updated with messages during and after a run: for example, during a run it displays the iteration number, and afterwards it can provide messages about the data (e.g. number of uninformative characters, if these are not set to be stripped out, number of identical terminals). It also displays progress bars where one is required.

@@ -3,7 +3,24 @@
 Logging the Simulation
 ======================
 
-RevoSim provides two primary logging options (as well as the opportunity to save images showing the progress of a run: see :ref:`outputs`).
+TRevoSim has a versatile logging system which allows the user to define outputs in a range of formats required for phylogenetic inference packages, provided these allow plain text inputs. Clicking on the output button of the toolbar will launch the output dialogue:
+
+.. figure:: _static/output_01.png
+    :align: center
+
+This provides the options for two custom log files, which are placed, after a run, within the *TREvoSim_output* folder created on the save path. Basename defines the start of the filename, which then either includes a number, which iterates with subsequent runs when output is not set to append, or *_batch* if the outputs are set to append and a batch is being run. The file extension is also defined here. The two text boxes then allow custom file content to be written: text is written as provided to the file - for example with run instructions or program commands - and any of the keywords below (note this is case sensitive) included within two vertical bar ( | ) symbols are replaced as a file is written with the following:
+
+:Matrix: This is replaced with the matrix from the run.
+:TNT_Tree: This writes a tree, if required, in TNT format (i.e. only brackets and terminal labels)
+:MrBayes_Tree:
+
+
+||. Other useful things: ||Time|| will add a timestamp; ||Settings|| will write the settings to the file (comment out yourself as required); ||Character_Number|| will write character number; ||Taxon_Number|| will write taxon number; ||Count|| will add a counter for batch runs (starting from zero); ||Unresolvable|| will add a list of unresolvable taxa (if there are any, or a message confirming there are none if not); ||Identical|| will give a plain count of these; and ||Uninformative|| will output the number of uninformative characters. Any issues, questions, unexpected behaviour, or seething resentment email RJG.\n");
+
+
+, and extension its extension.
+
+  (as well as the opportunity to save images showing the progress of a run: see :ref:`outputs`).
 
 Running log
 -----------
@@ -33,7 +50,7 @@ When logging is enabled, REvoSim writes a file called REvoSim_log.txt to the out
     - Genomic changes since species origination (noncoding genome)
     - Genomic changes since last logging iteration (coding genome)
     - Genomic changes since last logging iteration (noncoding genome)
-	
+
 :Log data: The log then begins. Iterations are separated by new line breaks. Every iteration has a single [I] line, one [P] line, and then an [S] line for every species above the minimum species size. We note that it does not exlude species without descendents because it is written during the log, appending to the file for speed. To filter out those species without descendents would introduce the need to store and then regularly filter the log data, and thus would come with a notable computational overhead.
 
 :CSV format: If the 'Log file formatted as CSV' option is checked in output settings, the log file has a different and simpler format using the 'comma separated value' system. This may be easier to parse in some software (e.g. spreadsheets). A single header row is generated at the start of the file, providing titles for columms. Subsequent rows are generated for each [S] record described above, but these also include columns with the [I] and [P] records in each row. All fields described above are included in the output.

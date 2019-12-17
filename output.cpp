@@ -22,7 +22,6 @@ Output::Output(QWidget *parent) :
     ui->intro->setWordWrap(true);
     ui->intro->setText("Using this output options dialogue you can set the text for up to two output files with the matrix and, if you so wish, the tree as well. You can also select to have the tree saved as a .nex file. In order to write the matrix into the file (tab-delineated, with taxon names Species_0 .... Species_n) type ||Matrix||. Similarly, to insert a tree TNT format, type ||TNT_Tree||, and for MrBayes ||MrBayes_Tree||. Other useful things: ||Time|| will add a timestamp; ||Settings|| will write the settings to the file (comment out yourself as required); ||Character_Number|| will write character number; ||Taxon_Number|| will write taxon number; ||Count|| will add a counter for batch runs (starting from zero); ||Unresolvable|| will add a list of unresolvable taxa (if there are any, or a message confirming there are none if not); ||Identical|| will give a plain count of these; and ||Uninformative|| will output the number of uninformative characters. Any issues, questions, unexpected behaviour, or seething resentment email RJG.\n");
 
-
     ui->file_01_base->setText(base_01);
     ui->file_01_extension->setText(ext_01);
     ui->string_f1->insertPlainText(filestring_01);
