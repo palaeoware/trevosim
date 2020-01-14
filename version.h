@@ -22,6 +22,9 @@
 #define GITREPOSITORY "palaeoware/trevosim"
 #define GITISSUE "/issues"
 
+//Documentation
+#define DOCSURL "https://trevosim.readthedocs.io/"
+
 //Email
 #define EMAIL "palaeoware@gmail.com"
 

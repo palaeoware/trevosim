@@ -23,6 +23,7 @@ private:
  private slots:
     void codeOnGitHub();
     void bugReport();
+    void docs();
 };
 
 #endif // ABOUT_H

@@ -26,7 +26,7 @@ About::About(QWidget *parent) :
       ui->textLabel_2->setText("This version of " + QString(PRODUCTNAME) + " was compiled on the date shown above. <br><br>"
                          "It was coded by <b>Russell Garwood</b> (russell.garwood@gmail.com) and uses a GUI theme designed by <b>Alan R.T. Spencer</b> (alan.spencer@imperial.ac.uk)."
                          "<br><br>Input from <b>Mark Sutton</b> (m.sutton@imperial.ac.uk) has been integral to its development. Invaluable ideas and disucssion were provided by: Robert Sansom; Joe Keating; Chris Knight; Roger Benson; Thomas Halliday, and a great number of other people."
-                         "<br><br>Reports are appreciated, and comments, suggestions, and feature requests are welcome.");
+                         "<br><br>Reports are appreciated, and comments, suggestions, and feature requests are welcome.<br>");
       ui->textLabel_2->setAlignment(Qt::AlignCenter);
 
       QPushButton *codePushButton = new  QPushButton("&Code on GitHub",this);
@@ -37,8 +37,12 @@ About::About(QWidget *parent) :
       ui->pushButtonHorizontalLayout->addWidget(bugPushButton);
      connect(bugPushButton , SIGNAL (clicked()), this, SLOT(bugReport()));
 
+     QPushButton *docsPushButton = new  QPushButton("&See documentation",this);
+     ui->pushButtonHorizontalLayout->addWidget(docsPushButton);
+     connect(docsPushButton, SIGNAL (clicked()), this, SLOT(docs()));
+
       ui->textLabel_3->setWordWrap(true);
-      ui->textLabel_3->setText("<br><br><b>Copyright and License:</b>"
+      ui->textLabel_3->setText("<br><b>Copyright and License:</b>"
                                "<br><br>" + QString(COPYRIGHT) +
                                "<br><br>"+ QString(LICENCE) +" (see below).");
       ui->textLabel_3->setAlignment(Qt::AlignCenter);
@@ -74,6 +78,10 @@ void About::bugReport()
     QDesktopServices::openUrl(QUrl(QString(GITURL) + QString(GITREPOSITORY) + QString(GITISSUE)));
 }
 
+void About::docs()
+{
+    QDesktopServices::openUrl(QUrl(QString(DOCSURL)));
+}
 
 
 QString About::returnLicense()
