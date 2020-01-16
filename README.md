@@ -1,13 +1,11 @@
 # TREvoSim
 ## [Tr]ee [Evo]lutionary [Sim]ulator program
 
-This package is distributed for review purposes only. Not for redistribution until publication.
-
 Coded by:
- - Russell J. Garwood (russell.garwood@gmail.com)
+ - Russell J. Garwood (russell.garwood@gmail.com).
 
 GUI theme by:
- - Alan R.T. Spencer (alan.spencer@imperial.ac.uk)
+ - Alan R.T. Spencer (alan.spencer@imperial.ac.uk).
 
 <p align="center">
   <img width="250" height="250" src="./resources/palaeoware_logo_square.png">
@@ -51,7 +49,7 @@ _____
 
 ## 3. Usage
 
-Descriptions of the algorithms used in this package are included in the reference above.
+Descriptions of the algorithms used in this package are included in the reference above. Full documentation is available on [readthedocs](https://trevosim.readthedocs.io/en/latest/)
 
 ### Version 1
 
