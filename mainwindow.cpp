@@ -104,7 +104,9 @@ MainWindow::MainWindow(QWidget *parent) :
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_O), this, SLOT(open()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_P), this, SLOT(count_peaks()));
 
-    settings_filename="";
+    QDir settings_path;
+    settings_path.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation));
+    settings_filename=(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation)+"/"+QString(PRODUCTNAME)+"_settings.xml");
 
     ui->mainToolBar->addSeparator();
     QLabel *spath = new QLabel("Save path: ", this);
