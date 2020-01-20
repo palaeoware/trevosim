@@ -24,7 +24,7 @@ Relevant references
 
 Garwood, R.J., Spencer A.R.T. and Sutton, M.D., 2019. REvoSim: Organism-level simulation of macro- and microevolution. Palaeontology 62(3),339-355. `https://doi.org/10.1111/pala.12420 <https://doi.org/10.1111/pala.12420>`_
 
-Keating, J.N., Sansom, R.S., Sutton, M.D., Knight, Chris G., and Garwood, R.J. 2020. Morphological phylogenetics evaluated using novel evolutionary simulations. Systematic Biology.
+Keating, J.N., Sansom, R.S., Sutton, M.D., Knight, C.G., and Garwood, R.J. 2020. Morphological phylogenetics evaluated using novel evolutionary simulations. Systematic Biology.
 
 Table of Contents
 =================
