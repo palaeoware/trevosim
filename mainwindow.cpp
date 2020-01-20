@@ -104,7 +104,7 @@ MainWindow::MainWindow(QWidget *parent) :
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_O), this, SLOT(open()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_P), this, SLOT(count_peaks()));
 
-    settings_filename=(QString(PRODUCTNAME)+"_settings.xml");
+    settings_filename="";
 
     ui->mainToolBar->addSeparator();
     QLabel *spath = new QLabel("Save path: ", this);
@@ -166,7 +166,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-
+    QDir settings_path;
+    settings_path.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation));
+    settings_filename=(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation)+"/"+QString(PRODUCTNAME)+"_settings.xml");
     save();
 
     delete simulation_randoms;
@@ -261,6 +263,7 @@ void MainWindow::save_as()
 
 void MainWindow::save()
 {
+    if(settings_filename.length()<3)save_as();
     QFile settings_file(settings_filename);
     if(!settings_file.open(QIODevice::WriteOnly|QIODevice::Text))
     {

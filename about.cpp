@@ -12,7 +12,7 @@ About::About(QWidget *parent) :
     ui->setupUi(this);
 
       setWindowTitle("About");
-      setWindowIcon(QIcon (":/icon.png"));
+      setWindowIcon(QIcon("://resources/icon.png"));
 
       QPixmap picture_1(":/img.png");
       ui->header->setPixmap(picture_1);
