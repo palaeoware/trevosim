@@ -41,7 +41,7 @@ RESOURCES += \
     resources.qrc
 
 #Windows icon for executable
-RC_FILE = resources/revosim.rc
+RC_FILE = resources/trevosim.rc
 
 #Needed to use C++ sort algorithm with lamda function
 CONFIG += c++11
