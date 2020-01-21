@@ -40,6 +40,9 @@ FORMS    += mainwindow.ui \
 RESOURCES += \
     resources.qrc
 
+#Windows icon for executable
+RC_FILE = resources/revosim.rc
+
 #Needed to use C++ sort algorithm with lamda function
 CONFIG += c++11
 
