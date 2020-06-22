@@ -644,6 +644,7 @@ void MainWindow::start_triggered()
 
             for (int i=0;i<playing_field.count();i++)
                     {
+                qDebug()<<playing_field.count();
                     //If found smallest, add all organisms with best fit to environment to a list to select between
                     if(found && playing_field[i]->fitness==smallest[0])found_pool.append(i);
                     else if (!found && playing_field[i]->fitness==smallest[0])ignore_list[i]=true;
