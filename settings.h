@@ -2,7 +2,10 @@
 #define SETTINGS_H
 
 #include <QDialog>
-#include "mainwindow.h"
+#include <QFormLayout>
+#include <QComboBox>
+
+#include "simulation_variables.h"
 
 namespace Ui {
 class Settings;
@@ -13,19 +16,21 @@ class Settings : public QDialog
     Q_OBJECT
 
 public:
-    explicit Settings(QWidget *parent = 0);
+    explicit Settings(QWidget *parent = nullptr, simulationVariables *simSettings = nullptr);
     ~Settings();
-    bool resize_grid;
-    bool recalc_strip_unin_factor;
+
+    bool resizeGrid;
+    bool recalculateStripUninformativeFactorOnClose;
+    simulationVariables *settings;
 
 private slots:
     void on_buttonBox_accepted();
-    void s_genome_size_changed();
-    void s_taxon_number_changed();
+    void slotGenomeSizeChanged();
+    void slotTaxonNumberChanged();
+    void slotPlayingFieldNumberChanged();
 
 private:
     Ui::Settings *ui;
-
 };
 
 #endif // SETTINGS_H

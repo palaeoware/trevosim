@@ -1,53 +1,160 @@
 #include "organism.h"
+#include "mainwindow.h"
 
-
-organism::organism(int genome_size)
+Organism::Organism(int genomeSize)
 {
+
     // Initialise everything to false/-1 to make it obvious if it has not been changed.
-    for (int i=0;i<genome_size;i++){genome.append(false);parent_genome.append(false);}
+    for (int i = 0; i < genomeSize; i++)
+    {
+        genome.append(false);
+        parentGenome.append(false);
+    }
 
-    species_id=-1;
-    parent_species_id=-1;
+    speciesID = -1;
+    parentSpeciesID = -1;
 
-    fitness=-1;
+    fitness = -1;
 }
 
-void organism::initialise(int genome_size)
+void Organism::initialise(int genomeSize)
 {
     // Initialise genome, assume this is first organism, and prog genome same as genome
-        for (int i=0;i<genome_size;i++)
-            {
-                if (simulation_randoms->gen_random() > (MAX_RAND/2)){genome[i]=true;parent_genome[i]=true;}
-                else {genome[i]=false;parent_genome[i]=false;}
-            }
+    for (int i = 0; i < genomeSize; i++)
+    {
+        if (QRandomGenerator::global()->generate() > (QRandomGenerator::max() / 2))
+        {
+            genome[i] = true;
+            parentGenome[i] = true;
+        }
+        else
+        {
+            genome[i] = false;
+            parentGenome[i] = false;
+        }
+    }
 
-        //This is true for first organism. Which is pretty much only time I initialise one currently.
-        species_id=0;
-        parent_species_id=0;
+    //This is true for first organism. Which is pretty much only time I initialise one currently.
+    speciesID = 0;
+    parentSpeciesID = 0;
 
-        born=0;
-        extinct=0;
-        cladogenesis=0;
+    born = 0;
+    extinct = 0;
+    cladogenesis = 0;
 
-        fitness=0;
+    fitness = 0;
 }
 
-void organism::operator = (const organism &O)
+void Organism::initialise(int genomeSize, const int *stochasticMap)
+{
+    // Initialise genome, assume this is first organism, and prog genome same as genome
+    for (int i = 0; i < genomeSize * 4; i++)
+        if (QRandomGenerator::global()->generate() > (QRandomGenerator::max() / 2)) stochasticGenome[i] = true;
+        else stochasticGenome[i] = false;
+    this->mapFromStochastic(stochasticMap);
+
+    for (int i = 0; i < genomeSize; i++) parentGenome[i] = genome[i];
+
+    //This is true for first organism. Which is pretty much only time I initialise one currently.
+    speciesID = 0;
+    parentSpeciesID = 0;
+
+    born = 0;
+    extinct = 0;
+    cladogenesis = 0;
+
+    fitness = 0;
+}
+
+
+void Organism::operator = (const Organism &O)
 {
     // Copy all attributes
-    int genome_size=O.genome.size();
-    for (int i=0;i<genome_size;i++)genome[i]=O.genome[i];
-    for (int i=0;i<genome_size;i++)parent_genome[i]=O.parent_genome[i];
-    species_id=O.species_id;
-    parent_species_id=O.parent_species_id;
-    fitness=O.fitness;
-    born=O.born;
-    extinct=O.extinct;
-    cladogenesis=O.cladogenesis;
+    genome = O.genome;
+    parentGenome = O.parentGenome;
+    if (stochasticLayer) stochasticGenome = O.stochasticGenome;
+    speciesID = O.speciesID;
+    parentSpeciesID = O.parentSpeciesID;
+    fitness = O.fitness;
+    born = O.born;
+    extinct = O.extinct;
+    cladogenesis = O.cladogenesis;
 }
 
-bool organism::operator < (const organism &O)
+bool Organism::operator == (const Organism &O)
 {
-    return (fitness<O.fitness);
+    // Copy all attributes
+    if (genome != O.genome) return false;
+    if (parentGenome != O.parentGenome) return false;
+    if (stochasticLayer && (stochasticGenome != O.stochasticGenome)) return false;
+    if (speciesID != O.speciesID) return false;
+    if (parentSpeciesID != O.parentSpeciesID) return false;
+    if (fitness != O.fitness) return false;
+    if (born != O.born) return false;
+    if (extinct != O.extinct) return false;
+    if (cladogenesis != O.cladogenesis) return false;
+    return true;
+}
+
+
+bool Organism::operator < (const Organism &O)
+{
+    return (fitness < O.fitness);
+}
+
+void Organism::mapFromStochastic(const int *stochasticMap)
+{
+
+    quint16 lookups[4];
+    lookups[0] = 1;
+    for (int i = 1; i < 4; i++)lookups[i] = lookups[i - 1] * 2;
+
+    int genomePosition = 0;
+
+    for (int i = 0; i < stochasticGenome.count(); i += 4)
+    {
+        quint16 map = 0;
+        if (stochasticGenome[i]) map  = map | lookups[0];
+        if (stochasticGenome[i + 1]) map  = map | lookups[1];
+        if (stochasticGenome[i + 2]) map  = map | lookups[2];
+        if (stochasticGenome[i + 3]) map  = map | lookups[3];
+
+        genome[genomePosition] = stochasticMap[map];
+        genomePosition ++;
+    }
+
+    //Debug code
+    /*
+    QString mapString;
+
+    for (int i = 0; i < 16 ; i++)
+        if (stochasticMap[i])mapString.append("1");
+        else mapString.append("0");
+
+    qDebug() << "Map is: " << mapString;
+
+    QString genomeString;
+    for (int i = 0; i < genome.count() ; i++)
+        if (genome[i])genomeString.append("1");
+        else genomeString.append("0");
+
+    qDebug() << "Genome is: " << genomeString;
+
+    genomeString.clear();
+
+    for (int i = 0; i < stochasticGenome.count() ; i++)
+    {
+        if (stochasticGenome[i])genomeString.append("1");
+        else genomeString.append("0");
+        if ((i + 1) % 4 == 0)genomeString.append(" ");
+    }
+
+    qDebug() << "Stochastic genome is: " << genomeString;
+    */
+}
+
+void Organism::setGenome(QVector<bool> genome)
+{
+    this->genome = genome;
 }
 

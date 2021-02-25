@@ -5,43 +5,42 @@
 #define MAX_RAND 65535
 #define STRIP_UNINFORM_FACTOR 12
 
-#include "randoms.h"
-#include "organism.h"
-#include "settings.h"
-#include "output.h"
 #include "about.h"
+#include "organism.h"
+#include "output.h"
+#include "settings.h"
 #include "simulation_variables.h"
 
 #include <algorithm>
 
-#include <QMainWindow>
-#include <QActionGroup>
+#include <QAbstractScrollArea>
 #include <QAction>
-#include <QTableWidget>
-#include <QStringList>
-#include <QString>
+#include <QActionGroup>
 #include <QDebug>
 #include <QFile>
-#include <QPushButton>
-#include <QLabel>
-#include <QLineEdit>
-#include <QAbstractScrollArea>
 #include <QFileDialog>
 #include <QInputDialog>
-#include <QXmlStreamWriter>
-#include <QXmlStreamReader>
-#include <QTextCodec>
-#include <QTimer>
+#include <QLabel>
+#include <QLineEdit>
+#include <QMainWindow>
 #include <QtMath>
 #include <QProgressBar>
+#include <QPushButton>
 #include <QShortcut>
 #include <QStandardPaths>
+#include <QStringList>
+#include <QString>
+#include <QTableWidget>
+#include <QTextCodec>
+#include <QTimer>
+#include <QRandomGenerator>
+#include <QMessageBox>
+#include <QDateTime>
 
-//Forward declaration to avoid circular dependencies in print_genome declaration
-class organism;
+//Forward declaration to avoid circular dependencies in printGenome declaration
+class Organism;
 
-namespace Ui
-{
+namespace Ui {
 class MainWindow;
 }
 
@@ -50,61 +49,75 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-
-protected:
     Ui::MainWindow *ui;
 
+    //Variables for simulation
+    simulationVariables *simSettings;
+
+    //Access functions for updating GUI from simulation object
+    void recalculateStripUniformativeFactor(bool running);
+    void setStatus(QString message);
+    void addProgressBar(int min, int max);
+    void setProgressBar(int value);
+    void hideProgressBar();
+    void printGenome(const Organism *org, int row);
+    void printBlank(int row);
+    void resizeGrid();
+    void resizeGrid(const simulationVariables &simSettings);
+    void setPath(QString newPath);
+    void setTreeDisplay(QString treeString);
+    QString getPath();
+    bool escapePressed, pauseFlag, batchRunning, calculateStripUninformativeFactorRunning;
+    bool batchError;
+    bool unresolvableBatch;
+
+
 private:
-     QAction *startButton, *pauseButton, *resetButton, *runForButton, *settingsButton, *logButton, *aboutButton;
-     QTableWidget *table;
-     QLineEdit *path;
-     int runs;
+    //GUI objects
+    QAction *startButton;
+    QAction *pauseButton;
+    QAction *resetButton;
+    QAction *runForButton;
+    QAction *settingsButton;
+    QAction *logButton;
+    QAction *testButton;
+    QAction *aboutButton;
+    QTableWidget *table;
+    QLineEdit *path;
+    QProgressBar *progress;
+    QString settingsFileString;
+    int runs;
+    bool testMode;
 
-     //Simulation calculations
-     int fitness(const organism *org, const QVector<QVector<bool> > &masks);
-     int genome_diff(const organism *org1, const organism *org2, int run_genome_size);
-     int parent_genome_diff(const organism *org1, int run_genome_size);
-     void recalculate_strip_uniformative_factor();
-     void gui_finish_run();
-     void gui_start_run();
-     void clear_vectors(QVector<organism *> &playing_field, QVector <organism*> &species_list, QVector<QVector<bool> > &masks);
+    void finishRunGUI();
+    void startRunGUI();
 
-     //Display
-     void print_genome(const organism *org, int row);
-     void print_blank(int row);
-     void resize_grid();
-
-     //Print to string for files
-     QString print_newick(int species, QVector<organism *> &species_list);
-     QString print_newick_bl(int species, QVector<organism *> &species_list, bool phangorn_tree);
-     QString print_Time();
-     QString print_Settings();
-     QString print_matrix(const QVector<organism *> species_list, int run_genome_size);
-     QString print_genome_string(const organism *org, int genome_size_local);
-     QString print_genome_int(quint64 genome_local, int genome_size_local, const quint64 *lookups_local);
-
- private slots:
-    void start_triggered();
-    void pause_triggered();
-    void reset_triggered();
-    void runfor_triggered();
-    void changepath_triggered();
-    void settings_triggered();
-    void output_triggered();
-    void about_triggered();
+private slots:
+    void startTriggered();
+    void pauseTriggered();
+    void resetTriggered();
+    void runForTriggered();
+    void changePathTriggered();
+    void settingsTriggered();
+    void outputTriggered();
+    void aboutTriggered();
     void load();
     void save();
-    void save_as();
+    void saveAs();
     void open();
     void escape();
+    void setRandomSeed();
+    void selectionHistogram();
+    void setFactor();
+    void setMultiplePlayingFields();
+    void defaultSettings();
 
     //Analysis
-    void count_peaks();
+    void countPeaks();
+    void doTests();
 };
-
-extern MainWindow *MainWin;
 
 #endif // MAINWINDOW_H

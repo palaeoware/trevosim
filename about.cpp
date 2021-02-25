@@ -1,66 +1,68 @@
 #include "about.h"
 #include "ui_about.h"
+
 #include "version.h"
+#include "mainwindow.h"
 
 #include <QDesktopServices>
 
-About::About(QWidget *parent) :
+About::About(QWidget *parent, QString title) :
     QDialog(parent),
     ui(new Ui::About)
 {
 
     ui->setupUi(this);
 
-      setWindowTitle("About");
-      setWindowIcon(QIcon("://resources/icon.png"));
+    setWindowTitle("About");
+    setWindowIcon(QIcon("://resources/icon.png"));
 
-      QPixmap picture_1(":/img.png");
-      ui->header->setPixmap(picture_1);
-      ui->header->setAlignment(Qt::AlignCenter);
+    QPixmap picture_1(":/img.png");
+    ui->header->setPixmap(picture_1);
+    ui->header->setAlignment(Qt::AlignCenter);
 
-      ui->textLabel_1->setText(MainWin->windowTitle());
-      ui->textLabel_1->setObjectName("aboutTextLabel1");
-      ui->textLabel_1->setAlignment(Qt::AlignCenter);
+    ui->textLabel_1->setText(title);
+    ui->textLabel_1->setObjectName("aboutTextLabel1");
+    ui->textLabel_1->setAlignment(Qt::AlignCenter);
 
-      ui->textLabel_2->setWordWrap(true);
-      ui->textLabel_2->setText("This version of " + QString(PRODUCTNAME) + " was compiled on the date shown above. <br><br>"
-                         "It was coded by <b>Russell Garwood</b> (russell.garwood@gmail.com) and uses a GUI theme designed by <b>Alan R.T. Spencer</b> (alan.spencer@imperial.ac.uk)."
-                         "<br><br>Input from <b>Mark Sutton</b> (m.sutton@imperial.ac.uk) has been integral to its development. Invaluable ideas and disucssion were provided by: Robert Sansom; Joe Keating; Chris Knight; Roger Benson; Thomas Halliday, and a great number of other people."
-                         "<br><br>Reports are appreciated, and comments, suggestions, and feature requests are welcome.<br>");
-      ui->textLabel_2->setAlignment(Qt::AlignCenter);
+    ui->textLabel_2->setWordWrap(true);
+    ui->textLabel_2->setText("This version of " + QString(PRODUCTNAME) + " was compiled on the date shown above. <br><br>"
+                             "It was coded by <b>Russell Garwood</b> (russell.garwood@gmail.com) and uses a GUI theme designed by <b>Alan R.T. Spencer</b> (alan.spencer@imperial.ac.uk)."
+                             "<br><br>Input from <b>Mark Sutton</b> (m.sutton@imperial.ac.uk) has been integral to its development. Invaluable ideas and disucssion were provided by: Robert Sansom; Joe Keating; Chris Knight; Roger Benson; Thomas Halliday, and a great number of other people."
+                             "<br><br>Reports are appreciated, and comments, suggestions, and feature requests are welcome.");
+    ui->textLabel_2->setAlignment(Qt::AlignCenter);
 
-      QPushButton *codePushButton = new  QPushButton("&Code on GitHub",this);
-      ui->pushButtonHorizontalLayout->addWidget(codePushButton);
-      connect(codePushButton , SIGNAL (clicked()), this, SLOT(codeOnGitHub()));
+    QPushButton *codePushButton = new  QPushButton("&Code on GitHub", this);
+    ui->pushButtonHorizontalLayout->addWidget(codePushButton);
+    connect(codePushButton, SIGNAL (clicked()), this, SLOT(codeOnGitHub()));
 
-     QPushButton *bugPushButton = new  QPushButton("&Report Bug/Issue/Feature Request",this);
-      ui->pushButtonHorizontalLayout->addWidget(bugPushButton);
-     connect(bugPushButton , SIGNAL (clicked()), this, SLOT(bugReport()));
+    QPushButton *bugPushButton = new  QPushButton("&Report Bug/Issue/Feature Request", this);
+    ui->pushButtonHorizontalLayout->addWidget(bugPushButton);
+    connect(bugPushButton, SIGNAL (clicked()), this, SLOT(bugReport()));
 
-     QPushButton *docsPushButton = new  QPushButton("&See documentation",this);
-     ui->pushButtonHorizontalLayout->addWidget(docsPushButton);
-     connect(docsPushButton, SIGNAL (clicked()), this, SLOT(docs()));
+    QPushButton *docsPushButton = new  QPushButton("&See documentation", this);
+    ui->pushButtonHorizontalLayout->addWidget(docsPushButton);
+    connect(docsPushButton, SIGNAL (clicked()), this, SLOT(docs()));
 
-      ui->textLabel_3->setWordWrap(true);
-      ui->textLabel_3->setText("<br><b>Copyright and License:</b>"
-                               "<br><br>" + QString(COPYRIGHT) +
-                               "<br><br>"+ QString(LICENCE) +" (see below).");
-      ui->textLabel_3->setAlignment(Qt::AlignCenter);
+    ui->textLabel_3->setWordWrap(true);
+    ui->textLabel_3->setText("<br><br><b>Copyright and License:</b>"
+                             "<br><br>" + QString(COPYRIGHT) +
+                             "<br><br>" + QString(LICENCE) + " (see below).");
+    ui->textLabel_3->setAlignment(Qt::AlignCenter);
 
-      ui->textBrowser->setHtml(returnLicense());
-      ui->textBrowser->setOpenLinks(true);
-      ui->textBrowser->setOpenExternalLinks(true);
+    ui->textBrowser->setHtml(returnLicense());
+    ui->textBrowser->setOpenLinks(true);
+    ui->textBrowser->setOpenExternalLinks(true);
 
-      QPixmap picture_2(":/gplV3Logo");
-      ui->footer1->setPixmap(picture_2);
-      ui->footer1->setAlignment(Qt::AlignCenter);
+    QPixmap picture_2(":/gplV3Logo");
+    ui->footer1->setPixmap(picture_2);
+    ui->footer1->setAlignment(Qt::AlignCenter);
 
-      QPixmap picture_3(":/builtWithQTLogo");
-      ui->footer2->setPixmap(picture_3);
-      ui->footer2->setAlignment(Qt::AlignCenter);
+    QPixmap picture_3(":/builtWithQTLogo");
+    ui->footer2->setPixmap(picture_3);
+    ui->footer2->setAlignment(Qt::AlignCenter);
 
-      ui->buttonBox->setStandardButtons(QDialogButtonBox::Close);
-      ui->buttonBox->setFocus();
+    ui->buttonBox->setStandardButtons(QDialogButtonBox::Close);
+    ui->buttonBox->setFocus();
 }
 
 About::~About()
@@ -82,7 +84,6 @@ void About::docs()
 {
     QDesktopServices::openUrl(QUrl(QString(DOCSURL)));
 }
-
 
 QString About::returnLicense()
 {

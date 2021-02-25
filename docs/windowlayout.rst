@@ -26,6 +26,7 @@ The buttons control the simulation, as well as launching dialogues, and defining
 :Batch: For repeated runs using the same settings, TREvoSim provides a batch mode. The number of runs is requested on launching batch mode, and output files are labelled accordingly.
 :Settings: Launches :ref:`settings` dialogue.
 :Output: Launches :ref:`loggingsim` dialogue.
+:Tests: Runs the TREvoSim test suite, reporting test results in a new panel that appears on the right of the main window.
 :Save path: All files created by the program are written to a folder titled *TREvoSim_output*, created in this location.
 :Change: Launches a file explorer to change the save path.
 :About: Opens a dialogue with information about TREvoSim, and links to the code and for bug reporting.

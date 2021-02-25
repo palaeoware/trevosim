@@ -1,14 +1,22 @@
-.. _logging:
+.. _loggingsim:
 
 Logging the Simulation
 ======================
 
-TRevoSim has a versatile logging system which allows the user to define outputs in a range of formats required for phylogenetic inference packages, provided these allow plain text inputs. Clicking on the output button of the toolbar will launch the output dialogue:
+Logging system
+--------------
+
+TREvoSim has a versatile logging system which allows the user to define outputs in a range of formats required for phylogenetic inference packages, provided these allow plain text inputs. Clicking on the output button of the toolbar will launch the output dialogue:
 
 .. figure:: _static/output_01.png
     :align: center
 
-This provides the options for two custom log files, which are placed, after a run, within the *TREvoSim_output* folder created on the save path. Basename defines the start of the filename, which then either includes a number, which iterates with subsequent runs when output is not set to append, or *_batch* if the outputs are set to append and a batch is being run. The file extension is also defined here. The two text boxes then allow custom file content to be written: text is written as provided to the file - for example with run instructions or program commands - and any of the keywords below (note this is case sensitive) included within two vertical bar ( | ) symbols are replaced as a file is written with the following:
+This provides the options for two custom log files, which are placed, after a run, within the *TREvoSim_output* folder created on the save path. Basename defines the start of the filename, which then either includes a number, which iterates with subsequent runs when output is not set to append, or *_batch* if the outputs are set to append and a batch is being run. The file extension is also defined here. The two text boxes then allow custom file content to be written: text is written as provided to the file - for example with run instructions or program commands - and any of the keywords below (note this is case sensitive) included within two vertical bar ( | ) symbols are replaced as a file is written.
+
+Keywords
+--------
+
+Keywords within two vertical bars ( e.g. \|Matrix\| ) are replaced as a file is written as follows:
 
 :Matrix: This is replaced with the matrix from the run.
 :TNT_Tree: This writes a tree, if required, in TNT format (i.e. only brackets and terminal labels), e.g.
@@ -56,4 +64,4 @@ There are three further options at the base of the dialogue:
 :Output NEX tree file: This outputs a tree for each run in a standard nexus format with the tree and translate block, as well as a comment with the settings of the run written to it. These do not append, but each file has the run number at the end of the file name.
 :Output working log: When this is checked, TREvoSim outputs a text file outlining many of the steps each iteration, such as the state of the playing field, the environment, and the processes the software is going through. This helps understand and fact check any given run, but for significant playing field sizes, taxon numbers, or character numbers, it creates a significant (10s - 100s of MB) text file.
 
-Should any other output options be required, please file a `feature request <https://github.com/palaeoware/trevosim/issues>`_.
+Should any other output options be required, please file a `feature request <https://github.com/palaeoware/trevosim/issues>`_. Keywords are not case sensitive.

@@ -9,7 +9,7 @@
 
 class DarkStyleTheme : public QProxyStyle
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
     DarkStyleTheme();

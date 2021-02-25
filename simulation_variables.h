@@ -3,17 +3,63 @@
 
 #include <QString>
 #include <QTextStream>
+#include <QFile>
+#include <QXmlStreamReader>
+#include <QXmlStreamWriter>
 
-//A bunch of global variables.
-extern int genome_size, taxon_number, pfield_size, species_difference, unresolvable_cutoff, mask_number, informative_characters;
-extern bool batch_running, pause_flag, strip_uninformative, append, write_tree, sansomian, error_batch, unresolvable_batch, no_deleterious, calc_factor_running, factor_settings_batch, escape_pressed, work_log;
-extern double strip_uninformative_factor, environment_mutation, organism_mutation;
-extern QString base_01, base_02, base_03, ext_01, ext_02, ext_03, filestring_01, filestring_02, filestring_03, groups, factor_settings, settings_filename;
+#include "version.h"
 
-class simulation_variables
+class simulationVariables
 {
 public:
-    simulation_variables();
+    simulationVariables();
+    QString printSettings() const;
+    bool loadSettings(QFile *settingsFile);
+    void saveSettings(QFile *settingsFile);
+
+    //Ints
+    int environmentNumber;
+    int fitnessTarget;
+    int genomeSize;
+    int maskNumber;
+    int playingfieldSize;
+    int playingfieldNumber;
+    int playingfieldMasksMode;
+    int speciesDifference;
+    int taxonNumber;
+    int unresolvableCutoff;
+    int test;
+
+    //Bools
+    bool append;
+    bool discardDeleterious;
+    bool sansomianSpeciation;
+    bool speciesCurve;
+    bool stripUninformative;
+    bool workingLog;
+    bool writeTree;
+    bool randomSeed;
+    bool randomOverwrite;
+
+    //Doubles
+    double environmentMutationRate;
+    double organismMutationRate;
+    double stripUninformativeFactor;
+    double selectionCoinToss;
+
+    //Strings - for logging
+    QString logFileNameBase01;
+    QString logFileNameBase02;
+    QString logFileNameBase03;
+    QString logFileExtension01;
+    QString logFileExtension02;
+    QString logFileExtension03;
+    QString stripUninformativeFactorSettings;
+    QString logFileString01;
+    QString logFileString02;
+    QString logFileString03;
+    //And saving files
+    QString savePathDirectory;
 };
 
 #endif // SIMULATION_VARIABLES_H

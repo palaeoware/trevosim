@@ -22,13 +22,13 @@ import sphinx_rtd_theme
 # -- Project information -----------------------------------------------------
 
 project = 'TREvoSim'
-copyright = '2019, Russell J. Garwood, Alan R.T. Spencer, Mark D. Sutton'
+copyright = '2021, Russell J. Garwood, Alan R.T. Spencer, Mark D. Sutton'
 author = 'Russell J. Garwood, Alan R.T. Spencer, Mark D. Sutton'
 
 # The short X.Y version
-version = '1.0.0'
+version = '2.0.0'
 # The full version, including alpha/beta/rc tags
-release = '1.0.0'
+release = '2.0.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -125,7 +125,7 @@ html_static_path = ['_static']
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-#html_logo = None
+html_logo = html_logo = '_static/TREvoSim.jpg'
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32

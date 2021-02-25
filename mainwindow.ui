@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>1181</width>
+    <height>630</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,229 +25,243 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QTableWidget" name="character_Display">
-      <property name="horizontalScrollBarPolicy">
-       <enum>Qt::ScrollBarAsNeeded</enum>
-      </property>
-      <property name="autoScrollMargin">
-       <number>16</number>
-      </property>
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
-      </property>
-      <property name="dragDropOverwriteMode">
-       <bool>true</bool>
-      </property>
-      <property name="alternatingRowColors">
-       <bool>true</bool>
-      </property>
-      <property name="selectionMode">
-       <enum>QAbstractItemView::NoSelection</enum>
-      </property>
-      <property name="rowCount">
-       <number>32</number>
-      </property>
-      <property name="columnCount">
-       <number>129</number>
-      </property>
-      <attribute name="horizontalHeaderVisible">
-       <bool>false</bool>
-      </attribute>
-      <attribute name="horizontalHeaderCascadingSectionResizes">
-       <bool>true</bool>
-      </attribute>
-      <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>20</number>
-      </attribute>
-      <attribute name="horizontalHeaderHighlightSections">
-       <bool>false</bool>
-      </attribute>
-      <attribute name="horizontalHeaderMinimumSectionSize">
-       <number>20</number>
-      </attribute>
-      <attribute name="verticalHeaderVisible">
-       <bool>true</bool>
-      </attribute>
-      <attribute name="verticalHeaderCascadingSectionResizes">
-       <bool>true</bool>
-      </attribute>
-      <attribute name="verticalHeaderDefaultSectionSize">
-       <number>25</number>
-      </attribute>
-      <attribute name="verticalHeaderHighlightSections">
-       <bool>true</bool>
-      </attribute>
-      <attribute name="verticalHeaderMinimumSectionSize">
-       <number>20</number>
-      </attribute>
-      <attribute name="verticalHeaderShowSortIndicator" stdset="0">
-       <bool>false</bool>
-      </attribute>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <row/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-      <column/>
-     </widget>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QTableWidget" name="character_Display">
+        <property name="horizontalScrollBarPolicy">
+         <enum>Qt::ScrollBarAsNeeded</enum>
+        </property>
+        <property name="autoScrollMargin">
+         <number>16</number>
+        </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <property name="dragDropOverwriteMode">
+         <bool>true</bool>
+        </property>
+        <property name="alternatingRowColors">
+         <bool>true</bool>
+        </property>
+        <property name="selectionMode">
+         <enum>QAbstractItemView::NoSelection</enum>
+        </property>
+        <property name="rowCount">
+         <number>32</number>
+        </property>
+        <property name="columnCount">
+         <number>129</number>
+        </property>
+        <attribute name="horizontalHeaderVisible">
+         <bool>false</bool>
+        </attribute>
+        <attribute name="horizontalHeaderCascadingSectionResizes">
+         <bool>true</bool>
+        </attribute>
+        <attribute name="horizontalHeaderMinimumSectionSize">
+         <number>25</number>
+        </attribute>
+        <attribute name="horizontalHeaderDefaultSectionSize">
+         <number>25</number>
+        </attribute>
+        <attribute name="horizontalHeaderHighlightSections">
+         <bool>false</bool>
+        </attribute>
+        <attribute name="verticalHeaderVisible">
+         <bool>true</bool>
+        </attribute>
+        <attribute name="verticalHeaderCascadingSectionResizes">
+         <bool>true</bool>
+        </attribute>
+        <attribute name="verticalHeaderMinimumSectionSize">
+         <number>20</number>
+        </attribute>
+        <attribute name="verticalHeaderDefaultSectionSize">
+         <number>25</number>
+        </attribute>
+        <attribute name="verticalHeaderHighlightSections">
+         <bool>true</bool>
+        </attribute>
+        <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+         <bool>false</bool>
+        </attribute>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <row/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+        <column/>
+       </widget>
+      </item>
+      <item>
+       <widget class="QTextEdit" name="testLog">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="textInteractionFlags">
+         <set>Qt::TextSelectableByMouse</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
     <item>
-     <widget class="QTextBrowser" name="tree_Display">
+     <widget class="QTextBrowser" name="treeDisplay">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
         <horstretch>0</horstretch>
@@ -290,10 +304,24 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
+     <width>1181</width>
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuCommands">
+    <property name="title">
+     <string>Commands</string>
+    </property>
+    <addaction name="actionSave_current_settings"/>
+    <addaction name="actionSave_settings_as"/>
+    <addaction name="actionLoad_settings_from_file"/>
+    <addaction name="actionRestore_default_settings"/>
+    <addaction name="actionFitness_histogram"/>
+    <addaction name="actionRun_tests"/>
+    <addaction name="actionSet_uninformative_factor"/>
+    <addaction name="actionRandom_seed"/>
+   </widget>
+   <addaction name="menuCommands"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <property name="toolButtonStyle">
@@ -307,6 +335,73 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionSave_current_settings">
+   <property name="text">
+    <string>Save current settings</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionSave_settings_as">
+   <property name="text">
+    <string>Save settings as...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
+  </action>
+  <action name="actionLoad_settings_from_file">
+   <property name="text">
+    <string>Load settings from file...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionRestore_default_settings">
+   <property name="text">
+    <string>Restore default settings</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+D</string>
+   </property>
+  </action>
+  <action name="actionFitness_histogram">
+   <property name="text">
+    <string>Fitness histogram</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+H</string>
+   </property>
+  </action>
+  <action name="actionRun_tests">
+   <property name="text">
+    <string>Run tests</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+T</string>
+   </property>
+  </action>
+  <action name="actionSet_uninformative_factor">
+   <property name="text">
+    <string>Set uninformative factor</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+F</string>
+   </property>
+  </action>
+  <action name="actionRandom_seed">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Random seed</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+R</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
