@@ -1,0 +1,32 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the paper below."
+authors:
+- family-names: "Garwood"
+  given-names: "Russell J."
+  orcid: "https://orcid.org/0000-0002-2803-9471"
+title: "TREvoSim"
+version: 2.0.0
+doi: 10.5281/zenodo.4564524
+date-released: 2021-02-26
+url: "https://github.com/palaeoware/trevosim/"
+preferred-citation:
+  type: article
+  authors:
+  - family-names: "Mongiardino Koch"
+    given-names: "Nicolás"
+    orcid: "https://orcid.org/0000-0001-6317-5869"
+  - family-names: "Garwood"
+    given-names: "Russell J."
+    orcid: "https://orcid.org/0000-0002-2803-9471
+  - family-names: "Parry"
+    given-names: "Luke A."
+    orcid: "https://orcid.org/0000-0002-3910-0346"
+  doi: "10.1098/rspb.2021.0044"
+  journal: "Proceedings of the Royal Society B"
+  month: 5
+  start: 20210044 # First page number
+  #end: Last page number - NA
+  title: "Morphological Phylogenetics Evaluated Using Novel Evolutionary Simulations"
+  issue: 288
+  volume: 1950
+  year: 2021
