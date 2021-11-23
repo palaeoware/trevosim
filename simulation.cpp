@@ -895,8 +895,13 @@ bool simulation::stripUninformativeCharacters(QVector <Organism *> &speciesList,
     if (simSettings->stripUninformative)
     {
         if (speciesList[0]->genome.size() < runGenomeSize) requiredCharacterNumber = false;
-        if (codingGenomeEnd < runGenomeSize || speciesList[0]->genome.size() < runGenomeSize) requiredCharacterNumber = false;
-    }
+        if (speciesList[0]->genome.size() > runGenomeSize)
+        {
+            for (int j = 0; j < simSettings->taxonNumber; j++)
+                for (int i=speciesList[j]->genome.size()-1; i>=runGenomeSize; i--)
+                    speciesList[j]->genome.remove(i);
+        }
+     }
 
     if (!requiredCharacterNumber && !simSettings->test)
     {
