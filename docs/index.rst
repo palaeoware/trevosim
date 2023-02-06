@@ -26,7 +26,7 @@ Garwood, R.J., Spencer A.R.T. and Sutton, M.D., 2019. REvoSim: Organism-level si
 
 Keating, J.N., Sansom, R.S., Sutton, M.D., Knight, C.G. and Garwood, R.J., 2020. Morphological phylogenetics evaluated using novel evolutionary simulations. Systematic Biology 69(5):897-912. `DOI: 10.1093/sysbio/syaa012 <https:/https://doi.org/10.1111/pala.12420/doi.org/10.1093/sysbio/syaa012>`_
 
-Koch, N.M., Garwood, R.J. and Parry, L.A., 2020. Fossils improve phylogenetic analyses of morphological characters. bioRxiv.
+Mongiardino Koch, N., Garwood, R.J. & Parry, L.A. 2021. Fossils improve phylogenetic analyses of morphological characters. Proceedings of the Royal Society B: 288(1950):20210044. `DOI: 10.1098/rspb.2021.0044 <https:/https://doi.org/10.1098/rspb.2021.0044>`_
 
 Table of Contents
 =================
