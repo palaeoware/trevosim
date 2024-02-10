@@ -18,8 +18,6 @@ e: `palaeoware@gmail.com <mailto:palaeoware@gmail.com>`_
 
 w: `https://github.com/palaeoware <https://github.com/palaeoware>`_
 
-Test webhook
-
 
 Relevant references
 -------------------
