@@ -2,15 +2,15 @@
 #define VERSION_H
 
 //Software Versions
-#define MAJORVERSION 2
+#define MAJORVERSION 3
 #define MINORVERSION 0
-#define PATCHVERSION 1
+#define PATCHVERSION 0
 
 //Save File Version
 #define FILEVERSION 1
 
 //Legal Stuff
-#define COPYRIGHT "Copyright © 2018-2020 Russell J. Garwood, Mark D. Sutton, Alan R.T. Spencer"
+#define COPYRIGHT "Copyright © 2018-2023 Russell J. Garwood, Mark D. Sutton, Alan R.T. Spencer"
 #define LICENCE "This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under the conditions of the GPL v3  license"
 
 //Programme Name

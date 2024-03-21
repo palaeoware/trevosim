@@ -1,12 +1,15 @@
-#include "test.h"
+#include "testinternal.h"
+#include "simulation.h"
+
 #include <QCryptographicHash>
 
-test::test(MainWindow *theMainWindowCon)
+testinternal::testinternal(MainWindow *theMainWindowCon)
 {
     theMainWindow = theMainWindowCon;
+    error = false;
 }
 
-bool test::callTest(int i, QString &outString)
+bool testinternal::callTest(int i, QString &outString)
 {
     bool pass;
     switch (i)
@@ -79,24 +82,29 @@ bool test::callTest(int i, QString &outString)
 }
 
 //Test fitness algorithm - send fitness function known masks and organism, and check output
-bool test::testZero(QString &outString)
+bool testinternal::testZero(QString &outString)
 {
     bool testFlag = true;
     QTextStream out(&outString);
     out << "Testing fitness algorithm.\n\n";
 
-    //Create default setting sonject and then a simulation object for the test
+    //Create default setting object and then a simulation object for the test
     simulationVariables simSettings;
     simSettings.genomeSize = 50;
-    //RJG - some stuff redacted for 2.0.0 - email if you're interested
-    simulation x(theMainWindow, 0, &simSettings);
+    simSettings.fitnessSize = 50;
+    simSettings.speciesSelectSize = 50;
+    //Test is for three masks and a target of zero (the defaults in v2.0.0)
+    simSettings.fitnessTarget = 0;
+    simSettings.maskNumber = 3;
+    simulation x(0, &simSettings, &error, theMainWindow);
+    if (error) testFlag = false;
 
     //Fitness requires an organism - create an organism with 50 bits, no stochastic genome, all bits are initialised to zero
-    Organism org(simSettings.genomeSize);
+    Organism org(simSettings.genomeSize, false);
     out << "Organism genome is: " << x.printGenomeString(&org) << "\n";
 
     //Now set masks in simulation to 1
-    for (auto p : x.playingFields)
+    for (auto p : qAsConst(x.playingFields))
         for (int k = 0; k < simSettings.environmentNumber; k++)
             for (int j = 0; j < simSettings.maskNumber; j++)
                 for (auto &i : p->masks[k][j]) i = true;
@@ -105,39 +113,79 @@ bool test::testZero(QString &outString)
     QStringList l = maskString .split('\n');
     out << "Masks are:\n" << l[2]  << "\n" << l[3] << "\n" << l[4] << "\n";
 
-    int fitness = x.fitness(&org, x.playingFields[0]->masks, simSettings.genomeSize, simSettings.fitnessTarget);
+    int fitness = x.fitness(&org, x.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber);
     if (fitness != 150) testFlag = false;
-    out <<  "Fitness, with fitness target of 0, is " << fitness << ". It should be 150.\n";
+    out <<  "Fitness, with fitness target of " << simSettings.fitnessTarget << " is " << fitness << ". It should be 150.\n";
 
     simSettings.fitnessTarget = 75;
-    fitness = x.fitness(&org, x.playingFields[0]->masks, simSettings.genomeSize, simSettings.fitnessTarget);
+    fitness = x.fitness(&org, x.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber);
     if (fitness != 75) testFlag = false;
     out <<  "Fitness, with fitness target of 75, is " << fitness << ". It should be 75.\n";
 
-    for (int i = 0; i < 25; i++)org.genome[i] = 1;
+    for (int i = 0; i < 25; i++)org.genome[i] = true;
     out << "Fitness target is still 75, genome is now: " << x.printGenomeString(&org) << "\n";
-    fitness = x.fitness(&org, x.playingFields[0]->masks, simSettings.genomeSize, simSettings.fitnessTarget);
+    fitness = x.fitness(&org, x.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber);
     if (fitness != 0) testFlag = false;
     out <<  "Fitness is " << fitness << ". It should be 0.\n";
 
     simSettings.maskNumber = 2;
     simSettings.fitnessTarget = 50;
     out << "Set masks to two, and fitness target back to 50.\n";
-    simulation y(theMainWindow, 0, &simSettings);
+    simulation y(0, &simSettings, &error, theMainWindow);
+    if (error) testFlag = false;
+
     //Now set masks in simulation to 1
-    for (auto p : y.playingFields)
+    for (auto p : qAsConst(y.playingFields))
         for (int k = 0; k < simSettings.environmentNumber; k++)
             for (int j = 0; j < simSettings.maskNumber; j++)
                 for (auto &i : p->masks[k][j]) i = true;
 
-    for (int i = 0; i < simSettings.genomeSize; i++)org.genome[i] = 1;
+    for (int i = 0; i < simSettings.fitnessSize; i++)org.genome[i] = true;
     maskString = y.printMasks(y.playingFields);
     l = maskString .split('\n');
     out << "Organism genome is: " << y.printGenomeString(&org) << "\n";
     out << "Masks are:\n" << l[2]  << "\n" << l[3] << "\n";
-    fitness = y.fitness(&org, y.playingFields[0]->masks, simSettings.genomeSize, simSettings.fitnessTarget);
+    fitness = y.fitness(&org, y.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber);
     if (fitness != 50) testFlag = false;
-    out <<  "Fitness is " << fitness << ". It should be 50.\n";
+    out <<  "Fitness is " << fitness << ". It should be 50.\n\n";
+
+    //Now let's test with two environments
+    out << "Two environments, one all ones, the other all zeros, target is zero.\n";
+
+    simSettings.environmentNumber = 2;
+    simSettings.fitnessTarget = 0;
+    simulation z(0, &simSettings, &error, theMainWindow);
+    if (error) testFlag = false;
+
+    //Now set masks in environment 0 simulation to 1
+    for (auto p : qAsConst(z.playingFields))
+        for (int j = 0; j < simSettings.maskNumber; j++)
+            for (auto &i : p->masks[0][j]) i = true;
+
+    //Now set masks in environment 1 simulation to 0
+    for (auto p : qAsConst(z.playingFields))
+        for (int j = 0; j < simSettings.maskNumber; j++)
+            for (auto &i : p->masks[1][j]) i = false;
+
+    for (int i = 0; i < 10; i++)org.genome[i] = false;
+
+    maskString = z.printMasks(z.playingFields);
+    l = maskString.split('\n');
+    out << "Organism genome is: " << y.printGenomeString(&org) << " fitness target is " << simSettings.fitnessTarget << "\n";
+    out << maskString;
+
+    int environmentZeroFitness = z.fitness(&org, z.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, 0);
+    out << "Environment zero fitness should be 20, it is " <<  environmentZeroFitness << ".\n";
+    if (environmentZeroFitness != 20) testFlag = false;
+
+    int environmentOneFitness = z.fitness(&org, z.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, 1);
+    out << "Environment one fitness should be 80, it is " <<  environmentOneFitness << ".\n";
+    if (environmentOneFitness != 80) testFlag = false;
+    if (environmentOneFitness == environmentZeroFitness) testFlag = false;
+
+    int environmentBothFitness = z.fitness(&org, z.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber);
+    out << "Fitness based on both environments should be 20, it is " <<  environmentBothFitness << ".\n";
+    if (environmentBothFitness != 20 || environmentBothFitness != environmentZeroFitness) testFlag = false;
 
     if (testFlag) out << "\nFitness tests passed.\n";
 
@@ -145,7 +193,7 @@ bool test::testZero(QString &outString)
 }
 
 //Test mask initialisation, and behaviour with multiple playing fields in different mask modes
-bool test::testOne(QString &outString)
+bool testinternal::testOne(QString &outString)
 {
     bool testFlag = true;
     QTextStream out(&outString);
@@ -154,12 +202,14 @@ bool test::testOne(QString &outString)
     //Create default setting sonject and then a simulation object for the test
     simulationVariables simSettings;
     simSettings.genomeSize = 50;
-    //RJG - some stuff redacted for 2.0.0 - email if you're interested
+    simSettings.fitnessSize = 50;
+    simSettings.speciesSelectSize = 50;
 
     //Mode identical
-    simSettings.playingfieldMasksMode = 0;
+    simSettings.playingfieldMasksMode = MASKS_MODE_IDENTICAL;
     simSettings.playingfieldNumber = 3;
-    simulation x(theMainWindow, 0, &simSettings);
+    simulation x(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
     if (x.playingFields[0]->masks != x.playingFields[1]->masks || x.playingFields[1]->masks != x.playingFields[2]->masks) testFlag = false;
     QString flagString = testFlag ? "true" : "false";
 
@@ -170,8 +220,9 @@ bool test::testOne(QString &outString)
             QCryptographicHash::Md5).toHex() << "\nTREvoSim has tested whether these are identical (they should be) and outputs " << flagString << ".\n";
 
     //Mode independent
-    simSettings.playingfieldMasksMode = 1;
-    simulation y(theMainWindow, 0, &simSettings);
+    simSettings.playingfieldMasksMode = MASKS_MODE_INDEPENDENT;
+    simulation y(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
     if (y.playingFields[0]->masks == y.playingFields[1]->masks || y.playingFields[1]->masks == y.playingFields[2]->masks) testFlag = false;
     flagString = testFlag ? "true" : "false";
 
@@ -182,8 +233,9 @@ bool test::testOne(QString &outString)
             QCryptographicHash::Md5).toHex() << "\nTREvoSim has tested whether these are not identical and outputs " << flagString  << ".\n";
 
     //Mode identical at start
-    simSettings.playingfieldMasksMode = 2;
-    simulation z(theMainWindow, 0, &simSettings);
+    simSettings.playingfieldMasksMode = MASKS_MODE_IDENTICAL_START;
+    simulation z(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
     if (z.playingFields[0]->masks != z.playingFields[1]->masks || z.playingFields[1]->masks != z.playingFields[2]->masks) testFlag = false;
     flagString = testFlag ? "true" : "false";
 
@@ -199,7 +251,7 @@ bool test::testOne(QString &outString)
 }
 
 //Test masks in different playing fields for different modes after a simulation has been running
-bool test::testTwo(QString &outString)
+bool testinternal::testTwo(QString &outString)
 {
 
     bool testFlag = true;
@@ -209,16 +261,19 @@ bool test::testTwo(QString &outString)
     //Create default setting object and then a simulation object for the test
     simulationVariables simSettings;
     simSettings.genomeSize = 50;
-    //RJG - some stuff redacted for 2.0.0 - email if you're interested
+    simSettings.fitnessSize = 50;
+    simSettings.speciesSelectSize = 50;
     simSettings.playingfieldNumber = 3;
-    simSettings.taxonNumber = 5;
+    simSettings.runForTaxa = 5;
     simSettings.test = 2;
 
-    theMainWindow->resizeGrid(simSettings);
+    if (theMainWindow)
+        theMainWindow->resizeGrid(simSettings.runForTaxa, simSettings.genomeSize);
 
     //Mode identical
-    simSettings.playingfieldMasksMode = 0;
-    simulation x(theMainWindow, 0, &simSettings);
+    simSettings.playingfieldMasksMode = MASKS_MODE_IDENTICAL;
+    simulation x(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
     x.run();
     if (x.playingFields[0]->masks != x.playingFields[1]->masks || x.playingFields[1]->masks != x.playingFields[2]->masks) testFlag = false;
     QString flagString = testFlag ? "true" : "false";
@@ -230,8 +285,9 @@ bool test::testTwo(QString &outString)
             QCryptographicHash::Md5).toHex() << "\nTREvoSim has tested whether these are identical and outputs " << flagString << ".\n";
 
     //Mode independent
-    simSettings.playingfieldMasksMode = 1;
-    simulation y(theMainWindow, 0, &simSettings);
+    simSettings.playingfieldMasksMode = MASKS_MODE_INDEPENDENT;
+    simulation y(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
     y.run();
     if (y.playingFields[0]->masks == y.playingFields[1]->masks || y.playingFields[1]->masks == y.playingFields[2]->masks) testFlag = false;
     flagString = testFlag ? "true" : "false";
@@ -244,8 +300,9 @@ bool test::testTwo(QString &outString)
 
 
     //Mode identical at start
-    simSettings.playingfieldMasksMode = 2;
-    simulation z(theMainWindow, 0, &simSettings);
+    simSettings.playingfieldMasksMode = MASKS_MODE_IDENTICAL_START;
+    simulation z(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
     z.run();
     if (z.playingFields[0]->masks == z.playingFields[1]->masks || z.playingFields[1]->masks == z.playingFields[2]->masks) testFlag = false;
     flagString = testFlag ? "true" : "false";
@@ -259,12 +316,16 @@ bool test::testTwo(QString &outString)
     if (testFlag) out << "\nMask mode tests passed.\n";
 
     simulationVariables simSettingsReset;
-    theMainWindow->resizeGrid(simSettingsReset);
+    if (theMainWindow)
+    {
+        theMainWindow->resizeGrid(simSettingsReset.runForTaxa, simSettingsReset.genomeSize);
+        theMainWindow->resetDisplays();
+    }
     return testFlag;
 }
 
 //Test initialisation of playing fields - should be populated with identical individual
-bool test::testThree(QString &outString)
+bool testinternal::testThree(QString &outString)
 {
     bool testFlag = true;
     QTextStream out(&outString);
@@ -272,46 +333,51 @@ bool test::testThree(QString &outString)
 
     simulationVariables simSettings;
     simSettings.genomeSize = 50;
-    //RJG - some stuff redacted for 2.0.0 - email if you're interested
+    simSettings.fitnessSize = 50;
+    simSettings.speciesSelectSize = 50;
     simSettings.playingfieldNumber = 3;
-    simSettings.taxonNumber = 5;
+    simSettings.runForTaxa = 5;
     simSettings.test = 3;
     simSettings.workingLog = true;
 
-    theMainWindow->resizeGrid(simSettings);
+    if (theMainWindow)
+        theMainWindow->resizeGrid(simSettings.runForTaxa, simSettings.genomeSize);
 
     //Mode identical
-    simSettings.playingfieldMasksMode = 0;
-    simulation x(theMainWindow, 0, &simSettings);
+    simSettings.playingfieldMasksMode = MASKS_MODE_IDENTICAL;
+    simulation x(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
     x.run();
 
     Organism org(*x.playingFields[0]->playingField[0]);
-    for (auto p : x.playingFields)
-        for (auto o : p->playingField)
+    for (auto p : qAsConst(x.playingFields))
+        for (auto o : qAsConst(p->playingField))
             if (!(*o == org)) testFlag = false;
 
     QString flagString = testFlag ? "true" : "false";
     out << "Mode identical - checked if all organisms are the same after initialisation and returned " << flagString << ".\n";
 
     //Mode independent
-    simSettings.playingfieldMasksMode = 1;
-    simulation y(theMainWindow, 0, &simSettings);
+    simSettings.playingfieldMasksMode = MASKS_MODE_INDEPENDENT;
+    simulation y(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
     y.run();
 
     org = *y.playingFields[0]->playingField[0];
-    for (auto p : y.playingFields)
-        for (auto o : p->playingField)
+    for (auto p : qAsConst(y.playingFields))
+        for (auto o : qAsConst(p->playingField))
             if (!(*o == org)) testFlag = false;
     flagString = testFlag ? "true" : "false";
     out << "Mode independent - checked if all organisms are the same after initialisation and returned " << flagString << ".\n";
 
     //Mode identical at start
-    simSettings.playingfieldMasksMode = 2;
-    simulation z(theMainWindow, 0, &simSettings);
+    simSettings.playingfieldMasksMode = MASKS_MODE_IDENTICAL_START;
+    simulation z(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
     z.run();
     org = *z.playingFields[0]->playingField[0];
-    for (auto p : z.playingFields)
-        for (auto o : p->playingField)
+    for (auto p : qAsConst(z.playingFields))
+        for (auto o : qAsConst(p->playingField))
             if (!(*o == org)) testFlag = false;
     flagString = testFlag ? "true" : "false";
     out << "Mode identical at start - checked if all organisms are the same after initialisation and returned " << flagString << ".\n";
@@ -319,39 +385,76 @@ bool test::testThree(QString &outString)
     if (testFlag) out << "\nInitialisation tests passed.\n";
 
     simulationVariables simSettingsReset;
-    theMainWindow->resizeGrid(simSettingsReset);
+    if (theMainWindow)
+    {
+        theMainWindow->resizeGrid(simSettingsReset.runForTaxa, simSettingsReset.genomeSize);
+        theMainWindow->resetDisplays();
+    }
+
     return testFlag;
 }
 
 //Test stochastic mapping - creation of genome from stochastic layer using user defined map
-bool test::testFour(QString &outString)
+bool testinternal::testFour(QString &outString)
 {
     bool testFlag = true;
     QTextStream out(&outString);
+    simulationVariables simSettings;
+    simSettings.stochasticLayer = true;
+    for (auto &i : simSettings.stochasticMap) i = 0;
 
-    out << "\n\nThis tests an experimental feature not present in TREvoSim v2.0.0.\n";
+    out << "Testing stochastic mapping.\n\nStochastic map is currently:\n";
+    for (auto i : simSettings.stochasticMap) i ? out << "1" : out << "0";
+    Organism org(20, true);
+    org.initialise(20, simSettings.stochasticMap);
+    out << "\nStochastic genome is: ";
+    for (auto i : qAsConst(org.stochasticGenome)) i ? out << "1" : out << "0";
+    out << "\nGenome is: ";
+    for (auto i : qAsConst(org.genome)) i ? out << "1" : out << "0";
+    for (auto i : qAsConst(org.genome)) if (i) testFlag = false;
+
+    out << "\nStochastic map has been updated and is now:\n";
+    for (auto &i : simSettings.stochasticMap) i = 1;
+    for (auto i : simSettings.stochasticMap) i ? out << "1" : out << "0";
+    org.initialise(20, simSettings.stochasticMap);
+    out << "\nStochastic genome is: ";
+    for (auto i : qAsConst(org.stochasticGenome)) i ? out << "1" : out << "0";
+    out << "\nGenome is: ";
+    for (auto i : qAsConst(org.genome)) i ? out << "1" : out << "0";
+    for (auto i : qAsConst(org.genome)) if (!i) testFlag = false;
+
+    QString flagString = testFlag ? "true" : "false";
+    out << "\n\nGiven the mapping the first genome should be all zeros, no matter what the stochastic genome, and the second all ones. TRevoSIm tested this and returned " << flagString << ".";
+
+    if (testFlag) out << "\n\nStochastic mapping tests passed.\n";
     return testFlag;
 }
 
 //Test mutation rates for environment and organism
-bool test::testFive(QString &outString)
+bool testinternal::testFive(QString &outString)
 {
     bool testFlag = true;
     QTextStream out(&outString);
     out << "Testing mutation rates.\n\n";
 
-    theMainWindow->addProgressBar(0, 10000);
-    theMainWindow->setStatus("Doing organism mutation tests");
+    if (theMainWindow)
+    {
+        theMainWindow->addProgressBar(0, 10000);
+        theMainWindow->setStatus("Doing organism mutation tests");
+    }
 
     simulationVariables simSettings;
-    simulation x(theMainWindow, 0, &simSettings);
+    simSettings.organismMutationRate = 1.;
+    simulation x(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
 
-    Organism org1(simSettings.genomeSize);
+    Organism org1(simSettings.genomeSize, false);
     int cnt = 0;
 
     for (int j = 0; j < 10000; j++)
     {
-        theMainWindow->setProgressBar(j);
+        if (theMainWindow)
+            theMainWindow->setProgressBar(j);
         org1.initialise(simSettings.genomeSize);
         Organism org2(org1);
         x.mutateOrganism(org1, x.playingFields[0]);
@@ -367,18 +470,21 @@ bool test::testFive(QString &outString)
 
     simSettings.environmentNumber = 2;
     simSettings.playingfieldNumber = 2;
-    simSettings.playingfieldMasksMode = 2;
-    simulation y(theMainWindow, 0, &simSettings);
+    simSettings.playingfieldMasksMode = MASKS_MODE_IDENTICAL_START;
+    simulation y(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
 
     QVector <QVector <QVector <bool> > > masks;
     QVector <QVector <QVector <bool> > > masks2;
     int cnts[12] = {0};
 
-    theMainWindow->setStatus("Doing environment mutation tests");
+    if (theMainWindow)
+        theMainWindow->setStatus("Doing environment mutation tests");
 
     for (int i = 0; i < 10000; i++)
     {
-        theMainWindow->setProgressBar(i);
+        if (theMainWindow)
+            theMainWindow->setProgressBar(i);
         masks = y.playingFields[0]->masks;
         masks2 =  y.playingFields[1]->masks;
         y.mutateEnvironment();
@@ -393,7 +499,8 @@ bool test::testFive(QString &outString)
         }
     }
 
-    theMainWindow->hideProgressBar();
+    if (theMainWindow)
+        theMainWindow->hideProgressBar();
 
     out << "Now testing environment mutation across two playing fields (mode independent), and two environments for each. Same test for each as above. \nPlaying field 1:\nEnvironment 1:\t";
 
@@ -422,19 +529,24 @@ bool test::testFive(QString &outString)
 }
 
 //Test the coin toss
-bool test::testSix(QString &outString)
+bool testinternal::testSix(QString &outString)
 {
 
-    theMainWindow->addProgressBar(0, 100000);
-    theMainWindow->setStatus("Testing coin toss.\n");
+    if (theMainWindow)
+    {
+        theMainWindow->addProgressBar(0, 100000);
+        theMainWindow->setStatus("Testing coin toss.\n");
+    }
 
     bool testFlag = true;
     QTextStream out(&outString);
     out << "Testing coin toss.\n\n";
 
     simulationVariables simSettings;
+    simSettings.selectionCoinToss = 2.;
     simSettings.playingfieldNumber = 4;
-    simulation x(theMainWindow, 0, &simSettings);
+    simulation x(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
 
     int pfSize = x.playingFields[0]->playingField.length();
 
@@ -454,7 +566,8 @@ bool test::testSix(QString &outString)
 
     for (int i = 0; i < 100000; i++)
     {
-        theMainWindow->setProgressBar(i);
+        if (theMainWindow)
+            theMainWindow->setProgressBar(i);
         hits0[x.coinToss(x.playingFields[0])]++;
         hits1[x.coinToss(x.playingFields[1])]++;
         hits2[x.coinToss(x.playingFields[2])]++;
@@ -521,13 +634,15 @@ bool test::testSix(QString &outString)
 
     out << "\nTested four playing fields, with decreasing fitness, equal fitness, and two or three values any failures to test printed above.\n";
     if (testFlag) out << "\nCoin toss tests passed.\n";
-    theMainWindow->hideProgressBar();
+
+    if (theMainWindow)
+        theMainWindow->hideProgressBar();
 
     return testFlag;
 }
 
 //Test the new species function - called when SD exceeded
-bool test::testSeven(QString &outString)
+bool testinternal::testSeven(QString &outString)
 {
     bool testFlag = true;
     QTextStream out(&outString);
@@ -536,18 +651,27 @@ bool test::testSeven(QString &outString)
 
     simulationVariables simSettings;
     simSettings.genomeSize = 50;
-    simulation x(theMainWindow, 0, &simSettings);
+    simSettings.fitnessSize = 50;
+    simSettings.speciesSelectSize = 50;
+
+    simulation x(0, &simSettings, &error, theMainWindow);
+
+    if (error)
+    {
+        out << "Error initialising test simulation";
+        return false;
+    }
     //This should update the counters on new species
     x.iterations = 66;
     x.speciesCount = 14;
 
     //This will have initialised values - i.e. zero for everything except the genome, which will be 50% 1's
-    Organism newSpecies(50);
+    Organism newSpecies(50, false);
     newSpecies.initialise(50);
     newSpecies.speciesID = 10;
     for (auto &i : newSpecies.genome) i = true;
 
-    Organism parentSpecies(50);
+    Organism parentSpecies(50, false);
     for (auto &i : parentSpecies.genome)i = true;
     for (auto &i : parentSpecies.parentGenome)i = true;
     parentSpecies.speciesID = 10;
@@ -573,17 +697,17 @@ bool test::testSeven(QString &outString)
     out << "Parent cladogenesis at iteration " << parentSpecies.cladogenesis << " (should be 66).\n";
     if (newSpecies.parentSpeciesID != 10)testFlag = false;
     out << "New species parent species ID " << newSpecies.parentSpeciesID << " (should be 10).\n";
-    for (auto i : newSpecies.parentGenome) if (i != 1)testFlag = false;
+    for (auto i : qAsConst(newSpecies.parentGenome)) if (i != 1)testFlag = false;
     out << "New species parent genome: ";
-    for (auto i : newSpecies.parentGenome) i ? out << "1" : out << "0";
+    for (auto i : qAsConst(newSpecies.parentGenome)) i ? out << "1" : out << "0";
     out << " (should be all 1s).\n";
-    for (auto i : newSpecies.genome) if (i != 1)testFlag = false;
+    for (auto i : qAsConst(newSpecies.genome)) if (i != 1)testFlag = false;
     out << "New species genome: ";
-    for (auto i : newSpecies.genome) i ? out << "1" : out << "0";
+    for (auto i : qAsConst(newSpecies.genome)) i ? out << "1" : out << "0";
     out << " (should be all 1s).\n";
-    for (auto i : x.playingFields[0]->playingField[8]->parentGenome) if (i != 1)testFlag = false;
+    for (auto i : qAsConst(x.playingFields[0]->playingField[8]->parentGenome)) if (i != 1)testFlag = false;
     out << "Species 10 parent genome in playing field is now: ";
-    for (auto i :  x.playingFields[0]->playingField[8]->parentGenome) i ? out << "1" : out << "0";
+    for (auto i :  qAsConst(x.playingFields[0]->playingField[8]->parentGenome)) i ? out << "1" : out << "0";
     out << " (should be all 1s).\n";
 
     if (testFlag) out << "\nNew species tests passed.\n";
@@ -592,7 +716,7 @@ bool test::testSeven(QString &outString)
 }
 
 //Test which organism to overwrite in playing field
-bool test::testEight(QString &outString)
+bool testinternal::testEight(QString &outString)
 {
     bool testFlag = true;
     QTextStream out(&outString);
@@ -602,49 +726,75 @@ bool test::testEight(QString &outString)
     simulationVariables simSettings;
 
     simSettings.randomOverwrite = false;
-    simulation x(theMainWindow, 0, &simSettings);
+    simulation x(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
     for (auto &o : x.playingFields[0]->playingField) o->fitness = 0;
     int pfSize = x.playingFields[0]->playingField.length();
-    simulation y(theMainWindow, 0, &simSettings);
+    simulation y(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
     for (int i = 0; i < pfSize ; i++) y.playingFields[0]->playingField[i]->fitness = i;
-    simulation z(theMainWindow, 0, &simSettings);
+    simulation z(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
     for (int i = 0; i < pfSize ; i++)
         if (i > pfSize / 2) z.playingFields[0]->playingField[i]->fitness = 0;
         else z.playingFields[0]->playingField[i]->fitness = 1;
 
     simulationVariables simSettings2;
     simSettings2.randomOverwrite = true;
-    simulation a(theMainWindow, 0, &simSettings2);
+    simulation a(0, &simSettings2, &error, theMainWindow);
+    if (error) return false;
     for (auto &o : a.playingFields[0]->playingField) o->fitness = 0;
-    simulation b(theMainWindow, 0, &simSettings2);
+    simulation b(0, &simSettings2, &error, theMainWindow);
+    if (error) return false;
     for (int i = 0; i < pfSize; i++) b.playingFields[0]->playingField[i]->fitness = i;
 
-    //int simulation::calculateOverwrite(const playingFieldStructure * pf)
+    simulationVariables simSettings3;
+    simSettings3.expandingPlayingfield = true;
+    simulation c(0, &simSettings3, &error, theMainWindow);
+    if (error) return false;
+
+
     QVector<int> hits0(pfSize, 0);
     QVector<int> hits1(pfSize, 0);
     QVector<int> hits2(pfSize, 0);
     QVector<int> hits3(pfSize, 0);
     QVector<int> hits4(pfSize, 0);
+    QVector<int> hits5(pfSize, 0);
 
-    theMainWindow->addProgressBar(0, 100000);
-    theMainWindow->setStatus("Testing overwrite code.");
+    if (theMainWindow)
+    {
+        theMainWindow->addProgressBar(0, 100000);
+        theMainWindow->setStatus("Testing overwrite code.");
+    }
     for (int i = 0; i < 100000; i++)
     {
-        theMainWindow->setProgressBar(i);
-        hits0[x.calculateOverwrite(x.playingFields[0])]++;
-        hits1[y.calculateOverwrite(y.playingFields[0])]++;
-        hits2[z.calculateOverwrite(z.playingFields[0])]++;
-        hits3[a.calculateOverwrite(a.playingFields[0])]++;
-        hits4[b.calculateOverwrite(b.playingFields[0])]++;
+        if (theMainWindow)
+            theMainWindow->setProgressBar(i);
+        hits0[x.calculateOverwrite(x.playingFields[0], 0)]++;
+        hits1[y.calculateOverwrite(y.playingFields[0], 0)]++;
+        hits2[z.calculateOverwrite(z.playingFields[0], 0)]++;
+        hits3[a.calculateOverwrite(a.playingFields[0], 0)]++;
+        hits4[b.calculateOverwrite(b.playingFields[0], 0)]++;
+        hits5[c.calculateOverwrite(c.playingFields[0], 4)]++;
     }
-    theMainWindow->hideProgressBar();
+    if (theMainWindow)
+        theMainWindow->hideProgressBar();
 
-    out << "<table><tr><th>Position</th><th>"
-        "</th><th>Equal fitness</th><th>"
-        "</th><th>Fittest at top</th><th>"
-        "</th><th>Half top fitness</th><th>"
-        "</th><th>Equal Fitness - random overwrite</th><th>"
-        "</th><th>Fittest at top - random overwrite</th>";
+    out << "<table><tr>"
+        "<th>Position</th>"
+        "<th></th>"
+        "<th>Equal fitness</th>"
+        "<th></th>"
+        "<th>Fittest at top</th>"
+        "<th></th>"
+        "<th>Half top fitness</th>"
+        "<th></th>"
+        "<th>Equal Fitness - random overwrite</th>"
+        "<th></th>"
+        "<th>Fittest at top - random overwrite</th>"
+        "<th></th>"
+        "<th>Expanding - species #4</th>"
+        "</tr>";
 
     for (int i = 0; i < pfSize; i++)
     {
@@ -652,7 +802,8 @@ bool test::testEight(QString &outString)
         out << "</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>" << hits1[i];
         out << "</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>" << hits2[i];
         out << "</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>" << hits3[i];
-        out << "</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>" << hits4[i] << "</tr>";
+        out << "</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>" << hits4[i];
+        out << "</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>" << hits5[i] << "</td></tr>";
     }
     out << "</table>\nRunning a bunch of tests comparing expected distribution to actual. Any failures printed below.\n";
     for (int i = 0; i < pfSize - 1; i++)
@@ -698,6 +849,17 @@ bool test::testEight(QString &outString)
             out << "Failed at hits4 - divisor is " << hits4d << "\n";
             testFlag = false;
         }
+
+        if (i == 4 && hits5[i] < 100000)
+        {
+            testFlag = false;
+            out << "Failed at hits5 - test 1\n";
+        }
+        else if (i != 4 && hits5[i] != 0)
+        {
+            testFlag = false;
+            out << "Failed at hits5 - test 2\n";
+        }
     }
 
     if (testFlag) out << "\nOverwrite species tests passed.\n";
@@ -705,18 +867,146 @@ bool test::testEight(QString &outString)
 }
 
 //Test apply perturbation
-bool test::testNine(QString &outString)
+bool testinternal::testNine(QString &outString)
 {
     bool testFlag = true;
     QTextStream out(&outString);
 
-    out << "\n\nThis tests an experimental feature not present in TREvoSim v2.0.0.\n";
+    out << "Testing perturbations. First perturbation start.\n\n";
 
+    for (int i = 0; i < 3; i++)
+    {
+        simulationVariables simSettings;
+        simSettings.environmentalPerturbation = true;
+        simSettings.playingfieldNumber = 2;
+        simSettings.playingfieldSize = 12; //Set the size to 12 which was the default for v2.0.0
+        simSettings.maskNumber = 3; //Set to 3 which was the default for v2.0.0
+        simSettings.mixingPerturbation = true;
+        simSettings.mixingProbabilityOneToZero = 1;
+        simSettings.mixingProbabilityZeroToOne = 2;
+        if (i == 0) out << "Playing field masks mode is identical - 0 should match 1.\n";
+        if (i > 0)
+        {
+            simSettings.playingfieldMasksMode = i;
+            out << "Playing field masks mode is non-identical by perturbation - 0 should not match 1.\n";
+        }
+
+        simulation x(0, &simSettings, &error, theMainWindow);
+        if (error)return false;
+        x.iterations = 66;
+        simulation y(0, &simSettings, &error, theMainWindow);
+        if (error) return false;
+        y.playingFields[0]->masks = x.playingFields[0]->masks;
+        y.playingFields[1]->masks = x.playingFields[1]->masks;
+
+        QString masksX0(x.printMasks(x.playingFields, 0));
+        QString masksX1(x.printMasks(x.playingFields, 1));
+        QString masksY0(y.printMasks(y.playingFields, 0));
+        QString masksY1(y.printMasks(y.playingFields, 1));
+
+        out << "Playingfields pre-perturbation X and Y should be identical (Y is copy of X):\n";
+        out << "X0:" << QCryptographicHash::hash(masksX0.toUtf8(), QCryptographicHash::Md5).toHex() << "\n";
+        out << "Y0:" << QCryptographicHash::hash(masksY0.toUtf8(), QCryptographicHash::Md5).toHex() << "\n";
+        out << "X1:" << QCryptographicHash::hash(masksX1.toUtf8(), QCryptographicHash::Md5).toHex() << "\n";
+        out << "Y1:" << QCryptographicHash::hash(masksY1.toUtf8(), QCryptographicHash::Md5).toHex() << "\n";
+        QString flagString;
+        if (x.playingFields[0]->masks != y.playingFields[0]->masks || x.playingFields[1]->masks != y.playingFields[1]->masks) testFlag = false;
+        flagString = testFlag ? "true" : "false";
+        out << "TREvoSim has tested whether these are identical and outputs " << flagString << ".\n\n";
+
+        //Apply perturbations should update a bunch of varianles, and bork the masks - check this!
+        x.applyPerturbation();
+
+        masksX0 = x.printMasks(x.playingFields, 0);
+        masksX1 = x.printMasks(x.playingFields, 1);
+        masksY0 = y.printMasks(y.playingFields, 0);
+        masksY1 = y.printMasks(y.playingFields, 1);
+        out << "Playingfields post-perturbation of X: X and Y masks should no longer be identical:\n";
+        out << "X0:" << QCryptographicHash::hash(masksX0.toUtf8(), QCryptographicHash::Md5).toHex() << "\n";
+        out << "Y0:" << QCryptographicHash::hash(masksY0.toUtf8(), QCryptographicHash::Md5).toHex() << "\n";
+        out << "X1:" << QCryptographicHash::hash(masksX1.toUtf8(), QCryptographicHash::Md5).toHex() << "\n";
+        out << "Y1:" << QCryptographicHash::hash(masksY1.toUtf8(), QCryptographicHash::Md5).toHex() << "\n";
+        if (x.playingFields[0]->masks == y.playingFields[0]->masks || x.playingFields[1]->masks == y.playingFields[0]->masks) testFlag = false;
+        flagString = testFlag ? "true" : "false";
+        out << "TREvoSim has tested that these are not identical and outputs " << flagString << ".\n";
+
+        if (i == 0)
+        {
+            if  (x.playingFields[0]->masks != x.playingFields[1]->masks) testFlag = false;
+            flagString = testFlag ? "true" : "false";
+            out << "\nIn X and Y should PFs should be identical (i.e. X0==Y0), TREvoSim has tested that they are, and outputs " << flagString << ".\n";
+
+            if (x.perturbationStart != 66) testFlag = false;
+            flagString = testFlag ? "true" : "false";
+            out << "Perturbation starts should be 66. It is " << x.perturbationStart << ". TREvoSim has tested this and outputs " << flagString << ".\n";
+            if (x.perturbationOccurring != 1) testFlag = false;
+            flagString = testFlag ? "true" : "false";
+            out << "PerturbationOccurring should be 1. It is " << x.perturbationOccurring << ". TREvoSim has tested this and outputs " << flagString << ".\n";
+            if (x.perturbationEnd != 72) testFlag = false;
+            flagString = testFlag ? "true" : "false";
+            out << "Perturbation ends should be 72. It is " << x.perturbationEnd << ". TREvoSim has tested this and outputs " << flagString << ".\n";
+            if (x.environmentalPerturbationCopyRate == 10) testFlag = false;
+            flagString = testFlag ? "true" : "false";
+            out << "EnvironmentalPerturbationCopyRate needs to be >0. It is " << x.environmentalPerturbationCopyRate << ". TREvoSim has tested this and outputs " << flagString << ".\n";
+
+            int cnt = 0;
+            for (int l = 0; l < simSettings.playingfieldNumber; l++)
+                for (int k = 0; k < simSettings.environmentNumber; k++)
+                    for (int j = 0; j < simSettings.maskNumber; j++)
+                        for (int i = 0; i < x.runFitnessSize; i++)
+                            if (x.environmentalPerturbationOverwriting[l][k][j][i])cnt++;
+            if (cnt != 0) testFlag = false;
+            out << "EnvironmentalPerturbationOverwriting is " << cnt << " it should be zero here right now.\n";
+            x.applyPerturbation();
+            cnt = 0;
+            for (int l = 0; l < simSettings.playingfieldNumber; l++)
+                for (int k = 0; k < simSettings.environmentNumber; k++)
+                    for (int j = 0; j < simSettings.maskNumber; j++)
+                        for (int i = 0; i < x.runFitnessSize; i++)
+                            if (x.environmentalPerturbationOverwriting[l][k][j][i])cnt++;
+            if (cnt != 108) testFlag = false;
+            out << "EnvironmentalPerturbationOverwriting is " << cnt << " it should be 108 right now.\n";
+            x.applyPerturbation();
+            cnt = 0;
+            for (int l = 0; l < simSettings.playingfieldNumber; l++)
+                for (int k = 0; k < simSettings.environmentNumber; k++)
+                    for (int j = 0; j < simSettings.maskNumber; j++)
+                        for (int i = 0; i < x.runFitnessSize; i++)
+                            if (x.environmentalPerturbationOverwriting[l][k][j][i])cnt++;
+            if (cnt != 216) testFlag = false;
+            out << "EnvironmentalPerturbationOverwriting is " << cnt << " it should be double figure above right now.\n";
+            if (x.runMixingProbabilityOneToZero != 10) testFlag = false;
+            if (x.runMixingProbabilityZeroToOne != 20) testFlag = false;
+            flagString = testFlag ? "true" : "false";
+            out << "Mixing probability one to zero should be 10. It is " << x.runMixingProbabilityOneToZero << ".\n";
+            out << "Mixing probability one to zero should be 20. It is " << x.runMixingProbabilityZeroToOne << ".\n";
+            out << "TREvoSim has tested this and outputs " << flagString << ".\n";
+            x.iterations = 72;
+            x.applyPerturbation();
+            if (x.perturbationOccurring != 2) testFlag = false;
+            flagString = testFlag ? "true" : "false";
+            out << "Ended perturbation - PerturbationOccurring should be 2. It is " << x.perturbationOccurring << ". TREvoSim has tested this and outputs " << flagString << ".\n";
+            if (x.runMixingProbabilityOneToZero != 1) testFlag = false;
+            if (x.runMixingProbabilityZeroToOne != 2) testFlag = false;
+            flagString = testFlag ? "true" : "false";
+            out << "Mixing probability one to zero should be 1. It is " << x.runMixingProbabilityOneToZero << ".\n";
+            out << "Mixing probability one to zero should be 2. It is " << x.runMixingProbabilityZeroToOne << ".\n\n";
+        }
+        else
+        {
+            if  (x.playingFields[0]->masks == x.playingFields[1]->masks) testFlag = false;
+            flagString = testFlag ? "true" : "false";
+            out << "In X and Y should PFs should not be identical (i.e. X0!=Y0), TREvoSim has tested that they are not, and outputs " << flagString << ".\n\n";
+        }
+        out << "--\n\n";
+    }
+
+    if (testFlag) out << "\nPerturbation tests passed.\n";
     return testFlag;
 }
 
 //Now test strip uninformative
-bool test::testTen(QString &outString)
+bool testinternal::testTen(QString &outString)
 {
     // To do - test coding v.s. non-coding? Needs to be done prior to release, but perhaps this needs a bit of a think of what should be released?
     bool testFlag = true;
@@ -724,15 +1014,16 @@ bool test::testTen(QString &outString)
     out << "Testing strip uninformative.\n\n";
 
     simulationVariables simSettings;
-    simSettings.taxonNumber = 20;
-    simulation x(theMainWindow, 0, &simSettings);
+    simSettings.runForTaxa = 20;
+    simulation x(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
 
     QVector <Organism *> speciesList;
     int count = 0;
     for (int i = 0; i < 20; i++)
     {
-        Organism *org = new Organism(50);
-        QVector<bool> genome;
+        Organism *org = new Organism(50, false);
+        QList<bool> genome;
 
         for (int j = 0; j < 50; j++)
         {
@@ -746,15 +1037,15 @@ bool test::testTen(QString &outString)
 
     out << "Stripping uninformative characters from matrix below with " << speciesList[0]->genome.length() << " characters.\n";
     out << x.printMatrix(speciesList);
-    x.runGenomeSize = 50;
+    x.runFitnessSize = 50;
     x.runGenomeSize = 50;
 
     QList <int> uninformativeCoding;
     QList <int> uninformativeNonCoding;
 
     //Test for informative
-    x.testForUninformative(speciesList, uninformativeCoding);
-    x.stripUninformativeCharacters(speciesList, uninformativeCoding);
+    x.testForUninformative(speciesList, uninformativeCoding, uninformativeNonCoding);
+    x.stripUninformativeCharacters(speciesList, uninformativeCoding, uninformativeNonCoding);
     out << "\nThere should be 17 informative characters.\n";
     if (speciesList[0]->genome.length() != 17)testFlag = false;
     out << "Stripped of uninformative characters, this matrix has " << speciesList[0]->genome.length() << " characters.\n";
@@ -765,7 +1056,7 @@ bool test::testTen(QString &outString)
 }
 
 //Check for unresolvable taxa
-bool test::testEleven(QString &outString)
+bool testinternal::testEleven(QString &outString)
 {
     bool testFlag = true;
     QTextStream out(&outString);
@@ -773,15 +1064,18 @@ bool test::testEleven(QString &outString)
     out << "Testing check for unresolvable taxa.\n\n";
 
     simulationVariables simSettings;
-    simSettings.taxonNumber = 20;
+    simSettings.runForTaxa = 20;
     simSettings.genomeSize = 50;
+    simSettings.fitnessSize = 50;
+    simSettings.speciesSelectSize = 50;
     simSettings.test = 11;
-    simulation x(theMainWindow, 0, &simSettings);
+    simulation x(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
 
     QVector <Organism *> speciesList;
     for (int i = 0; i < 20; i += 2)
     {
-        Organism *org = new Organism(50);
+        Organism *org = new Organism(50, false);
         org->initialise(50);
         speciesList.append(org);
         speciesList.append(org);
@@ -800,7 +1094,8 @@ bool test::testEleven(QString &outString)
 
     simSettings.unresolvableCutoff = 20;
     unresolvableTaxonGroups.clear();
-    simulation y(theMainWindow, 0, &simSettings);
+    simulation y(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
     testFlag = y.checkForUnresolvableTaxa(speciesList, unresolvableTaxonGroups, unresolvableCount);
     flagString = testFlag ? "true" : "false";
     out << "\nNow changed unresolvable cutoff to 20, and checked for resolvable again, which should return true. Tested this and returned " << flagString  << ".\n";
@@ -810,18 +1105,19 @@ bool test::testEleven(QString &outString)
 }
 
 //Check memory
-bool test::testTwelve(QString &outString)
+bool testinternal::testTwelve(QString &outString)
 {
     bool testFlag = true;
     QTextStream out(&outString);
     simulationVariables simSettings;
     simSettings.playingfieldNumber = 2;
-    simulation x(theMainWindow, 0, &simSettings);
+    simulation x(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
 
     QVector <Organism *> speciesList;
     for (int i = 0; i < 20; i ++)
     {
-        Organism *org = new Organism(50);
+        Organism *org = new Organism(50, false);
         org->initialise(50);
         speciesList.append(org);
     }
@@ -841,7 +1137,7 @@ bool test::testTwelve(QString &outString)
 }
 
 //Check extinction
-bool test::testThirteen(QString &outString)
+bool testinternal::testThirteen(QString &outString)
 {
     bool testFlag = true;
     QTextStream out(&outString);
@@ -851,7 +1147,7 @@ bool test::testThirteen(QString &outString)
     QVector <Organism *> speciesList;
     for (int i = 0; i < 20; i ++)
     {
-        Organism *org = new Organism(50);
+        Organism *org = new Organism(50, false);
         org->initialise(50);
         speciesList.append(org);
     }
@@ -859,29 +1155,38 @@ bool test::testThirteen(QString &outString)
     simulationVariables simSettings;
     simSettings.playingfieldNumber = 2;
     simSettings.genomeSize = 50;
+    simSettings.fitnessSize = 50;
+    simSettings.speciesSelectSize = 50;
 
-    simulation x(theMainWindow, 0, &simSettings);
+    simulation x(0, &simSettings, &error, theMainWindow);
+    for (int i = 0; i < 50; i++)x.extinctList.append(false);
 
-    for (auto pf : x.playingFields)
-        for (auto o : pf->playingField)
+    if (error) return false;
+
+    for (auto pf : qAsConst(x.playingFields))
+        for (auto o : qAsConst(pf->playingField))
             o->initialise(simSettings.genomeSize);
 
     x.iterations = 66;
 
-    theMainWindow->resizeGrid(simSettings);
+    if (theMainWindow)
+        theMainWindow->resizeGrid(simSettings.runForTaxa, simSettings.genomeSize);
 
-    QVector <bool> genome (50, false);
+    QList <bool> genome;
+    for (int i = 0; i < 50; i++) genome.append(false);
     x.playingFields[0]->playingField[10]->speciesID = 1;
     x.playingFields[0]->playingField[10]->setGenome(genome);
     x.playingFields[1]->playingField[6]->speciesID = 1;
     x.playingFields[1]->playingField[6]->setGenome(genome);
 
+
     QHash<QString, QVector <int> > extinct = x.checkForExtinct(speciesList);
 
-    for (auto s : extinct) x.speciesExtinction(speciesList[s[0]], x.playingFields[s[1]]->playingField[s[2]], (x.iterations + 1), simSettings.sansomianSpeciation);
+    for (auto s : qAsConst(extinct)) x.speciesExtinction(speciesList[s[0]], x.playingFields[s[1]]->playingField[s[2]], (x.iterations + 1), simSettings.sansomianSpeciation, simSettings.stochasticLayer,
+                                                             true);
 
-    for (auto o : speciesList)
-        if (o->extinct != 0)
+    for (int i = 0; i < 20; i ++)
+        if (speciesList[i]->extinct != 0)
         {
             testFlag = false;
             out << "Set species extinction to 66 for species 1 when there are two instances - fail.\n\n";
@@ -893,13 +1198,15 @@ bool test::testThirteen(QString &outString)
 
     extinct = x.checkForExtinct(speciesList);
 
-    for (auto s : extinct) out << "Species is extinct: " << s[0] << "\n";
-    for (auto s : extinct) x.speciesExtinction(speciesList[s[0]], x.playingFields[s[1]]->playingField[s[2]], (x.iterations + 1), simSettings.sansomianSpeciation);
-    for (auto o : speciesList)
-        if (o->extinct != 0)
+    for (auto s : qAsConst(extinct)) out << "Species is extinct: " << s[0] << "\n";
+    for (auto s : qAsConst(extinct)) x.speciesExtinction(speciesList[s[0]], x.playingFields[s[1]]->playingField[s[2]], (x.iterations + 1), simSettings.sansomianSpeciation, simSettings.stochasticLayer,
+                                                             true);
+
+    for (int i = 0; i < 20; i ++)
+        if (speciesList[i]->extinct != 0)
         {
-            out << "Extinct at " << o->extinct << "\nGenome should be all zeros. It is: ";
-            for (auto b : o->genome)
+            out << "Extinct at " << speciesList[i]->extinct << "\nGenome should be all zeros. It is: ";
+            for (auto b : qAsConst(speciesList[i]->genome))
             {
                 out << (b ? "1" : "0");
                 if (b)
@@ -908,7 +1215,7 @@ bool test::testThirteen(QString &outString)
                     out << "Genome is incorrect in test 13.\n";
                 }
             }
-            if (o->extinct != 67)
+            if (speciesList[i]->extinct != 67)
             {
                 testFlag = false;
                 out << "Set species extinction to 67 for species 1 when there are two instances - fail.\n\n";
@@ -921,14 +1228,16 @@ bool test::testThirteen(QString &outString)
     x.playingFields[0]->playingField[11]->speciesID = 4;
     x.playingFields[1]->playingField[6]->speciesID = 1;
     extinct = x.checkForExtinct(speciesList);
-    for (auto s : extinct) out << "Species is extinct: " << s[0] << "\n";
-    for (auto s : extinct) x.speciesExtinction(speciesList[s[0]], x.playingFields[s[1]]->playingField[s[2]], (x.iterations + 1), simSettings.sansomianSpeciation);
-    for (auto o : speciesList)
-        if (o->extinct == 69)
+    for (auto s : qAsConst(extinct)) out << "Species is extinct: " << s[0] << "\n";
+    for (auto s : qAsConst(extinct)) x.speciesExtinction(speciesList[s[0]], x.playingFields[s[1]]->playingField[s[2]], (x.iterations + 1), simSettings.sansomianSpeciation, simSettings.stochasticLayer,
+                                                             true);
+
+    for (int i = 0; i < 20; i ++)
+        if (speciesList[i]->extinct == 69)
         {
-            out << "Extinct at " << o->extinct << "\nGenome should not be all zeros. It is: ";
+            out << "Extinct at " << speciesList[i]->extinct << "\nGenome should not be all zeros. It is: ";
             int count = 0;
-            for (auto b : o->genome)
+            for (auto b : qAsConst(speciesList[i]->genome))
             {
                 out << (b ? "1" : "0");
                 if (!b) count++;
@@ -945,13 +1254,17 @@ bool test::testThirteen(QString &outString)
     if (testFlag) out << "\nExtinction tests passed.\n";
 
     simulationVariables simSettingsReset;
-    theMainWindow->resizeGrid(simSettingsReset);
+    if (theMainWindow)
+    {
+        theMainWindow->resizeGrid(simSettingsReset.runForTaxa, simSettingsReset.genomeSize);
+        theMainWindow->resetDisplays();
+    }
 
     return testFlag;
 }
 
 //Check count difference to parent
-bool test::testFourteen(QString &outString)
+bool testinternal::testFourteen(QString &outString)
 {
     bool testFlag = true;
     QTextStream out(&outString);
@@ -959,11 +1272,12 @@ bool test::testFourteen(QString &outString)
     out << "Testing difference to parent.\n\n";
 
     //Initialised to false
-    Organism org(50);
+    Organism org(50, false);
     for (auto &p : org.parentGenome) p = true;
 
     simulationVariables simSettings;
-    simulation x(theMainWindow, 0, &simSettings);
+    simulation x(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
 
     int diff = x.differenceToParent(&org, 50);
 
@@ -1002,7 +1316,7 @@ bool test::testFourteen(QString &outString)
 }
 
 //Check print matrix function
-bool test::testFifteen(QString &outString)
+bool testinternal::testFifteen(QString &outString)
 {
     bool testFlag = true;
     QTextStream out(&outString);
@@ -1011,11 +1325,12 @@ bool test::testFifteen(QString &outString)
     QVector <Organism *> speciesList;
     for (int i = 0; i < 20; i ++)
     {
-        Organism *org = new Organism(50);
+        Organism *org = new Organism(50, false);
         speciesList.append(org);
     }
     simulationVariables simSettings;
-    simulation x(theMainWindow, 0, &simSettings);
+    simulation x(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
 
     out << "Should be all zeros.\n" << x.printMatrix(speciesList);
 
@@ -1023,7 +1338,7 @@ bool test::testFifteen(QString &outString)
 }
 
 //Check print tree
-bool test::testSixteen(QString &outString)
+bool testinternal::testSixteen(QString &outString)
 {
     bool testFlag = true;
     QTextStream out(&outString);
@@ -1033,7 +1348,7 @@ bool test::testSixteen(QString &outString)
     QVector <Organism *> speciesList;
     for (int i = 0; i < 8; i ++)
     {
-        Organism *org = new Organism(50);
+        Organism *org = new Organism(50, false);
         org->speciesID = i;
         speciesList.append(org);
     }
@@ -1092,8 +1407,9 @@ bool test::testSixteen(QString &outString)
     speciesList[7]->extinct = 38;
 
     simulationVariables simSettings;
-    simulation x(theMainWindow, 0, &simSettings);
-    QString tree(x.printNewickWithBranchLengths(0, speciesList, true, 8));
+    simulation x(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
+    QString tree(x.printNewickWithBranchLengths(0, speciesList, true));
     tree.replace("S_0", "Species_");
     out << "Tree from R:\n((Species_1:8,((Species_6:10,Species_4:7):9,(((Species_8:7,Species_5:10):6,Species_7:8):7,Species_3:6):2):6):10,Species_2:9);\nPrinted using function:\n" <<
         tree << ";\n";
@@ -1115,7 +1431,38 @@ bool test::testSixteen(QString &outString)
     return testFlag;
 }
 
-bool test::testSeventeen(QString &outString)
+bool testinternal::testSeventeen(QString &outString)
+{
+    bool testFlag = true;
+    QTextStream out(&outString);
+
+    out << "Check ecosystem engineers.\n\n";
+
+    simulationVariables simSettings;
+    simulation x(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
+
+    out << "To do.\n";
+
+    /*OK so we need to check that:
+     * When we send it ecosystemengineer == 1 that it picks an EE, and then writes over masks with its genome
+     * When ecosystem engineeer >1 it pciks an EE and then uses that to write the mask
+     */
+
+    return testFlag;
+}
+
+bool testinternal::testEighteen(QString &outString)
+{
+    bool testFlag = true;
+    QTextStream out(&outString);
+
+    out << "Check playing field mixing.\n\n";
+
+    return testFlag;
+}
+
+bool testinternal::testNineteen(QString &outString)
 {
     bool testFlag = true;
     QTextStream out(&outString);
@@ -1123,23 +1470,7 @@ bool test::testSeventeen(QString &outString)
     return testFlag;
 }
 
-bool test::testEighteen(QString &outString)
-{
-    bool testFlag = true;
-    QTextStream out(&outString);
-
-    return testFlag;
-}
-
-bool test::testNineteen(QString &outString)
-{
-    bool testFlag = true;
-    QTextStream out(&outString);
-
-    return testFlag;
-}
-
-bool test::testTwenty(QString &outString)
+bool testinternal::testTwenty(QString &outString)
 {
     bool testFlag = true;
     QTextStream out(&outString);

@@ -1,41 +1,23 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-//Global define
-#define MAX_RAND 65535
-#define STRIP_UNINFORM_FACTOR 12
-
-#include "about.h"
 #include "organism.h"
-#include "output.h"
-#include "settings.h"
 #include "simulation_variables.h"
 
-#include <algorithm>
-
-#include <QAbstractScrollArea>
-#include <QAction>
-#include <QActionGroup>
-#include <QDebug>
-#include <QFile>
-#include <QFileDialog>
-#include <QInputDialog>
-#include <QLabel>
-#include <QLineEdit>
 #include <QMainWindow>
-#include <QtMath>
-#include <QProgressBar>
-#include <QPushButton>
-#include <QShortcut>
-#include <QStandardPaths>
-#include <QStringList>
-#include <QString>
 #include <QTableWidget>
-#include <QTextCodec>
-#include <QTimer>
-#include <QRandomGenerator>
-#include <QMessageBox>
-#include <QDateTime>
+#include <QProgressBar>
+
+//Mode for masks
+// 0 is identical, 1 independent, 2 identical at start
+#define MASKS_MODE_IDENTICAL 0
+#define MASKS_MODE_INDEPENDENT 1
+#define MASKS_MODE_IDENTICAL_START 2
+
+//Run mode - i.e. continuous, until taxon number, until iteration number
+#define RUN_MODE_CONTINUOUS 0
+#define RUN_MODE_TAXON 1
+#define RUN_MODE_ITERATION 2
 
 //Forward declaration to avoid circular dependencies in printGenome declaration
 class Organism;
@@ -60,20 +42,19 @@ public:
     //Access functions for updating GUI from simulation object
     void recalculateStripUniformativeFactor(bool running);
     void setStatus(QString message);
+    void setPath(QString newPath);
     void addProgressBar(int min, int max);
     void setProgressBar(int value);
     void hideProgressBar();
     void printGenome(const Organism *org, int row);
     void printBlank(int row);
-    void resizeGrid();
-    void resizeGrid(const simulationVariables &simSettings);
-    void setPath(QString newPath);
+    void resizeGrid(const int speciesNumber, const int genomeSize, const int hideFrom = 0);
+    void resetDisplays();
     void setTreeDisplay(QString treeString);
-    QString getPath();
-    bool escapePressed, pauseFlag, batchRunning, calculateStripUninformativeFactorRunning;
-    bool batchError;
-    bool unresolvableBatch;
-
+    void hideRow(const int rowNumber);
+    void showRow(const int rowNumber);
+    int rowMax();
+    bool escapePressed, pauseFlag, batchRunning;
 
 private:
     //GUI objects
@@ -101,6 +82,7 @@ private slots:
     void resetTriggered();
     void runForTriggered();
     void changePathTriggered();
+    void pathTextChanged(QString newPath);
     void settingsTriggered();
     void outputTriggered();
     void aboutTriggered();
@@ -112,6 +94,7 @@ private slots:
     void setRandomSeed();
     void selectionHistogram();
     void setFactor();
+
     void setMultiplePlayingFields();
     void defaultSettings();
 

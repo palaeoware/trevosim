@@ -2,12 +2,7 @@
 #define SIMULATION_VARIABLES_H
 
 #include <QString>
-#include <QTextStream>
 #include <QFile>
-#include <QXmlStreamReader>
-#include <QXmlStreamWriter>
-
-#include "version.h"
 
 class simulationVariables
 {
@@ -19,27 +14,49 @@ public:
 
     //Ints
     int environmentNumber;
+    int fitnessSize;
     int fitnessTarget;
     int genomeSize;
     int maskNumber;
+    int mixingProbabilityZeroToOne;
+    int mixingProbabilityOneToZero;
     int playingfieldSize;
     int playingfieldNumber;
     int playingfieldMasksMode;
+    int speciesSelectSize;
     int speciesDifference;
-    int taxonNumber;
+    int runForTaxa;
     int unresolvableCutoff;
+    int stochasticDepth;
+    int stochasticMap[16];
     int test;
+    int runMode;
+    int runForIterations;
+    int ecosystemEngineeringFrequency;
+    int runningLogFrequency;
 
     //Bools
-    bool append;
     bool discardDeleterious;
+    bool environmentalPerturbation;
+    bool mixing;
+    bool mixingPerturbation;
     bool sansomianSpeciation;
-    bool speciesCurve;
     bool stripUninformative;
     bool workingLog;
     bool writeTree;
+    bool noSelection;
     bool randomSeed;
     bool randomOverwrite;
+    bool stochasticLayer;
+    bool expandingPlayingfield;
+    bool matchFitnessPeaks;
+    bool ecosystemEngineers;
+    bool ecosystemEngineersArePersistent;
+    bool ecosystemEngineersAddMask;
+    bool writeRunningLog;
+    bool writeFileOne;
+    bool writeFileTwo;
+    bool writeEE;
 
     //Doubles
     double environmentMutationRate;
@@ -58,6 +75,9 @@ public:
     QString logFileString01;
     QString logFileString02;
     QString logFileString03;
+    QString runningLogHeader;
+    QString runningLogBody;
+
     //And saving files
     QString savePathDirectory;
 };

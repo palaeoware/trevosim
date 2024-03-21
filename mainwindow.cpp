@@ -4,22 +4,37 @@
 #include "version.h"
 #include "simulation.h"
 #include "settings.h"
-#include "test.h"
+#include "testinternal.h"
+#include "batchdialog.h"
+#include "output.h"
+#include "about.h"
 
+
+#include <algorithm>
 #include <QProgressDialog>
+#include <QShortcut>
+#include <QStandardPaths>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QFutureWatcher>
+#include <QInputDialog>
+#include <QRandomGenerator>
+#include <QtConcurrent>
+
 
 /*********** TREvoSim structure - overview ***********/
 /*
  * There are four structures/classes that interact in TREvoSim, namely:
  * -- Organisms - each organism has a genome, a record of its parents genome, fitness, and can have a stochastic layer. Operators > and = are implemented.
- * -- Simulation - this object has a run and fitness histogram function, local copies of important settings for the run (which change sometimes during a run), and lots of private functions to aid the simulation such as e.g. fitness
+ * -- Simulation:
+ * ---- This object has a run and Fitness histogram function, local copies of important settings for the run (which change sometimes during a run)
+ * -- There are lots of private functions to aid the simulation such as e.g. fitness, allowing these to tested individually
+ * ---- The run function is sent a pointer to mainWindow, which is uses to communicate with the main window when a single run is occurring. When a batch is running, it is not sent this pointer, allowing batches to run in parallel
+ * -- Tests are a friend class to simulation, providing under the hood access to the simulation. They are run on compile, and will throw an error if any fail
  * -- Simulation variables - this object contains the variables of the simulation. It is sent as a const to the simulation which makes local copies, and modified by the output and simulation classes. It also has functions to load, save and print setings
  * -- MainWindow - This handles the GUI and interacts with the other objects allowing user input etc.
- *
- * Simulation.run is sent a pointer to Maindwindow and uses this to communicate with the window via access functions.
- * Mainwindow has a bunch of flags such as whether a batch is running which the simulation can access.
- *
- *
  *
  */
 /****************************************************/
@@ -35,8 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowIcon(TREvoSimIcon);
 
     ui->setupUi(this);
-    QString version;
-    version.sprintf("%d.%d.%d", MAJORVERSION, MINORVERSION, PATCHVERSION);
+    QString version = QString("%1.%2.%3").arg(MAJORVERSION).arg(MINORVERSION).arg(PATCHVERSION);
     setWindowTitle(QString(PRODUCTNAME) + " v" + version + " - compiled - " + __DATE__);
 
     //Create default settings object
@@ -74,27 +88,29 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mainToolBar->addSeparator();
     ui->mainToolBar->addAction(testButton);
 
-    QObject::connect(startButton, SIGNAL(triggered()), this, SLOT(startTriggered()));
-    QObject::connect(pauseButton, SIGNAL(triggered()), this, SLOT(pauseTriggered()));
-    QObject::connect(resetButton, SIGNAL(triggered()), this, SLOT(resetTriggered()));
-    QObject::connect(runForButton, SIGNAL(triggered()), this, SLOT(runForTriggered()));
-    QObject::connect(settingsButton, SIGNAL(triggered()), this, SLOT(settingsTriggered()));
-    QObject::connect(logButton, SIGNAL(triggered()), this, SLOT(outputTriggered()));
-    QObject::connect(testButton, SIGNAL(triggered()), this, SLOT(doTests()));
+    //QObject::connect(&futureWatcher, &QFutureWatcher<void>::finished, &dialog, &QProgressDialog::reset);
 
-    QObject::connect(ui->actionFitness_histogram, SIGNAL(triggered()), this, SLOT(countPeaks()));
-    QObject::connect(ui->actionSave_current_settings, SIGNAL(triggered()), this, SLOT(save()));
-    QObject::connect(ui->actionSave_settings_as, SIGNAL(triggered()), this, SLOT(saveAs()));
-    QObject::connect(ui->actionLoad_settings_from_file, SIGNAL(triggered()), this, SLOT(open()));
-    QObject::connect(ui->actionSet_uninformative_factor, SIGNAL(triggered()), this, SLOT(setFactor()));
-    QObject::connect(ui->actionRun_tests, SIGNAL(triggered()), this, SLOT(doTests()));
-    QObject::connect(ui->actionRestore_default_settings, SIGNAL(triggered()), this, SLOT(defaultSettings()));
+    QObject::connect(startButton, &QAction::triggered, this, &MainWindow::startTriggered);
+    QObject::connect(pauseButton, &QAction::triggered, this, &MainWindow::pauseTriggered);
+    QObject::connect(resetButton, &QAction::triggered, this, &MainWindow::resetTriggered);
+    QObject::connect(runForButton, &QAction::triggered, this, &MainWindow::runForTriggered);
+    QObject::connect(settingsButton, &QAction::triggered, this, &MainWindow::settingsTriggered);
+    QObject::connect(logButton, &QAction::triggered, this, &MainWindow::outputTriggered);
+    QObject::connect(testButton, &QAction::triggered, this, &MainWindow::doTests);
 
-    QObject::connect(ui->actionRandom_seed, SIGNAL(triggered()), this, SLOT(setRandomSeed()));
+    QObject::connect(ui->actionFitness_histogram, &QAction::triggered, this, &MainWindow::countPeaks);
+    QObject::connect(ui->actionSave_settings, &QAction::triggered, this, &MainWindow::save);
+    QObject::connect(ui->actionSave_settings_as, &QAction::triggered, this, &MainWindow::saveAs);
+    QObject::connect(ui->actionLoad_settings_from_file, &QAction::triggered, this, &MainWindow::open);
+    QObject::connect(ui->actionSet_uninformative_factor, &QAction::triggered, this, &MainWindow::setFactor);
+    QObject::connect(ui->actionRun_tests, &QAction::triggered, this, &MainWindow::doTests);
+    QObject::connect(ui->actionRestore_default_settings, &QAction::triggered, this, &MainWindow::defaultSettings);
+
+    QObject::connect(ui->actionRandom_seed, &QAction::triggered, this, &MainWindow::setRandomSeed);
 
     new QShortcut(QKeySequence(Qt::Key_Escape), this, SLOT(escape()));
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_M), this, SLOT(setMultiplePlayingFields()));
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_X), this, SLOT(selectionHistogram()));
+    new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_M), this, SLOT(setMultiplePlayingFields()));
+    new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_X), this, SLOT(selectionHistogram()));
 
     QDir settingsPath;
     settingsPath.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation));
@@ -106,6 +122,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QString savePathString(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
     savePathString.append("/");
     path = new QLineEdit(savePathString, this);
+    connect(path, &QLineEdit::textChanged, this, &MainWindow::pathTextChanged);
     ui->mainToolBar->addWidget(path);
 
     //Spacer
@@ -116,12 +133,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mainToolBar->addWidget(empty);
     QPushButton *cpath = new QPushButton("&Change", this);
     ui->mainToolBar->addWidget(cpath);
-    connect(cpath, SIGNAL (clicked()), this, SLOT (changePathTriggered()));
+    connect(cpath, &QPushButton::clicked, this, &MainWindow::changePathTriggered);
 
     ui->mainToolBar->addSeparator();
     aboutButton = new QAction(QIcon(QPixmap(":/darkstyle/icon_about_button.png")), QString("About"), this);
     ui->mainToolBar->addAction(aboutButton);
-    QObject::connect(aboutButton, SIGNAL (triggered()), this, SLOT (aboutTriggered()));
+    QObject::connect(aboutButton, &QAction::triggered, this, &MainWindow::aboutTriggered);
 
     //Formatting of table font then colour
     QFont fnt;
@@ -138,17 +155,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Titles
     QStringList labellist;
-    for (int i = 0; i < simSettings->taxonNumber; i++)labellist << QString("Species " + QString::number(i));
+    for (int i = 0; i < simSettings->runForTaxa; i++)labellist << QString("Species " + QString::number(i));
     ui->character_Display->setVerticalHeaderLabels(labellist);
 
-    //Populate table, and then modify these items as required when needed - think this is  better as less faffing with memory that creating and deleting new ones
-    for (int i = 0; i < simSettings->taxonNumber; i++)
-        for (int j = 0; j < simSettings->genomeSize; j++)
-            ui->character_Display->setItem(i, j, new QTableWidgetItem(" "));
-
-    //Qt 5.12 seems to resize the columns on compile on some operating systems. This resize ensures they appear the same across all operating systems
-    for (int i = 0; i < ui->character_Display->columnCount(); i++)ui->character_Display->setColumnWidth(i, 25);
-    ui->character_Display->setCurrentItem(nullptr);
+    //Set selectability
     ui->character_Display->setSelectionMode(QAbstractItemView::NoSelection);
 
     //Progress bar
@@ -160,19 +170,20 @@ MainWindow::MainWindow(QWidget *parent) :
     escapePressed = false;
     pauseFlag = false;
     batchRunning = false;
-    calculateStripUninformativeFactorRunning = false;
-    batchError = false;
-    unresolvableBatch = false;
     testMode = false;
 
     //Load settings if previously saved
     load();
 
     //Ensure grid is right size for loaded settings or defaults
-    resizeGrid();
+    if (simSettings->runMode == RUN_MODE_TAXON) resizeGrid(simSettings->runForTaxa, simSettings->genomeSize);
+    else resizeGrid(500, simSettings->genomeSize, 1);
 
     //Maximise window
     showMaximized();
+
+    //Start runs at zero
+    runs = 0;
 }
 
 MainWindow::~MainWindow()
@@ -208,9 +219,19 @@ void MainWindow::hideProgressBar()
     progress->hide();
 }
 
-QString MainWindow::getPath()
+void MainWindow::changePathTriggered()
 {
-    return path->text();
+    QString dirname = QFileDialog::getExistingDirectory(this, "Select directory in which files should be saved.");
+    if (dirname.length() != 0)
+    {
+        dirname.append("/");
+        setPath(dirname);
+    }
+}
+
+void MainWindow::pathTextChanged(QString newPath)
+{
+    setPath(newPath);
 }
 
 void MainWindow::setPath(QString newPath)
@@ -266,7 +287,9 @@ void MainWindow::open()
         return;
     }
     load();
-    resizeGrid();
+    if (simSettings->runMode == RUN_MODE_TAXON) resizeGrid(simSettings->runForTaxa, simSettings->genomeSize);
+    else resizeGrid(500, simSettings->genomeSize, 1);
+
     settingsFileString = (QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + "/" + QString(PRODUCTNAME) + "_settings.xml");
 }
 
@@ -299,34 +322,28 @@ void MainWindow::save()
     setStatus("File saved");
 }
 
-void MainWindow::changePathTriggered()
-{
-    QString dirname = QFileDialog::getExistingDirectory(this, "Select directory in which files should be saved.");
-    if (dirname.length() != 0)
-    {
-        dirname.append("/");
-        setPath(dirname);
-    }
-}
-
 void MainWindow::startTriggered()
 {
     //First sort GUI
     startRunGUI();
 
-    if (simSettings->stripUninformative && (simSettings->stripUninformativeFactorSettings != simSettings->printSettings()))
+    if ((simSettings->stripUninformative) && (simSettings->stripUninformativeFactorSettings != simSettings->printSettings()) && runs == 0)
         if (QMessageBox::question(this, "Hmmm",
                                   "It looks like you have not calculated the strip uninformative factor for these settings. Would you like to?<br /><br />If you have manually set the factor, you should select no here otherwise your chosen value will be overwritten.",
-                                  QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes)recalculateStripUniformativeFactor(true);
+                                  QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) recalculateStripUniformativeFactor(true);
 
+    bool error = false;
     //Create a new simulation object - sending it important settings.
-    simulation theSimulation(this, 0, simSettings);
+    simulation theSimulation(runs, simSettings, &error, this);
     //Then set it running - send pointer to main window for GUI and access functions, and run number
-    theSimulation.run();
+    if (!error) theSimulation.run();
 
     //Clear table/gui
     finishRunGUI();
     resetTriggered();
+
+    //Increment in case user is doing multiple runs
+    runs++;
 }
 
 void MainWindow::escape()
@@ -339,23 +356,34 @@ void MainWindow::pauseTriggered()
     pauseFlag = !pauseFlag;
 }
 
-void MainWindow::resetTriggered()
+
+void MainWindow::resetDisplays()
 {
     /******* Sort out displays *******/
-    // Clear table
+// Clear table
     for (int i = 0; i < ui->character_Display->rowCount(); i++)
         for (int j = 0; j < ui->character_Display->columnCount(); j++)
         {
             QTableWidgetItem *item(ui->character_Display->item(i, j));
             item->setText(" ");
         }
+}
+
+void MainWindow::resetTriggered()
+{
+    /******* Sort out displays *******/
+    // Clear table
+    resetDisplays();
+    if (simSettings->runMode == RUN_MODE_TAXON) resizeGrid(simSettings->runForTaxa, simSettings->genomeSize);
+    else resizeGrid(500, simSettings->genomeSize, 1);
+
     //Clear tree string
     QString TNTstring(" ");
     setTreeDisplay(TNTstring);
     ui->statusBar->clearMessage();
 
     /******* And variables / gui if required - i.e. if hit by user. Don't really need this, but there as safety net *******/
-    if (!batchRunning && !calculateStripUninformativeFactorRunning)
+    if (!batchRunning)
     {
         finishRunGUI();
         pauseFlag = false;
@@ -365,108 +393,89 @@ void MainWindow::resetTriggered()
 
 void MainWindow::runForTriggered()
 {
-
     /******** Batch mode - multiple runs *****/
+    int runBatchFor = -1;
+    //Use custom dialogue to allow word wrap
+    batchDialog bDialogue(this, &runBatchFor);
+    //Does not modify runBatchFor unless box is accepted
+    bDialogue.exec();
+    //Return if dialogue cancelled
+    if (runBatchFor == -1) return;
 
-    bool ok;
-    int runBatchFor = QInputDialog::getInt(this, "Batch...", "How many runs?", 25, 1, 10000, 1, &ok);
-    if (!ok)return;
+    QString label =
+        "It looks like you have not calculated the strip uninformative factor for these settings. Would you like to?<br /><br />If you have manually set the factor, you should select no here otherwise your chosen value will be overwritten.";
+    if ((simSettings->stripUninformative) && (simSettings->stripUninformativeFactorSettings != simSettings->printSettings()))
+        if (QMessageBox::question(this, "Hmmm", label, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes)
+            recalculateStripUniformativeFactor(true);
 
     startRunGUI();
     batchRunning = true;
-    batchError = false;
-    unresolvableBatch = false;
 
-    if (simSettings->stripUninformative && (simSettings->stripUninformativeFactorSettings != simSettings->printSettings()))
-        if (QMessageBox::question(this, "Hmmm",
-                                  "It looks like you have not calculated the strip uninformative factor for these settings. Would you like to?<br /><br />If you have manually set the factor, you should select no here otherwise your chosen value will be overwritten.",
-                                  QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes)recalculateStripUniformativeFactor(true);
+    QVector<int> runsList(runBatchFor);
+    std::iota(runsList.begin(), runsList.end(), 0);
 
+    bool errorStart = false;
+    //Create a new simulation object - sending it important settings.
+    simulation theSimulation(runsList[0], simSettings, &errorStart, this);
+    //Then set it running - send pointer to main window for GUI and access functions, and run number
+    if (!errorStart) errorStart = theSimulation.run();
 
-
-    //Sort out headers for cumulative species file - no need to repeat these every time, in contrast to batch analysis files
-    if (simSettings->speciesCurve)
+    if (!errorStart)
     {
+        bool stopRuns = escapePressed;
+        label = "It looks like the simulation failed.\nWould you like continue?";
+        if (!stopRuns)
+            if (QMessageBox::question(this, "Error", label, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::No)
+                stopRuns = true;
 
-        QString speciesCurveFilenameString = (QString(PRODUCTNAME) + "_species_curve.txt");
-
-        if (!simSettings->append || !batchRunning )
+        if (stopRuns)
         {
-            speciesCurveFilenameString.append(QString("%1").arg(runs, 3, 10, QChar('0')));
-            speciesCurveFilenameString.append(".txt");
-        }
-        else
-        {
-            //speciesCurveFilenameString.append(QString("batch_env_%1_masks_%2").arg(environmentNumber).arg(maskNumber));
-            speciesCurveFilenameString.append(QString("batch"));
-            speciesCurveFilenameString.append(".txt");
-        }
-
-        //RJG - Set up save directory
-        QDir savePathDirectory(path->text());
-        if (!savePathDirectory.mkpath(QString(PRODUCTNAME) + "_output"))
-        {
-            QMessageBox::warning(this, "Error", "Cant save output files. Permissions issue?");
+            batchRunning = false;
+            resetTriggered();
             return;
         }
-        else savePathDirectory.cd(QString(PRODUCTNAME) + "_output");
-        speciesCurveFilenameString.prepend(savePathDirectory.absolutePath() + QDir::separator());
-
-        QFile speciesCurveFile(speciesCurveFilenameString);
-
-        bool errorFlagSpecies = false;
-
-        if (!simSettings->append)
-        {
-            if (!speciesCurveFile.open(QIODevice::WriteOnly | QIODevice::Text))
-            {
-                QMessageBox::warning(this, "Error!", "Error opening curve file to write to.");
-                errorFlagSpecies = true;
-            }
-        }
-        else
-        {
-            if (!speciesCurveFile.open(QIODevice::Append | QIODevice::Text))
-            {
-                QMessageBox::warning(this, "Error!", "Error opening curve file to write to.");
-                errorFlagSpecies = true;
-            }
-        }
-
-        if (errorFlagSpecies)
-        {
-            finishRunGUI();
-            return;
-        }
-
-        QTextStream speciesCurveTextStream(&speciesCurveFile);
-
-        speciesCurveTextStream << (QString(PRODUCTNAME) + "_") << simSettings->printSettings() << "\n";
-        speciesCurveTextStream << "First row gives species ID, subsequent rows are iterations at which that species originates in each run:\n";
-        for (int i = 0; i < simSettings->taxonNumber; i++)speciesCurveTextStream << i << "\t";
-        speciesCurveTextStream << "\n";
-        speciesCurveFile.close();
     }
+    else runsList.removeFirst();
 
-    int runs = 0;
+    resetTriggered();
 
-    addProgressBar(0, runBatchFor);
-
+    auto count = 0;
     do
     {
-        setProgressBar(runs);
-        simulation theSimulation(this, runs, simSettings);
-        theSimulation.run();
-        resetTriggered();
-        if (!batchError && !unresolvableBatch)runs++;
+        //In a previous version RJG had used the progress bar in the status bar, but connecting the future watcher signals and slots provide very challenging
+        //Hence now do this with a dialogue - first create a dialogue, then QFutureWatcher and connect signals and slots.
+        QProgressDialog dialog;
+        QFutureWatcher<void> futureWatcher;
+        QObject::connect(&futureWatcher, &QFutureWatcher<void>::finished, &dialog, &QProgressDialog::reset);
+        QObject::connect(&dialog, &QProgressDialog::canceled, &futureWatcher, &QFutureWatcher<void>::cancel);
+        QObject::connect(&futureWatcher, &QFutureWatcher<void>::progressRangeChanged, &dialog, &QProgressDialog::setRange);
+        QObject::connect(&futureWatcher, &QFutureWatcher<void>::progressValueChanged,  &dialog, &QProgressDialog::setValue);
+
+        //Set text
+        if (count == 0) dialog.setLabelText(QString("Starting first pass of your remaining batch. Running %1 remaining simulations on %2 cores.").arg(runsList.length()).arg(QThread::idealThreadCount()));
+        else dialog.setLabelText(QString("Starting pass %1 of your remaining batch. Running %2 simulations that failed in pass %3 on %4 cores.").arg(count + 1).arg(runsList.length()).arg(count).arg(
+                                         QThread::idealThreadCount()));
+
+        //Do the runs using QtConcurrent::filter which modified the sequence in place
+        futureWatcher.setFuture(QtConcurrent::filter(runsList, [this](const int &run)
+        {
+            bool error = false;
+            simulation theSimulation(run, simSettings, &error);
+            if (error) return true;
+            //The simulation returns false if it fails, whereas QtConcurrent::filter() retains an item if filterFunction returns true - hence the not
+            return (!theSimulation.run());
+        }));
+
+        // Display the dialog and start the event loop.
+        dialog.exec();
+        if (futureWatcher.isCanceled()) batchRunning = false;
+        count++;
     }
-    while (runs < runBatchFor && !escapePressed);
+    //Run up to 50 times so this cannot get caught in an infinite loop
+    while (runsList.count() > 0 && count < 50 && batchRunning == true);
 
     //Reset gui etc.
     batchRunning = false;
-    batchError = false;
-    unresolvableBatch = false;
-    hideProgressBar();
     resetTriggered();
 }
 
@@ -475,62 +484,51 @@ void MainWindow::settingsTriggered()
     Settings *sdialogue = new Settings(this, simSettings);
     sdialogue->exec();
 
-    if (sdialogue->resizeGrid)
-    {
-        resetTriggered();
-        resizeGrid();
-    }
+    resetTriggered();
+    if (simSettings->runMode == RUN_MODE_TAXON) resizeGrid(simSettings->runForTaxa, simSettings->genomeSize);
+    else resizeGrid(500, simSettings->genomeSize, 1);
 
     if (sdialogue->recalculateStripUninformativeFactorOnClose) recalculateStripUniformativeFactor(false);
 
 }
 
-void MainWindow::resizeGrid()
+void MainWindow::resizeGrid(const int speciesNumber, const int genomeSize, const int hideFrom)
 {
-    int width = simSettings->genomeSize;
-    if (width > 128)width = 128;
+    int width = genomeSize;
+    if (width > 128) width = 128;
     ui->character_Display->setColumnCount(width);
-    ui->character_Display->setRowCount(simSettings->taxonNumber);
+    ui->character_Display->setRowCount(speciesNumber);
 
-    //Populate table, and then modify these items as required when needed - think this is  better as less faffing with memory that creating and deleting new ones
-    for (int i = 0; i < simSettings->taxonNumber; i++)
-        for (int j = 0; j < simSettings->genomeSize; j++)
-            if (ui->character_Display->item(i, j) == nullptr)ui->character_Display->setItem(i, j, new QTableWidgetItem(" "));
+    if (hideFrom > 0) for (int i = hideFrom; i < speciesNumber; i++) ui->character_Display->hideRow(i);
+    else for (int i = hideFrom; i < speciesNumber; i++) ui->character_Display->showRow(i);
+
+    for (int i = 0; i < speciesNumber; i++)
+        for (int j = 0; j < width; j++)
+            if (ui->character_Display->item(i, j) == nullptr) ui->character_Display->setItem(i, j, new QTableWidgetItem(" "));
 
     for (int i = 0; i < ui->character_Display->columnCount(); i++)ui->character_Display->setColumnWidth(i, 25);
 
     //Titles
     QStringList labellist;
-    for (int i = 0; i < simSettings->taxonNumber; i++)labellist << QString("Species " + QString::number(i));
+    for (int i = 0; i < speciesNumber; i++)labellist << QString("Species " + QString::number(i));
     ui->character_Display->setVerticalHeaderLabels(labellist);
 
     qApp->processEvents();
 }
 
-
-void MainWindow::resizeGrid(const simulationVariables &simSettings)
+void MainWindow::hideRow(const int rowNumber)
 {
+    ui->character_Display->hideRow(rowNumber);
+}
 
-    resetTriggered();
+void MainWindow::showRow(const int rowNumber)
+{
+    ui->character_Display->showRow(rowNumber);
+}
 
-    int width = simSettings.genomeSize;
-    if (width > 128)width = 128;
-    ui->character_Display->setColumnCount(width);
-    ui->character_Display->setRowCount(simSettings.taxonNumber);
-
-    //Populate table, and then modify these items as required when needed - think this is  better as less faffing with memory that creating and deleting new ones
-    for (int i = 0; i < simSettings.taxonNumber; i++)
-        for (int j = 0; j < simSettings.genomeSize; j++)
-            if (ui->character_Display->item(i, j) == nullptr)ui->character_Display->setItem(i, j, new QTableWidgetItem(" "));
-
-    for (int i = 0; i < ui->character_Display->columnCount(); i++)ui->character_Display->setColumnWidth(i, 25);
-
-    //Titles
-    QStringList labellist;
-    for (int i = 0; i < simSettings.taxonNumber; i++)labellist << QString("Species " + QString::number(i));
-    ui->character_Display->setVerticalHeaderLabels(labellist);
-
-    qApp->processEvents();
+int MainWindow::rowMax()
+{
+    return ui->character_Display->rowCount();
 }
 
 void MainWindow::outputTriggered()
@@ -570,7 +568,6 @@ void MainWindow::printGenome(const Organism *org, int row)
 void MainWindow::recalculateStripUniformativeFactor(bool running)
 {
     bool tempStripUninformative = simSettings->stripUninformative;
-    calculateStripUninformativeFactorRunning = true;
     simSettings->stripUninformative = true;
     simSettings->stripUninformativeFactor = 1.0;
 
@@ -585,24 +582,27 @@ void MainWindow::recalculateStripUniformativeFactor(bool running)
         setProgressBar(i);
         resetTriggered();
 
-        //qDebug() << stripUninformativeFactorMean;
+        bool error = false;
+        //Start a simulation - last bool here tells it we are running the strip uninformative calculation, which is required for constructor
+        simulation theSimulation(0, simSettings, &error, this, true);
+        bool success = false;
+        if (!error) success = theSimulation.run();
 
-        simulation theSimulation(this, 0, simSettings);
-        theSimulation.run();
+        if (success) stripUninformativeFactorMean += static_cast<double>(simSettings->genomeSize) / static_cast<double>(theSimulation.returninformativeCharacters());
 
-        stripUninformativeFactorMean += static_cast<double>(simSettings->genomeSize) / static_cast<double>(theSimulation.returninformativeCharacters());
+        if (error || !success) setStatus("Error calculating strip uninformative");
     }
 
     //Divide by 9 here to add some extra given variability of strip ununformative factor
     simSettings->stripUninformativeFactor = (stripUninformativeFactorMean / 9.);
     if (simSettings->stripUninformativeFactor > 20.)simSettings->stripUninformativeFactor = 20.;
+    if (simSettings->stripUninformativeFactor < 1.) simSettings->stripUninformativeFactor = 1.;
 
     hideProgressBar();
 
     //Reset gui etc.
     if (!running)finishRunGUI();
 
-    calculateStripUninformativeFactorRunning = false;
     simSettings->stripUninformative = tempStripUninformative;
 
     simSettings->stripUninformativeFactorSettings = simSettings->printSettings();
@@ -655,10 +655,10 @@ void MainWindow::selectionHistogram()
     }
 
     //RJG - Set up save directory
-    QDir savePathDirectory(path->text());
+    QDir savePathDirectory(simSettings->savePathDirectory);
     if (!savePathDirectory.mkpath(QString(PRODUCTNAME) + "_output"))
     {
-        QMessageBox::warning(this, "Error", "Cant save output file. Permissions issue?");
+        QMessageBox::warning(this, "Error", "Can't create output directory. Permissions issue?");
         return;
     }
     else savePathDirectory.cd(QString(PRODUCTNAME) + "_output");
@@ -710,14 +710,46 @@ void MainWindow::countPeaks()
     save();
 
     //Create a new simulation object - sending it important settings.
-    simulation theSimulation(this, 0, simSettings);
-    //Then set it running - send pointer to main window for GUI and access functions, and run number
-    theSimulation.countPeaks(this);
+    bool error = false;
+
+    int genomeSize = QInputDialog::getInt(this, "Fitness histogram...", "How many bits?", 32, 1, 64, 1, &error);
+    if (!error) return;
+
+    int repeats =  QInputDialog::getInt(this, "Fitness histogram...", "How many repeats?", 1, 1, 100000, 1, &error);
+    if (!error) return;
+
+    //RJG - resize grid otherwise the print function will make. No need to record original settings, as dealt with in main window
+    simSettings->genomeSize = genomeSize;
+    //Also need to reset fitness size so count peaks works when doing match peaks (masks are initialised to fitness size)
+    simSettings->fitnessSize = genomeSize;
+    simSettings->speciesSelectSize = genomeSize;
+    //Don't want to create a rogue subfolder if writeRunningLog is enabled
+    simSettings->writeRunningLog = false;
+    resizeGrid(1, genomeSize);
+
+    //Progress bar max value is 2^16 - scale to this
+    quint16 pmax = static_cast<quint16>(-1);
+
+    addProgressBar(0, pmax);
+
+    for (int repeat = 0; repeat < repeats; repeat++)
+    {
+        bool simError = false;
+        simulation theSimulation(0, simSettings, &simError, this);
+        setStatus(QString("Repeat %1/%2").arg(repeat).arg(repeats));
+
+        //Then set it running - send pointer to main window for GUI and access functions, and run number
+        if (!simError)theSimulation.countPeaks(genomeSize, repeat);
+    }
 
     //Load previous settings again
     load();
-    resizeGrid();
+    if (simSettings->runMode == RUN_MODE_TAXON) resizeGrid(simSettings->runForTaxa, simSettings->genomeSize);
+    else resizeGrid(1, simSettings->genomeSize);
+
     resetTriggered();
+
+    hideProgressBar();
 }
 
 
@@ -727,7 +759,8 @@ void MainWindow::doTests()
     {
         load();
         testMode = false;
-        resizeGrid();
+        if (simSettings->runMode == RUN_MODE_TAXON) resizeGrid(simSettings->runForTaxa, simSettings->genomeSize);
+        else resizeGrid(1, simSettings->genomeSize);
         ui->testLog->setHtml("<h1>TREvoSim test log </h1><p>Below you can find the output of the TREvoSim tests. The long pieces of text - e.g. masks and playing fields - are output as MD5 checksums for space and clarity. If the text is the same, the checksum will be too. Any tests that fail will appear in bright green font with a test failed message at the front.</p>");
         ui->testLog->setVisible(false);
         return;
@@ -744,7 +777,7 @@ void MainWindow::doTests()
 
     QStringList items;
     items << tr("All");
-    for (int i = 1; i < testCount; i++) items << QString::number(i);
+    for (int i = 0; i < testCount; i++) items << QString::number(i);
 
     bool ok;
     QString item = QInputDialog::getItem(this, tr("TREvoSim tests"), tr("Which test?"), items, 0, false, &ok);
@@ -772,13 +805,18 @@ void MainWindow::doTests()
     else
     {
         testMode = false;
-        resizeGrid();
+        if (simSettings->runMode == RUN_MODE_TAXON) resizeGrid(simSettings->runForTaxa, simSettings->genomeSize);
+        else resizeGrid(1, simSettings->genomeSize);
         ui->testLog->setVisible(false);
         setStatus("Tests cancelled");
         return;
     }
 
-    test testObject(this);
+    testinternal testObject(this);
+
+    QElapsedTimer timer;
+    timer.start();
+
     for (int testNumber = testStart; testNumber < testCount; testNumber++)
     {
         if (item == "All")
@@ -815,14 +853,15 @@ void MainWindow::doTests()
 
     if (item != "All") progress.close();
 
-    setStatus("Tests done.");
+    setStatus(QString("%1 tests completed in %2 seconds.").arg(testCount - testStart).arg(timer.elapsed() / 1000));
 }
 
 void MainWindow::defaultSettings()
 {
     delete simSettings;
     simSettings = new simulationVariables;
-    resizeGrid();
+    if (simSettings->runMode == RUN_MODE_TAXON) resizeGrid(simSettings->runForTaxa, simSettings->genomeSize);
+    else resizeGrid(1, simSettings->genomeSize);
     setStatus("Returned settings to defaults");
     path->setText(simSettings->savePathDirectory);
 }

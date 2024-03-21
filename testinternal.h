@@ -1,13 +1,14 @@
-#ifndef TEST_H
-#define TEST_H
+#ifndef TESTINTERNAL_H
+#define TESTINTERNAL_H
 
-#include "simulation.h"
+#include "mainwindow.h"
 
-class test
+class testinternal
 {
 public:
-    test(MainWindow *theMainWindowCon);
+    testinternal(MainWindow *theMainWindowCon);
     bool callTest(int i, QString &outString);
+
 private:
     bool testZero(QString &outString);
     bool testOne(QString &outString);
@@ -31,7 +32,7 @@ private:
     bool testNineteen(QString &outString);
     bool testTwenty(QString &outString);
     MainWindow *theMainWindow;
-
+    bool error;
 };
 
-#endif // TEST_H
+#endif // TESTINTERNAL_H

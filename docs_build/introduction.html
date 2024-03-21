@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1. Introduction &mdash; TREvoSim 3.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="2. Compiling, Installation, and Requirements" href="requirements.html" />
+    <link rel="prev" title="Welcome to TREvoSim’s User Manual" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> TREvoSim
+            <img src="_static/TREvoSim.jpg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">1. Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">1.1. Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#simulation-setup">1.2. Simulation setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#output-setup">1.3. Output setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quick-start">1.4. Quick start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#default-settings">1.5. Default settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">2. Compiling, Installation, and Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="windowlayout.html">3. Window Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html">4. Settings - Organisms and simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings2.html">5. Settings - Environment and Extinction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="loggingsim.html">6. Logging the Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">7. Menu commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">8. Tests</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">TREvoSim</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><span class="section-number">1. </span>Introduction</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/introduction.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="introduction">
+<h1><span class="section-number">1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<section id="overview">
+<h2><span class="section-number">1.1. </span>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>TREvoSim is an individual-based evo-evolutionary model that lacks complex spatial structure (if you want space, check out sister package <a class="reference external" href="https://github.com/palaeoware/revosim">REvoSim</a>). It is abstracted, and particularly well-suited to simulating discrete binary (~phenomic) data for phylogenetic research, and the outcomes of other evolutionary and environmental processes in the absence of space. The papers on the page <a class="reference internal" href="index.html#index"><span class="std std-ref">Welcome to TREvoSim’s User Manual</span></a> provide useful information regarding the software, its approach, and its limitations.</p>
+<p>In brief, individuals comprise binary strings, referred to throughout this documentation as their genome, which can be output as a phylogenetic matrix at the end of the run (i.e. these form the character data in the simulation). Genomes are compared with one or several environments, also comprise a series of binary strings (masks). Fitness of the individuals is calculated based on the hamming (i.e. character) distance between their genome and the masks. For a full description of the fitness algorithm, see Garwood et al. (2019) and Keating et al. (2020), cited on the <a class="reference internal" href="index.html#index"><span class="std std-ref">Welcome to TREvoSim’s User Manual</span></a> page. Individuals are placed in a list structure called the playing field (of which there can be one, or many, with the same – or different – environments), and compete with other individuals within their own playing field. An individual’s fitness dictates its probability of duplication, which happens for one individual per playing field per iteration. On duplication there is a user-defined chance of a mutation being applied. TREvoSim employs a lineage-based species concept: a new species is defined based on genomic distance to either its parent species, or to that parent’s last daughter species to appear. As a simulation runs, a tree representing the evolutionary relationships between the species is recorded, and the character data for each species is recorded at species extinction. A phylogeny and character data can be output after a requested number of taxa has evolved, or after a set number of iterations.</p>
+</section>
+<section id="simulation-setup">
+<h2><span class="section-number">1.2. </span>Simulation setup<a class="headerlink" href="#simulation-setup" title="Permalink to this headline">¶</a></h2>
+<p>Variables can be defined by clicking on the Settings button in the toolbar. This creates a pop up window, which has two tabs:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Organisms and simulation</dt>
+<dd class="field-odd"><p>This tab contains a series of settings that defines the parameters for the simulation setup, and properties of the organisms. See <a class="reference internal" href="settings.html#settings"><span class="std std-ref">Settings - Organisms and simulation</span></a>.</p>
+</dd>
+<dt class="field-even">Environment and extinction</dt>
+<dd class="field-even"><p>Variables defined within this tab control extrinsic factors that impact on the organisms. See <a class="reference internal" href="settings2.html#settings2"><span class="std std-ref">Settings - Environment and Extinction</span></a>.</p>
+</dd>
+</dl>
+</section>
+<section id="output-setup">
+<h2><span class="section-number">1.3. </span>Output setup<a class="headerlink" href="#output-setup" title="Permalink to this headline">¶</a></h2>
+<p>TREvoSim provides functionality for two types of logs. All logs are placed within a folder called TREvoSim_output in the save path defined in the toolbar. To change this click on change in the toolbar. The options associated with these can be accessed by clicking on the Output button in the toolbar, which creates a pop up window with the following tabs:</p>
+<dl class="field-list simple">
+<dt class="field-odd">End run log</dt>
+<dd class="field-odd"><p>On this tab you can configure outputs at the end of a log, including:</p>
+<ul class="simple">
+<li><p>Two custom output files – the options allow  you to define file name, content (replacing keywords in ||double pipes|| with the requested information – see <a class="reference internal" href="loggingsim.html#loggingsim"><span class="std std-ref">Logging the Simulation</span></a>) and extension.</p></li>
+<li><p>A standard nex tree file.</p></li>
+<li><p>A working log which includes all operations the software performs across a run if you want to inspect its workings (this file can be very large).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Running log</dt>
+<dd class="field-even"><p>This tab allows a running log to be defined that can record the state of the simulation at user-requested frequencies (see <a class="reference internal" href="loggingsim.html#loggingsim"><span class="std std-ref">Logging the Simulation</span></a>). The tab includes options for:</p>
+<ul class="simple">
+<li><p>Header text</p></li>
+<li><p>Body text</p></li>
+<li><p>An option to write the running log (if not requested this is not output)</p></li>
+<li><p>A tick box to output for a specialised Ecosystem Engineering log</p></li>
+<li><p>A spin box that dictates the frequency with which which the running log is written</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="quick-start">
+<h2><span class="section-number">1.4. </span>Quick start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h2>
+<p>The TREvoSim defaults will allow you to create exemplar data in TREvoSim by hitting the Run button on the toolbar. This will output a nexus file with the final character matrix in it that can be loaded in e.g. R for analysis, placed in a folder called <em>TREvoSim_output</em>, the default location of which is your desktop. It will also output a nexus formatted tree file in this folder.</p>
+</section>
+<section id="default-settings">
+<h2><span class="section-number">1.5. </span>Default settings<a class="headerlink" href="#default-settings" title="Permalink to this headline">¶</a></h2>
+<p>TREvoSim’s default simulation parameters are intended to be a good general place to start when thinking about phylogenetic questions. Their outputs (trees, characters) are benchmarked against twelve total evidence empirical datasets. Details of the measures used, the script used to generate them, the source of the empirical data, and the output graphs from the script, are available in the folder <em>Benchmarking</em> in the source code repository.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to TREvoSim’s User Manual" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="requirements.html" class="btn btn-neutral float-right" title="2. Compiling, Installation, and Requirements" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Russell J. Garwood, Alan R.T. Spencer, Mark D. Sutton.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

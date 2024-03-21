@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>6. Logging the Simulation &mdash; TREvoSim 3.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="7. Menu commands" href="commands.html" />
+    <link rel="prev" title="5. Settings - Environment and Extinction" href="settings2.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> TREvoSim
+            <img src="_static/TREvoSim.jpg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">2. Compiling, Installation, and Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="windowlayout.html">3. Window Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html">4. Settings - Organisms and simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings2.html">5. Settings - Environment and Extinction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">6. Logging the Simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#logging-system">6.1. Logging system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#keywords">6.2. Keywords</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">7. Menu commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">8. Tests</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">TREvoSim</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><span class="section-number">6. </span>Logging the Simulation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/loggingsim.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="logging-the-simulation">
+<span id="loggingsim"></span><h1><span class="section-number">6. </span>Logging the Simulation<a class="headerlink" href="#logging-the-simulation" title="Permalink to this headline">¶</a></h1>
+<section id="logging-system">
+<h2><span class="section-number">6.1. </span>Logging system<a class="headerlink" href="#logging-system" title="Permalink to this headline">¶</a></h2>
+<p><strong>End run log</strong></p>
+<p>TREvoSim has a versatile logging system which allows the user to define outputs in a range of formats required for phylogenetic inference packages, or e.g. R, provided these allow plain text inputs. Clicking on the output button of the toolbar will launch the output dialogue, which has two tabs. The first is a log that is output at the end of the run:</p>
+<figure class="align-center">
+<img alt="_images/output_01.png" src="_images/output_01.png" />
+</figure>
+<p>A typical use case for this is when you would like to use the outputs of a finished simulation to do downstream analyses for e.g. phylogenetic methods. This tab provides options for two custom log files, which are placed, after a run, within the <em>TREvoSim_output</em> folder created on the save path. Basename defines the start of the filename, which then either includes a number, which iterates with subsequent runs when output is not set to append, or <em>_batch</em> if the outputs are set to append and a batch is being run. The file extension is also defined here. The two text boxes then allow custom file content to be written: text is written as provided to the file – for example with run instructions or program commands – and any of the keywords shown below included within two vertical bar ( | ) symbols are replaced as a file is written. The default outputs are shown in the figure above – they create a vanilla nexus file which allows you to, for example, load the character matrix into R.</p>
+<p>There are two further options at the base of the dialogue:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Output NEX tree file</dt>
+<dd class="field-odd"><p>This outputs a tree for each run in a standard nexus format with the tree and translate block, as well as a comment with the settings of the run written to it. These do not append, but each file has the run number at the end of the file name.</p>
+</dd>
+<dt class="field-even">Output working log</dt>
+<dd class="field-even"><p>When this is checked, TREvoSim outputs a text file outlining many of the steps each iteration, such as the state of the playing field, the environment, and the processes the software is going through. This helps understand and fact check any given run, but for significant playing field sizes, taxon numbers, or character numbers, it creates a significant (10s – 100s of MB) text file.</p>
+</dd>
+</dl>
+<p><strong>Running log</strong></p>
+<p>The other tab is a running log which is output during a run:</p>
+<figure class="align-center">
+<img alt="_images/output_02.png" src="_images/output_02.png" />
+</figure>
+<p>This is of utility for studying processes as they occur during a run, as it is output on a regular basis as the simulation progresses. The text entered in the header text region is output once, when the file is created – so if, for example, a CSV output is required and a series of strings are comma separated, these will form the column headers. Note that in order to write the first data output on the next line, a newline is required at the end of this string.</p>
+<p>The next box (body text) is output at the requested frequency and can be used to record anything in the state of the simulation required to study a process of interest. It uses the same keywords (shown below) as the end run log, outputting data in the current state for the iteration at which the log is written. Again, this requires a line break at the end of the string of interest if you would like outputs for each iteration to appear on subsequent lines.</p>
+<p>There are three further options at the base of the dialogue:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Write running log</dt>
+<dd class="field-odd"><p>By default this log is not output when a simulation runs. In order to write the files this option needs to be enabled.</p>
+</dd>
+<dt class="field-even">Write ecosystem engineers</dt>
+<dd class="field-even"><p>There is a custom log for simulations in which ecosystem engineers are enabled (the nature of this functionality does not allow all required information to be easily output using the running log: this is primarily a convenience function).</p>
+</dd>
+<dt class="field-odd">Frequency</dt>
+<dd class="field-odd"><p>This dictates the frequency, in iterations, with which the running log is written.</p>
+</dd>
+</dl>
+</section>
+<section id="keywords">
+<h2><span class="section-number">6.2. </span>Keywords<a class="headerlink" href="#keywords" title="Permalink to this headline">¶</a></h2>
+<p>Keywords within two vertical bars ( e.g. ||Matrix|| ) are replaced as a file is written as follows:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Character_Number</dt>
+<dd class="field-odd"><p>This outputs the character number.</p>
+</dd>
+<dt class="field-even">Count</dt>
+<dd class="field-even"><p>This is replaced with a counter for batch runs; incrementing by one using C++ numbering (i.e. starting from zero).</p>
+</dd>
+<dt class="field-odd">Ecosystem_Engineers</dt>
+<dd class="field-odd"><p>This prints a list of species, and their ecosystem engineering status (i.e. whether any members of this species are ecosystem engineers).</p>
+</dd>
+<dt class="field-even">Iteration</dt>
+<dd class="field-even"><p>This outputs the current iteration number.</p>
+</dd>
+<dt class="field-odd">Matrix</dt>
+<dd class="field-odd"><p>This is replaced with the matrix from the run.</p>
+</dd>
+<dt class="field-even">MrBayes_Tree</dt>
+<dd class="field-even"><p>This writes a tree in standard Newick format, including branch lengths (these are based on iteration number throughout), e.g.</p>
+</dd>
+</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">S_01</span><span class="p">:</span><span class="mi">13</span><span class="p">,(</span><span class="n">S_02</span><span class="p">:</span><span class="mi">8</span><span class="p">,(</span><span class="n">S_03</span><span class="p">:</span><span class="mi">13</span><span class="p">,(</span><span class="n">S_04</span><span class="p">:</span><span class="mi">32</span><span class="p">,((</span><span class="n">S_06</span><span class="p">:</span><span class="mi">4</span><span class="p">,(</span><span class="n">S_07</span><span class="p">:</span><span class="mi">10</span><span class="p">,(</span><span class="n">S_08</span><span class="p">:</span><span class="mi">6</span><span class="p">,(</span><span class="n">S_09</span><span class="p">:</span><span class="mi">5</span><span class="p">,(</span><span class="n">S_10</span><span class="p">:</span><span class="mi">10</span><span class="p">,(</span><span class="n">S_11</span><span class="p">:</span><span class="mi">6</span><span class="p">,(</span><span class="n">S_12</span><span class="p">:</span><span class="mi">6</span><span class="p">,(</span><span class="n">S_13</span><span class="p">:</span><span class="mi">2</span><span class="p">,(((</span><span class="n">S_22</span><span class="p">:</span><span class="mi">11</span><span class="p">,(</span><span class="n">S_23</span><span class="p">:</span><span class="mi">12</span><span class="p">,(</span><span class="n">S_24</span><span class="p">:</span><span class="mi">9</span><span class="p">,((</span><span class="n">S_26</span><span class="p">:</span><span class="mi">28</span><span class="p">,((</span><span class="n">S_28</span><span class="p">:</span><span class="mi">37</span><span class="p">,(</span><span class="n">S_29</span><span class="p">:</span><span class="mi">2</span><span class="p">,(</span><span class="n">S_30</span><span class="p">:</span><span class="mi">2</span><span class="p">,(</span><span class="n">S_31</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="n">S_27</span><span class="p">:</span><span class="mi">1</span><span class="p">):</span><span class="mi">1</span><span class="p">):</span><span class="mi">38</span><span class="p">):</span><span class="mi">23</span><span class="p">):</span><span class="mi">20</span><span class="p">,</span><span class="n">S_25</span><span class="p">:</span><span class="mi">12</span><span class="p">):</span><span class="mi">31</span><span class="p">):</span><span class="mi">41</span><span class="p">,</span><span class="n">S_21</span><span class="p">:</span><span class="mi">31</span><span class="p">):</span><span class="mi">24</span><span class="p">):</span><span class="mi">27</span><span class="p">):</span><span class="mi">1</span><span class="p">):</span><span class="mi">70</span><span class="p">,</span><span class="n">S_14</span><span class="p">:</span><span class="mi">13</span><span class="p">):</span><span class="mi">42</span><span class="p">,(</span><span class="n">S_15</span><span class="p">:</span><span class="mi">21</span><span class="p">,(</span><span class="n">S_16</span><span class="p">:</span><span class="mi">2</span><span class="p">,(</span><span class="n">S_17</span><span class="p">:</span><span class="mi">11</span><span class="p">,(</span><span class="n">S_18</span><span class="p">:</span><span class="mi">2</span><span class="p">,(</span><span class="n">S_19</span><span class="p">:</span><span class="mi">10</span><span class="p">,(</span><span class="n">S_20</span><span class="p">:</span><span class="mi">14</span><span class="p">,</span><span class="n">S_05</span><span class="p">:</span><span class="mi">25</span><span class="p">):</span><span class="mi">7</span><span class="p">):</span><span class="mi">1</span><span class="p">):</span><span class="mi">4</span><span class="p">):</span><span class="mi">2</span><span class="p">):</span><span class="mi">1</span><span class="p">):</span><span class="mi">2</span><span class="p">):</span><span class="mi">1</span><span class="p">):</span><span class="mi">13</span><span class="p">):</span><span class="mi">58</span><span class="p">):</span><span class="mi">6</span><span class="p">):</span><span class="mi">2</span><span class="p">):</span><span class="mi">2</span><span class="p">):</span><span class="mi">5</span><span class="p">):</span><span class="mi">2</span><span class="p">):</span><span class="mi">36</span><span class="p">,</span><span class="n">S_00</span><span class="p">:</span><span class="mi">20</span><span class="p">):</span><span class="mi">3</span><span class="p">):</span><span class="mi">1</span><span class="p">):</span><span class="mi">3</span><span class="p">):</span><span class="mi">7</span><span class="p">):</span><span class="mi">85</span>
+</pre></div>
+</div>
+<p><em>Note</em> The mechanism used for tree writing differs between TNT and MrBayes outputs – the tree topology is the same, but the taxon order differs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Settings</dt>
+<dd class="field-odd"><p>Writes the settings to the file (this is provided as a useful way to record, with any output data, the set up for TREvoSim for any given run).</p>
+</dd>
+<dt class="field-even">TNT_Tree</dt>
+<dd class="field-even"><p>This writes a tree, if required, in TNT format (i.e. only brackets and terminal labels), e.g.</p>
+</dd>
+</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(((((</span><span class="mi">00</span> <span class="p">(((((((((((((((</span><span class="mi">05</span> <span class="mi">20</span><span class="p">)</span> <span class="mi">19</span><span class="p">)</span> <span class="mi">18</span><span class="p">)</span> <span class="mi">17</span><span class="p">)</span> <span class="mi">16</span><span class="p">)</span> <span class="mi">15</span><span class="p">)</span> <span class="p">(</span><span class="mi">14</span> <span class="p">((((</span><span class="mi">21</span> <span class="p">((</span><span class="mi">25</span> <span class="p">((((</span><span class="mi">27</span> <span class="mi">31</span><span class="p">)</span> <span class="mi">30</span><span class="p">)</span> <span class="mi">29</span><span class="p">)</span> <span class="mi">28</span><span class="p">))</span> <span class="mi">26</span><span class="p">))</span> <span class="mi">24</span><span class="p">)</span> <span class="mi">23</span><span class="p">)</span> <span class="mi">22</span><span class="p">)))</span> <span class="mi">13</span><span class="p">)</span> <span class="mi">12</span><span class="p">)</span> <span class="mi">11</span><span class="p">)</span> <span class="mi">10</span><span class="p">)</span> <span class="mi">09</span><span class="p">)</span> <span class="mi">08</span><span class="p">)</span> <span class="mi">07</span><span class="p">)</span> <span class="mi">06</span><span class="p">))</span> <span class="mi">04</span><span class="p">)</span> <span class="mi">03</span><span class="p">)</span> <span class="mi">02</span><span class="p">)</span> <span class="mi">01</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><em>Note</em> The mechanism used for tree writing differs between TNT and MrBayes outputs – the tree topology is the same, but the taxon order differs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Time</dt>
+<dd class="field-odd"><p>Adds a timestamp.</p>
+</dd>
+<dt class="field-even">Taxon_Number</dt>
+<dd class="field-even"><p>Writes taxon number.</p>
+</dd>
+<dt class="field-odd">Unresolvable</dt>
+<dd class="field-odd"><p>This prints a list of unresolvable taxa (or a notice that there are none if required).</p>
+</dd>
+<dt class="field-even">Uninformative</dt>
+<dd class="field-even"><p>Writes the number of uninformative characters.</p>
+</dd>
+</dl>
+<p>As an example, the following would output a block of text that could be run as a macro in tnt:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NSTATES</span> <span class="n">nogaps</span><span class="p">;</span>
+<span class="n">xread</span>
+<span class="s1">&#39;Written on ||Time|| Variables: ||Settings||&#39;</span>
+<span class="o">||</span><span class="n">Character_Number</span><span class="o">||</span> <span class="o">||</span><span class="n">Taxon_Number</span><span class="o">||</span>
+<span class="o">||</span><span class="n">Matrix</span><span class="o">||</span>
+<span class="p">;</span>
+<span class="n">piwe</span><span class="o">-</span><span class="p">;</span>
+<span class="n">keep</span> <span class="mi">0</span><span class="p">;</span> <span class="n">hold</span> <span class="mi">100000</span><span class="p">;</span>
+<span class="n">rseed</span> <span class="o">*</span><span class="p">;</span>
+<span class="n">xmult</span> <span class="o">=</span> <span class="n">level</span> <span class="mi">10</span><span class="p">;</span> <span class="n">bbreak</span><span class="p">;</span>
+<span class="n">export</span> <span class="o">-</span> <span class="o">||</span><span class="n">Count</span><span class="o">||</span><span class="n">_POUT</span><span class="o">.</span><span class="n">nex</span><span class="p">;</span>
+<span class="n">xwipe</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Should any other output options be required, please file a <a class="reference external" href="https://github.com/palaeoware/trevosim/issues">feature request</a>. Keywords are not case sensitive.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="settings2.html" class="btn btn-neutral float-left" title="5. Settings - Environment and Extinction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="commands.html" class="btn btn-neutral float-right" title="7. Menu commands" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Russell J. Garwood, Alan R.T. Spencer, Mark D. Sutton.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

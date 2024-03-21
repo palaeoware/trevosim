@@ -1,8 +1,8 @@
 #ifndef OUTPUT_H
 #define OUTPUT_H
 
+#include "simulation_variables.h"
 #include <QDialog>
-#include <simulation_variables.h>
 
 namespace Ui {
 class Output;
@@ -19,6 +19,7 @@ public:
 
 private slots:
     void on_buttonBox_accepted();
+    void docs();
 
 private:
     Ui::Output *ui;

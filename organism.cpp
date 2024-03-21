@@ -1,8 +1,10 @@
 #include "organism.h"
-#include "mainwindow.h"
 
-Organism::Organism(int genomeSize)
+#include <QRandomGenerator>
+
+Organism::Organism(int genomeSize, bool stochastic)
 {
+    stochasticLayer = stochastic;
 
     // Initialise everything to false/-1 to make it obvious if it has not been changed.
     for (int i = 0; i < genomeSize; i++)
@@ -10,6 +12,12 @@ Organism::Organism(int genomeSize)
         genome.append(false);
         parentGenome.append(false);
     }
+
+    if (stochasticLayer)
+        for (int i = 0; i < genomeSize * 4; i++)
+            stochasticGenome.append(false);
+
+    ecosystemEngineer = false;
 
     speciesID = -1;
     parentSpeciesID = -1;
@@ -38,6 +46,8 @@ void Organism::initialise(int genomeSize)
     speciesID = 0;
     parentSpeciesID = 0;
 
+    ecosystemEngineer = false;
+
     born = 0;
     extinct = 0;
     cladogenesis = 0;
@@ -59,6 +69,8 @@ void Organism::initialise(int genomeSize, const int *stochasticMap)
     speciesID = 0;
     parentSpeciesID = 0;
 
+    ecosystemEngineer = false;
+
     born = 0;
     extinct = 0;
     cladogenesis = 0;
@@ -79,11 +91,11 @@ void Organism::operator = (const Organism &O)
     born = O.born;
     extinct = O.extinct;
     cladogenesis = O.cladogenesis;
+    ecosystemEngineer = O.ecosystemEngineer;
 }
 
 bool Organism::operator == (const Organism &O)
 {
-    // Copy all attributes
     if (genome != O.genome) return false;
     if (parentGenome != O.parentGenome) return false;
     if (stochasticLayer && (stochasticGenome != O.stochasticGenome)) return false;
@@ -93,6 +105,7 @@ bool Organism::operator == (const Organism &O)
     if (born != O.born) return false;
     if (extinct != O.extinct) return false;
     if (cladogenesis != O.cladogenesis) return false;
+    if (ecosystemEngineer != O.ecosystemEngineer) return false;
     return true;
 }
 
@@ -153,7 +166,7 @@ void Organism::mapFromStochastic(const int *stochasticMap)
     */
 }
 
-void Organism::setGenome(QVector<bool> genome)
+void Organism::setGenome(QList<bool> genome)
 {
     this->genome = genome;
 }

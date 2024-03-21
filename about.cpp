@@ -2,9 +2,9 @@
 #include "ui_about.h"
 
 #include "version.h"
-#include "mainwindow.h"
 
 #include <QDesktopServices>
+#include <QPushButton>
 
 About::About(QWidget *parent, QString title) :
     QDialog(parent),
@@ -33,15 +33,15 @@ About::About(QWidget *parent, QString title) :
 
     QPushButton *codePushButton = new  QPushButton("&Code on GitHub", this);
     ui->pushButtonHorizontalLayout->addWidget(codePushButton);
-    connect(codePushButton, SIGNAL (clicked()), this, SLOT(codeOnGitHub()));
+    connect(codePushButton, &QPushButton::clicked, this, &About::codeOnGitHub);
 
     QPushButton *bugPushButton = new  QPushButton("&Report Bug/Issue/Feature Request", this);
     ui->pushButtonHorizontalLayout->addWidget(bugPushButton);
-    connect(bugPushButton, SIGNAL (clicked()), this, SLOT(bugReport()));
+    connect(bugPushButton, &QPushButton::clicked, this, &About::bugReport);
 
     QPushButton *docsPushButton = new  QPushButton("&See documentation", this);
     ui->pushButtonHorizontalLayout->addWidget(docsPushButton);
-    connect(docsPushButton, SIGNAL (clicked()), this, SLOT(docs()));
+    connect(docsPushButton, &QPushButton::clicked, this, &About::docs);
 
     ui->textLabel_3->setWordWrap(true);
     ui->textLabel_3->setText("<br><br><b>Copyright and License:</b>"
