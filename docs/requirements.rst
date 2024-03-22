@@ -8,7 +8,7 @@ Compiling from Source
 
 **Windows 64-bit**
 
-*QT Creator + QT v5.x using MSYS2 (64-bit) and MinGW (64-bit)*
+*For v1.X,2.X - QT Creator + QT v5.x using MSYS2 (64-bit) and MinGW (64-bit)*
 We recommend you install and use MSYS2 (64-bit) a Windows package manager, based on modern Cygwin (POSIX compatibility layer) and MinGW-w64, that allows easy installation of QT v5.x 64-bit.
 
 #. Download and run the latest version of `MSYS2 <https://www.msys2.org/>`_ for 64-bit Windows. This will be name "MSYS2-x86_64-..." for the 64-bit installer.
@@ -24,6 +24,9 @@ We recommend you install and use MSYS2 (64-bit) a Windows package manager, based
     * {install location}/mingw64/bin/gdb.exe (Debugger | OPTIONAL)
 #. You should now be able to find the required libraries under "{install location}/mingw64/bin" and the required header (.h) files for QT v5.x.
 #. Open the .pro file in QT Creator, and then use the information above to setup a new 64-bit ming64 kit. Follow standard QT Creator debug/release procedure.
+
+*For v3.X - QT Creator + QT v6.x using Qt installer and MinGW (64-bit)*
+For Qt6.X,  `MSYS2 <https://gist.github.com/fdelbos/44b9e054bf97d7a1192fc7a5b6cfcf9f>`_ this Github Gist features instructions for installation and setup.
 
 **Ubuntu 22.04 64-bit - QT Creator + QT v6.x using GCC (64-bit)**
 
