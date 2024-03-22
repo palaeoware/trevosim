@@ -26,7 +26,7 @@ We recommend you install and use MSYS2 (64-bit) a Windows package manager, based
 #. Open the .pro file in QT Creator, and then use the information above to setup a new 64-bit ming64 kit. Follow standard QT Creator debug/release procedure.
 
 *For v3.X - QT Creator + QT v6.x using Qt installer and MinGW (64-bit)*
-For Qt6.X,  `MSYS2 <https://gist.github.com/fdelbos/44b9e054bf97d7a1192fc7a5b6cfcf9f>`_ this Github Gist features instructions for installation and setup.
+For Qt6.X,  `this Github Gist <https://gist.github.com/fdelbos/44b9e054bf97d7a1192fc7a5b6cfcf9f>`_ features instructions for installation and setup.
 
 **Ubuntu 22.04 64-bit - QT Creator + QT v6.x using GCC (64-bit)**
 
