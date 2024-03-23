@@ -26,7 +26,9 @@ We recommend you install and use MSYS2 (64-bit) a Windows package manager, based
 #. Open the .pro file in QT Creator, and then use the information above to setup a new 64-bit ming64 kit. Follow standard QT Creator debug/release procedure.
 
 *For v3.X - QT Creator + QT v6.x using Qt installer and MinGW (64-bit)*
-For Qt6.X,  `this Github Gist <https://gist.github.com/fdelbos/44b9e054bf97d7a1192fc7a5b6cfcf9f>`_ features instructions for installation and setup.
+For the TREvoSim v3.0.0 release a build was created using an stand install of Qt6 using the QT online installer available from the `Qt website <https://doc.qt.io/qt-6/get-and-install-qt.html>`_. If following this approach, ensuring the installation includes the latest Qt v6 release, and Qt Creator will allow build of the software. To achieve this, open CMakeLists.txt in Qt creator following installation, select to build a release following the `Qt creator documentation <https://doc.qt.io/qtcreator/creator-building-targets.html>`_, and then initiate a build (ctrl + B / Build, then Build Project). This will create an executable that can be launched by double clicking. To create a build that includes the tests, it will be necessary to modify the cmake file as per the instructions provided with the `Google Test framework  <https://google.github.io/googletest/quickstart-cmake.html>`_. 
+
+*Note:* At the time of release of v3.0.0 the authors temporarily have limited access to windows machines to allow us to make the above changes to cmake, and provide more explicit instructions. We expect to make a patch release with those changes, and featuring improved documentation for Qt v6.x builds, in May 2024. 
 
 **Ubuntu 22.04 64-bit - QT Creator + QT v6.x using GCC (64-bit)**
 
