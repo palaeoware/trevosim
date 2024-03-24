@@ -143,13 +143,14 @@ Typically, phylogenetic simulations are conducted using deterministic or stochas
 # Current associated projects 
 
 In addition to the published studies, cited previously, future directions include:
-TJS, FSD, LAP, RJG - The Macroevolutionary consequences of ecosystem engineering. 
-CTMB, TJS, LAP, RJG, FSD - Fitness landscapes and disparity.
-TJDH, RJG - Mixing and perturbations.
-RSS, ARTS, RJG, JNK - Impact of character number and correlated characters in a phylogenetic context.
-NMK, LAP, RJG - Phylogenetic method development.
-JNK, RJG - Impact of evolutionary mode on phylogenetic character data.
-MDS, RJG - Fossilisation and phylogenetic inference.
+
+- TJS, FSD, LAP, RJG - The Macroevolutionary consequences of ecosystem engineering. 
+- CTMB, TJS, LAP, RJG, FSD - Fitness landscapes and disparity.
+- TJDH, RJG - Mixing and perturbations.
+- RSS, ARTS, RJG, JNK - Impact of character number and correlated characters in a phylogenetic context.
+- NMK, LAP, RJG - Phylogenetic method development.
+- JNK, RJG - Impact of evolutionary mode on phylogenetic character data.
+- MDS, RJG - Fossilisation and phylogenetic inference.
 
 # Author contributions
 
