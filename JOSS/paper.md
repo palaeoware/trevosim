@@ -157,7 +157,7 @@ In addition to the published studies, cited previously, future directions includ
 RJG developed and coded TREvoSim, with support on testing and releasing from ARTS. RSS, LMC-C, MDS, and JNK contributed ideas during the initial phases and continued development of the software, and JK proposed the stochastic layer. Peak matching and associated features were developed in collaboration with CTMB, FSD, LAP and TJS, and ecosystem engineering was developed in collaboration with LAP, FSD and TJS. Mixing and perturbations were proposed by TJDH. Development of many of the features released in v2.0.0 was conducted in collaboration with, and empirical benchmarking was led by, NMK. The expanding playing field was developed with and analysed by TV. 
 
 # Availability 
-##TODO
+
 TREvoSim v3.0.0 source code and binaries are freely available from [Zenodo](https://doi.org/10.5281/zenodo.10866261) and [GitHub](https://github.com/palaeoware/trevosim). Newer releases of the REvoSim software will be available on GitHub. Fully documentation is available from [ReadTheDocs](https://trevosim.readthedocs.io/en/latest/).
 
 # Acknowledgements 
