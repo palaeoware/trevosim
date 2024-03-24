@@ -86,7 +86,7 @@ TREvoSim v1.0.0 was developed to investigate the accuracy and precision of phylo
 
 # New features
 
-TREvoSim v3.0.0 includes a suite of new features that allow the investigation of an expanded range of evolutionary processes. These new features are briefly introduced (in alphabetical order) below, and fully described in the TREvoSim documentation [TREvoSim documentation](https://trevosim.readthedocs.io/en/latest/).
+TREvoSim v3.0.0 includes a suite of new features that allow the investigation of an expanded range of evolutionary processes. These new features are briefly introduced (in alphabetical order) below, and fully described in the [TREvoSim documentation](https://trevosim.readthedocs.io/en/latest/).
 
 ## Character options
 
