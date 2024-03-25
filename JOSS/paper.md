@@ -94,7 +94,7 @@ New options allow finer control of TREvoSim functions that employ genome charact
 
 ## Default simulation parameters
 
-New default values for simulation parameters are introduced with this release. These are benchmarked against three properties of 12 empirical, total evidence analyses [@Mongiardino_Koch_Garwood_Parry_2021]. The empirical data, analysis script, and resulting graphs have been placed in the folder Benchmarking within the source code repository.
+New default values for simulation parameters are introduced with this release. These are benchmarked against three properties of 12 empirical, total evidence analyses [following the approach of, and using empirical data sourced from @Mongiardino_Koch_Garwood_Parry_2021]. The empirical data, analysis script, and resulting graphs have been placed in the folder Benchmarking within the source code repository.
 
 ## Ecosystem engineering
 
