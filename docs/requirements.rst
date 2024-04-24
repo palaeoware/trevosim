@@ -35,9 +35,11 @@ For the TREvoSim v3.0.0 release a build was created using an stand install of Qt
 
 *Note:* At the time of release of v3.0.0 the authors temporarily have limited access to windows machines to allow us to make the above changes to cmake, and provide more explicit instructions. We expect to make a patch release with those changes, and featuring improved documentation for Qt v6.x builds, in May 2024. 
 
-**Ubuntu 22.04 64-bit - QT Creator + QT v6.x using GCC (64-bit)**
+Ubuntu 22.04 64-bit - QT Creator + QT v6.x using GCC (64-bit)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-*To compile from command line.*
+To compile from command line
+""""""""""""""""""""""""""""
 
 1. Install GCC and Qt using system packages:
 
@@ -62,12 +64,14 @@ For the TREvoSim v3.0.0 release a build was created using an stand install of Qt
 
 4. Launch the software by double clicking on the TREvoSim binary that has been created in this folder.
 
-*Using Qt creator.*
+Using Qt creator
+""""""""""""""""
 
 1. Install Qt 6.X on your system by running the installer from Qt: https://www.qt.io/download
 2. Download source code, launch Qt Creator, and open the CMakeLists.txt file. Configure build and follow standard debug/release procedure.
 
-**MacOS - QT Creator + QT v6.x using Clang and xcode**
+MacOS - QT Creator + QT v6.x using Clang and xcode
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 1. Xcode can be downloaded from the Apple Store or Apple's developer website (including older versions of Xcode): https://developer.apple.com/download/. We recommend always using the latest Xcode available from Apple that has been tested with the Qt version you are using.
 2. Install Qt 6.X and Qt Creator on your system by running the installer from Qt: https://www.qt.io/download. An alternative may be to install via homebrew: 
