@@ -127,6 +127,7 @@ add_executable(${TREVOSIM_UNIT_TEST}
     ${app_sources}
     testsuite.h testsuite.cpp
 )
+
 target_link_libraries(${TREVOSIM_UNIT_TEST} PRIVATE GTest::gtest_main Qt6::Core Qt::Gui Qt::Widgets Qt6::Concurrent Qt::Core5Compat)
 
 set_target_properties(${TREVOSIM_UNIT_TEST} PROPERTIES
@@ -135,7 +136,7 @@ set_target_properties(${TREVOSIM_UNIT_TEST} PROPERTIES
 )
 
 include(GoogleTest)
-gtest_discover_tests(${TREVOSIM_UNIT_TEST})
+gtest_add_tests(TARGET ${TREVOSIM_UNIT_TEST})
 
 # Add the GoogleTest built program as a CTest
 add_test(
@@ -143,11 +144,13 @@ add_test(
     COMMAND ${TREVOSIM_UNIT_TEST}
 )
 
-# Run the test progam post build
-add_custom_command(
-     TARGET ${TREVOSIM_UNIT_TEST}
-     POST_BUILD
-     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-     COMMAND ${CMAKE_CTEST_COMMAND} -C $<CONFIGURATION> -R "^${TREVOSIM_UNIT_TEST}$" --output-on-failures -v
-)
-
+# Run the test progam post build if Mac or Unix, Not Windows as we cannot pass the correct
+# PATH values for the test program to find the correct .dll locations.
+if(!WIN32)
+    add_custom_command(
+         TARGET ${TREVOSIM_UNIT_TEST}
+         POST_BUILD
+         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+         COMMAND ${CMAKE_CTEST_COMMAND} -C $<CONFIGURATION> -R "^${TREVOSIM_UNIT_TEST}$" --output-on-failures -v
+    )
+endif()

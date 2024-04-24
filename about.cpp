@@ -159,9 +159,11 @@ QString About::returnLicense()
     patents cannot be used to render the program non-free.</p>
 
     <p>The precise terms and conditions for copying, distribution and
-    modification follow.</p>
+    modification follow.</p>)V0G0N";
 
-    <h3><a name="terms"></a>TERMS AND CONDITIONS</h3>
+    // Broken up the raw strign to get around the compile error:
+    // C2026 string too big; trailing characters truncated.
+    license.append(R"V0G0N(<h3><a name="terms"></a>TERMS AND CONDITIONS</h3>
 
     <h4><a name="section0"></a>0. Definitions.</h4>
 
@@ -267,9 +269,11 @@ QString About::returnLicense()
 
     <p>Conveying under any other circumstances is permitted solely under
     the conditions stated below.  Sublicensing is not allowed; section 10
-    makes it unnecessary.</p>
+    makes it unnecessary.</p>)V0G0N");
 
-    <h4><a name="section3"></a>3. Protecting Users' Legal Rights From Anti-Circumvention Law.</h4>
+    // Broken up the raw strign to get around the compile error:
+    // C2026 string too big; trailing characters truncated.
+    license.append(R"V0G0N(<h4><a name="section3"></a>3. Protecting Users' Legal Rights From Anti-Circumvention Law.</h4>
 
     <p>No covered work shall be deemed part of an effective technological
     measure under any applicable law fulfilling obligations under article
@@ -335,9 +339,11 @@ QString About::returnLicense()
     used to limit the access or legal rights of the compilation's users
     beyond what the individual works permit.  Inclusion of a covered work
     in an aggregate does not cause this License to apply to the other
-    parts of the aggregate.</p>
+    parts of the aggregate.</p>)V0G0N");
 
-    <h4><a name="section6"></a>6. Conveying Non-Source Forms.</h4>
+    // Broken up the raw strign to get around the compile error:
+    // C2026 string too big; trailing characters truncated.
+    license.append(R"V0G0N(<h4><a name="section6"></a>6. Conveying Non-Source Forms.</h4>
 
     <p>You may convey a covered work in object code form under the terms
     of sections 4 and 5, provided that you also convey the
@@ -435,9 +441,9 @@ QString About::returnLicense()
     in accord with this section must be in a format that is publicly
     documented (and with an implementation available to the public in
     source code form), and must require no special password or key for
-    unpacking, reading or copying.</p>
+    unpacking, reading or copying.</p>)V0G0N");
 
-    <h4><a name="section7"></a>7. Additional Terms.</h4>
+    license.append(R"V0G0N(<h4><a name="section7"></a>7. Additional Terms.</h4>
 
     <p>&ldquo;Additional permissions&rdquo; are terms that supplement the terms of this
     License by making exceptions from one or more of its conditions.
@@ -501,9 +507,11 @@ QString About::returnLicense()
 
     <p>Additional terms, permissive or non-permissive, may be stated in the
     form of a separately written license, or stated as exceptions;
-    the above requirements apply either way.</p>
+    the above requirements apply either way.</p>)V0G0N");
 
-    <h4><a name="section8"></a>8. Termination.</h4>
+    // Broken up the raw strign to get around the compile error:
+    // C2026 string too big; trailing characters truncated.
+    license.append(R"V0G0N(<h4><a name="section8"></a>8. Termination.</h4>
 
     <p>You may not propagate or modify a covered work except as expressly
     provided under this License.  Any attempt otherwise to propagate or
@@ -565,9 +573,11 @@ QString About::returnLicense()
     rights granted under this License, and you may not initiate litigation
     (including a cross-claim or counterclaim in a lawsuit) alleging that
     any patent claim is infringed by making, using, selling, offering for
-    sale, or importing the Program or any portion of it.</p>
+    sale, or importing the Program or any portion of it.</p>)V0G0N");
 
-    <h4><a name="section11"></a>11. Patents.</h4>
+    // Broken up the raw strign to get around the compile error:
+    // C2026 string too big; trailing characters truncated.
+    license.append(R"V0G0N(<h4><a name="section11"></a>11. Patents.</h4>
 
     <p>A &ldquo;contributor&rdquo; is a copyright holder who authorizes use under this
     License of the Program or a work on which the Program is based.  The
@@ -634,9 +644,11 @@ QString About::returnLicense()
 
     <p>Nothing in this License shall be construed as excluding or limiting
     any implied license or other defenses to infringement that may
-    otherwise be available to you under applicable patent law.</p>
+    otherwise be available to you under applicable patent law.</p>)V0G0N");
 
-    <h4><a name="section12"></a>12. No Surrender of Others' Freedom.</h4>
+    // Broken up the raw strign to get around the compile error:
+    // C2026 string too big; trailing characters truncated.
+    license.append(R"V0G0N(<h4><a name="section12"></a>12. No Surrender of Others' Freedom.</h4>
 
     <p>If conditions are imposed on you (whether by court order, agreement or
     otherwise) that contradict the conditions of this License, they do not
@@ -683,9 +695,11 @@ QString About::returnLicense()
     <p>Later license versions may give you additional or different
     permissions.  However, no additional obligations are imposed on any
     author or copyright holder as a result of your choosing to follow a
-    later version.</p>
+    later version.</p)V0G0N");
 
-    <h4><a name="section15"></a>15. Disclaimer of Warranty.</h4>
+    // Broken up the raw strign to get around the compile error:
+    // C2026 string too big; trailing characters truncated.
+    license.append(R"V0G0N(<h4><a name="section15"></a>15. Disclaimer of Warranty.</h4>
 
     <p>THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY
     APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT
@@ -718,7 +732,7 @@ QString About::returnLicense()
     copy of the Program in return for a fee.</p>
 
     <p>END OF TERMS AND CONDITIONS</p>
-    </div>)V0G0N";
+    </div>)V0G0N");
 
     return license;
 }
