@@ -146,11 +146,11 @@ add_test(
 
 # Run the test progam post build if Mac or Unix, Not Windows as we cannot pass the correct
 # PATH values for the test program to find the correct .dll locations.
-if(!WIN32)
-    add_custom_command(
-         TARGET ${TREVOSIM_UNIT_TEST}
-         POST_BUILD
-         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-         COMMAND ${CMAKE_CTEST_COMMAND} -C $<CONFIGURATION> -R "^${TREVOSIM_UNIT_TEST}$" --output-on-failures -v
-    )
-endif()
+# if(!WIN32)
+#    add_custom_command(
+#         TARGET ${TREVOSIM_UNIT_TEST}
+#         POST_BUILD
+#         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+#         COMMAND ${CMAKE_CTEST_COMMAND} -C $<CONFIGURATION> -R "^${TREVOSIM_UNIT_TEST}$" --output-on-failures -v
+#    )
+#endif()
