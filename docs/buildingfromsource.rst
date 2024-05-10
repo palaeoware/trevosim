@@ -30,12 +30,14 @@ For v3.X - QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit)
 	qtenv2.bat
 	"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
 	
+
 	where 'C:\Program Files (x86)\Microsoft Visual Studio' is your path to the installed VS2019.
 	
 .. code-block:: console
 	
 	windeployqt6 {full path to TREvoSim binary}\TREvoSim.exe  --release
 	
+
 	- Your deploy folder should now look like this:
 	
 .. figure:: _static/post_windeploy.png
