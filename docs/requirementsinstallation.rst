@@ -1,6 +1,48 @@
-.. _requirements:
+.. _requirementsinstallation:
 
-Compiling, Testing, Installation, and Requirements
+Requirements and Installation from Binaries
+===========================================
+
+Requirements
+------------
+
+TREvoSim has no minimum requirements as such, and will run on most standard systems (Windows/Linux/Mac); it however has not been tested on versions of Windows older than Windows 10, before Ubuntu 22.04, and below macOS High Sierra. Performance will benefit from high processor speed and increased number of processor cores, with large amounts (>4GB) of available RAM recommended for large simulations. Graphics card performance is not relevant as GPUs are not currently used in the program's calculation pipeline. A fast hard drive (e.g. SSD) is recommend when intensive logging is enabled; as slow I/O response time can affect the iteration cycle speed.
+
+Installation from Binaries
+--------------------------
+
+Binary donwload locations
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+From the TREvoSim GitHub repository pre-compiled binary releases and packaged installers can be downloaded.
+
+  - https://github.com/palaeoware/trevosim/releases/tag/v3.0.0
+  - https://github.com/palaeoware/trevosim/releases/tag/v2.0.0
+  - https://github.com/palaeoware/trevosim/releases/tag/v1.0.0
+
+
+Windows 64-bit
+^^^^^^^^^^^^^^
+
+For Windows users we provide two means of installation:
+
+1. portable binary release within a .ZIP archive - which just needs extracting to a convenient location.
+2. or, a self contained installer - which when run will guide you though the installation process.
+
+MacOS
+^^^^^
+For TREvoSim v1.X and v2.X we provide a .ZIP archive containing the TREvoSim program that can be downloaded from the TREvoSim GitHub repository.
+
+For TREvoSim v3.X we provide a .DMG image to install the software. Download and double click on the .dmg and follow the on screen instructions. You may be required to the approve the software in security and privacy settings before it will launch.
+
+Note: this binary was build and tested on an Apple M1 processor as such users on other chipsets might need to complie and build their own TREvoSim binaries.
+
+Ubuntu 64-bit / Linux
+^^^^^^^^^^^^^^^^^^^^^
+
+For Linux users, the above instructions will allow the software to be built using a limited number of lines of bash. Please contact palaeoware@gmail.com if you encounter any issues.
+
+Compiling from source and Testing
 ==================================================
 
 Compiling from Source
@@ -104,28 +146,3 @@ TREvoSim >= v3 come with a suite of tests that verify the core simulator/generat
 1. As a standalone program - for this we leverage the GoogleTest Mocking anf Testing Framework (https://github.com/google/googletest) which is pulled in automatically by CMake and built alongside the TREvoSim main program - creating a separate standalone test program called TREvoSimTest. This program can be called from the command line. Note that for Windows there is a requirement for the support .DLLs and the .EXE to be placed in the same folder, alternatively this program can be added into the Inno Setup during the Installer creation stage.
 2. From the QT Creator application. Once the test program has been build (see point 1 above) you can run the test suite with the QT Cretor by going to the 'Tools > Tests > Run All Tests' from the main menu. This will build the application if not already done so and display the results in the 'Test Result' tab which normally appears at the bottom of the worksapce.
 
-Installation
-------------
-
-From the TREvoSim GitHub repository pre-compiled binary releases and packaged installers can be downloaded. 
-
-Windows 64-bit
-^^^^^^^^^^^^^^
-
-For Windows users we provide both a portable binary release (.zip; v1-3) - which just needs extracting to a convenient location as per the instructions on the release - and a self contained installer (currently v1-2 only).
-
-MacOS
-^^^^^
-For Mac we provide a zip containing the TREvoSim program that can be downloaded from the TREvoSim GitHub repository. To install the software, double click on the .dmg and follow the on screen instructions. You may be required to the approve the software in security and privacy settings before it will launch.
-
-Note: this binary was build and tested on an Apple M1 processor as such users on other chipsets might need to complie and build their own TREvoSim binaries.
-
-Ubuntu 64-bit / Linux
-^^^^^^^^^^^^^^^^^^^^^
-
-For Linux users, the above instructions will allow the software to be built using a limited number of lines of bash. Please contact palaeoware@gmail.com if you encounter any issues.
-
-Requirements
-------------
-
-TREvoSim has no minimum requirements as such, and will run on most standard systems (Windows/Linux/Mac); it however has not been tested on versions of Windows older than Windows 10, before Ubuntu 22.04, and below macOS High Sierra. Performance will benefit from high processor speed and increased number of processor cores, with large amounts (>4GB) of available RAM recommended for large simulations. Graphics card performance is not relevant as GPUs are not currently used in the program's calculation pipeline. A fast hard drive (e.g. SSD) is recommend when intensive logging is enabled; as slow I/O response time can affect the iteration cycle speed.
