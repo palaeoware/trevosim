@@ -25,21 +25,21 @@ For v3.X - QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit)
 	- First step is to copy to a new folder (we called ours 'deploy' and will refer to this by name) the newly generated binaries (TREvoSim.exe and TREvoSimTest.exe) from your build folder. The build folder should be called 'build-trevosim-Desktop_Qt_6_6_1_MSVC2019_64bit-Release' if using the QT defaults, where Qt_6_6_1 will change to match your current QT 6 version.
 	- From the windows command line '''cd''' into the '{path to your QT installation}\{QT 6 version}\msvc2019_64\bin\' folder containing the windeployqt6.exe binary and run the following commands:
 	
-	.. code-block:: console
+.. code-block:: console
 	
 	qtenv2.bat
 	"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
 	
 	where 'C:\Program Files (x86)\Microsoft Visual Studio' is your path to the installed VS2019.
 	
-	.. code-block:: console
+.. code-block:: console
 	
 	windeployqt6 {full path to TREvoSim binary}\TREvoSim.exe  --release
 	
 	- Your deploy folder should now look like this:
 	
-	.. figure:: _static/post_windeploy.png
-    :align: center
+.. figure:: _static/post_windeploy.png
+:align: center
 	
 	- You can now test if this has worked successfully by attempting to run the TREvoSim binary in the deploy folder. It should run without any missing libraries warnings.
 	- For more information on how this works see: https://doc.qt.io/qt-6/windows-deployment.html
@@ -49,8 +49,8 @@ For v3.X - QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit)
   - The file TREvoSim_Installer_v3.x.x_dev.iss under the ./inno_setup folder is provided as a template. Copy this file to the deploy folder you created earlier.
   - Open this file in InnoSetup - if you associated .ISS files with InnoStup during its installtion you will be able to double click this file. It will look simialr to this:
   
-  .. figure:: _static/innosetup.png
-  :align: center
+.. figure:: _static/innosetup.png
+:align: center
   
   - Next you need to create a new folder under your deploy folder called 'bin'.
   - Copy all files other than .ISS file into the ./bin folder.
