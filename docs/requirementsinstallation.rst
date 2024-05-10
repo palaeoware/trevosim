@@ -40,4 +40,4 @@ Note: this binary was build and tested on an Apple M1 processor as such users on
 Ubuntu 64-bit / Linux
 ^^^^^^^^^^^^^^^^^^^^^
 
-For Linux users, the above instructions will allow the software to be built using a limited number of lines of bash. Please contact palaeoware@gmail.com if you encounter any issues.
+For Linux users, please see the 'Compiling from Source and Testing' instructions on the next page. This uses a limited number of lines of bash to complie TREvoSim on your computer. Please contact palaeoware@gmail.com if you encounter any issues.
