@@ -1,7 +1,7 @@
 .. _buildingfromsource:
 
-Compiling from Source and Testing
-=================================
+Compiling from Source and Development Testing
+=============================================
 
 Compiling from Source
 ---------------------
@@ -135,8 +135,8 @@ For v1.X, 2.X, v3.X - Using Qt creator
   - See the Qt Mac Deployment tool: https://doc.qt.io/qt-6/macos-deployment.html#the-mac-deployment-tool 
   - Also see the volume package information to make a .dmg: https://doc.qt.io/qt-6/macos-deployment.html#volume-name 
 
-Testing
--------
+Devolopment Testing
+-------------------
 
 TREvoSim >= v3 come with a suite of development tests that verify the core simulator/generator code. These can be called via one of two methods during the devlopment phase:
 
