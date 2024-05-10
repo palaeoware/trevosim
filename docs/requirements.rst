@@ -29,7 +29,7 @@ We recommend you install and use MSYS2 (64-bit) a Windows package manager, based
 #. Open the .pro file in QT Creator, and then use the information above to setup a new 64-bit ming64 kit. Follow standard QT Creator debug/release procedure.
 
 For v3.X - QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit)
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 1. Install Qt 6.X on your system by running the installer from Qt: https://www.qt.io/download
 2. Install Microsoft Visual Studio 2019 installed. See https://visualstudio.microsoft.com/vs/older-downloads/. Note Visual Studio 2022 should also work but has not yet been tested with TREvoSim.
@@ -96,6 +96,13 @@ MacOS - QT Creator + QT v6.x using Clang and xcode
   - See the Qt Mac Deployment tool: https://doc.qt.io/qt-6/macos-deployment.html#the-mac-deployment-tool 
   - Also see the volume package information to make a .dmg: https://doc.qt.io/qt-6/macos-deployment.html#volume-name 
 
+Testing
+-------
+
+TREvoSim >= v3 come with a suite of tests that verify the core simulator/generator code. These can be called via one of two methods:
+
+1. As a standalone program - for this we leverage the GoogleTest Mocking anf Testing Framework (https://github.com/google/googletest) which is pulled in automatically by CMake and built alongside the TREvoSim main program - creating a separate standalone test program called TREvoSimTest. This program can be called from the command line. Note that for Windows there is a requirement for the support .DLLs and the .EXE to be placed in the same folder, alternatively this program can be added into the Inno Setup during the Installer creation stage.
+2. From the QT Creator application. Once the test program has been build (see point 1 above) you can run the test suite with the QT Cretor by going to the 'Tools > Tests > Run All Tests' from the main menu. This will build the application if not already done so and display the results in the 'Test Result' tab which normally appears at the bottom of the worksapce.
 
 Installation
 ------------
