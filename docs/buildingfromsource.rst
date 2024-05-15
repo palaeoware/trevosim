@@ -6,8 +6,8 @@ Compiling from Source and Development Testing
 Compiling from Source
 ---------------------
 
-Windows 64-bit
-^^^^^^^^^^^^^^
+Windows 10 64-bit
+^^^^^^^^^^^^^^^^^
 
 For v3.X - QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -24,14 +24,34 @@ For v3.X - QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit)
   * During the installation check that under the 'Development and Designer Tools' sub-category that 'QT Creator X.X.X', 'Debugging Tools for Windows', 'CMake X.X.X', and 'Ninja X.X.X' are selected. These should be selcted by default.
   
   * If you forget or need to amend/check which components are active you can run the QT Maintance tool (which gets installed automatically) and add/remove/update them post-installation.
+  
+#. Install Git - this is required by CMake during the build to pull the latest version of GoogleTest - download from: https://git-scm.com/download/win
+
+#. Add Ninja - installed by QT - and Git to your windows PATH. 
+
+  * Open the Start Search, type in "env", and choose 'Edit the system environment variables'.
+  
+  * Click the 'Environment Variables…' button.
+  
+  * From the 'System Variables' section, find the entry called "Path" in the varible column, and click the 'Edit…' button.
+  
+  * The 'Edit environment variable' window will appear.
+  
+  * Click 'New' and type in the path to the QT Ninja install folder - the default is: C:\Qt\Tools\Ninja.
+  
+  * Repeat with the path to the Git git.exe folder - the default is: C:\Program Files\Git\cmd.
+  
+  * Save the new settings by pressing the 'OK' button.
+  
+  * At this point you may need to restart Windows for the settings to take affect or at the very least restart QT Creator if it is already running.
 	
-#. Download or clone the TREvoSim source code from the GitHub repository: https://github.com/palaeoware/trevosim
+#. Download or clone using Git the TREvoSim source code from the GitHub repository: https://github.com/palaeoware/trevosim
 
 #. Run QT Creator and configure the build pipeline. QT Creator should automatically detect your Microsoft Visual Studio 2019 installation and configure the build chain.
 
-#. In QT Creator using the main menu 'File > Open File or Project...' navigating to and select the TREvoSim CMakeLists.txt file in the root of the source code folder. This will open the TREvoSim project within the workspace. 
+#. In QT Creator using the main menu 'File > Open File or Project…' navigating to and select the TREvoSim CMakeLists.txt file in the root of the source code folder. This will open the TREvoSim project within the workspace. 
  
-#. From QT Creator you can build debug and release version of TREvoSim. The easiest way is via the bottom left 'Build' button. Alternatively you can use the 'Build > Build All Projects...' from the main menu.
+#. From QT Creator you can build debug and release version of TREvoSim. The easiest way is via the bottom left 'Build' button. Alternatively you can use the 'Build > Build All Projects…' from the main menu.
 
 #. Once you have built the release version of TREvoSim through QT Creator, and you if wish to make the binary useable outside of the QT Creator environment (either as a standalone distribution or for use with an installer), you will need to run the Qt Windows Deployment tool. This tool automates the process of creating a deployable folder that contains all QT-related dependancies to make TREvoSim run (e.g., .DLL libraries).
 
