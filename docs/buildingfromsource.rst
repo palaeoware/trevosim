@@ -27,7 +27,7 @@ For v3.X - QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit)
   
 #. Install Git - this is required by CMake during the build to pull the latest version of GoogleTest - download from: https://git-scm.com/download/win
 
-#. Add Ninja - installed by QT - and Git to your windows PATH. 
+#. Add Ninja (installed by QT) and Git to your Windows PATH enviroment variable. 
 
   * Open the Start Search, type in "env", and choose 'Edit the system environment variables'.
   
