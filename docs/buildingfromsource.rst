@@ -17,59 +17,66 @@ For v3.X - QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit)
 
 #. Install Microsoft Visual Studio 2019 (VS2019). See https://visualstudio.microsoft.com/vs/older-downloads/. 
 #. Install Qt 6.X and QT Creator on your system by running the open source development installer from Qt: https://www.qt.io/download-open-source
-  * During the installation you will need to select the 'MSVC 2019 64-bit' component under the QT 6.6.x sub-category.
-  * During the installation check that under the 'Development and Designer Tools' sub-category that 'QT Creator X.X.X', 'Debugging Tools for Windows', 'CMake X.X.X', and 'Ninja X.X.X' are selected. These should be selcted by default.
-  * If you forget or need to amend/check which components are active you can run the QT Maintance tool (which gets installed automatically) and add/remove/update them post-installation.
+
+   * During the installation you will need to select the 'MSVC 2019 64-bit' component under the QT 6.6.x sub-category.
+   * During the installation check that under the 'Development and Designer Tools' sub-category that 'QT Creator X.X.X', 'Debugging Tools for Windows', 'CMake X.X.X', and 'Ninja X.X.X' are selected. These should be selcted by default.
+   * If you forget or need to amend/check which components are active you can run the QT Maintance tool (which gets installed automatically) and add/remove/update them post-installation.
+
 #. Install Git - this is required by CMake during the build to pull the latest version of GoogleTest - download from: https://git-scm.com/download/win
 #. Add Ninja (installed by QT) and Git to your Windows PATH enviroment variable.
-  * Open the Start Search, type in "env", and choose 'Edit the system environment variables'.
-  * Click the 'Environment Variables…' button.
-  * From the 'System Variables' section, find the entry called "Path" in the varible column, and click the 'Edit…' button.
-  * The 'Edit environment variable' window will appear.
-  * Click 'New' and type in the path to the QT Ninja install folder - the default is: C:\Qt\Tools\Ninja.
-  * Repeat with the path to the Git git.exe folder - the default is: C:\Program Files\Git\cmd.
-  * Save the new settings by pressing the 'OK' button.
-  * At this point you may need to restart Windows for the settings to take affect or at the very least restart QT Creator if it is already running.
+
+   * Open the Start Search, type in "env", and choose 'Edit the system environment variables'.
+   * Click the 'Environment Variables…' button.
+   * From the 'System Variables' section, find the entry called "Path" in the varible column, and click the 'Edit…' button.
+   * The 'Edit environment variable' window will appear.
+   * Click 'New' and type in the path to the QT Ninja install folder - the default is: C:\Qt\Tools\Ninja.
+   * Repeat with the path to the Git git.exe folder - the default is: C:\Program Files\Git\cmd.
+   * Save the new settings by pressing the 'OK' button.
+   * At this point you may need to restart Windows for the settings to take affect or at the very least restart QT Creator if it is already running.
+
 #. Download or clone using Git the TREvoSim source code from the GitHub repository: https://github.com/palaeoware/trevosim
 #. Run QT Creator and configure the build pipeline. QT Creator should automatically detect your Microsoft Visual Studio 2019 installation and configure the build chain.
 #. In QT Creator using the main menu 'File > Open File or Project…' navigating to and select the TREvoSim CMakeLists.txt file in the root of the source code folder. This will open the TREvoSim project within the workspace. 
 #. From QT Creator you can build debug and release version of TREvoSim. The easiest way is via the bottom left 'Build' button. Alternatively you can use the 'Build > Build All Projects…' from the main menu.
 #. Once you have built the release version of TREvoSim through QT Creator, and you if wish to make the binary useable outside of the QT Creator environment (either as a standalone distribution or for use with an installer), you will need to run the Qt Windows Deployment tool. This tool automates the process of creating a deployable folder that contains all QT-related dependancies to make TREvoSim run (e.g., .DLL libraries).
-  * First step is to copy to a new folder (we called ours 'deploy' and will refer to this by name) the newly generated binaries (TREvoSim.exe and TREvoSimTest.exe) from your build folder. The build folder should be called 'build-trevosim-Desktop_Qt_6_6_1_MSVC2019_64bit-Release' if using the QT defaults, where Qt_6_6_1 will change to match your current QT 6 version.
-  * From the windows command line '''cd''' into the '{path to your QT installation}\{QT 6 version}\msvc2019_64\bin\' folder containing the windeployqt6.exe binary and run the following commands:
+
+   * First step is to copy to a new folder (we called ours 'deploy' and will refer to this by name) the newly generated binaries (TREvoSim.exe and TREvoSimTest.exe) from your build folder. The build folder should be called 'build-trevosim-Desktop_Qt_6_6_1_MSVC2019_64bit-Release' if using the QT defaults, where Qt_6_6_1 will change to match your current QT 6 version.
+   * From the windows command line '''cd''' into the '{path to your QT installation}\{QT 6 version}\msvc2019_64\bin\' folder containing the windeployqt6.exe binary and run the following commands:
 	
-  .. code-block:: console
+   .. code-block:: console
 	
-	qtenv2.bat
-	"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
+	 qtenv2.bat
+	 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
+	 
+   
+   where 'C:\Program Files (x86)\Microsoft Visual Studio' is your path to the installed VS2019.
+	
+   .. code-block:: console
+	
+	 windeployqt6 {full path to TREvoSim binary}\TREvoSim.exe  --release
 	
 
-  where 'C:\Program Files (x86)\Microsoft Visual Studio' is your path to the installed VS2019.
+   * Your deploy folder should now look like this:
 	
-  .. code-block:: console
+   .. figure:: _static/post_windeploy.png
 	
-	windeployqt6 {full path to TREvoSim binary}\TREvoSim.exe  --release
-	
-
-  * Your deploy folder should now look like this:
-	
-  .. figure:: _static/post_windeploy.png
-	
-  * You can now test if this has worked successfully by attempting to run the TREvoSim binary in the deploy folder. It should run without any missing libraries warnings.
-  * For more information on how this works see: https://doc.qt.io/qt-6/windows-deployment.html
+   * You can now test if this has worked successfully by attempting to run the TREvoSim binary in the deploy folder. It should run without any missing libraries warnings.
+   * For more information on how this works see: https://doc.qt.io/qt-6/windows-deployment.html
+  
 #. [Optional] To package the application as Windows portable binary release simply compress the deploy folder as a .ZIP archive and rename the new file to TREvoSim_v3.X.X.zip.
 #. [Optional] To package the application as Windows Installation Binary for distribution we recommend using Inno Setup v6.x: https://jrsoftware.org/isinfo.php
-  * Inno Setup is a free installer for Windows programs by Jordan Russell and Martijn Laan. 
-  * The file TREvoSim_Installer_v3.x.x_dev.iss under the ./inno_setup folder is provided as a template. Copy this file to the deploy folder you created earlier.
-  * Open this file in InnoSetup - if you associated .ISS files with InnoStup during its installtion you will be able to double click this file. It will look similar to this:
+
+   * Inno Setup is a free installer for Windows programs by Jordan Russell and Martijn Laan. 
+   * The file TREvoSim_Installer_v3.x.x_dev.iss under the ./inno_setup folder is provided as a template. Copy this file to the deploy folder you created earlier.
+   * Open this file in InnoSetup - if you associated .ISS files with InnoStup during its installtion you will be able to double click this file. It will look similar to this:
   
-  .. figure:: _static/innosetup.png
+   .. figure:: _static/innosetup.png
   
-  * Next you need to create a new folder under your deploy folder called 'bin'.
-  * Copy all files other than .ISS file into the ./bin folder.
-  * The template .ISS files is expecting a LICENSE.md files to be in the ./bin folder as well. This file must be copied from the TREvoSim source folder root.
-  * You can now Compile the installer in Inno Setup. Press the small blue arrow pointing down on the tool bar, or from the main menu 'Build > Compile'. Inno Setup will then compile, compress, and create the a install binary in a folder called ./build. Note the template file is set to run the installation post creations - this may be cannceled if you do not want to install straight away.
-  * You can now distribute the TREvoSimInstaller_v3.0.0_win_x64.exe under the ./build folder that was created. Note the name of the installtion binary is controlled by the .ISS file and can be changed there.
+   * Next you need to create a new folder under your deploy folder called 'bin'.
+   * Copy all files other than .ISS file into the ./bin folder.
+   * The template .ISS files is expecting a LICENSE.md files to be in the ./bin folder as well. This file must be copied from the TREvoSim source folder root.
+   * You can now Compile the installer in Inno Setup. Press the small blue arrow pointing down on the tool bar, or from the main menu 'Build > Compile'. Inno Setup will then compile, compress, and create the a install binary in a folder called ./build. Note the template file is set to run the installation post creations - this may be cannceled if you do not want to install straight away.
+   * You can now distribute the TREvoSimInstaller_v3.0.0_win_x64.exe under the ./build folder that was created. Note the name of the installtion binary is controlled by the .ISS file and can be changed there.
 
 
 For v1.X, 2.X - QT Creator + QT v5.x using MSYS2 (64-bit) and MinGW (64-bit)
