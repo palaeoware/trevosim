@@ -19,7 +19,7 @@ For v3.X - QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit)
 #. Install Microsoft Visual Studio 2019 (VS2019). See https://visualstudio.microsoft.com/vs/older-downloads/. 
 #. Install Qt 6.X and QT Creator on your system by running the open source development installer from Qt: https://www.qt.io/download-open-source
 
-   * During the installation you will need to select the 'MSVC 2019 64-bit' component under the QT 6.6.x sub-category.
+   * During the installation you will need to select the 'MSVC 2019 64-bit' and 'Qt 5 Compatability Module' components under the QT 6.x.x sub-category.
    * During the installation check that under the 'Development and Designer Tools' sub-category that 'QT Creator X.X.X', 'Debugging Tools for Windows', 'CMake X.X.X', and 'Ninja X.X.X' are selected. These should be selected by default.
    * If you forget or need to amend/check which components are active you can run the QT Maintenance tool (which gets installed automatically) and add/remove/update them post-installation.
 
