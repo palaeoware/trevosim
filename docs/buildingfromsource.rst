@@ -30,8 +30,8 @@ For v3.X - QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit)
    * Click the 'Environment Variables…' button.
    * From the 'System Variables' section, find the entry called "Path" in the variable column, and click the 'Edit…' button.
    * The 'Edit environment variable' window will appear.
-   * Click 'New' and type in the path to the QT Ninja install folder - the default is: C:\Qt\Tools\Ninja.
-   * Repeat with the path to the Git git.exe folder - the default is: C:\Program Files\Git\cmd.
+   * Click 'New' and type in the path to the QT Ninja install folder - the default is: C:\\Qt\\Tools\\Ninja.
+   * Repeat with the path to the Git git.exe folder - the default is: C:\\Program Files\\Git\\cmd.
    * Save the new settings by pressing the 'OK' button.
    * At this point you may need to restart Windows for the settings to take affect or at the very least restart QT Creator if it is already running.
 
