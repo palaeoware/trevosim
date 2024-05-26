@@ -36,3 +36,4 @@
 *-pre1
 *.user
 .DS_Store
+build/*
