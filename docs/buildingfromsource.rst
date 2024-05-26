@@ -19,7 +19,8 @@ For v3.X - QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit)
 #. Install Microsoft Visual Studio 2019 (VS2019). See https://visualstudio.microsoft.com/vs/older-downloads/. 
 #. Install Qt 6.X and QT Creator on your system by running the open source development installer from Qt: https://www.qt.io/download-open-source
 
-   * During the installation you will need to select the 'MSVC 2019 64-bit' component under the QT 6.6.x sub-category.
+   * During the installation you will need to select the 'MSVC 2019 64-bit' and 'Qt 5 Compatability Module' components under the QT 6.x.x sub-category.
+   * During the installation you will need to select the 'MSVC 2019 64-bit' component under the QT 6.x.x sub-category.
    * During the installation check that under the 'Development and Designer Tools' sub-category that 'QT Creator X.X.X', 'Debugging Tools for Windows', 'CMake X.X.X', and 'Ninja X.X.X' are selected. These should be selected by default.
    * If you forget or need to amend/check which components are active you can run the QT Maintenance tool (which gets installed automatically) and add/remove/update them post-installation.
 
@@ -30,8 +31,8 @@ For v3.X - QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit)
    * Click the 'Environment Variables…' button.
    * From the 'System Variables' section, find the entry called "Path" in the variable column, and click the 'Edit…' button.
    * The 'Edit environment variable' window will appear.
-   * Click 'New' and type in the path to the QT Ninja install folder - the default is: C:\Qt\Tools\Ninja.
-   * Repeat with the path to the Git git.exe folder - the default is: C:\Program Files\Git\cmd.
+   * Click 'New' and type in the path to the QT Ninja install folder - the default is: C:\\Qt\\Tools\\Ninja.
+   * Repeat with the path to the Git git.exe folder - the default is: C:\\Program Files\\Git\\cmd.
    * Save the new settings by pressing the 'OK' button.
    * At this point you may need to restart Windows for the settings to take affect or at the very least restart QT Creator if it is already running.
 
@@ -42,7 +43,7 @@ For v3.X - QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit)
 #. Once you have built the release version of TREvoSim through QT Creator, and you if wish to make the binary useable outside of the QT Creator environment (either as a standalone distribution or for use with an installer), you will need to run the Qt Windows Deployment tool. This tool automates the process of creating a deployable folder that contains all QT-related dependencies to make TREvoSim run (e.g., .DLL libraries).
 
    * First step is to copy to a new folder (we called ours 'deploy' and will refer to this by name) the newly generated binaries (TREvoSim.exe and TREvoSimTest.exe) from your build folder. The build folder should be called 'build\\Desktop_Qt_6_6_1_MSVC2019_64bit-Release' if using the QT defaults, where Qt_6_6_1 will change to match your current QT 6 version.
-   * From the windows command line '''cd''' into the '{path to your QT installation}\{QT 6 version}\msvc2019_64\bin\' folder containing the windeployqt6.exe binary and run the following commands:
+   * From the windows command line '''cd''' into the '{path to your QT installation}\\{QT 6 version}\\msvc2019_64\\bin\\' folder containing the windeployqt6.exe binary and run the following commands:
 	
    .. code-block:: console
 	
@@ -50,7 +51,7 @@ For v3.X - QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit)
 	 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
 	 
    
-   where 'C:\Program Files (x86)\Microsoft Visual Studio' is your path to the installed VS2019.
+   where 'C:\\Program Files (x86)\\Microsoft Visual Studio' is your path to the installed VS2019.
 	
    .. code-block:: console
 	
