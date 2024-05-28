@@ -42,6 +42,9 @@ Set uninformative factor
 
 This menu command (or shortcut ctrl + shift + f) opens a dialogue that allows the strip uninformative factor to be set manually.
 
+// MRS comment: This feels like it belongs on the Settings→Organisms and Simulation tab, as an alternative to "Recalculate multiplication factor" – these are two alternative solutions to the same issue so surely belong together?
+
+
 Random Seed
 -----------
 
