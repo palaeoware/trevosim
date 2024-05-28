@@ -46,3 +46,6 @@ Random Seed
 -----------
 
 By default, the organism used to initialise a simulation is one near peak fitness for the starting environment(s), to prevent the resulting tree from documenting a lineage adapting to a fitness peak (this results in a highly asymmetrical tree). This menu command (shortcut ctrl + shift + r) toggles between this approach, and one in which a random individual is used to initialise the simulation.
+
+// MRS comment: "Random seed" is a confusing term to use here; I read this to mean "value used to seed random number generator".  Would something like "Seed on random individual" make the consequence of this item less ambiguous?
+
