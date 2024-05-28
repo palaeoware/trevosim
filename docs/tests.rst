@@ -10,3 +10,5 @@ TREvoSim has tests covering every function used in the simulation process. If yo
 As such, it is possible to check TREvoSim is running as expected and described in the publications introducing the model (you can alternatively/additionally output a working log to check the internal workings of the software - see :ref:`loggingsim`). 
 
 The output in the test log describes each test, and also the expected output. The system then makes sure the output meets these expectations. Failed tests will be highlighted in green.
+
+// MRS comment: I can't reconcile "when a test fails, so will the build" with "Failed tests will be highlighted in green" – if you can't build the software with a failing test, how can the software highlight the failure?  If there's a stochastic elements to tests, it would be helpful to describe the expectations associated with it.  More generally, it's difficult to see how an end-user is meant to use the "Tests" feature in the software, given that the tests are not documented, and are guaranteed to pass.  What's the objective of making these visible to the user?
