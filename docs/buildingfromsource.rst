@@ -113,11 +113,13 @@ We recommend you install and use MSYS2 (64-bit) a Windows package manager, based
 #. Open the .pro file in QT Creator, and then use the information above to setup a new 64-bit ming64 kit. Follow standard QT Creator debug/release procedure.
 
 
-Ubuntu 22.04 64-bit - QT Creator + QT v6.x using GCC (64-bit)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Ubuntu 64-bit 
+^^^^^^^^^^^^^
 
-For v1.X, 2.X, v3.X - To compile from command line
-""""""""""""""""""""""""""""""""""""""""""""""""""
+For v3.X - To compile using command line and QT v6.x (64-bit)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+This has been tested on Ubuntu 22.04 64-bit with QT v6.x using GCC. 
 
 1. Install GCC and Qt using system packages:
 
@@ -142,10 +144,47 @@ For v1.X, 2.X, v3.X - To compile from command line
 
 4. Launch the software by double clicking on the TREvoSim binary that has been created in this folder.
 
-For v1.X, 2.X, v3.X - Using Qt creator
+
+For v1.X & v2.X - To compile using command line and QT v5.x (64-bit)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+This has been tested on Ubuntu 18.04 and 2204, with QT v5.x using GCC.
+
+*To compile from command line.*
+
+1. Install GCC and Qt using system packages:
+
+.. code-block:: console
+
+  sudo apt-get install build-essential libgl1-mesa-dev
+  sudo apt install qt5-default
+
+2. Download source code and navigate to folder, or alternatively clone using Git:
+
+.. code-block:: console
+
+  git clone https://github.com/palaeoware/trevosim.git
+  cd trevosim
+
+3. Within REvoSim folder create makefile:
+
+.. code-block:: console
+
+  qmake ./trevosim.pro
+
+4. Build by running the make command:
+
+.. code-block:: console
+
+  make
+
+5. Navigate to bin folder (e.g. trevosim/bin) and launch software by double clicking on file.
+
+
+For v1.X, v2.X, v3.X - Using Qt creator
 """"""""""""""""""""""""""""""""""""""
 
-1. Install Qt 6.X on your system by running the installer from Qt: https://www.qt.io/download
+1. Install Qt 5.X (v1.X, v2.X) or Qt 6.X (v3.X) on your system by running the installer from Qt: https://www.qt.io/download
 2. Download source code, launch Qt Creator, and open the CMakeLists.txt file. Configure build and follow standard debug/release procedure.
 
 MacOS - QT Creator + QT v6.x using Clang and xcode
