@@ -7,14 +7,17 @@ Compiling from Source and Development Testing
 Compiling from Source
 ---------------------
 
-Windows 10 64-bit
-^^^^^^^^^^^^^^^^^
+Windows 10
+^^^^^^^^^^
 
-For v3.X - QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit)
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+Compiling v3.X
+""""""""""""""
+
+QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit).
 
 .. note::
   Note Visual Studio 2022 should also work but has not yet been tested with TREvoSim.
+
 
 #. Install Microsoft Visual Studio 2019 (VS2019). See https://visualstudio.microsoft.com/vs/older-downloads/. 
 #. Install Qt 6.X and QT Creator on your system by running the open source development installer from Qt: https://www.qt.io/download-open-source
@@ -81,8 +84,10 @@ For v3.X - QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit)
    * You can now distribute the TREvoSimInstaller_v3.0.0_win_x64.exe under the ./build folder that was created. Note the name of the installation binary is controlled by the .ISS file and can be changed there.
 
 
-For v1.X, 2.X - QT Creator + QT v5.x using MSYS2 (64-bit) and MinGW (64-bit)
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+Compiling v1.X, 2.X 
+"""""""""""""""""""
+
+QT Creator + QT v5.x using MSYS2 (64-bit) and MinGW (64-bit).
 
 We recommend you install and use MSYS2 (64-bit) a Windows package manager, based on modern Cygwin (POSIX compatibility layer) and MinGW-w64, that allows easy installation of QT v5.x 64-bit.
 
@@ -113,13 +118,13 @@ We recommend you install and use MSYS2 (64-bit) a Windows package manager, based
 #. Open the .pro file in QT Creator, and then use the information above to setup a new 64-bit ming64 kit. Follow standard QT Creator debug/release procedure.
 
 
-Ubuntu 64-bit 
-^^^^^^^^^^^^^
+Ubuntu
+^^^^^^
 
-For v3.X - To compile using command line and QT v6.x (64-bit)
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+Compiling v3.X using command line
+"""""""""""""""""""""""""""""""""
 
-This has been tested on Ubuntu 22.04 64-bit with QT v6.x using GCC. 
+ This has been tested on Ubuntu 22.04 64-bit with QT v6.x using GCC (64-bit).
 
 1. Install GCC and Qt using system packages:
 
@@ -145,12 +150,10 @@ This has been tested on Ubuntu 22.04 64-bit with QT v6.x using GCC.
 4. Launch the software by double clicking on the TREvoSim binary that has been created in this folder.
 
 
-For v1.X & v2.X - To compile using command line and QT v5.x (64-bit)
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+Compiling v1.X & v2.X using command line
+""""""""""""""""""""""""""""""""""""""""
 
-This has been tested on Ubuntu 18.04 and 2204, with QT v5.x using GCC.
-
-*To compile from command line.*
+This has been tested on Ubuntu 18.04 and 2204, with QT v5.x using GCC (64-bit).
 
 1. Install GCC and Qt using system packages:
 
@@ -181,17 +184,19 @@ This has been tested on Ubuntu 18.04 and 2204, with QT v5.x using GCC.
 5. Navigate to bin folder (e.g. trevosim/bin) and launch software by double clicking on file.
 
 
-For v1.X, v2.X, v3.X - Using Qt creator
-""""""""""""""""""""""""""""""""""""""
+Compiling v1.X, v2.X, v3.X using Qt Creator
+"""""""""""""""""""""""""""""""""""""""""""
 
 1. Install Qt 5.X (v1.X, v2.X) or Qt 6.X (v3.X) on your system by running the installer from Qt: https://www.qt.io/download
 2. Download source code, launch Qt Creator, and open the CMakeLists.txt file. Configure build and follow standard debug/release procedure.
 
-MacOS - QT Creator + QT v6.x using Clang and xcode
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+MacOS 
+^^^^^
 
-For v1.X, 2.X, v3.X - Using Qt creator
-""""""""""""""""""""""""""""""""""""""
+QT Creator + QT v6.x using Clang and xcode.
+
+For v1.X, 2.X, v3.X
+"""""""""""""""""""
 
 1. Xcode can be downloaded from the Apple Store or Apple's developer website (including older versions of Xcode): https://developer.apple.com/download/. We recommend always using the latest Xcode available from Apple that has been tested with the Qt version you are using.
 2. Install Qt 6.X and Qt Creator on your system by running the installer from Qt: https://www.qt.io/download. An alternative may be to install via homebrew: 
