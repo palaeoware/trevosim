@@ -46,7 +46,7 @@ ______
 
 ## 2. Installation
 
-TREvoSim can be installed and installed/run from the binary releases on our [GitHub](https://github.com/palaeoware).
+TREvoSim can be installed and installed/run from the binary releases on our [GitHub](https://github.com/palaeoware): see the page [releases](https://github.com/palaeoware/trevosim/releases) for the latest release.
 
 If you wish to modify the software, ad thus compile TREvoSim on your system this requires the [Qt library](https://www.qt.io). The software has been tested with Qt versions 5.6-5.15 (v1,2), and 6.2-6.5 (v3). Versions 1 and 2 should be compatible with all Qt versions greater than 5.3, v3 wil compile with Qt versions >6.0. TREvoSim has been tested on Windows, Mac OS and Ubuntu Linux, but will in theory work on any Qt-capable system. Build guides are provided in the documentation.
 _____

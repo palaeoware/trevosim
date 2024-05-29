@@ -1,4 +1,5 @@
 .. _commands:
+.. include:: <isonum.txt>
 
 Menu commands
 =============
@@ -29,7 +30,7 @@ If at any point you require default settings, this menu option (or shortcut ctrl
 Fitness histogram
 -----------------
 
-The fitness algorithm for TREvoSim is described in Keating et al. (2020). The fitness landscape varies depends on the simulation settings. This menu command (shortcut ctrl + shift + h) provides a basic assessment of that landscape by showing the distribution of fitnesses for every possible genome for the current settings. It provides an option to select how many bits in the test organism's genome as larger genome sizes (e.g. >16) take exponentially longer given the need to try every potential genome rearrangement.
+The fitness algorithm for TREvoSim is described in Keating et al. (2020). The fitness landscape varies depends on the simulation settings. This menu command (shortcut ctrl + shift + h) provides a basic assessment of that landscape by showing the distribution of fitnesses for every possible genome for the current settings. It provides an option to select how many bits in the test organism's genome as larger genome sizes (e.g. |gt|16) take exponentially longer given the need to try every potential genome rearrangement.
 
 Run tests
 ---------

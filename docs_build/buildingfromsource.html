@@ -46,18 +46,19 @@
 <li class="toctree-l1"><a class="reference internal" href="requirementsinstallation.html">2. Requirements and Installation from Binaries</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">3. Compiling from Source and Development Testing</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#compiling-from-source">3.1. Compiling from Source</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#windows-10-64-bit">3.1.1. Windows 10 64-bit</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#for-v3-x-qt-creator-qt-v6-x-using-qt-installer-and-msvc2019-64-bit">3.1.1.1. For v3.X - QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit)</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#for-v1-x-2-x-qt-creator-qt-v5-x-using-msys2-64-bit-and-mingw-64-bit">3.1.1.2. For v1.X, 2.X - QT Creator + QT v5.x using MSYS2 (64-bit) and MinGW (64-bit)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#windows-10">3.1.1. Windows 10</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#compiling-v3-x">3.1.1.1. Compiling v3.X</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#compiling-v1-x-2-x">3.1.1.2. Compiling v1.X, 2.X</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#ubuntu-22-04-64-bit-qt-creator-qt-v6-x-using-gcc-64-bit">3.1.2. Ubuntu 22.04 64-bit - QT Creator + QT v6.x using GCC (64-bit)</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#for-v1-x-2-x-v3-x-to-compile-from-command-line">3.1.2.1. For v1.X, 2.X, v3.X - To compile from command line</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#for-v1-x-2-x-v3-x-using-qt-creator">3.1.2.2. For v1.X, 2.X, v3.X - Using Qt creator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ubuntu">3.1.2. Ubuntu</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#compiling-v3-x-using-command-line">3.1.2.1. Compiling v3.X using command line</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#compiling-v1-x-v2-x-using-command-line">3.1.2.2. Compiling v1.X &amp; v2.X using command line</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#compiling-v1-x-v2-x-v3-x-using-qt-creator">3.1.2.3. Compiling v1.X, v2.X, v3.X using Qt Creator</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#macos-qt-creator-qt-v6-x-using-clang-and-xcode">3.1.3. MacOS - QT Creator + QT v6.x using Clang and xcode</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#id1">3.1.3.1. For v1.X, 2.X, v3.X - Using Qt creator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#macos">3.1.3. MacOS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#for-v1-x-2-x-v3-x">3.1.3.1. For v1.X, 2.X, v3.X</a></li>
 </ul>
 </li>
 </ul>
@@ -101,10 +102,11 @@
 <h1><span class="section-number">3. </span>Compiling from Source and Development Testing<a class="headerlink" href="#compiling-from-source-and-development-testing" title="Permalink to this headline">¶</a></h1>
 <section id="compiling-from-source">
 <h2><span class="section-number">3.1. </span>Compiling from Source<a class="headerlink" href="#compiling-from-source" title="Permalink to this headline">¶</a></h2>
-<section id="windows-10-64-bit">
-<h3><span class="section-number">3.1.1. </span>Windows 10 64-bit<a class="headerlink" href="#windows-10-64-bit" title="Permalink to this headline">¶</a></h3>
-<section id="for-v3-x-qt-creator-qt-v6-x-using-qt-installer-and-msvc2019-64-bit">
-<h4><span class="section-number">3.1.1.1. </span>For v3.X - QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit)<a class="headerlink" href="#for-v3-x-qt-creator-qt-v6-x-using-qt-installer-and-msvc2019-64-bit" title="Permalink to this headline">¶</a></h4>
+<section id="windows-10">
+<h3><span class="section-number">3.1.1. </span>Windows 10<a class="headerlink" href="#windows-10" title="Permalink to this headline">¶</a></h3>
+<section id="compiling-v3-x">
+<h4><span class="section-number">3.1.1.1. </span>Compiling v3.X<a class="headerlink" href="#compiling-v3-x" title="Permalink to this headline">¶</a></h4>
+<p>QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit).</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Note Visual Studio 2022 should also work but has not yet been tested with TREvoSim.</p>
@@ -113,7 +115,8 @@
 <li><p>Install Microsoft Visual Studio 2019 (VS2019). See <a class="reference external" href="https://visualstudio.microsoft.com/vs/older-downloads/">https://visualstudio.microsoft.com/vs/older-downloads/</a>.</p></li>
 <li><p>Install Qt 6.X and QT Creator on your system by running the open source development installer from Qt: <a class="reference external" href="https://www.qt.io/download-open-source">https://www.qt.io/download-open-source</a></p>
 <ul class="simple">
-<li><p>During the installation you will need to select the ‘MSVC 2019 64-bit’ component under the QT 6.6.x sub-category.</p></li>
+<li><p>During the installation you will need to select the ‘MSVC 2019 64-bit’ and ‘Qt 5 Compatability Module’ components under the QT 6.x.x sub-category.</p></li>
+<li><p>During the installation you will need to select the ‘MSVC 2019 64-bit’ component under the QT 6.x.x sub-category.</p></li>
 <li><p>During the installation check that under the ‘Development and Designer Tools’ sub-category that ‘QT Creator X.X.X’, ‘Debugging Tools for Windows’, ‘CMake X.X.X’, and ‘Ninja X.X.X’ are selected. These should be selected by default.</p></li>
 <li><p>If you forget or need to amend/check which components are active you can run the QT Maintenance tool (which gets installed automatically) and add/remove/update them post-installation.</p></li>
 </ul>
@@ -125,8 +128,8 @@
 <li><p>Click the ‘Environment Variables…’ button.</p></li>
 <li><p>From the ‘System Variables’ section, find the entry called “Path” in the variable column, and click the ‘Edit…’ button.</p></li>
 <li><p>The ‘Edit environment variable’ window will appear.</p></li>
-<li><p>Click ‘New’ and type in the path to the QT Ninja install folder - the default is: C:QtToolsNinja.</p></li>
-<li><p>Repeat with the path to the Git git.exe folder - the default is: C:Program FilesGitcmd.</p></li>
+<li><p>Click ‘New’ and type in the path to the QT Ninja install folder - the default is: C:\Qt\Tools\Ninja.</p></li>
+<li><p>Repeat with the path to the Git git.exe folder - the default is: C:\Program Files\Git\cmd.</p></li>
 <li><p>Save the new settings by pressing the ‘OK’ button.</p></li>
 <li><p>At this point you may need to restart Windows for the settings to take affect or at the very least restart QT Creator if it is already running.</p></li>
 </ul>
@@ -134,17 +137,17 @@
 <li><p>Download or clone using Git the TREvoSim source code from the GitHub repository: <a class="reference external" href="https://github.com/palaeoware/trevosim">https://github.com/palaeoware/trevosim</a></p></li>
 <li><p>Run QT Creator and configure the build pipeline. QT Creator should automatically detect your Microsoft Visual Studio 2019 installation and configure the build chain.</p></li>
 <li><p>In QT Creator using the main menu ‘File → Open File or Project…’ navigating to and select the TREvoSim CMakeLists.txt file in the root of the source code folder. This will open the TREvoSim project within the workspace.</p></li>
-<li><p>From QT Creator you can build debug and release version of TREvoSim. The easiest way is via the bottom left ‘Build’ button. Alternatively you can use the ‘Build &gt; Build All Projects…’ from the main menu.</p></li>
+<li><p>From QT Creator you can build debug and release version of TREvoSim. The easiest way is via the bottom left ‘Build’ button. Alternatively you can use the ‘Build → Build All Projects…’ from the main menu.</p></li>
 <li><p>Once you have built the release version of TREvoSim through QT Creator, and you if wish to make the binary useable outside of the QT Creator environment (either as a standalone distribution or for use with an installer), you will need to run the Qt Windows Deployment tool. This tool automates the process of creating a deployable folder that contains all QT-related dependencies to make TREvoSim run (e.g., .DLL libraries).</p>
 <ul class="simple">
-<li><p>First step is to copy to a new folder (we called ours ‘deploy’ and will refer to this by name) the newly generated binaries (TREvoSim.exe and TREvoSimTest.exe) from your build folder. The build folder should be called ‘build-trevosim-Desktop_Qt_6_6_1_MSVC2019_64bit-Release’ if using the QT defaults, where Qt_6_6_1 will change to match your current QT 6 version.</p></li>
-<li><p>From the windows command line ‘’’cd’’’ into the ‘{path to your QT installation}{QT 6 version}msvc2019_64bin' folder containing the windeployqt6.exe binary and run the following commands:</p></li>
+<li><p>First step is to copy to a new folder (we called ours ‘deploy’ and will refer to this by name) the newly generated binaries (TREvoSim.exe and TREvoSimTest.exe) from your build folder. The build folder should be called ‘build\Desktop_Qt_6_6_1_MSVC2019_64bit-Release’ if using the QT defaults, where Qt_6_6_1 will change to match your current QT 6 version.</p></li>
+<li><p>From the windows command line ‘’’cd’’’ into the ‘{path to your QT installation}\{QT 6 version}\msvc2019_64\bin\’ folder containing the windeployqt6.exe binary and run the following commands:</p></li>
 </ul>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">qtenv2.bat</span>
 <span class="go">&quot;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat&quot;</span>
 </pre></div>
 </div>
-<p>where ‘C:Program Files (x86)Microsoft Visual Studio’ is your path to the installed VS2019.</p>
+<p>where ‘C:\Program Files (x86)\Microsoft Visual Studio’ is your path to the installed VS2019.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">windeployqt6 {full path to TREvoSim binary}\TREvoSim.exe  --release</span>
 </pre></div>
 </div>
@@ -179,8 +182,9 @@
 </li>
 </ol>
 </section>
-<section id="for-v1-x-2-x-qt-creator-qt-v5-x-using-msys2-64-bit-and-mingw-64-bit">
-<h4><span class="section-number">3.1.1.2. </span>For v1.X, 2.X - QT Creator + QT v5.x using MSYS2 (64-bit) and MinGW (64-bit)<a class="headerlink" href="#for-v1-x-2-x-qt-creator-qt-v5-x-using-msys2-64-bit-and-mingw-64-bit" title="Permalink to this headline">¶</a></h4>
+<section id="compiling-v1-x-2-x">
+<h4><span class="section-number">3.1.1.2. </span>Compiling v1.X, 2.X<a class="headerlink" href="#compiling-v1-x-2-x" title="Permalink to this headline">¶</a></h4>
+<p>QT Creator + QT v5.x using MSYS2 (64-bit) and MinGW (64-bit).</p>
 <p>We recommend you install and use MSYS2 (64-bit) a Windows package manager, based on modern Cygwin (POSIX compatibility layer) and MinGW-w64, that allows easy installation of QT v5.x 64-bit.</p>
 <ol class="arabic">
 <li><p>Download and run the latest version of <a class="reference external" href="https://www.msys2.org/">MSYS2</a> for 64-bit Windows. This will be name “MSYS2-x86_64-…” for the 64-bit installer.</p></li>
@@ -204,10 +208,13 @@
 </ol>
 </section>
 </section>
-<section id="ubuntu-22-04-64-bit-qt-creator-qt-v6-x-using-gcc-64-bit">
-<h3><span class="section-number">3.1.2. </span>Ubuntu 22.04 64-bit - QT Creator + QT v6.x using GCC (64-bit)<a class="headerlink" href="#ubuntu-22-04-64-bit-qt-creator-qt-v6-x-using-gcc-64-bit" title="Permalink to this headline">¶</a></h3>
-<section id="for-v1-x-2-x-v3-x-to-compile-from-command-line">
-<h4><span class="section-number">3.1.2.1. </span>For v1.X, 2.X, v3.X - To compile from command line<a class="headerlink" href="#for-v1-x-2-x-v3-x-to-compile-from-command-line" title="Permalink to this headline">¶</a></h4>
+<section id="ubuntu">
+<h3><span class="section-number">3.1.2. </span>Ubuntu<a class="headerlink" href="#ubuntu" title="Permalink to this headline">¶</a></h3>
+<section id="compiling-v3-x-using-command-line">
+<h4><span class="section-number">3.1.2.1. </span>Compiling v3.X using command line<a class="headerlink" href="#compiling-v3-x-using-command-line" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><p>This has been tested on Ubuntu 22.04 64-bit with QT v6.x using GCC (64-bit).</p>
+</div></blockquote>
 <ol class="arabic simple">
 <li><p>Install GCC and Qt using system packages:</p></li>
 </ol>
@@ -232,18 +239,52 @@
 <li><p>Launch the software by double clicking on the TREvoSim binary that has been created in this folder.</p></li>
 </ol>
 </section>
-<section id="for-v1-x-2-x-v3-x-using-qt-creator">
-<h4><span class="section-number">3.1.2.2. </span>For v1.X, 2.X, v3.X - Using Qt creator<a class="headerlink" href="#for-v1-x-2-x-v3-x-using-qt-creator" title="Permalink to this headline">¶</a></h4>
+<section id="compiling-v1-x-v2-x-using-command-line">
+<h4><span class="section-number">3.1.2.2. </span>Compiling v1.X &amp; v2.X using command line<a class="headerlink" href="#compiling-v1-x-v2-x-using-command-line" title="Permalink to this headline">¶</a></h4>
+<p>This has been tested on Ubuntu 18.04 and 2204, with QT v5.x using GCC (64-bit).</p>
 <ol class="arabic simple">
-<li><p>Install Qt 6.X on your system by running the installer from Qt: <a class="reference external" href="https://www.qt.io/download">https://www.qt.io/download</a></p></li>
+<li><p>Install GCC and Qt using system packages:</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install build-essential libgl1-mesa-dev</span>
+<span class="go">sudo apt install qt5-default</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Download source code and navigate to folder, or alternatively clone using Git:</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone https://github.com/palaeoware/trevosim.git</span>
+<span class="go">cd trevosim</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Within REvoSim folder create makefile:</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">qmake ./trevosim.pro</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>Build by running the make command:</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">make</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>Navigate to bin folder (e.g. trevosim/bin) and launch software by double clicking on file.</p></li>
+</ol>
+</section>
+<section id="compiling-v1-x-v2-x-v3-x-using-qt-creator">
+<h4><span class="section-number">3.1.2.3. </span>Compiling v1.X, v2.X, v3.X using Qt Creator<a class="headerlink" href="#compiling-v1-x-v2-x-v3-x-using-qt-creator" title="Permalink to this headline">¶</a></h4>
+<ol class="arabic simple">
+<li><p>Install Qt 5.X (v1.X, v2.X) or Qt 6.X (v3.X) on your system by running the installer from Qt: <a class="reference external" href="https://www.qt.io/download">https://www.qt.io/download</a></p></li>
 <li><p>Download source code, launch Qt Creator, and open the CMakeLists.txt file. Configure build and follow standard debug/release procedure.</p></li>
 </ol>
 </section>
 </section>
-<section id="macos-qt-creator-qt-v6-x-using-clang-and-xcode">
-<h3><span class="section-number">3.1.3. </span>MacOS - QT Creator + QT v6.x using Clang and xcode<a class="headerlink" href="#macos-qt-creator-qt-v6-x-using-clang-and-xcode" title="Permalink to this headline">¶</a></h3>
-<section id="id1">
-<h4><span class="section-number">3.1.3.1. </span>For v1.X, 2.X, v3.X - Using Qt creator<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<section id="macos">
+<h3><span class="section-number">3.1.3. </span>MacOS<a class="headerlink" href="#macos" title="Permalink to this headline">¶</a></h3>
+<p>QT Creator + QT v6.x using Clang and xcode.</p>
+<section id="for-v1-x-2-x-v3-x">
+<h4><span class="section-number">3.1.3.1. </span>For v1.X, 2.X, v3.X<a class="headerlink" href="#for-v1-x-2-x-v3-x" title="Permalink to this headline">¶</a></h4>
 <ol class="arabic simple">
 <li><p>Xcode can be downloaded from the Apple Store or Apple’s developer website (including older versions of Xcode): <a class="reference external" href="https://developer.apple.com/download/">https://developer.apple.com/download/</a>. We recommend always using the latest Xcode available from Apple that has been tested with the Qt version you are using.</p></li>
 <li><p>Install Qt 6.X and Qt Creator on your system by running the installer from Qt: <a class="reference external" href="https://www.qt.io/download">https://www.qt.io/download</a>. An alternative may be to install via homebrew:</p></li>
@@ -271,7 +312,7 @@
 <li><p>As a standalone program - for this we leverage the GoogleTest Mocking and Testing Framework (<a class="reference external" href="https://github.com/google/googletest">https://github.com/google/googletest</a>) which is pulled in automatically by CMake and built alongside the TREvoSim main program - creating a separate standalone test program called TREvoSimTest. This program can be called from the command line on Mac/Linux or from the QT Creator environment on Windows.</p></li>
 <li><p>From the QT Creator application. Once the test program has been build (see point 1 above) you can run the test suite with the QT Creator by going to the ‘Tools → Tests → Run All Tests’ from the main menu. This will build the application if not already done so and display the results in the ‘Test Result’ tab which normally appears at the bottom of the workspace.</p></li>
 </ol>
-<p>Note: The tests that run are the same that can be called from the TREvoSIM program via the ‘Tests’ button on the main tool bar.</p>
+<p>Note: The tests that run are the same that can be called from the TREvoSim program via the ‘Tests’ button on the main tool bar.</p>
 </section>
 </section>
 

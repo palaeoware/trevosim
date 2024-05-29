@@ -7,19 +7,23 @@ Compiling from Source and Development Testing
 Compiling from Source
 ---------------------
 
-Windows 10 64-bit
-^^^^^^^^^^^^^^^^^
+Windows 10
+^^^^^^^^^^
 
-For v3.X - QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit)
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+Compiling v3.X
+""""""""""""""
+
+QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit).
 
 .. note::
   Note Visual Studio 2022 should also work but has not yet been tested with TREvoSim.
 
+
 #. Install Microsoft Visual Studio 2019 (VS2019). See https://visualstudio.microsoft.com/vs/older-downloads/. 
 #. Install Qt 6.X and QT Creator on your system by running the open source development installer from Qt: https://www.qt.io/download-open-source
 
-   * During the installation you will need to select the 'MSVC 2019 64-bit' component under the QT 6.6.x sub-category.
+   * During the installation you will need to select the 'MSVC 2019 64-bit' and 'Qt 5 Compatability Module' components under the QT 6.x.x sub-category.
+   * During the installation you will need to select the 'MSVC 2019 64-bit' component under the QT 6.x.x sub-category.
    * During the installation check that under the 'Development and Designer Tools' sub-category that 'QT Creator X.X.X', 'Debugging Tools for Windows', 'CMake X.X.X', and 'Ninja X.X.X' are selected. These should be selected by default.
    * If you forget or need to amend/check which components are active you can run the QT Maintenance tool (which gets installed automatically) and add/remove/update them post-installation.
 
@@ -30,19 +34,19 @@ For v3.X - QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit)
    * Click the 'Environment Variables…' button.
    * From the 'System Variables' section, find the entry called "Path" in the variable column, and click the 'Edit…' button.
    * The 'Edit environment variable' window will appear.
-   * Click 'New' and type in the path to the QT Ninja install folder - the default is: C:\Qt\Tools\Ninja.
-   * Repeat with the path to the Git git.exe folder - the default is: C:\Program Files\Git\cmd.
+   * Click 'New' and type in the path to the QT Ninja install folder - the default is: C:\\Qt\\Tools\\Ninja.
+   * Repeat with the path to the Git git.exe folder - the default is: C:\\Program Files\\Git\\cmd.
    * Save the new settings by pressing the 'OK' button.
    * At this point you may need to restart Windows for the settings to take affect or at the very least restart QT Creator if it is already running.
 
 #. Download or clone using Git the TREvoSim source code from the GitHub repository: https://github.com/palaeoware/trevosim
 #. Run QT Creator and configure the build pipeline. QT Creator should automatically detect your Microsoft Visual Studio 2019 installation and configure the build chain.
 #. In QT Creator using the main menu 'File |rarr| Open File or Project…' navigating to and select the TREvoSim CMakeLists.txt file in the root of the source code folder. This will open the TREvoSim project within the workspace. 
-#. From QT Creator you can build debug and release version of TREvoSim. The easiest way is via the bottom left 'Build' button. Alternatively you can use the 'Build > Build All Projects…' from the main menu.
+#. From QT Creator you can build debug and release version of TREvoSim. The easiest way is via the bottom left 'Build' button. Alternatively you can use the 'Build |rarr| Build All Projects…' from the main menu.
 #. Once you have built the release version of TREvoSim through QT Creator, and you if wish to make the binary useable outside of the QT Creator environment (either as a standalone distribution or for use with an installer), you will need to run the Qt Windows Deployment tool. This tool automates the process of creating a deployable folder that contains all QT-related dependencies to make TREvoSim run (e.g., .DLL libraries).
 
-   * First step is to copy to a new folder (we called ours 'deploy' and will refer to this by name) the newly generated binaries (TREvoSim.exe and TREvoSimTest.exe) from your build folder. The build folder should be called 'build-trevosim-Desktop_Qt_6_6_1_MSVC2019_64bit-Release' if using the QT defaults, where Qt_6_6_1 will change to match your current QT 6 version.
-   * From the windows command line '''cd''' into the '{path to your QT installation}\{QT 6 version}\msvc2019_64\bin\' folder containing the windeployqt6.exe binary and run the following commands:
+   * First step is to copy to a new folder (we called ours 'deploy' and will refer to this by name) the newly generated binaries (TREvoSim.exe and TREvoSimTest.exe) from your build folder. The build folder should be called 'build\\Desktop_Qt_6_6_1_MSVC2019_64bit-Release' if using the QT defaults, where Qt_6_6_1 will change to match your current QT 6 version.
+   * From the windows command line '''cd''' into the '{path to your QT installation}\\{QT 6 version}\\msvc2019_64\\bin\\' folder containing the windeployqt6.exe binary and run the following commands:
 	
    .. code-block:: console
 	
@@ -50,7 +54,7 @@ For v3.X - QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit)
 	 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
 	 
    
-   where 'C:\Program Files (x86)\Microsoft Visual Studio' is your path to the installed VS2019.
+   where 'C:\\Program Files (x86)\\Microsoft Visual Studio' is your path to the installed VS2019.
 	
    .. code-block:: console
 	
@@ -80,8 +84,10 @@ For v3.X - QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit)
    * You can now distribute the TREvoSimInstaller_v3.0.0_win_x64.exe under the ./build folder that was created. Note the name of the installation binary is controlled by the .ISS file and can be changed there.
 
 
-For v1.X, 2.X - QT Creator + QT v5.x using MSYS2 (64-bit) and MinGW (64-bit)
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+Compiling v1.X, 2.X 
+"""""""""""""""""""
+
+QT Creator + QT v5.x using MSYS2 (64-bit) and MinGW (64-bit).
 
 We recommend you install and use MSYS2 (64-bit) a Windows package manager, based on modern Cygwin (POSIX compatibility layer) and MinGW-w64, that allows easy installation of QT v5.x 64-bit.
 
@@ -112,11 +118,13 @@ We recommend you install and use MSYS2 (64-bit) a Windows package manager, based
 #. Open the .pro file in QT Creator, and then use the information above to setup a new 64-bit ming64 kit. Follow standard QT Creator debug/release procedure.
 
 
-Ubuntu 22.04 64-bit - QT Creator + QT v6.x using GCC (64-bit)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Ubuntu
+^^^^^^
 
-For v1.X, 2.X, v3.X - To compile from command line
-""""""""""""""""""""""""""""""""""""""""""""""""""
+Compiling v3.X using command line
+"""""""""""""""""""""""""""""""""
+
+ This has been tested on Ubuntu 22.04 64-bit with QT v6.x using GCC (64-bit).
 
 1. Install GCC and Qt using system packages:
 
@@ -141,17 +149,54 @@ For v1.X, 2.X, v3.X - To compile from command line
 
 4. Launch the software by double clicking on the TREvoSim binary that has been created in this folder.
 
-For v1.X, 2.X, v3.X - Using Qt creator
-""""""""""""""""""""""""""""""""""""""
 
-1. Install Qt 6.X on your system by running the installer from Qt: https://www.qt.io/download
+Compiling v1.X & v2.X using command line
+""""""""""""""""""""""""""""""""""""""""
+
+This has been tested on Ubuntu 18.04 and 2204, with QT v5.x using GCC (64-bit).
+
+1. Install GCC and Qt using system packages:
+
+.. code-block:: console
+
+  sudo apt-get install build-essential libgl1-mesa-dev
+  sudo apt install qt5-default
+
+2. Download source code and navigate to folder, or alternatively clone using Git:
+
+.. code-block:: console
+
+  git clone https://github.com/palaeoware/trevosim.git
+  cd trevosim
+
+3. Within REvoSim folder create makefile:
+
+.. code-block:: console
+
+  qmake ./trevosim.pro
+
+4. Build by running the make command:
+
+.. code-block:: console
+
+  make
+
+5. Navigate to bin folder (e.g. trevosim/bin) and launch software by double clicking on file.
+
+
+Compiling v1.X, v2.X, v3.X using Qt Creator
+"""""""""""""""""""""""""""""""""""""""""""
+
+1. Install Qt 5.X (v1.X, v2.X) or Qt 6.X (v3.X) on your system by running the installer from Qt: https://www.qt.io/download
 2. Download source code, launch Qt Creator, and open the CMakeLists.txt file. Configure build and follow standard debug/release procedure.
 
-MacOS - QT Creator + QT v6.x using Clang and xcode
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+MacOS 
+^^^^^
 
-For v1.X, 2.X, v3.X - Using Qt creator
-""""""""""""""""""""""""""""""""""""""
+QT Creator + QT v6.x using Clang and xcode.
+
+For v1.X, 2.X, v3.X
+"""""""""""""""""""
 
 1. Xcode can be downloaded from the Apple Store or Apple's developer website (including older versions of Xcode): https://developer.apple.com/download/. We recommend always using the latest Xcode available from Apple that has been tested with the Qt version you are using.
 2. Install Qt 6.X and Qt Creator on your system by running the installer from Qt: https://www.qt.io/download. An alternative may be to install via homebrew: 
@@ -174,4 +219,4 @@ TREvoSim |gt| = v3 come with a suite of development tests that verify the core s
 #. As a standalone program - for this we leverage the GoogleTest Mocking and Testing Framework (https://github.com/google/googletest) which is pulled in automatically by CMake and built alongside the TREvoSim main program - creating a separate standalone test program called TREvoSimTest. This program can be called from the command line on Mac/Linux or from the QT Creator environment on Windows.
 #. From the QT Creator application. Once the test program has been build (see point 1 above) you can run the test suite with the QT Creator by going to the 'Tools |rarr| Tests |rarr| Run All Tests' from the main menu. This will build the application if not already done so and display the results in the 'Test Result' tab which normally appears at the bottom of the workspace.
 
-Note: The tests that run are the same that can be called from the TREvoSIM program via the 'Tests' button on the main tool bar.
+Note: The tests that run are the same that can be called from the TREvoSim program via the 'Tests' button on the main tool bar.
