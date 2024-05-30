@@ -676,7 +676,7 @@ bool simulation::run()
             file03TextStream << "\t\t" << "Species_" << i << ",\n";
         }
 
-        file03TextStream << "\t\t;\n\ntree tree1 = [&U]";
+        file03TextStream << "\t\t;\n\ntree tree1 = [&R]";
         QString newickString(printNewickWithBranchLengths(0, speciesList, true));
         // Remove text for phangorn
         newickString.remove("S_000");
