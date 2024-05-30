@@ -39,6 +39,7 @@ Table of Contents
    introduction
    requirementsinstallation
    buildingfromsource
+   algorithmconcepts
    windowlayout
    settings
    settings2
