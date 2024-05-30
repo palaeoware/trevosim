@@ -84,26 +84,28 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
     calculateStripUninformativeFactorRunning = calculateStripUninformativeFactorRunningCon;
     if (simSettings->stripUninformative && !calculateStripUninformativeFactorRunning)
     {
+        double stripUninformativeFactorLocal = simSettings->stripUninformativeFactor;
+        if (stripUninformativeFactorLocal < 1.5) stripUninformativeFactorLocal = 5;
 
         double runGenomeSizeDouble = static_cast<double>(runGenomeSize);
-        runGenomeSizeDouble *= simSettings->stripUninformativeFactor;
+        runGenomeSizeDouble *= stripUninformativeFactorLocal;
         runGenomeSize = static_cast<int>(runGenomeSizeDouble);
 
         double runSelectSizeDouble = static_cast<double>(runSelectSize);
-        runSelectSizeDouble *= simSettings->stripUninformativeFactor;
+        runSelectSizeDouble *= stripUninformativeFactorLocal;
         runSelectSize = static_cast<int>(runSelectSizeDouble);
 
         double runFitnessSizeDouble = static_cast<double>(runFitnessSize);
-        runFitnessSizeDouble *= simSettings->stripUninformativeFactor;
+        runFitnessSizeDouble *= stripUninformativeFactorLocal;
         runFitnessSize = static_cast<int>(runFitnessSizeDouble);
 
         double runFitnessTargetDouble = static_cast<double>(runFitnessTarget);
-        runFitnessTargetDouble *= simSettings->stripUninformativeFactor;
+        runFitnessTargetDouble *= stripUninformativeFactorLocal;
         runFitnessTarget = static_cast<int>(runFitnessTargetDouble);
 
         //I suspect it makes sense to do this so it still hits expected behaviour - but note that that means we can't guaruntee species difference if stripping uninformative characters
         double runSpeciesDifferenceDouble = static_cast<double>(runSpeciesDifference);
-        runSpeciesDifferenceDouble *= simSettings->stripUninformativeFactor;
+        runSpeciesDifferenceDouble *= stripUninformativeFactorLocal;
         runSpeciesDifference = static_cast<int>(runSpeciesDifferenceDouble);
     }
 

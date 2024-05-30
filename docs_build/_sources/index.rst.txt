@@ -37,7 +37,8 @@ Table of Contents
    :numbered:
 
    introduction
-   requirements
+   requirementsinstallation
+   buildingfromsource
    windowlayout
    settings
    settings2

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3. Compiling from Source and Development Testing &mdash; TREvoSim 3.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="4. Window Layout" href="windowlayout.html" />
+    <link rel="prev" title="2. Requirements and Installation from Binaries" href="requirementsinstallation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> TREvoSim
+            <img src="_static/TREvoSim.jpg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                3.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="requirementsinstallation.html">2. Requirements and Installation from Binaries</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Compiling from Source and Development Testing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#compiling-from-source">3.1. Compiling from Source</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#windows-10">3.1.1. Windows 10</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#compiling-v3-x">3.1.1.1. Compiling v3.X</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#compiling-v1-x-2-x">3.1.1.2. Compiling v1.X, 2.X</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#ubuntu">3.1.2. Ubuntu</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#compiling-v3-x-using-command-line">3.1.2.1. Compiling v3.X using command line</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#compiling-v1-x-v2-x-using-command-line">3.1.2.2. Compiling v1.X &amp; v2.X using command line</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#compiling-v1-x-v2-x-v3-x-using-qt-creator">3.1.2.3. Compiling v1.X, v2.X, v3.X using Qt Creator</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#macos">3.1.3. MacOS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#for-v1-x-2-x-v3-x">3.1.3.1. For v1.X, 2.X, v3.X</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#development-testing">3.2. Development Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="windowlayout.html">4. Window Layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html">5. Settings - Organisms and simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings2.html">6. Settings - Environment and Extinction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="loggingsim.html">7. Logging the Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">8. Menu commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">9. Tests</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">TREvoSim</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><span class="section-number">3. </span>Compiling from Source and Development Testing</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/buildingfromsource.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <span class="target" id="buildingfromsource"></span><section id="compiling-from-source-and-development-testing">
+<h1><span class="section-number">3. </span>Compiling from Source and Development Testing<a class="headerlink" href="#compiling-from-source-and-development-testing" title="Permalink to this headline">¶</a></h1>
+<section id="compiling-from-source">
+<h2><span class="section-number">3.1. </span>Compiling from Source<a class="headerlink" href="#compiling-from-source" title="Permalink to this headline">¶</a></h2>
+<section id="windows-10">
+<h3><span class="section-number">3.1.1. </span>Windows 10<a class="headerlink" href="#windows-10" title="Permalink to this headline">¶</a></h3>
+<section id="compiling-v3-x">
+<h4><span class="section-number">3.1.1.1. </span>Compiling v3.X<a class="headerlink" href="#compiling-v3-x" title="Permalink to this headline">¶</a></h4>
+<p>QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note Visual Studio 2022 should also work but has not yet been tested with TREvoSim.</p>
+</div>
+<ol class="arabic">
+<li><p>Install Microsoft Visual Studio 2019 (VS2019). See <a class="reference external" href="https://visualstudio.microsoft.com/vs/older-downloads/">https://visualstudio.microsoft.com/vs/older-downloads/</a>.</p></li>
+<li><p>Install Qt 6.X and QT Creator on your system by running the open source development installer from Qt: <a class="reference external" href="https://www.qt.io/download-open-source">https://www.qt.io/download-open-source</a></p>
+<ul class="simple">
+<li><p>During the installation you will need to select the ‘MSVC 2019 64-bit’ and ‘Qt 5 Compatability Module’ components under the QT 6.x.x sub-category.</p></li>
+<li><p>During the installation you will need to select the ‘MSVC 2019 64-bit’ component under the QT 6.x.x sub-category.</p></li>
+<li><p>During the installation check that under the ‘Development and Designer Tools’ sub-category that ‘QT Creator X.X.X’, ‘Debugging Tools for Windows’, ‘CMake X.X.X’, and ‘Ninja X.X.X’ are selected. These should be selected by default.</p></li>
+<li><p>If you forget or need to amend/check which components are active you can run the QT Maintenance tool (which gets installed automatically) and add/remove/update them post-installation.</p></li>
+</ul>
+</li>
+<li><p>Install Git - this is required by CMake during the build to pull the latest version of GoogleTest - download from: <a class="reference external" href="https://git-scm.com/download/win">https://git-scm.com/download/win</a></p></li>
+<li><p>Add Ninja (installed by QT) and Git to your Windows PATH environment variable.</p>
+<ul class="simple">
+<li><p>Open the Start Search, type in “env”, and choose ‘Edit the system environment variables’.</p></li>
+<li><p>Click the ‘Environment Variables…’ button.</p></li>
+<li><p>From the ‘System Variables’ section, find the entry called “Path” in the variable column, and click the ‘Edit…’ button.</p></li>
+<li><p>The ‘Edit environment variable’ window will appear.</p></li>
+<li><p>Click ‘New’ and type in the path to the QT Ninja install folder - the default is: C:\Qt\Tools\Ninja.</p></li>
+<li><p>Repeat with the path to the Git git.exe folder - the default is: C:\Program Files\Git\cmd.</p></li>
+<li><p>Save the new settings by pressing the ‘OK’ button.</p></li>
+<li><p>At this point you may need to restart Windows for the settings to take affect or at the very least restart QT Creator if it is already running.</p></li>
+</ul>
+</li>
+<li><p>Download or clone using Git the TREvoSim source code from the GitHub repository: <a class="reference external" href="https://github.com/palaeoware/trevosim">https://github.com/palaeoware/trevosim</a></p></li>
+<li><p>Run QT Creator and configure the build pipeline. QT Creator should automatically detect your Microsoft Visual Studio 2019 installation and configure the build chain.</p></li>
+<li><p>In QT Creator using the main menu ‘File → Open File or Project…’ navigating to and select the TREvoSim CMakeLists.txt file in the root of the source code folder. This will open the TREvoSim project within the workspace.</p></li>
+<li><p>From QT Creator you can build debug and release version of TREvoSim. The easiest way is via the bottom left ‘Build’ button. Alternatively you can use the ‘Build → Build All Projects…’ from the main menu.</p></li>
+<li><p>Once you have built the release version of TREvoSim through QT Creator, and you if wish to make the binary useable outside of the QT Creator environment (either as a standalone distribution or for use with an installer), you will need to run the Qt Windows Deployment tool. This tool automates the process of creating a deployable folder that contains all QT-related dependencies to make TREvoSim run (e.g., .DLL libraries).</p>
+<ul class="simple">
+<li><p>First step is to copy to a new folder (we called ours ‘deploy’ and will refer to this by name) the newly generated binaries (TREvoSim.exe and TREvoSimTest.exe) from your build folder. The build folder should be called ‘build\Desktop_Qt_6_6_1_MSVC2019_64bit-Release’ if using the QT defaults, where Qt_6_6_1 will change to match your current QT 6 version.</p></li>
+<li><p>From the windows command line ‘’’cd’’’ into the ‘{path to your QT installation}\{QT 6 version}\msvc2019_64\bin\’ folder containing the windeployqt6.exe binary and run the following commands:</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">qtenv2.bat</span>
+<span class="go">&quot;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat&quot;</span>
+</pre></div>
+</div>
+<p>where ‘C:\Program Files (x86)\Microsoft Visual Studio’ is your path to the installed VS2019.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">windeployqt6 {full path to TREvoSim binary}\TREvoSim.exe  --release</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Your deploy folder should now look like this:</p></li>
+</ul>
+<figure class="align-default">
+<img alt="_images/post_windeploy.png" src="_images/post_windeploy.png" />
+</figure>
+<ul class="simple">
+<li><p>You can now test if this has worked successfully by attempting to run the TREvoSim binary in the deploy folder. It should run without any missing libraries warnings.</p></li>
+<li><p>For more information on how this works see: <a class="reference external" href="https://doc.qt.io/qt-6/windows-deployment.html">https://doc.qt.io/qt-6/windows-deployment.html</a></p></li>
+</ul>
+</li>
+<li><p>[Optional] To package the application as Windows portable binary release simply compress the deploy folder as a .ZIP archive and rename the new file to TREvoSim_v3.X.X.zip.</p></li>
+<li><p>[Optional] To package the application as Windows Installation Binary for distribution we recommend using Inno Setup v6.x: <a class="reference external" href="https://jrsoftware.org/isinfo.php">https://jrsoftware.org/isinfo.php</a></p>
+<ul class="simple">
+<li><p>Inno Setup is a free installer for Windows programs by Jordan Russell and Martijn Laan.</p></li>
+<li><p>The file TREvoSim_Installer_v3.x.x_dev.iss under the ./inno_setup folder is provided as a template. Copy this file to the deploy folder you created earlier.</p></li>
+<li><p>Open this file in InnoSetup - if you associated .ISS files with InnoStup during its installation you will be able to double click this file. It will look similar to this:</p></li>
+</ul>
+<figure class="align-default">
+<img alt="_images/innosetup.png" src="_images/innosetup.png" />
+</figure>
+<ul class="simple">
+<li><p>Next you need to create a new folder under your deploy folder called ‘bin’.</p></li>
+<li><p>Copy all files other than .ISS file into the ./bin folder.</p></li>
+<li><p>The template .ISS files is expecting a LICENSE.md files to be in the ./bin folder as well. This file must be copied from the TREvoSim source folder root.</p></li>
+<li><p>You can now Compile the installer in Inno Setup. Press the small blue arrow pointing down on the tool bar, or from the main menu ‘Build → Compile’. Inno Setup will then compile, compress, and create the a install binary in a folder called ./build. Note the template file is set to run the installation post creations - this may be canceled if you do not want to install straight away.</p></li>
+<li><p>You can now distribute the TREvoSimInstaller_v3.0.0_win_x64.exe under the ./build folder that was created. Note the name of the installation binary is controlled by the .ISS file and can be changed there.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="compiling-v1-x-2-x">
+<h4><span class="section-number">3.1.1.2. </span>Compiling v1.X, 2.X<a class="headerlink" href="#compiling-v1-x-2-x" title="Permalink to this headline">¶</a></h4>
+<p>QT Creator + QT v5.x using MSYS2 (64-bit) and MinGW (64-bit).</p>
+<p>We recommend you install and use MSYS2 (64-bit) a Windows package manager, based on modern Cygwin (POSIX compatibility layer) and MinGW-w64, that allows easy installation of QT v5.x 64-bit.</p>
+<ol class="arabic">
+<li><p>Download and run the latest version of <a class="reference external" href="https://www.msys2.org/">MSYS2</a> for 64-bit Windows. This will be name “MSYS2-x86_64-…” for the 64-bit installer.</p></li>
+<li><p>Follow the install instructions. We have used the default install location of “C:mysys64&quot; and it is here that includes required in the .pro files point. If you install MSYS2 to another location the .pro files will need to be updated to your install location.</p></li>
+<li><p>Once installed open up MSYS2 shell and run the pacman update command: pacman -Syu Note that as this will almost certainly update pacman itself you may have to close down and restart the MSYS2 shell before re-running the command to finish.</p></li>
+<li><p>Once MSYS2 and pacman are fully updated run the following command to install QT 5.x and its dependencies: pacman -S mingw-w64-x86_64-qt-creator mingw-w64-x86_64-qt5</p></li>
+<li><p>Optional - if you intend on debugging the software in QT and wish to use GDB then run the following to install the matching GBD debugger: pacman -S mingw-w64-x86_64-gdb</p></li>
+<li><p>At this stage you should have the following under the MSYS2 install location:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>{install location}/mingw64 (Main ming64 folder)</p></li>
+<li><p>{install location}/mingw64/bin/qmake.exe (QMake for QT version)</p></li>
+<li><p>{install location}/mingw64/bin/g++.exe (C++ complier)</p></li>
+<li><p>{install location}/mingw64/bin/gcc.exe (C complier)</p></li>
+<li><p>{install location}/mingw64/bin/gdb.exe (Debugger | OPTIONAL)</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>You should now be able to find the required libraries under “{install location}/mingw64/bin” and the required header (.h) files for QT v5.x.</p></li>
+<li><p>Open the .pro file in QT Creator, and then use the information above to setup a new 64-bit ming64 kit. Follow standard QT Creator debug/release procedure.</p></li>
+</ol>
+</section>
+</section>
+<section id="ubuntu">
+<h3><span class="section-number">3.1.2. </span>Ubuntu<a class="headerlink" href="#ubuntu" title="Permalink to this headline">¶</a></h3>
+<section id="compiling-v3-x-using-command-line">
+<h4><span class="section-number">3.1.2.1. </span>Compiling v3.X using command line<a class="headerlink" href="#compiling-v3-x-using-command-line" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><p>This has been tested on Ubuntu 22.04 64-bit with QT v6.x using GCC (64-bit).</p>
+</div></blockquote>
+<ol class="arabic simple">
+<li><p>Install GCC and Qt using system packages:</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install build-essential libgl1-mesa-dev</span>
+<span class="go">sudo apt install qt6-base-dev libqt6core5compat6-dev</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Download source code and navigate to folder, or alternatively clone using Git:</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone https://github.com/palaeoware/trevosim.git</span>
+<span class="go">cd trevosim</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Within TREvoSim folder, run the following command to build the software:</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cmake --build .</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>Launch the software by double clicking on the TREvoSim binary that has been created in this folder.</p></li>
+</ol>
+</section>
+<section id="compiling-v1-x-v2-x-using-command-line">
+<h4><span class="section-number">3.1.2.2. </span>Compiling v1.X &amp; v2.X using command line<a class="headerlink" href="#compiling-v1-x-v2-x-using-command-line" title="Permalink to this headline">¶</a></h4>
+<p>This has been tested on Ubuntu 18.04 and 2204, with QT v5.x using GCC (64-bit).</p>
+<ol class="arabic simple">
+<li><p>Install GCC and Qt using system packages:</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo apt-get install build-essential libgl1-mesa-dev</span>
+<span class="go">sudo apt install qt5-default</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Download source code and navigate to folder, or alternatively clone using Git:</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone https://github.com/palaeoware/trevosim.git</span>
+<span class="go">cd trevosim</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Within REvoSim folder create makefile:</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">qmake ./trevosim.pro</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>Build by running the make command:</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">make</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>Navigate to bin folder (e.g. trevosim/bin) and launch software by double clicking on file.</p></li>
+</ol>
+</section>
+<section id="compiling-v1-x-v2-x-v3-x-using-qt-creator">
+<h4><span class="section-number">3.1.2.3. </span>Compiling v1.X, v2.X, v3.X using Qt Creator<a class="headerlink" href="#compiling-v1-x-v2-x-v3-x-using-qt-creator" title="Permalink to this headline">¶</a></h4>
+<ol class="arabic simple">
+<li><p>Install Qt 5.X (v1.X, v2.X) or Qt 6.X (v3.X) on your system by running the installer from Qt: <a class="reference external" href="https://www.qt.io/download">https://www.qt.io/download</a></p></li>
+<li><p>Download source code, launch Qt Creator, and open the CMakeLists.txt file. Configure build and follow standard debug/release procedure.</p></li>
+</ol>
+</section>
+</section>
+<section id="macos">
+<h3><span class="section-number">3.1.3. </span>MacOS<a class="headerlink" href="#macos" title="Permalink to this headline">¶</a></h3>
+<p>QT Creator + QT v6.x using Clang and xcode.</p>
+<section id="for-v1-x-2-x-v3-x">
+<h4><span class="section-number">3.1.3.1. </span>For v1.X, 2.X, v3.X<a class="headerlink" href="#for-v1-x-2-x-v3-x" title="Permalink to this headline">¶</a></h4>
+<ol class="arabic simple">
+<li><p>Xcode can be downloaded from the Apple Store or Apple’s developer website (including older versions of Xcode): <a class="reference external" href="https://developer.apple.com/download/">https://developer.apple.com/download/</a>. We recommend always using the latest Xcode available from Apple that has been tested with the Qt version you are using.</p></li>
+<li><p>Install Qt 6.X and Qt Creator on your system by running the installer from Qt: <a class="reference external" href="https://www.qt.io/download">https://www.qt.io/download</a>. An alternative may be to install via homebrew:</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>brew install qt
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>To build the software and test suite, download source code, launch Qt Creator, and open the CMakeLists.txt file.</p></li>
+<li><p>Configure build and follow standard debug/release procedure.</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p>See the Qt Mac Deployment tool: <a class="reference external" href="https://doc.qt.io/qt-6/macos-deployment.html#the-mac-deployment-tool">https://doc.qt.io/qt-6/macos-deployment.html#the-mac-deployment-tool</a></p></li>
+<li><p>Also see the volume package information to make a .dmg: <a class="reference external" href="https://doc.qt.io/qt-6/macos-deployment.html#volume-name">https://doc.qt.io/qt-6/macos-deployment.html#volume-name</a></p></li>
+</ul>
+</div></blockquote>
+</section>
+</section>
+</section>
+<section id="development-testing">
+<h2><span class="section-number">3.2. </span>Development Testing<a class="headerlink" href="#development-testing" title="Permalink to this headline">¶</a></h2>
+<p>TREvoSim &gt; = v3 come with a suite of development tests that verify the core simulator/generator code. These can be called via one of two methods during the devlopment phase:</p>
+<ol class="arabic simple">
+<li><p>As a standalone program - for this we leverage the GoogleTest Mocking and Testing Framework (<a class="reference external" href="https://github.com/google/googletest">https://github.com/google/googletest</a>) which is pulled in automatically by CMake and built alongside the TREvoSim main program - creating a separate standalone test program called TREvoSimTest. This program can be called from the command line on Mac/Linux or from the QT Creator environment on Windows.</p></li>
+<li><p>From the QT Creator application. Once the test program has been build (see point 1 above) you can run the test suite with the QT Creator by going to the ‘Tools → Tests → Run All Tests’ from the main menu. This will build the application if not already done so and display the results in the ‘Test Result’ tab which normally appears at the bottom of the workspace.</p></li>
+</ol>
+<p>Note: The tests that run are the same that can be called from the TREvoSim program via the ‘Tests’ button on the main tool bar.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="requirementsinstallation.html" class="btn btn-neutral float-left" title="2. Requirements and Installation from Binaries" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="windowlayout.html" class="btn btn-neutral float-right" title="4. Window Layout" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Russell J. Garwood, Alan R.T. Spencer, Mark D. Sutton.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
