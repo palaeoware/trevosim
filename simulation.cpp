@@ -1362,7 +1362,7 @@ void simulation::applyEcosystemEngineering(QVector <Organism *> &speciesList, bo
     else if (ecosystemEngineeringOccurring > 1 && simSettings->ecosystemEngineersArePersistent)
     {
 
-        //31st of July - code block deleted that allows us to choose the modal EE if we so wish, and use that to overwrite the masks
+        //31st of July 2023 - code block deleted that allows us to choose the modal EE if we so wish, and use that to overwrite the masks
         //Deleted because this enforces too strong a selective pressure towads the modal genome: not what we want
         //Instead we have chosen to select a random one
         //To recover code block if this changes, just look at git history for commits early on the 31st of July
