@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>10. Tests &mdash; TREvoSim 3.0.0 documentation</title>
+  <title>4. Algorithm and Concepts &mdash; TREvoSim 3.0.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,7 +18,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="9. Menu commands" href="commands.html" /> 
+    <link rel="next" title="5. Window Layout" href="windowlayout.html" />
+    <link rel="prev" title="3. Compiling from Source and Development Testing" href="buildingfromsource.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,13 +45,17 @@
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="requirementsinstallation.html">2. Requirements and Installation from Binaries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="buildingfromsource.html">3. Compiling from Source and Development Testing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="algorithmconcepts.html">4. Algorithm and Concepts</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Algorithm and Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#trevosim-algorithm-description">4.1. TREvoSim Algorithm Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rooting">4.2. Rooting</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="windowlayout.html">5. Window Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="settings.html">6. Settings - Organisms and simulation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="settings2.html">7. Settings - Environment and Extinction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="loggingsim.html">8. Logging the Simulation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="commands.html">9. Menu commands</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">10. Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">10. Tests</a></li>
 </ul>
 
         </div>
@@ -67,9 +72,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><span class="section-number">10. </span>Tests</li>
+      <li><span class="section-number">4. </span>Algorithm and Concepts</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/tests.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/algorithmconcepts.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -77,21 +82,24 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="tests">
-<span id="id1"></span><h1><span class="section-number">10. </span>Tests<a class="headerlink" href="#tests" title="Permalink to this headline">¶</a></h1>
-<p>TREvoSim has tests covering every function used in the simulation process. If you are working on the TREvoSim code, be aware that the tests are run as part of the build chain – when a test fails, so will the build. However, if you are a user, and would like to see the outputs of the tests, then this is possible by hitting the Test button on the toolbar menu, or Tests in the command menu. When this is selected, the main window is first split into two, and the software runs its test suite. The output of the results is then displayed on the panel on the right, shown below.</p>
-<figure class="align-default">
-<img alt="_images/windowLayout_test.png" src="_images/windowLayout_test.png" />
-</figure>
-<p>As such, it is possible to check TREvoSim is running as expected and described in the publications introducing the model (you can alternatively/additionally output a working log to check the internal workings of the software - see <a class="reference internal" href="loggingsim.html#loggingsim"><span class="std std-ref">Logging the Simulation</span></a>).</p>
-<p>The output in the test log describes each test, and also the expected output. The system then makes sure the output meets these expectations. Failed tests will be highlighted in green.</p>
+  <section id="algorithm-and-concepts">
+<span id="algorithmconcepts"></span><h1><span class="section-number">4. </span>Algorithm and Concepts<a class="headerlink" href="#algorithm-and-concepts" title="Permalink to this headline">¶</a></h1>
+<section id="trevosim-algorithm-description">
+<h2><span class="section-number">4.1. </span>TREvoSim Algorithm Description<a class="headerlink" href="#trevosim-algorithm-description" title="Permalink to this headline">¶</a></h2>
+<p>To do.</p>
+</section>
+<section id="rooting">
+<h2><span class="section-number">4.2. </span>Rooting<a class="headerlink" href="#rooting" title="Permalink to this headline">¶</a></h2>
+<p>It is valuable to note that TREvoSim trees in some respects differ from how we typically think of empirical trees, and this is particularly true when it comes to rooting. If we consider the root to be the last common ancestor of everything in the tree (a relatively common definition, most often applied to a species), then this will be – in our case – an early individual within species zero, but not species zero itself. Due to the nature of this algorithm, under many settings, species zero will kick around for a long time, diversify, and give birth to other species, and so if we consider the root to be the oldest point in the tree, this will be the node splitting species zero (and typically its associated clade) from species one. Species zero may nest uptree somewhere - so as a species it has the oldest origin, but typically an extinction later than a number of other taxa in the tree, and it is a direct ancestor of a number of these (the genome is written at extinction by default, and so its characters best represent its later state). Given this, TREvoSim roots on the earliest node, rather than species zero,- i.e. the root lies between species 1 and (assuming this species does not evolve into its own clade, which is often the case), the other taxa. Typically, this distinction (between the individual and the species) matters most where character polarisation matters, as opposed to the tree topology per se. Given this there is the option to output character states at the root (i.e. the organism that is used to seed the simulation) in the logs (see <a class="reference internal" href="loggingsim.html#loggingsim"><span class="std std-ref">Logging the Simulation</span></a> )</p>
+</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="commands.html" class="btn btn-neutral float-left" title="9. Menu commands" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="buildingfromsource.html" class="btn btn-neutral float-left" title="3. Compiling from Source and Development Testing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="windowlayout.html" class="btn btn-neutral float-right" title="5. Window Layout" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

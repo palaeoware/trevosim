@@ -626,6 +626,7 @@ bool simulation::run()
     outValues["Character_Number"] = QString::number(runGenomeSize);
     outValues["Taxon_Number"] = QString::number(speciesList.length());
     outValues["Count"] = doPadding(runs, 3);
+    outValues["Root"] = printGenomeString(&bestOrganism);
 
     if (!writeFile(simSettings->logFileNameBase01, simSettings->logFileExtension01, simSettings->logFileString01, outValues, speciesList))
     {
@@ -676,7 +677,7 @@ bool simulation::run()
             file03TextStream << "\t\t" << "Species_" << i << ",\n";
         }
 
-        file03TextStream << "\t\t;\n\ntree tree1 = [&U]";
+        file03TextStream << "\t\t;\n\ntree tree1 = [&R]";
         QString newickString(printNewickWithBranchLengths(0, speciesList, true));
         // Remove text for phangorn
         newickString.remove("S_000");
@@ -1361,7 +1362,7 @@ void simulation::applyEcosystemEngineering(QVector <Organism *> &speciesList, bo
     else if (ecosystemEngineeringOccurring > 1 && simSettings->ecosystemEngineersArePersistent)
     {
 
-        //31st of July - code block deleted that allows us to choose the modal EE if we so wish, and use that to overwrite the masks
+        //31st of July 2023 - code block deleted that allows us to choose the modal EE if we so wish, and use that to overwrite the masks
         //Deleted because this enforces too strong a selective pressure towads the modal genome: not what we want
         //Instead we have chosen to select a random one
         //To recover code block if this changes, just look at git history for commits early on the 31st of July
@@ -2139,6 +2140,7 @@ bool simulation::writeFile(const QString logFileNameBase, const QString logFileE
     fileStringWrite.replace("||Character_Number||", outValues["Character_Number"], Qt::CaseInsensitive);
     fileStringWrite.replace("||Taxon_Number||",  outValues["Taxon_Number"], Qt::CaseInsensitive);
     fileStringWrite.replace("||Count||", outValues["Count"], Qt::CaseInsensitive);
+    fileStringWrite.replace("||Root||", outValues["Root"], Qt::CaseInsensitive);
 
     fileTextStream << fileStringWrite;
 

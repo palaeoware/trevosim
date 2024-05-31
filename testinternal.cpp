@@ -1440,13 +1440,17 @@ bool testinternal::testSeventeen(QString &outString)
 
     simulationVariables simSettings;
     simulation x(0, &simSettings, &error, theMainWindow);
+    x.run();
+
     if (error) return false;
+
 
     out << "To do.\n";
 
     /*OK so we need to check that:
      * When we send it ecosystemengineer == 1 that it picks an EE, and then writes over masks with its genome
      * When ecosystem engineeer >1 it pciks an EE and then uses that to write the mask
+     * That this is true across laying fields
      */
 
     return testFlag;

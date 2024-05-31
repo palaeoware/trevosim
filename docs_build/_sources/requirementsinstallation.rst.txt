@@ -7,7 +7,7 @@ Requirements and Installation from Binaries
 Requirements
 ------------
 
-TREvoSim has no minimum requirements as such, and will run on most standard systems (Windows/Linux/Mac); however, it has not been tested on versions of Windows older than Windows 10, versions of Ubuntu older than 18.04 (v1,2) or 22.04 (v3), and below macOS High Sierra. Performance will benefit from high processor speed and increased number of processor cores, with large amounts ( |gt| 4GB) of available RAM recommended for large simulations. Graphics card performance is not relevant as GPUs are not currently used in the program's calculation pipeline. A fast hard drive (e.g. SSD) is recommend when intensive logging is enabled; as slow I/O response time can affect the iteration cycle speed.,mmama
+TREvoSim has no minimum requirements as such, and will run on most standard systems (Windows/Linux/Mac); however, it has not been tested on versions of Windows older than Windows 10, versions of Ubuntu older than 18.04 (v1,2) or 22.04 (v3), and below macOS High Sierra. Performance will benefit from high processor speed and increased number of processor cores, with large amounts ( |gt| 4GB) of available RAM recommended for large simulations. Graphics card performance is not relevant as GPUs are not currently used in the program's calculation pipeline. A fast hard drive (e.g. SSD) is recommend when intensive logging is enabled; as slow I/O response time can affect the iteration cycle speed.
 
 Installation from Binaries
 --------------------------
