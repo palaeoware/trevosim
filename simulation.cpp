@@ -626,6 +626,7 @@ bool simulation::run()
     outValues["Character_Number"] = QString::number(runGenomeSize);
     outValues["Taxon_Number"] = QString::number(speciesList.length());
     outValues["Count"] = doPadding(runs, 3);
+    outValues["Root"] = printGenomeString(&bestOrganism);
 
     if (!writeFile(simSettings->logFileNameBase01, simSettings->logFileExtension01, simSettings->logFileString01, outValues, speciesList))
     {
@@ -2139,6 +2140,7 @@ bool simulation::writeFile(const QString logFileNameBase, const QString logFileE
     fileStringWrite.replace("||Character_Number||", outValues["Character_Number"], Qt::CaseInsensitive);
     fileStringWrite.replace("||Taxon_Number||",  outValues["Taxon_Number"], Qt::CaseInsensitive);
     fileStringWrite.replace("||Count||", outValues["Count"], Qt::CaseInsensitive);
+    fileStringWrite.replace("||Root||", outValues["Root"], Qt::CaseInsensitive);
 
     fileTextStream << fileStringWrite;
 
