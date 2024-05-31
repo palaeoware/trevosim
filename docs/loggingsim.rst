@@ -56,6 +56,7 @@ Keywords within two vertical bars ( e.g. \|\|Matrix\|\| ) are replaced as a file
 
 *Note* The mechanism used for tree writing differs between TNT and MrBayes outputs -- the tree topology is the same, but the taxon order differs.
 
+:Root: Writes the genome of the organism used to seed the simulation, thereby allowing characters to be polarised correctly with respect to the root of the tree (see :ref:`algorithmconcepts`).
 :Settings: Writes the settings to the file (this is provided as a useful way to record, with any output data, the set up for TREvoSim for any given run).
 :TNT_Tree: This writes a tree, if required, in TNT format (i.e. only brackets and terminal labels), e.g.
 
