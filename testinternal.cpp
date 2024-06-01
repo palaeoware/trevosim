@@ -1439,10 +1439,55 @@ bool testinternal::testSeventeen(QString &outString)
     out << "Check ecosystem engineers.\n\n";
 
     simulationVariables simSettings;
+    simSettings.runForIterations = 200;
+    simSettings.runMode = RUN_MODE_ITERATION;
+    simSettings.test = 17;
     simulation x(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
     x.run();
 
-    if (error) return false;
+    x.ecosystemEngineeringOccurring++;
+    simSettings.ecosystemEngineers = true;
+
+    QVector <Organism *> speciesList;
+    for (int i = 0; i < x.speciesCount; i ++)
+    {
+        Organism *org = new Organism(50, false);
+        speciesList.append(org);
+    }
+
+    x.applyEcosystemEngineering(speciesList, false);
+
+    int total = 0;
+    for (auto p : qAsConst(x.playingFields))
+        for (auto o : p->playingField)
+            if (o->ecosystemEngineer) total ++;
+
+    out << "Have applied EE: count of organisms with EE status in playing field should be >0. It is : " << total << ".\n";
+    if (total == 0)
+    {
+        testFlag = false;
+    }
+
+    total = 0;
+    for (auto o : speciesList)
+        if (o->ecosystemEngineer)
+            total ++;
+    out << "Have applied EE: count of organisms with EE status in species list should be 1. It is : " << total << ".\n";
+    if (total != 1)
+    {
+        testFlag = false;
+    }
+
+    //simSettings.ecosystemEngineers = true;
+    //check species list has an EE in it too
+
+    //simSettings.runForIterations = 200;
+    //simSettings.runMode = RUN_MODE_ITERATION;
+    //simulation x(0, &simSettings, &error, theMainWindow);
+    //if (error) return false;
+    //x.run();
+
 
 
     out << "To do.\n";

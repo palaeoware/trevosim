@@ -772,7 +772,7 @@ void MainWindow::doTests()
     //Save settings to load at end
     save();
 
-    int testCount = 17;
+    int testCount = 18;
     int testStart = 0;
 
     QStringList items;
