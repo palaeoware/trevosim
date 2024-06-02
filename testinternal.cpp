@@ -1446,7 +1446,6 @@ bool testinternal::testSeventeen(QString &outString)
     if (error) return false;
     x.run();
 
-    x.ecosystemEngineeringOccurring++;
     simSettings.ecosystemEngineers = true;
 
     QVector <Organism *> speciesList;
@@ -1456,6 +1455,10 @@ bool testinternal::testSeventeen(QString &outString)
         speciesList.append(org);
     }
 
+    //Apply only once, but on second time - should have no effect
+    out << "Apply EE with persistent off, for second time - should have no effect\n";
+    x.ecosystemEngineeringOccurring = 2;
+    simSettings.ecosystemEngineersArePersistent = false;
     x.applyEcosystemEngineering(speciesList, false);
 
     int total = 0;
@@ -1463,40 +1466,90 @@ bool testinternal::testSeventeen(QString &outString)
         for (auto o : p->playingField)
             if (o->ecosystemEngineer) total ++;
 
-    out << "Have applied EE: count of organisms with EE status in playing field should be >0. It is : " << total << ".\n";
-    if (total == 0)
-    {
-        testFlag = false;
-    }
+    out << "Have applied EE: count of organisms with EE status in playing field should be 0. It is : " << total << ".\n";
+    if (total != 0) testFlag = false;
+
+    bool identical = false;
+
+    for (auto p : qAsConst(x.playingFields))
+        for (auto o : p->playingField)
+            if (o->ecosystemEngineer)
+                for (auto &m : p->masks)
+                    for (auto &n : m)
+                    {
+                        if (o->genome == n) identical = true;
+                    }
+    out << "Have applied EE and checked that no mask is identical to genome. Check returned: " << identical << ".\n";
+    if (identical == true) testFlag = false;
 
     total = 0;
     for (auto o : speciesList)
         if (o->ecosystemEngineer)
             total ++;
-    out << "Have applied EE: count of organisms with EE status in species list should be 1. It is : " << total << ".\n";
-    if (total != 1)
-    {
-        testFlag = false;
-    }
-
-    //simSettings.ecosystemEngineers = true;
-    //check species list has an EE in it too
-
-    //simSettings.runForIterations = 200;
-    //simSettings.runMode = RUN_MODE_ITERATION;
-    //simulation x(0, &simSettings, &error, theMainWindow);
-    //if (error) return false;
-    //x.run();
+    out << "Have applied EE: count of organisms with EE status in species list should be 0. It is : " << total << ".\n\n";
+    if (total != 0) testFlag = false;
 
 
+    //Apply once, first time
+    out << "Apply EE once, for first time - should have an effect.\n";
+    x.ecosystemEngineeringOccurring = 1;
+    x.applyEcosystemEngineering(speciesList, false);
 
-    out << "To do.\n";
+    total = 0;
+    for (auto p : qAsConst(x.playingFields))
+        for (auto o : p->playingField)
+            if (o->ecosystemEngineer) total ++;
 
-    /*OK so we need to check that:
-     * When we send it ecosystemengineer == 1 that it picks an EE, and then writes over masks with its genome
-     * When ecosystem engineeer >1 it pciks an EE and then uses that to write the mask
-     * That this is true across laying fields
-     */
+    out << "Have applied EE: count of organisms with EE status in playing field should be >0. It is : " << total << ".\n";
+    if (total == 0) testFlag = false;
+
+    identical = false;
+
+    for (auto p : qAsConst(x.playingFields))
+        for (auto o : p->playingField)
+            if (o->ecosystemEngineer)
+                for (auto &m : p->masks)
+                    for (auto &n : m)
+                    {
+                        if (o->genome == n) identical = true;
+                    }
+    out << "Have applied EE and checked that one mask is identical to genome. Check returned: " << identical << ".\n";
+    if (identical == false) testFlag = false;
+
+    total = 0;
+    for (auto o : speciesList)
+        if (o->ecosystemEngineer)
+            total ++;
+    out << "Have applied EE: count of organisms with EE status in species list should be 1. It is : " << total << ".\n\n";
+    if (total != 1) testFlag = false;
+
+
+    //Apply again, second time, persistent
+    out << "Apply EE for second time - should overwrite mask.\n";
+    x.ecosystemEngineeringOccurring = 2;
+    simSettings.ecosystemEngineersArePersistent = true;
+
+    for (auto p : qAsConst(x.playingFields))
+        for (auto o : p->playingField)
+            if (o->ecosystemEngineer)
+                for (auto &g : o->genome)
+                    g = false;
+
+    x.applyEcosystemEngineering(speciesList, false);
+
+    identical = false;
+    for (auto p : qAsConst(x.playingFields))
+        for (auto o : p->playingField)
+            if (o->ecosystemEngineer)
+                for (auto &m : p->masks)
+                    for (auto &n : m)
+                    {
+                        if (o->genome == n) identical = true;
+                    }
+    out << "Have applied EE and checked that one mask is identical to genome. Check returned: " << identical << ".\n";
+    if (identical == false) testFlag = false;
+
+    if (testFlag) out << "\nEE tests passed.\n";
 
     return testFlag;
 }
