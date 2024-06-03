@@ -1561,6 +1561,44 @@ bool testinternal::testEighteen(QString &outString)
 
     out << "Check playing field mixing.\n\n";
 
+    simulationVariables simSettings;
+    simSettings.runForIterations = 2;
+    simSettings.runMode = RUN_MODE_ITERATION;
+    simSettings.playingfieldSize = 100;
+    simSettings.test = 18;
+    simSettings.playingfieldNumber = 2;
+    simulation x(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
+    x.run();
+
+    QVector <Organism *> speciesList;
+    for (int i = 0; i < x.speciesCount; i ++)
+    {
+        Organism *org = new Organism(50, false);
+        speciesList.append(org);
+    }
+
+    //Assign known genomes to members of each playing field
+    bool base = false;
+    for (auto p : qAsConst(x.playingFields))
+    {
+        base = !base;
+        for (auto o : p->playingField)
+            for (auto &g : o->genome)
+                g = base;
+    }
+    simSettings.mixingProbabilityOneToZero = 20;
+
+    x.applyPlayingfieldMixing(speciesList);
+
+    int cnt = 0;
+
+    for (auto o : x.playingFields[0]->playingField)
+        if (o->genome[0])
+            cnt++;
+
+    out << "cnt " << cnt;
+
     return testFlag;
 }
 
