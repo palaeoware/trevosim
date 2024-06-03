@@ -104,9 +104,9 @@ A new ecosystem engineering system allows organism-environment feedback to be in
 
 This new option alters competition such that it occurs between species rather than between individuals (i.e. it removes intra-species competition from the simulation). When enabled (disabled by default), this is achieved by allowing only one individual from each species to be present in the playing field at any time. As such, the playing field grows to accommodate new species, which appear following the standard speciation rules. On duplication of an individual, juveniles overwrite the previous member of their species in the playing field. Otherwise, the playing field operates as normal, i.e. it is ordered by fitness and a coin toss is used to link fitness to fecundity.  
 
-## Logging
+## Running log
 
-A new logging system has been added that allows the user to create a customised file recording many aspects  of the simulation state — for example, the tree and the character data — during a run (previous versions only supported outputs at the end of a simulation). The user can define all log outputs using the logging options. 
+In previous versions, TREvoSim only allowed outputs at the end of a run. From v3, an additional logging system has been added, called the running log, that allows the user to create a customised file recording many aspects of the simulation state -- for example, the tree and the character data -- during a run. The user can define all log outputs using the logging options (which are outlined in the documentation), and can also dictate the frequency with which the running log is written. 
 
 ## Match peaks
 
