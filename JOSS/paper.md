@@ -102,7 +102,7 @@ A new ecosystem engineering system allows organism-environment feedback to be in
 
 ## Expanding playing field 
 
-This new option alters competition such that it occurs between species rather than between individuals. When enabled (disabled by default), only one individual from each species is present in the playing field at any time, and this grows to accommodate new species following the standard speciation rules. On duplication, juveniles overwrite the previous member of their species in the playing field. This removes intra-species competition from the simulation. 
+This new option alters competition such that it occurs between species rather than between individuals (i.e. it removes intra-species competition from the simulation). When enabled (disabled by default), this is achieved by allowing only one individual from each species to be present in the playing field at any time. As such, the playing field grows to accommodate new species, which appear following the standard speciation rules. On duplication of an individual, juveniles overwrite the previous member of their species in the playing field. Otherwise, the playing field operates as normal, i.e. it is ordered by fitness and a coin toss is used to link fitness to fecundity.  
 
 ## Logging
 
