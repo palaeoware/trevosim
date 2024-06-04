@@ -1449,7 +1449,7 @@ bool testinternal::testSeventeen(QString &outString)
     simSettings.ecosystemEngineers = true;
 
     QVector <Organism *> speciesList;
-    for (int i = 0; i < x.speciesCount; i ++)
+    for (int i = 0; i < x.speciesCount + 1; i ++)
     {
         Organism *org = new Organism(50, false);
         speciesList.append(org);
@@ -1567,12 +1567,14 @@ bool testinternal::testEighteen(QString &outString)
     simSettings.playingfieldSize = 100;
     simSettings.test = 18;
     simSettings.playingfieldNumber = 2;
+    simSettings.mixingProbabilityOneToZero = 20;
+    simSettings.mixing = true;
     simulation x(0, &simSettings, &error, theMainWindow);
     if (error) return false;
     x.run();
 
     QVector <Organism *> speciesList;
-    for (int i = 0; i < x.speciesCount; i ++)
+    for (int i = 0; i < x.speciesCount + 1; i ++)
     {
         Organism *org = new Organism(50, false);
         speciesList.append(org);
@@ -1587,13 +1589,20 @@ bool testinternal::testEighteen(QString &outString)
             for (auto &g : o->genome)
                 g = base;
     }
-    simSettings.mixingProbabilityOneToZero = 20;
 
-    x.applyPlayingfieldMixing(speciesList);
+    for (int i = 0; i < 100; i++) x.applyPlayingfieldMixing(speciesList);
 
     int cnt = 0;
 
     for (auto o : x.playingFields[0]->playingField)
+        if (o->genome[0])
+            cnt++;
+
+    out << "cnt " << cnt << "\n\n";
+
+    cnt = 0;
+
+    for (auto o : x.playingFields[1]->playingField)
         if (o->genome[0])
             cnt++;
 
