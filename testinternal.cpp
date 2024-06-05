@@ -1577,6 +1577,7 @@ bool testinternal::testEighteen(QString &outString)
     for (int i = 0; i < x.speciesCount + 1; i ++)
     {
         Organism *org = new Organism(50, false);
+        org->speciesID = 0;//Set this to zero to stop extinction function complaining
         speciesList.append(org);
     }
 
