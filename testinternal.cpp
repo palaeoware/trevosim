@@ -1599,7 +1599,14 @@ bool testinternal::testEighteen(QString &outString)
         if (o->genome[0])
             cnt++;
 
-    out << "cnt " << cnt << "\n\n";
+    out << "Playing field zero was originally 100 genomes, all zero. mixingProbabilityOneToZero was set to 20 and mixing applied 100 times, so ~20 should have been overwritten, and the count of all zero genomes should be ~80. It is "
+        << cnt << "\n";
+
+    if (cnt < 75 || cnt > 85)
+    {
+        out << "\n\nThis number seems off what we should expect, although since we're dealing with random numbers, there may be nothing untoward - try repating test\n\n";
+        testFlag = false;
+    }
 
     cnt = 0;
 
@@ -1607,7 +1614,62 @@ bool testinternal::testEighteen(QString &outString)
         if (o->genome[0])
             cnt++;
 
-    out << "cnt " << cnt;
+    out << "Playing field one was originally 100 genomes, all ones. This should still be the same as mixingProbabilityZeroToOne is zero, and so we should count no all zero genomes. Count is " << cnt <<
+        "\n\n";
+
+    if (cnt != 0)
+    {
+        testFlag = false;
+    }
+
+    simSettings.mixingProbabilityOneToZero = 0;
+    simSettings.mixingProbabilityZeroToOne = 20;
+
+    simulation y(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
+    y.run();
+
+    //Assign known genomes to members of each playing field
+    base = false;
+    for (auto p : qAsConst(y.playingFields))
+    {
+        base = !base;
+        for (auto o : p->playingField)
+            for (auto &g : o->genome)
+                g = base;
+    }
+
+    for (int i = 0; i < 100; i++) y.applyPlayingfieldMixing(speciesList);
+
+    cnt = 0;
+
+    for (auto o : y.playingFields[0]->playingField)
+        if (o->genome[0])
+            cnt++;
+
+    out << "Playing field zero was originally 100 genomes, all zero. This should still be the same as mixingProbabilityOneToZero is zero, so none should have been overwritten, and the count of all zero genomes should be 100. It is "
+        << cnt << "\n";
+
+    if (cnt != 100)
+    {
+        testFlag = false;
+    }
+
+    cnt = 0;
+
+    for (auto o : y.playingFields[1]->playingField)
+        if (o->genome[0])
+            cnt++;
+
+    out << "Playing field one was originally 100 genomes, all ones. mixingProbabilityZeroToOne was set to 20 and and mixing applied 100 times, and so we should count ~20 all zero genomes. Count is " <<
+        cnt << "\n\n";
+
+    if (cnt > 25 || cnt < 15)
+    {
+        out << "\n\nThis number seems off what we should expect, although since we're dealing with random numbers, there may be nothing untoward - try repating test\n\n";
+        testFlag = false;
+    }
+
 
     return testFlag;
 }
