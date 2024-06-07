@@ -1671,6 +1671,68 @@ bool testinternal::testEighteen(QString &outString)
     }
 
 
+    simSettings.mixingProbabilityOneToZero = 50;
+    simSettings.mixingProbabilityZeroToOne = 0;
+    simSettings.playingfieldNumber = 3;
+
+    simulation z(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
+    z.run();
+
+    //Assign known genomes to members of each playing field
+    base = false;
+    for (auto p : qAsConst(z.playingFields))
+    {
+        base = !base;
+        for (auto o : p->playingField)
+            for (auto &g : o->genome)
+                g = base;
+    }
+
+    for (int i = 0; i < 100; i++) z.applyPlayingfieldMixing(speciesList);
+
+    cnt = 0;
+
+    for (auto o : z.playingFields[0]->playingField)
+        if (o->genome[0])
+            cnt++;
+
+    out << "Now testing three playing fields. Playing field mixing was set to fifty, then repeated 100 times, and PF 0 and 3 were all zeros, PF1 was all ones. As such, we should have ~25 mixed individuals in PF0 & PF3 (though slightly fewer in PF0 as they have been overwritten by those from PF3). Playing field zero count of organisms that are all zero should be ~75-85. It is "
+        << cnt << "\n";
+
+    if (cnt < 65 || cnt > 90)
+    {
+        out << "\n\nThis number seems off what we should expect, although since we're dealing with random numbers, there may be nothing untoward - try repating test\n\n";
+        testFlag = false;
+    }
+
+    cnt = 0;
+
+    for (auto o : z.playingFields[1]->playingField)
+        if (o->genome[0])
+            cnt++;
+
+    out << "PF1 was originally 100 genomes, all ones. Some of these will have been overwritten from PF0 and PF3 - around 35 all zeros would be sensible. Count is " << cnt << "\n\n";
+
+    if (cnt > 45 || cnt < 25)
+    {
+        out << "\n\nThis number seems off what we should expect, although since we're dealing with random numbers, there may be nothing untoward - try repating test\n\n";
+        testFlag = false;
+    }
+
+    cnt = 0;
+    for (auto o : z.playingFields[2]->playingField)
+        if (o->genome[0])
+            cnt++;
+
+    out << "PF3 is similar to PF1, and and thus there should be ~25 all ones. Count of all zeros is " << cnt << "\n\n";
+
+    if (cnt > 85 || cnt < 65)
+    {
+        out << "\n\nThis number seems off what we should expect, although since we're dealing with random numbers, there may be nothing untoward - try repating test\n\n";
+        testFlag = false;
+    }
+
     return testFlag;
 }
 
