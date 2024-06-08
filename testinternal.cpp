@@ -1559,7 +1559,7 @@ bool testinternal::testEighteen(QString &outString)
     bool testFlag = true;
     QTextStream out(&outString);
 
-    out << "Check playing field mixing.\n\n";
+    out << "Check playing field mixing. The mixing mechanism relies on random numbers to provide a probability of mixing, and as such, on occasions, this test will fail due to the stochastic nature of the process. If this happens, you may want to repeat the test again and see if the warnings dissappear.\n\n";
 
     simulationVariables simSettings;
     simSettings.runForIterations = 2;
