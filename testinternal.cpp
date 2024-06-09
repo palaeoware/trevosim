@@ -7,12 +7,40 @@ testinternal::testinternal(MainWindow *theMainWindowCon)
 {
     theMainWindow = theMainWindowCon;
     error = false;
+
+    //This is currently used (June 2024) to return the test description
+    //Long term it would be good to create a test class for each test which returns a description and includes the test code
+    testList.insert(0, "Fitness Algorithm");
+    testList.insert(1, "Mask initialisation");
+    testList.insert(2, "Masks during simulation");
+    testList.insert(3, "Initialisation of playing field");
+    testList.insert(4, "Stochastic mapping");
+    testList.insert(5, "Mutation rates");
+    testList.insert(6, "Coin toss");
+    testList.insert(7, "Speciation");
+    testList.insert(8, "Overwrite");
+    testList.insert(9, "Perturbations");
+    testList.insert(10, "Strip uninformative");
+    testList.insert(11, "Unresolvable taxa");
+    testList.insert(12, "Memory use");
+    testList.insert(13, "Extinction");
+    testList.insert(14, "Difference to parent");
+    testList.insert(15, "Print matrix");
+    testList.insert(16, "Print tree");
+    testList.insert(17, "Ecosystem engineers");
+    testList.insert(18, "Playing field mixing");
 }
 
-bool testinternal::callTest(int i, QString &outString)
+QString testinternal::testDescription(int testNumber)
+{
+    if (testList.contains(testNumber)) return testList.value(testNumber);
+    else return "No description available";
+}
+
+bool testinternal::callTest(int testNumber, QString &outString)
 {
     bool pass;
-    switch (i)
+    switch (testNumber)
     {
     case 0:
         pass = testZero(outString);
@@ -1431,6 +1459,7 @@ bool testinternal::testSixteen(QString &outString)
     return testFlag;
 }
 
+//Check ecosystem engineering
 bool testinternal::testSeventeen(QString &outString)
 {
     bool testFlag = true;
@@ -1554,6 +1583,7 @@ bool testinternal::testSeventeen(QString &outString)
     return testFlag;
 }
 
+//Check playing field mixing
 bool testinternal::testEighteen(QString &outString)
 {
     bool testFlag = true;

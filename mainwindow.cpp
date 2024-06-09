@@ -9,7 +9,6 @@
 #include "output.h"
 #include "about.h"
 
-
 #include <algorithm>
 #include <QProgressDialog>
 #include <QShortcut>
@@ -772,12 +771,15 @@ void MainWindow::doTests()
     //Save settings to load at end
     save();
 
+    //Create this here so we can use QMap list of tests to populate drop downs
+    testinternal testObject(this);
+
     int testCount = 19;
     int testStart = 0;
 
     QStringList items;
     items << tr("All");
-    for (int i = 0; i < testCount; i++) items << QString::number(i);
+    for (int i = 0; i < testCount; i++) items << QString::number(i) + " - " + testObject.testDescription(i);
 
     bool ok;
     QString item = QInputDialog::getItem(this, tr("TREvoSim tests"), tr("Which test?"), items, 0, false, &ok);
@@ -811,8 +813,6 @@ void MainWindow::doTests()
         setStatus("Tests cancelled");
         return;
     }
-
-    testinternal testObject(this);
 
     QElapsedTimer timer;
     timer.start();
