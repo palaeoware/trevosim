@@ -9,7 +9,7 @@
 #include "output.h"
 #include "about.h"
 
-#include <algorithm>
+//#include <algorithm>
 #include <QProgressDialog>
 #include <QShortcut>
 #include <QStandardPaths>
@@ -59,6 +59,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mainToolBar->setIconSize(QSize(25, 25));
     startButton = new QAction(QIcon(QPixmap(":/darkstyle/icon_play_button_green.png")), QString("Run"), this);
     pauseButton = new QAction(QIcon(QPixmap(":/darkstyle/icon_pause_button_orange.png")), QString("Pause"), this);
+    stopButton = new QAction(QIcon(QPixmap(":/darkstyle/icon_stop_button_red.png")), QString("Stop"), this);
     resetButton = new QAction(QIcon(QPixmap(":/darkstyle/icon_reset_button_red.png")), QString("Reset"), this);
     runForButton = new QAction(QIcon(QPixmap(":/darkstyle/icon_play_n_button_green.png")), QString("Batch..."), this);
     settingsButton = new QAction(QIcon(QPixmap(":/darkstyle/icon_settings_2_button.png")), QString("Settings"), this);
@@ -67,6 +68,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     startButton->setEnabled(true);
     pauseButton->setEnabled(false);
+    stopButton->setEnabled(false);
     resetButton->setEnabled(true);
     runForButton->setEnabled(true);
     settingsButton->setEnabled(true);
@@ -76,6 +78,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mainToolBar->addAction(startButton);
     ui->mainToolBar->addSeparator();
     ui->mainToolBar->addAction(pauseButton);
+    ui->mainToolBar->addSeparator();
+    ui->mainToolBar->addAction(stopButton);
     ui->mainToolBar->addSeparator();
     ui->mainToolBar->addAction(resetButton);
     ui->mainToolBar->addSeparator();
@@ -91,6 +95,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QObject::connect(startButton, &QAction::triggered, this, &MainWindow::startTriggered);
     QObject::connect(pauseButton, &QAction::triggered, this, &MainWindow::pauseTriggered);
+    QObject::connect(stopButton, &QAction::triggered, this, &MainWindow::escape);
     QObject::connect(resetButton, &QAction::triggered, this, &MainWindow::resetTriggered);
     QObject::connect(runForButton, &QAction::triggered, this, &MainWindow::runForTriggered);
     QObject::connect(settingsButton, &QAction::triggered, this, &MainWindow::settingsTriggered);
@@ -615,6 +620,7 @@ void MainWindow::startRunGUI()
 {
     startButton->setEnabled(false);
     pauseButton->setEnabled(true);
+    stopButton->setEnabled(true);
     resetButton->setEnabled(false);
     runForButton->setEnabled(false);
     settingsButton->setEnabled(false);
@@ -626,6 +632,7 @@ void MainWindow::finishRunGUI()
 {
     startButton->setEnabled(true);
     pauseButton->setEnabled(false);
+    stopButton->setEnabled(false);
     resetButton->setEnabled(true);
     runForButton->setEnabled(true);
     settingsButton->setEnabled(true);

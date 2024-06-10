@@ -60,6 +60,7 @@ private:
     //GUI objects
     QAction *startButton;
     QAction *pauseButton;
+    QAction *stopButton;
     QAction *resetButton;
     QAction *runForButton;
     QAction *settingsButton;
