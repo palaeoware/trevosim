@@ -714,6 +714,7 @@ void MainWindow::countPeaks()
 {
     //Save settings to load at end
     save();
+    startRunGUI();
 
     //Create a new simulation object - sending it important settings.
     bool error = false;
@@ -752,6 +753,8 @@ void MainWindow::countPeaks()
     load();
     if (simSettings->runMode == RUN_MODE_TAXON) resizeGrid(simSettings->runForTaxa, simSettings->genomeSize);
     else resizeGrid(1, simSettings->genomeSize);
+
+    finishRunGUI();
 
     resetTriggered();
 

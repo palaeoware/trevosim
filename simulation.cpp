@@ -2262,6 +2262,9 @@ int simulation::countPeaks(int genomeSize, int repeat, int environment)
     for (quint64 x = 0; x < max; x++)
     {
 
+        while (theMainWindow->pauseFlag == true && !theMainWindow->escapePressed) qApp->processEvents();
+        if (theMainWindow->escapePressed) return -1;
+
         //Create genome from number
         for (int i = 0; i < genomeSize; i++)
             if (lookups[i] & x)org.genome[i] = true;
