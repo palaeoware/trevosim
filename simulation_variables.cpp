@@ -74,7 +74,7 @@ simulationVariables::simulationVariables()
     logFileExtension02 = ".tnt";
     logFileExtension03 = ".nex";
     logFileString01 =
-        "#NEXUS\n[||Settings||]\nBegin data;\nDimensions ntax=||Taxon_Number|| nchar=||Character_Number||;\nFormat datatype=standard missing=? gap=-;\nMATRIX\n||Matrix||\n\n;\nBEGIN ASSUMPTIONS;\nTYPESET * UNTITLED = unord: 1-||Character_Number||;\nEND;";
+        "#NEXUS\n[||Settings||]\nBegin data;\nDimensions ntax=||Taxon_Number|| nchar=||Character_Number||;\nFormat datatype=standard missing=? gap=-;\nMatrix\n||Matrix||\n;\nend;\n\nBegin assumptions;\nTypeset * untitled = unord: 1-||Character_Number||;\nend;";
     logFileString02 = "Please enter output text (options in output dialogue).";
     logFileString03 = "#NEXUS\n\n[ ||Time|| ||Settings|| ] \n\n Begin trees;\nTranslate\n";
     runningLogHeader = "Please enter output text (options in output dialogue).";
