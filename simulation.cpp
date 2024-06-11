@@ -628,19 +628,21 @@ bool simulation::run()
     outValues["Count"] = doPadding(runs, 3);
     outValues["Root"] = printGenomeString(&bestOrganism);
 
-    if (!writeFile(simSettings->logFileNameBase01, simSettings->logFileExtension01, simSettings->logFileString01, outValues, speciesList))
-    {
-        warning("Error!", "Error opening output file 1 to write to.");
-        clearVectors(playingFields, speciesList);
-        return false;
-    }
+    if (simSettings->writeFileOne)
+        if (!writeFile(simSettings->logFileNameBase01, simSettings->logFileExtension01, simSettings->logFileString01, outValues, speciesList))
+        {
+            warning("Error!", "Error opening output file 1 to write to.");
+            clearVectors(playingFields, speciesList);
+            return false;
+        }
 
-    if (!writeFile(simSettings->logFileNameBase02, simSettings->logFileExtension02, simSettings->logFileString02, outValues, speciesList))
-    {
-        warning("Error!", "Error opening output file 2 to write to.");
-        clearVectors(playingFields, speciesList);
-        return false;
-    }
+    if (simSettings->writeFileTwo)
+        if (!writeFile(simSettings->logFileNameBase02, simSettings->logFileExtension02, simSettings->logFileString02, outValues, speciesList))
+        {
+            warning("Error!", "Error opening output file 2 to write to.");
+            clearVectors(playingFields, speciesList);
+            return false;
+        }
 
     QString fileNameString03;
     fileNameString03 = simSettings->logFileNameBase03;
@@ -650,7 +652,7 @@ bool simulation::run()
 
     if (simSettings->writeTree)
     {
-        //File 03 is tree file in .nex format - withour zero padding
+        //File 03 is tree file in .nex format - without zero padding
         QFile file03(fileNameString03);
         if (!file03.open(QIODevice::WriteOnly | QIODevice::Text))
         {
