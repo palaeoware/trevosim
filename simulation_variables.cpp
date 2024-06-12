@@ -38,7 +38,7 @@ simulationVariables::simulationVariables()
     environmentMutationRate = 1.0;
     organismMutationRate = 2.0;
     selectionCoinToss = 10.0;
-    stripUninformativeFactor = -1.;
+    stripUninformativeFactor = 5.;
 
     //Bools
     stripUninformative = false;
