@@ -682,10 +682,10 @@ bool simulation::run()
         file03TextStream << "\t\t;\n\ntree tree1 = [&R]";
         QString newickString(printNewickWithBranchLengths(0, speciesList, true));
         // Remove text for phangorn
-        newickString.remove("S_000");
-        newickString.remove("S_00");
-        newickString.remove("S_0");
-        newickString.remove("S_");
+        newickString.remove("Species_000");
+        newickString.remove("Species_00");
+        newickString.remove("Species_0");
+        newickString.remove("Species_");
 
         file03TextStream << newickString << ";\n\nEND;";
         file03.close();
@@ -1892,9 +1892,18 @@ QString simulation::printMatrix(const QVector <Organism *> &speciesList)
     QString matrixString;
     QTextStream matrixTextStream(&matrixString);
 
-    for (int i = 0; i < speciesList.length(); i++)
+    int totalSpeciesCount = speciesList.length();
+
+    //Zero padding
+    int padding = 0;
+    if (totalSpeciesCount < 100) padding = 2;
+    else if (totalSpeciesCount < 1000) padding = 3;
+    else padding = 4;
+
+
+    for (int i = 0; i < totalSpeciesCount; i++)
     {
-        matrixTextStream << "Species_" << i << "\t";
+        matrixTextStream << "Species_" << doPadding(i, padding) << "\t";
         for (auto j : qAsConst(speciesList[i]->genome)) j ? matrixTextStream << 1 : matrixTextStream << 0 ;
         matrixTextStream << "\n";
     }
@@ -1972,15 +1981,15 @@ QString simulation::printNewickWithBranchLengths(int species, QVector <Organism 
     QString speciesID;
     if (phangornTree)
     {
-        if (totalSpeciesCount < 100) speciesID = QString("S_%1").arg(speciesList[species]->speciesID + 1, 2, 10, QChar('0'));
-        else if (totalSpeciesCount < 1000) speciesID = QString("S_%1").arg(speciesList[species]->speciesID + 1, 3, 10, QChar('0'));
-        else speciesID = QString("S_%1").arg(speciesList[species]->speciesID + 1, 4, 10, QChar('0'));
+        if (totalSpeciesCount < 100) speciesID = QString("Species_%1").arg(speciesList[species]->speciesID + 1, 2, 10, QChar('0'));
+        else if (totalSpeciesCount < 1000) speciesID = QString("Species_%1").arg(speciesList[species]->speciesID + 1, 3, 10, QChar('0'));
+        else speciesID = QString("Species_%1").arg(speciesList[species]->speciesID + 1, 4, 10, QChar('0'));
     }
     else
     {
-        if (totalSpeciesCount < 100) speciesID = QString("S_%1").arg(speciesList[species]->speciesID, 2, 10, QChar('0'));
-        else if (totalSpeciesCount < 1000) speciesID = QString("S_%1").arg(speciesList[species]->speciesID, 3, 10, QChar('0'));
-        else speciesID = QString("S_%1").arg(speciesList[species]->speciesID, 4, 10, QChar('0'));
+        if (totalSpeciesCount < 100) speciesID = QString("Species_%1").arg(speciesList[species]->speciesID, 2, 10, QChar('0'));
+        else if (totalSpeciesCount < 1000) speciesID = QString("Species_%1").arg(speciesList[species]->speciesID, 3, 10, QChar('0'));
+        else speciesID = QString("Species_%1").arg(speciesList[species]->speciesID, 4, 10, QChar('0'));
     }
     //For terminal cases (reused for branches to nodes below)
     int branchLength = speciesList[species]->extinct - speciesList[species]->cladogenesis;
