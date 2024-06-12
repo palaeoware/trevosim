@@ -40,7 +40,7 @@ public:
     simulationVariables *simSettings;
 
     //Access functions for updating GUI from simulation object
-    void recalculateStripUniformativeFactor(bool running);
+    void recalculateStripUniformativeFactor();
     void setStatus(QString message);
     void setPath(QString newPath);
     void addProgressBar(int min, int max);

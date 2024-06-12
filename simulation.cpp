@@ -1502,9 +1502,13 @@ bool simulation::stripUninformativeCharacters(QVector <Organism *> &speciesList,
     if (!requiredCharacterNumber && !simSettings->test)
     {
         if (theMainWindow != nullptr)
-            warning("Oops",
-                    "It seems there are not enough informative characters to pull this off. Best either try different settings, or email RJG and he can sort. This may be a one off - you could try running a batch of 1, and the program will try repeatedly with these settings - though after ten or more repeats you may want to cancel and change the settings.");
-
+        {
+            QString label = "It seems there are not enough informative characters to pull this off.\n\n"
+                            "By default, TREvoSim over generates characters by a factor of 5x before trying to strip down to those that are parsimony uninformative. "
+                            "Under these settings, it seems that 5x is not enough. Choosing the menu option \'Recalculate uninformative factor for current settings\' will allow you to recalculate this factor for the current settings, and \'Set uninformative factor' will allow you to set it manually to a large number.\n\n"
+                            "Alternatively, this may be a one off - you could try running a batch of 1, and the program will try repeatedly with these settings - though after ten or more repeats you may want to cancel and change the settings.";
+            warning("Oops", label);
+        }
         if (simSettings->workingLog) workLogTextStream << "Return at !requiredCharacterNumber\n";
         return false;
     }

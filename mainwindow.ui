@@ -328,6 +328,7 @@
     <addaction name="actionRun_tests"/>
     <addaction name="actionSet_uninformative_factor"/>
     <addaction name="separator"/>
+    <addaction name="actionRecalculate_uninformative_factor_for_current_settings"/>
     <addaction name="actionRandom_seed"/>
    </widget>
    <addaction name="menuTools"/>
@@ -421,6 +422,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+F</string>
+   </property>
+  </action>
+  <action name="actionRecalculate_uninformative_factor_for_current_settings">
+   <property name="text">
+    <string>Recalculate uninformative factor for current settings</string>
    </property>
   </action>
  </widget>

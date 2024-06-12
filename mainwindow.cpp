@@ -107,6 +107,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->actionSave_settings_as, &QAction::triggered, this, &MainWindow::saveAs);
     QObject::connect(ui->actionLoad_settings_from_file, &QAction::triggered, this, &MainWindow::open);
     QObject::connect(ui->actionSet_uninformative_factor, &QAction::triggered, this, &MainWindow::setFactor);
+    QObject::connect(ui->actionRecalculate_uninformative_factor_for_current_settings, &QAction::triggered, this, &MainWindow::recalculateStripUniformativeFactor);
+
     QObject::connect(ui->actionRun_tests, &QAction::triggered, this, &MainWindow::doTests);
     QObject::connect(ui->actionRestore_default_settings, &QAction::triggered, this, &MainWindow::defaultSettings);
 
@@ -331,10 +333,10 @@ void MainWindow::startTriggered()
     //First sort GUI
     startRunGUI();
 
-    if ((simSettings->stripUninformative) && (simSettings->stripUninformativeFactorSettings != simSettings->printSettings()) && runs == 0)
-        if (QMessageBox::question(this, "Hmmm",
-                                  "It looks like you have not calculated the strip uninformative factor for these settings. Would you like to?<br /><br />If you have manually set the factor, you should select no here otherwise your chosen value will be overwritten.",
-                                  QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) recalculateStripUniformativeFactor(true);
+    if ((simSettings->stripUninformative) && (simSettings->stripUninformativeFactor < 1.))
+        if (QMessageBox::question(this, "Error",
+                                  "It looks like the strip uninformative factor for these settings is unexpected - i.e. it is less than one. Would you like to recalculate it for these settings?<br /><br />",
+                                  QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) recalculateStripUniformativeFactor();
 
     bool error = false;
     //Create a new simulation object - sending it important settings.
@@ -406,11 +408,10 @@ void MainWindow::runForTriggered()
     //Return if dialogue cancelled
     if (runBatchFor == -1) return;
 
-    QString label =
-        "It looks like you have not calculated the strip uninformative factor for these settings. Would you like to?<br /><br />If you have manually set the factor, you should select no here otherwise your chosen value will be overwritten.";
-    if ((simSettings->stripUninformative) && (simSettings->stripUninformativeFactorSettings != simSettings->printSettings()))
+    QString label = "It looks like the strip uninformative factor for these settings is unexpected - i.e. it is less than one. Would you like to recalculate it for these settings?<br /><br />";
+    if ((simSettings->stripUninformative) && (simSettings->stripUninformativeFactor < 1.))
         if (QMessageBox::question(this, "Hmmm", label, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes)
-            recalculateStripUniformativeFactor(true);
+            recalculateStripUniformativeFactor();
 
     startRunGUI();
     batchRunning = true;
@@ -491,9 +492,6 @@ void MainWindow::settingsTriggered()
     resetTriggered();
     if (simSettings->runMode == RUN_MODE_TAXON) resizeGrid(simSettings->runForTaxa, simSettings->genomeSize);
     else resizeGrid(500, simSettings->genomeSize, 1);
-
-    //if (sdialogue->recalculateStripUninformativeFactorOnClose) recalculateStripUniformativeFactor(false);
-
 }
 
 void MainWindow::resizeGrid(const int speciesNumber, const int genomeSize, const int hideFrom)
@@ -569,7 +567,7 @@ void MainWindow::printGenome(const Organism *org, int row)
     }
 }
 
-void MainWindow::recalculateStripUniformativeFactor(bool running)
+void MainWindow::recalculateStripUniformativeFactor()
 {
     bool tempStripUninformative = simSettings->stripUninformative;
     simSettings->stripUninformative = true;
@@ -605,7 +603,7 @@ void MainWindow::recalculateStripUniformativeFactor(bool running)
     hideProgressBar();
 
     //Reset gui etc.
-    if (!running)finishRunGUI();
+    finishRunGUI();
 
     simSettings->stripUninformative = tempStripUninformative;
 
@@ -701,7 +699,7 @@ void MainWindow::setFactor()
 {
     bool ok;
 
-    double tempFactor = QInputDialog::getDouble(this, "Set factor...", "Required factor?", 1.0, 1.0, 2000.0, 2, &ok);
+    double tempFactor = QInputDialog::getDouble(this, "Set factor...", "Please set the required strip uninformative factor here.", 1.0, 1.0, 2000.0, 2, &ok);
     if (!ok)
     {
         return;
