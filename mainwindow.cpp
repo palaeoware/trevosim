@@ -492,7 +492,7 @@ void MainWindow::settingsTriggered()
     if (simSettings->runMode == RUN_MODE_TAXON) resizeGrid(simSettings->runForTaxa, simSettings->genomeSize);
     else resizeGrid(500, simSettings->genomeSize, 1);
 
-    if (sdialogue->recalculateStripUninformativeFactorOnClose) recalculateStripUniformativeFactor(false);
+    //if (sdialogue->recalculateStripUninformativeFactorOnClose) recalculateStripUniformativeFactor(false);
 
 }
 

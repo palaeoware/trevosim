@@ -9,7 +9,6 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
     QDialog(parent),
     ui(new Ui::Settings)
 {
-    recalculateStripUninformativeFactorOnClose = false;
     settings = simSettings;
 
     ui->setupUi(this);
@@ -63,8 +62,6 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
     ui->s_species_difference->setMaximum(max);
     ui->s_fitness_target->setMaximum(ui->s_fitness_size->value()*settings->maskNumber);
 
-    recalculateStripUninformativeFactorOnClose = false;
-
     //Environment tab set up
     //Slots
     QObject::connect(ui->c_mixing, &QCheckBox::stateChanged, this, &Settings::slotMixingChanged);
@@ -109,9 +106,6 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
 
 void Settings::on_buttonBox_accepted()
 {
-    //Sort out flags
-    recalculateStripUninformativeFactorOnClose = ui->c_recalc->isChecked();
-
     //Modify variables - organism tab
     settings->genomeSize = ui->s_genome_size->value();
     settings->speciesSelectSize = ui->s_select_size->value();
@@ -340,14 +334,12 @@ void Settings::slotStochasticChanged()
         ui->s_fitness_size->setValue(ui->s_genome_size->value());
         ui->c_strip_uninformative->setChecked(false);
         ui->c_strip_uninformative->setEnabled(false);
-        ui->c_recalc->setEnabled(false);
     }
     else
     {
         ui->s_select_size->setEnabled(true);
         ui->s_fitness_size->setEnabled(true);
         ui->c_strip_uninformative->setEnabled(true);
-        ui->c_recalc->setEnabled(true);
     }
 }
 

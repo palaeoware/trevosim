@@ -16,7 +16,6 @@ public:
     explicit Settings(QWidget *parent = nullptr, simulationVariables *simSettings = nullptr);
     ~Settings();
 
-    bool recalculateStripUninformativeFactorOnClose;
     simulationVariables *settings;
 
 private slots:

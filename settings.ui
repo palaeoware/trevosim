@@ -39,34 +39,27 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="organism_tab">
     <attribute name="title">
      <string>Organisms and simulation</string>
     </attribute>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="20" column="0">
-      <widget class="QLabel" name="label_5">
-       <property name="text">
-        <string>Fitness target</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>Characters for fitness calculation</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QSpinBox" name="s_genome_size">
+     <item row="15" column="2">
+      <widget class="QSpinBox" name="s_run_for">
        <property name="minimum">
-        <number>10</number>
+        <number>1</number>
        </property>
        <property name="maximum">
-        <number>10000</number>
+        <number>1000000</number>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="0">
+      <widget class="QLabel" name="label_25">
+       <property name="text">
+        <string>Depth of layer</string>
        </property>
       </widget>
      </item>
@@ -83,72 +76,20 @@
        </property>
       </spacer>
      </item>
-     <item row="28" column="0" colspan="3">
-      <widget class="QCheckBox" name="c_recalc">
-       <property name="text">
-        <string>Recalculate multiplication factor when dialogue closes</string>
-       </property>
-      </widget>
-     </item>
-     <item row="14" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Run to taxon number:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="2">
-      <widget class="QSpinBox" name="s_stochasticDepth">
+     <item row="18" column="2">
+      <widget class="QSpinBox" name="s_species_difference">
        <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>1</number>
-       </property>
-      </widget>
-     </item>
-     <item row="22" column="0" colspan="3">
-      <widget class="QCheckBox" name="c_sansomian">
-       <property name="text">
-        <string>Sansomian speciation</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="2">
-      <widget class="QSpinBox" name="s_select_size">
-       <property name="minimum">
-        <number>1</number>
+        <number>2</number>
        </property>
        <property name="maximum">
         <number>999</number>
        </property>
       </widget>
      </item>
-     <item row="0" column="0" colspan="3">
-      <widget class="QLabel" name="label_12">
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-         <bold>true</bold>
-         <underline>true</underline>
-        </font>
-       </property>
+     <item row="19" column="0">
+      <widget class="QLabel" name="label_11">
        <property name="text">
-        <string>Organisms</string>
-       </property>
-      </widget>
-     </item>
-     <item row="15" column="0">
-      <widget class="QLabel" name="label_27">
-       <property name="text">
-        <string>Run for iterations number:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="0">
-      <widget class="QLabel" name="label_8">
-       <property name="text">
-        <string>Rate of organism mutation</string>
+        <string>Unresolvable cutoff</string>
        </property>
       </widget>
      </item>
@@ -162,10 +103,10 @@
        </property>
       </widget>
      </item>
-     <item row="23" column="0" colspan="3">
-      <widget class="QCheckBox" name="c_beneficial_mut">
+     <item row="21" column="0" colspan="3">
+      <widget class="QCheckBox" name="c_noSelection">
        <property name="text">
-        <string>Discard deleterious mutations</string>
+        <string>No selection</string>
        </property>
       </widget>
      </item>
@@ -183,8 +124,33 @@
        </property>
       </widget>
      </item>
-     <item row="20" column="2">
-      <widget class="QSpinBox" name="s_fitness_target"/>
+     <item row="13" column="0">
+      <widget class="QRadioButton" name="r_iterations">
+       <property name="text">
+        <string>Run for iteration number</string>
+       </property>
+      </widget>
+     </item>
+     <item row="23" column="0" colspan="3">
+      <widget class="QCheckBox" name="c_beneficial_mut">
+       <property name="text">
+        <string>Discard deleterious mutations</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Characters for fitness calculation</string>
+       </property>
+      </widget>
+     </item>
+     <item row="14" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Run to taxon number:</string>
+       </property>
+      </widget>
      </item>
      <item row="12" column="0" colspan="3">
       <widget class="QLabel" name="label_13">
@@ -200,6 +166,33 @@
        </property>
       </widget>
      </item>
+     <item row="18" column="0">
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>Species difference</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="2">
+      <widget class="QDoubleSpinBox" name="s_organism_mutation">
+       <property name="decimals">
+        <number>2</number>
+       </property>
+       <property name="singleStep">
+        <double>0.010000000000000</double>
+       </property>
+       <property name="value">
+        <double>1.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="24" column="0">
+      <widget class="QCheckBox" name="c_strip_uninformative">
+       <property name="text">
+        <string>Strip uninformative characters via subsampling</string>
+       </property>
+      </widget>
+     </item>
      <item row="19" column="2">
       <widget class="QSpinBox" name="s_unresolvable_c">
        <property name="minimum">
@@ -207,10 +200,99 @@
        </property>
       </widget>
      </item>
-     <item row="10" column="0">
-      <widget class="QLabel" name="label_25">
+     <item row="0" column="0" colspan="3">
+      <widget class="QLabel" name="label_12">
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+         <bold>true</bold>
+         <underline>true</underline>
+        </font>
+       </property>
        <property name="text">
-        <string>Depth of layer</string>
+        <string>Organisms</string>
+       </property>
+      </widget>
+     </item>
+     <item row="20" column="2">
+      <widget class="QSpinBox" name="s_fitness_target"/>
+     </item>
+     <item row="15" column="0">
+      <widget class="QLabel" name="label_27">
+       <property name="text">
+        <string>Run for iterations number:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="22" column="0" colspan="3">
+      <widget class="QCheckBox" name="c_sansomian">
+       <property name="text">
+        <string>Sansomian speciation</string>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="2">
+      <widget class="QSpinBox" name="s_stochasticDepth">
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>1</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QSpinBox" name="s_genome_size">
+       <property name="minimum">
+        <number>10</number>
+       </property>
+       <property name="maximum">
+        <number>10000</number>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0" colspan="2">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Characters for species identification</string>
+       </property>
+      </widget>
+     </item>
+     <item row="20" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Fitness target</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="0">
+      <widget class="QCheckBox" name="c_stochastic">
+       <property name="text">
+        <string>Stochastic layer</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Number of characters</string>
+       </property>
+      </widget>
+     </item>
+     <item row="13" column="1" colspan="2">
+      <widget class="QRadioButton" name="r_taxon_number">
+       <property name="text">
+        <string>Run to taxon number</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QSpinBox" name="s_select_size">
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>999</number>
        </property>
       </widget>
      </item>
@@ -227,57 +309,6 @@
        </property>
       </spacer>
      </item>
-     <item row="8" column="2">
-      <widget class="QDoubleSpinBox" name="s_organism_mutation">
-       <property name="decimals">
-        <number>2</number>
-       </property>
-       <property name="singleStep">
-        <double>0.010000000000000</double>
-       </property>
-       <property name="value">
-        <double>1.000000000000000</double>
-       </property>
-      </widget>
-     </item>
-     <item row="19" column="0">
-      <widget class="QLabel" name="label_11">
-       <property name="text">
-        <string>Unresolvable cutoff</string>
-       </property>
-      </widget>
-     </item>
-     <item row="18" column="2">
-      <widget class="QSpinBox" name="s_species_difference">
-       <property name="minimum">
-        <number>2</number>
-       </property>
-       <property name="maximum">
-        <number>999</number>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Number of characters</string>
-       </property>
-      </widget>
-     </item>
-     <item row="21" column="0" colspan="3">
-      <widget class="QCheckBox" name="c_noSelection">
-       <property name="text">
-        <string>No selection</string>
-       </property>
-      </widget>
-     </item>
-     <item row="18" column="0">
-      <widget class="QLabel" name="label_6">
-       <property name="text">
-        <string>Species difference</string>
-       </property>
-      </widget>
-     </item>
      <item row="14" column="2">
       <widget class="QSpinBox" name="s_taxon_number">
        <property name="minimum">
@@ -288,48 +319,10 @@
        </property>
       </widget>
      </item>
-     <item row="15" column="2">
-      <widget class="QSpinBox" name="s_run_for">
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>1000000</number>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="0">
-      <widget class="QCheckBox" name="c_stochastic">
+     <item row="8" column="0">
+      <widget class="QLabel" name="label_8">
        <property name="text">
-        <string>Stochastic layer</string>
-       </property>
-      </widget>
-     </item>
-     <item row="13" column="0">
-      <widget class="QRadioButton" name="r_iterations">
-       <property name="text">
-        <string>Run for iteration number</string>
-       </property>
-      </widget>
-     </item>
-     <item row="13" column="1" colspan="2">
-      <widget class="QRadioButton" name="r_taxon_number">
-       <property name="text">
-        <string>Run to taxon number</string>
-       </property>
-      </widget>
-     </item>
-     <item row="24" column="0">
-      <widget class="QCheckBox" name="c_strip_uninformative">
-       <property name="text">
-        <string>Strip uninformative characters via subsampling</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0" colspan="2">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Characters for species identification</string>
+        <string>Rate of organism mutation</string>
        </property>
       </widget>
      </item>
@@ -754,7 +747,7 @@
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="button_group_overwrite_add"/>
   <buttongroup name="button_group_once_pers"/>
+  <buttongroup name="button_group_overwrite_add"/>
  </buttongroups>
 </ui>
