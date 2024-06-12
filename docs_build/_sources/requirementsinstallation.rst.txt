@@ -22,16 +22,17 @@ You can download pre-compiled binary releases and packaged installers from the T
   - https://github.com/palaeoware/trevosim/releases/tag/v1.0.0
 
 
-Windows 64-bit
-^^^^^^^^^^^^^^
+Windows 64-bit - Binaries
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 For Windows users we provide two means of installation:
 
 1. A portable binary release within a .ZIP archive. To run this, all you need to do is extract the zip to a convenient location, and double click on the .exe file.
 2. A self contained installer - download and double click on the file, which will guide you though the installation process.
 
-MacOS
-^^^^^
+MacOS - Binaries
+^^^^^^^^^^^^^^^^
+
 For TREvoSim v1.X and v2.X we provide a .ZIP archive containing the TREvoSim program that can be downloaded from the TREvoSim GitHub repository.
 
 For TREvoSim v3.X we provide a .DMG image to install the software. Download and double click on the .dmg and follow the on screen instructions. You may be required to the approve the software in security and privacy settings before it will launch.

@@ -30,7 +30,7 @@ If at any point you require default settings, this menu option (or shortcut ctrl
 Fitness histogram
 -----------------
 
-The fitness algorithm for TREvoSim is described in Keating et al. (2020). The fitness landscape varies depends on the simulation settings. This menu command (shortcut ctrl + shift + h) provides a basic assessment of that landscape by showing the distribution of fitnesses for every possible genome for the current settings. It provides an option to select how many bits in the test organism's genome as larger genome sizes (e.g. |gt|16) take exponentially longer given the need to try every potential genome rearrangement.
+The fitness algorithm for TREvoSim is described in Keating et al. (2020). The fitness landscape varies depends on the simulation settings. This menu command (shortcut ctrl + shift + h) provides a basic assessment of that landscape by showing the distribution of fitnesses for every possible genome for the current settings. It provides an option to select how many bits in the test organism's genome as larger genome sizes (e.g. |gt| 16) take exponentially longer given the need to try every potential genome rearrangement.
 
 Run tests
 ---------
@@ -40,7 +40,12 @@ TREvoSim includes a test mode, which is launched by clicking the Tests button on
 Set uninformative factor
 ------------------------
 
-This menu command (or shortcut ctrl + shift + f) opens a dialogue that allows the strip uninformative factor to be set manually.
+This menu command (or shortcut ctrl + shift + f) opens a dialogue that allows the strip uninformative factor to be set manually (see :ref:`Simulations` - Strip uninformative characters via subsampling).
+
+Recalculate uninformative factor for current settings
+-----------------------------------------------------
+
+The multiplication factor required to achieve a set number of informative characters via subsampling depends on the settings of any given run. Selecting this option calculates and sets this factor empirically after the settings dialogue is closed by conducting a ten-run batch and working out the proportion of informative characters within those runs. This needs to be recalculated after any settings are changed. If it is not, or has not been set, the software will run with a large factor, and thus be slower than necessary.
 
 Random Seed
 -----------

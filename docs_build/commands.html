@@ -58,7 +58,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#fitness-histogram">9.5. Fitness histogram</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#run-tests">9.6. Run tests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#set-uninformative-factor">9.7. Set uninformative factor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#random-seed">9.8. Random Seed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#recalculate-uninformative-factor-for-current-settings">9.8. Recalculate uninformative factor for current settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#random-seed">9.9. Random Seed</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tests.html">10. Tests</a></li>
@@ -109,7 +110,7 @@
 </section>
 <section id="fitness-histogram">
 <h2><span class="section-number">9.5. </span>Fitness histogram<a class="headerlink" href="#fitness-histogram" title="Permalink to this headline">¶</a></h2>
-<p>The fitness algorithm for TREvoSim is described in Keating et al. (2020). The fitness landscape varies depends on the simulation settings. This menu command (shortcut ctrl + shift + h) provides a basic assessment of that landscape by showing the distribution of fitnesses for every possible genome for the current settings. It provides an option to select how many bits in the test organism’s genome as larger genome sizes (e.g. <a href="#id1"><span class="problematic" id="id2">|</span></a>gt|16) take exponentially longer given the need to try every potential genome rearrangement.</p>
+<p>The fitness algorithm for TREvoSim is described in Keating et al. (2020). The fitness landscape varies depends on the simulation settings. This menu command (shortcut ctrl + shift + h) provides a basic assessment of that landscape by showing the distribution of fitnesses for every possible genome for the current settings. It provides an option to select how many bits in the test organism’s genome as larger genome sizes (e.g. &gt; 16) take exponentially longer given the need to try every potential genome rearrangement.</p>
 </section>
 <section id="run-tests">
 <h2><span class="section-number">9.6. </span>Run tests<a class="headerlink" href="#run-tests" title="Permalink to this headline">¶</a></h2>
@@ -117,10 +118,14 @@
 </section>
 <section id="set-uninformative-factor">
 <h2><span class="section-number">9.7. </span>Set uninformative factor<a class="headerlink" href="#set-uninformative-factor" title="Permalink to this headline">¶</a></h2>
-<p>This menu command (or shortcut ctrl + shift + f) opens a dialogue that allows the strip uninformative factor to be set manually.</p>
+<p>This menu command (or shortcut ctrl + shift + f) opens a dialogue that allows the strip uninformative factor to be set manually (see <a class="reference internal" href="settings.html#simulations"><span class="std std-ref">Simulations</span></a> - Strip uninformative characters via subsampling).</p>
+</section>
+<section id="recalculate-uninformative-factor-for-current-settings">
+<h2><span class="section-number">9.8. </span>Recalculate uninformative factor for current settings<a class="headerlink" href="#recalculate-uninformative-factor-for-current-settings" title="Permalink to this headline">¶</a></h2>
+<p>The multiplication factor required to achieve a set number of informative characters via subsampling depends on the settings of any given run. Selecting this option calculates and sets this factor empirically after the settings dialogue is closed by conducting a ten-run batch and working out the proportion of informative characters within those runs. This needs to be recalculated after any settings are changed. If it is not, or has not been set, the software will run with a large factor, and thus be slower than necessary.</p>
 </section>
 <section id="random-seed">
-<h2><span class="section-number">9.8. </span>Random Seed<a class="headerlink" href="#random-seed" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">9.9. </span>Random Seed<a class="headerlink" href="#random-seed" title="Permalink to this headline">¶</a></h2>
 <p>By default, the organism used to initialise a simulation is one near peak fitness for the starting environment(s), to prevent the resulting tree from documenting a lineage adapting to a fitness peak (this results in a highly asymmetrical tree). This menu command (shortcut ctrl + shift + r) toggles between this approach, and one in which a random individual is used to initialise the simulation.</p>
 </section>
 </section>
