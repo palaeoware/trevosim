@@ -32,6 +32,9 @@ private slots:
     void slotRandomOverwriteChanged();
     void slotEngineersChanged();
     void slotEngineersRadioClicked();
+    void docs1();
+    void docs2();
+
 
 private:
     Ui::Settings *ui;

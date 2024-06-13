@@ -6,710 +6,728 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>491</width>
-    <height>723</height>
+    <width>583</width>
+    <height>849</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Settings</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>680</y>
-     <width>481</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-   </property>
-  </widget>
-  <widget class="QTabWidget" name="settingsTabWidget">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>467</width>
-     <height>671</height>
-    </rect>
-   </property>
-   <property name="currentIndex">
-    <number>0</number>
-   </property>
-   <widget class="QWidget" name="organism_tab">
-    <attribute name="title">
-     <string>Organisms and simulation</string>
-    </attribute>
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="15" column="2">
-      <widget class="QSpinBox" name="s_run_for">
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>1000000</number>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="0">
-      <widget class="QLabel" name="label_25">
-       <property name="text">
-        <string>Depth of layer</string>
-       </property>
-      </widget>
-     </item>
-     <item row="18" column="1">
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="18" column="2">
-      <widget class="QSpinBox" name="s_species_difference">
-       <property name="minimum">
-        <number>2</number>
-       </property>
-       <property name="maximum">
-        <number>999</number>
-       </property>
-      </widget>
-     </item>
-     <item row="19" column="0">
-      <widget class="QLabel" name="label_11">
-       <property name="text">
-        <string>Unresolvable cutoff</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="2">
-      <widget class="QSpinBox" name="s_fitness_size">
-       <property name="minimum">
-        <number>5</number>
-       </property>
-       <property name="maximum">
-        <number>999</number>
-       </property>
-      </widget>
-     </item>
-     <item row="21" column="0" colspan="3">
-      <widget class="QCheckBox" name="c_noSelection">
-       <property name="text">
-        <string>No selection</string>
-       </property>
-      </widget>
-     </item>
-     <item row="17" column="0">
-      <widget class="QLabel" name="label_26">
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-         <bold>true</bold>
-         <underline>true</underline>
-        </font>
-       </property>
-       <property name="text">
-        <string>Simulation (Organisms)</string>
-       </property>
-      </widget>
-     </item>
-     <item row="13" column="0">
-      <widget class="QRadioButton" name="r_iterations">
-       <property name="text">
-        <string>Run for iteration number</string>
-       </property>
-      </widget>
-     </item>
-     <item row="23" column="0" colspan="3">
-      <widget class="QCheckBox" name="c_beneficial_mut">
-       <property name="text">
-        <string>Discard deleterious mutations</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>Characters for fitness calculation</string>
-       </property>
-      </widget>
-     </item>
-     <item row="14" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Run to taxon number:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="12" column="0" colspan="3">
-      <widget class="QLabel" name="label_13">
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-         <bold>true</bold>
-         <underline>true</underline>
-        </font>
-       </property>
-       <property name="text">
-        <string>Simulation</string>
-       </property>
-      </widget>
-     </item>
-     <item row="18" column="0">
-      <widget class="QLabel" name="label_6">
-       <property name="text">
-        <string>Species difference</string>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="2">
-      <widget class="QDoubleSpinBox" name="s_organism_mutation">
-       <property name="decimals">
-        <number>2</number>
-       </property>
-       <property name="singleStep">
-        <double>0.010000000000000</double>
-       </property>
-       <property name="value">
-        <double>1.000000000000000</double>
-       </property>
-      </widget>
-     </item>
-     <item row="24" column="0">
-      <widget class="QCheckBox" name="c_strip_uninformative">
-       <property name="text">
-        <string>Strip uninformative characters via subsampling</string>
-       </property>
-      </widget>
-     </item>
-     <item row="19" column="2">
-      <widget class="QSpinBox" name="s_unresolvable_c">
-       <property name="minimum">
-        <number>2</number>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0" colspan="3">
-      <widget class="QLabel" name="label_12">
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-         <bold>true</bold>
-         <underline>true</underline>
-        </font>
-       </property>
-       <property name="text">
-        <string>Organisms</string>
-       </property>
-      </widget>
-     </item>
-     <item row="20" column="2">
-      <widget class="QSpinBox" name="s_fitness_target"/>
-     </item>
-     <item row="15" column="0">
-      <widget class="QLabel" name="label_27">
-       <property name="text">
-        <string>Run for iterations number:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="22" column="0" colspan="3">
-      <widget class="QCheckBox" name="c_sansomian">
-       <property name="text">
-        <string>Sansomian speciation</string>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="2">
-      <widget class="QSpinBox" name="s_stochasticDepth">
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>1</number>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QSpinBox" name="s_genome_size">
-       <property name="minimum">
-        <number>10</number>
-       </property>
-       <property name="maximum">
-        <number>10000</number>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0" colspan="2">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Characters for species identification</string>
-       </property>
-      </widget>
-     </item>
-     <item row="20" column="0">
-      <widget class="QLabel" name="label_5">
-       <property name="text">
-        <string>Fitness target</string>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="0">
-      <widget class="QCheckBox" name="c_stochastic">
-       <property name="text">
-        <string>Stochastic layer</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Number of characters</string>
-       </property>
-      </widget>
-     </item>
-     <item row="13" column="1" colspan="2">
-      <widget class="QRadioButton" name="r_taxon_number">
-       <property name="text">
-        <string>Run to taxon number</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="2">
-      <widget class="QSpinBox" name="s_select_size">
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>999</number>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <spacer name="horizontalSpacer_4">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="14" column="2">
-      <widget class="QSpinBox" name="s_taxon_number">
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>9999</number>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="0">
-      <widget class="QLabel" name="label_8">
-       <property name="text">
-        <string>Rate of organism mutation</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="envirnment_tab">
-    <attribute name="title">
-     <string>Environment and extinction</string>
-    </attribute>
-    <layout class="QGridLayout" name="gridLayout_2">
-     <item row="24" column="0">
-      <widget class="QLabel" name="label_15">
-       <property name="text">
-        <string>Probability of mixing - PF2 to PF1</string>
-       </property>
-      </widget>
-     </item>
-     <item row="25" column="2">
-      <widget class="QSpinBox" name="s_mixing_0_to_1">
-       <property name="maximum">
-        <number>65535</number>
-       </property>
-      </widget>
-     </item>
-     <item row="15" column="0" colspan="3">
-      <widget class="QCheckBox" name="c_extinction">
-       <property name="text">
-        <string>Apply environmental perturbation during run</string>
-       </property>
-      </widget>
-     </item>
-     <item row="20" column="0" colspan="3">
-      <layout class="QHBoxLayout" name="horizontalLayout_5">
-       <item>
-        <widget class="QCheckBox" name="c_expanding_playingfield">
-         <property name="text">
-          <string>Expanding playing field</string>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTabWidget" name="settingsTabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="organism_tab">
+      <attribute name="title">
+       <string>Organisms and simulation</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="18" column="2">
+        <widget class="QSpinBox" name="s_run_for">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>1000000</number>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QCheckBox" name="c_random_overwrite">
+       <item row="13" column="0">
+        <widget class="QLabel" name="label_25">
          <property name="text">
-          <string>Random Overwrite</string>
+          <string>Depth of layer</string>
+         </property>
+        </widget>
+       </item>
+       <item row="21" column="1">
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="21" column="2">
+        <widget class="QSpinBox" name="s_species_difference">
+         <property name="minimum">
+          <number>2</number>
+         </property>
+         <property name="maximum">
+          <number>999</number>
+         </property>
+        </widget>
+       </item>
+       <item row="22" column="0">
+        <widget class="QLabel" name="label_11">
+         <property name="text">
+          <string>Unresolvable cutoff</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="2">
+        <widget class="QSpinBox" name="s_fitness_size">
+         <property name="minimum">
+          <number>5</number>
+         </property>
+         <property name="maximum">
+          <number>999</number>
+         </property>
+        </widget>
+       </item>
+       <item row="24" column="0" colspan="3">
+        <widget class="QCheckBox" name="c_noSelection">
+         <property name="text">
+          <string>No selection</string>
+         </property>
+        </widget>
+       </item>
+       <item row="20" column="0">
+        <widget class="QLabel" name="label_26">
+         <property name="font">
+          <font>
+           <pointsize>11</pointsize>
+           <bold>true</bold>
+           <underline>true</underline>
+          </font>
+         </property>
+         <property name="text">
+          <string>Simulation (Organisms)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="0">
+        <widget class="QRadioButton" name="r_iterations">
+         <property name="text">
+          <string>Run for iteration number</string>
+         </property>
+        </widget>
+       </item>
+       <item row="26" column="0" colspan="3">
+        <widget class="QCheckBox" name="c_beneficial_mut">
+         <property name="text">
+          <string>Discard deleterious mutations</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Characters for fitness calculation</string>
+         </property>
+        </widget>
+       </item>
+       <item row="17" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Run to taxon number:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="0" colspan="3">
+        <widget class="QLabel" name="label_13">
+         <property name="font">
+          <font>
+           <pointsize>11</pointsize>
+           <bold>true</bold>
+           <underline>true</underline>
+          </font>
+         </property>
+         <property name="text">
+          <string>Simulation</string>
+         </property>
+        </widget>
+       </item>
+       <item row="21" column="0">
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Species difference</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="2">
+        <widget class="QDoubleSpinBox" name="s_organism_mutation">
+         <property name="decimals">
+          <number>2</number>
+         </property>
+         <property name="singleStep">
+          <double>0.010000000000000</double>
+         </property>
+         <property name="value">
+          <double>1.000000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item row="27" column="0">
+        <widget class="QCheckBox" name="c_strip_uninformative">
+         <property name="text">
+          <string>Strip uninformative characters via subsampling</string>
+         </property>
+        </widget>
+       </item>
+       <item row="22" column="2">
+        <widget class="QSpinBox" name="s_unresolvable_c">
+         <property name="minimum">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="3">
+        <widget class="QLabel" name="label_12">
+         <property name="font">
+          <font>
+           <pointsize>11</pointsize>
+           <bold>true</bold>
+           <underline>true</underline>
+          </font>
+         </property>
+         <property name="text">
+          <string>Organisms</string>
+         </property>
+        </widget>
+       </item>
+       <item row="23" column="2">
+        <widget class="QSpinBox" name="s_fitness_target"/>
+       </item>
+       <item row="18" column="0">
+        <widget class="QLabel" name="label_27">
+         <property name="text">
+          <string>Run for iterations number:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="25" column="0" colspan="3">
+        <widget class="QCheckBox" name="c_sansomian">
+         <property name="text">
+          <string>Sansomian speciation</string>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="2">
+        <widget class="QSpinBox" name="s_stochasticDepth">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>1</number>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="3">
+        <widget class="QLabel" name="docs_label_01">
+         <property name="text">
+          <string>Textlabel</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QSpinBox" name="s_genome_size">
+         <property name="minimum">
+          <number>10</number>
+         </property>
+         <property name="maximum">
+          <number>10000</number>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0" colspan="2">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Characters for species identification</string>
+         </property>
+        </widget>
+       </item>
+       <item row="23" column="0">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Fitness target</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="0">
+        <widget class="QCheckBox" name="c_stochastic">
+         <property name="text">
+          <string>Stochastic layer</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Number of characters</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="1" colspan="2">
+        <widget class="QRadioButton" name="r_taxon_number">
+         <property name="text">
+          <string>Run to taxon number</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="2">
+        <widget class="QSpinBox" name="s_select_size">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>999</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <spacer name="horizontalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="17" column="2">
+        <widget class="QSpinBox" name="s_taxon_number">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>9999</number>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="0">
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string>Rate of organism mutation</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="3">
+        <widget class="QPushButton" name="docs_pushButton_01">
+         <property name="text">
+          <string>See documentation</string>
          </property>
         </widget>
        </item>
       </layout>
-     </item>
-     <item row="22" column="2">
-      <widget class="QSpinBox" name="s_multiple">
-       <property name="minimum">
-        <number>1</number>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_7">
-       <property name="text">
-        <string>Rate of environmental mutation</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_14">
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-         <bold>true</bold>
-         <underline>true</underline>
-        </font>
-       </property>
-       <property name="text">
-        <string>Environment</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="25" column="0">
-      <widget class="QLabel" name="label_21">
-       <property name="text">
-        <string>Probability of mixing - PF1 to PF2</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="2">
-      <widget class="QDoubleSpinBox" name="s_environment_mutation">
-       <property name="decimals">
-        <number>2</number>
-       </property>
-       <property name="singleStep">
-        <double>0.010000000000000</double>
-       </property>
-       <property name="value">
-        <double>1.000000000000000</double>
-       </property>
-      </widget>
-     </item>
-     <item row="19" column="2">
-      <widget class="QSpinBox" name="s_playingfield_size">
-       <property name="minimum">
-        <number>2</number>
-       </property>
-       <property name="maximum">
-        <number>10000</number>
-       </property>
-       <property name="value">
-        <number>50</number>
-       </property>
-      </widget>
-     </item>
-     <item row="23" column="0">
-      <widget class="QCheckBox" name="c_mixing">
-       <property name="text">
-        <string>Playing field mixing</string>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="1">
-      <spacer name="horizontalSpacer_3">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="21" column="0">
-      <widget class="QLabel" name="label_23">
-       <property name="text">
-        <string>Selection coin toss</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0">
-      <widget class="QCheckBox" name="c_match_fitness_peaks">
-       <property name="text">
-        <string>Match fitness peaks</string>
-       </property>
-      </widget>
-     </item>
-     <item row="16" column="0" colspan="3">
-      <widget class="QCheckBox" name="c_mixing_perturbation">
-       <property name="text">
-        <string>Increase mixing for perturbation period </string>
-       </property>
-      </widget>
-     </item>
-     <item row="24" column="2">
-      <widget class="QSpinBox" name="s_mixing_1_to_0">
-       <property name="maximum">
-        <number>65535</number>
-       </property>
-      </widget>
-     </item>
-     <item row="18" column="0">
-      <widget class="QLabel" name="label_20">
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-         <bold>true</bold>
-         <underline>true</underline>
-        </font>
-       </property>
-       <property name="text">
-        <string>Playing field(s)</string>
-       </property>
-      </widget>
-     </item>
-     <item row="26" column="0">
-      <widget class="QLabel" name="label_16">
-       <property name="text">
-        <string>Playing field masks:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_19">
-       <property name="text">
-        <string>Number of environments</string>
-       </property>
-      </widget>
-     </item>
-     <item row="21" column="2">
-      <widget class="QDoubleSpinBox" name="s_selection">
-       <property name="decimals">
-        <number>1</number>
-       </property>
-       <property name="minimum">
-        <double>1.000000000000000</double>
-       </property>
-       <property name="value">
-        <double>2.000000000000000</double>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="0">
-      <widget class="QLabel" name="EE_Label">
-       <property name="text">
-        <string>EE frequency</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="2">
-      <widget class="QSpinBox" name="s_environment_number">
-       <property name="minimum">
-        <number>1</number>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="2">
-      <widget class="QSpinBox" name="s_masks_per_environment">
-       <property name="minimum">
-        <number>1</number>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="label_17">
-       <property name="text">
-        <string>Masks per environment</string>
-       </property>
-      </widget>
-     </item>
-     <item row="22" column="0">
-      <widget class="QLabel" name="label_playingfieldNumber">
-       <property name="text">
-        <string>Number of playing fields</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0">
-      <widget class="QCheckBox" name="c_ecosystem_engineers">
-       <property name="text">
-        <string>Ecosystem engineers (EE)</string>
-       </property>
-      </widget>
-     </item>
-     <item row="19" column="0">
-      <widget class="QLabel" name="label_18">
-       <property name="text">
-        <string>Playing field size</string>
-       </property>
-      </widget>
-     </item>
-     <item row="12" column="0" colspan="3">
-      <layout class="QHBoxLayout" name="horizontalLayout_4">
-       <item>
-        <widget class="QRadioButton" name="r_overwrite_mask">
+     </widget>
+     <widget class="QWidget" name="envirnment_tab">
+      <attribute name="title">
+       <string>Environment, events and playing fields</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="12" column="0">
+        <widget class="QLabel" name="EE_Label">
          <property name="text">
-          <string>EE overwrites mask</string>
+          <string>EE frequency</string>
          </property>
-         <attribute name="buttonGroup">
-          <string notr="true">button_group_overwrite_add</string>
-         </attribute>
         </widget>
        </item>
-       <item>
-        <widget class="QRadioButton" name="r_add_mask">
+       <item row="9" column="0" colspan="3">
+        <widget class="QLabel" name="EE_Label_3">
          <property name="text">
-          <string>EE adds mask</string>
+          <string>EE mode:</string>
          </property>
-         <attribute name="buttonGroup">
-          <string notr="true">button_group_overwrite_add</string>
-         </attribute>
+        </widget>
+       </item>
+       <item row="14" column="0" colspan="3">
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QRadioButton" name="r_overwrite_mask">
+           <property name="text">
+            <string>EE overwrites mask</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">button_group_overwrite_add</string>
+           </attribute>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="r_add_mask">
+           <property name="text">
+            <string>EE adds mask</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">button_group_overwrite_add</string>
+           </attribute>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="29" column="0" colspan="3">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QRadioButton" name="r_identical">
+           <property name="text">
+            <string>Identical</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="r_independent">
+           <property name="text">
+            <string>Independent</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="r_start">
+           <property name="text">
+            <string>Identical at start</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="13" column="0">
+        <widget class="QLabel" name="EE_Label_2">
+         <property name="text">
+          <string>EE mechanism:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="23" column="2">
+        <widget class="QDoubleSpinBox" name="s_selection">
+         <property name="decimals">
+          <number>1</number>
+         </property>
+         <property name="minimum">
+          <double>1.000000000000000</double>
+         </property>
+         <property name="value">
+          <double>2.000000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="1">
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="6" column="2">
+        <widget class="QSpinBox" name="s_masks_per_environment">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+        </widget>
+       </item>
+       <item row="19" column="0">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>Rate of environmental mutation</string>
+         </property>
+        </widget>
+       </item>
+       <item row="24" column="2">
+        <widget class="QSpinBox" name="s_multiple">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="2">
+        <widget class="QSpinBox" name="s_EE_frequency">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>100000</number>
+         </property>
+        </widget>
+       </item>
+       <item row="17" column="0" colspan="3">
+        <widget class="QCheckBox" name="c_extinction">
+         <property name="text">
+          <string>Apply environmental perturbation during run</string>
+         </property>
+        </widget>
+       </item>
+       <item row="26" column="0">
+        <widget class="QLabel" name="label_15">
+         <property name="text">
+          <string>Probability of mixing - PF2 to PF1</string>
+         </property>
+        </widget>
+       </item>
+       <item row="26" column="2">
+        <widget class="QSpinBox" name="s_mixing_1_to_0">
+         <property name="maximum">
+          <number>65535</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_19">
+         <property name="text">
+          <string>Number of environments</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QCheckBox" name="c_ecosystem_engineers">
+         <property name="text">
+          <string>Ecosystem engineers (EE)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QDoubleSpinBox" name="s_environment_mutation">
+         <property name="decimals">
+          <number>2</number>
+         </property>
+         <property name="singleStep">
+          <double>0.010000000000000</double>
+         </property>
+         <property name="value">
+          <double>1.000000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item row="20" column="0">
+        <widget class="QLabel" name="label_20">
+         <property name="font">
+          <font>
+           <pointsize>11</pointsize>
+           <bold>true</bold>
+           <underline>true</underline>
+          </font>
+         </property>
+         <property name="text">
+          <string>Playing field(s)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="27" column="0">
+        <widget class="QLabel" name="label_21">
+         <property name="text">
+          <string>Probability of mixing - PF1 to PF2</string>
+         </property>
+        </widget>
+       </item>
+       <item row="27" column="2">
+        <widget class="QSpinBox" name="s_mixing_0_to_1">
+         <property name="maximum">
+          <number>65535</number>
+         </property>
+        </widget>
+       </item>
+       <item row="23" column="0">
+        <widget class="QLabel" name="label_23">
+         <property name="text">
+          <string>Selection coin toss</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="0">
+        <widget class="QLabel" name="label_22">
+         <property name="font">
+          <font>
+           <bold>true</bold>
+           <underline>true</underline>
+          </font>
+         </property>
+         <property name="text">
+          <string>Events </string>
+         </property>
+        </widget>
+       </item>
+       <item row="21" column="2">
+        <widget class="QSpinBox" name="s_playingfield_size">
+         <property name="minimum">
+          <number>2</number>
+         </property>
+         <property name="maximum">
+          <number>10000</number>
+         </property>
+         <property name="value">
+          <number>50</number>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
+        <widget class="QSpinBox" name="s_environment_number">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+        </widget>
+       </item>
+       <item row="21" column="0">
+        <widget class="QLabel" name="label_18">
+         <property name="text">
+          <string>Playing field size</string>
+         </property>
+        </widget>
+       </item>
+       <item row="25" column="0">
+        <widget class="QCheckBox" name="c_mixing">
+         <property name="text">
+          <string>Playing field mixing</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QCheckBox" name="c_match_fitness_peaks">
+         <property name="text">
+          <string>Match fitness peaks</string>
+         </property>
+        </widget>
+       </item>
+       <item row="22" column="0" colspan="3">
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <widget class="QCheckBox" name="c_expanding_playingfield">
+           <property name="text">
+            <string>Expanding playing field</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="c_random_overwrite">
+           <property name="text">
+            <string>Random Overwrite</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_17">
+         <property name="text">
+          <string>Masks per environment</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="3">
+        <widget class="QLabel" name="docs_label_02">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item row="18" column="0" colspan="3">
+        <widget class="QCheckBox" name="c_mixing_perturbation">
+         <property name="text">
+          <string>Increase mixing for perturbation period </string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="0" colspan="3">
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QRadioButton" name="r_once_EE">
+           <property name="text">
+            <string>Single shot EE</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">button_group_once_pers</string>
+           </attribute>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="r_persistent_EE">
+           <property name="text">
+            <string>Persistent EE</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">button_group_once_pers</string>
+           </attribute>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="24" column="0">
+        <widget class="QLabel" name="label_playingfieldNumber">
+         <property name="text">
+          <string>Number of playing fields</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_14">
+         <property name="font">
+          <font>
+           <pointsize>11</pointsize>
+           <bold>true</bold>
+           <underline>true</underline>
+          </font>
+         </property>
+         <property name="text">
+          <string>Environment</string>
+         </property>
+        </widget>
+       </item>
+       <item row="28" column="0">
+        <widget class="QLabel" name="label_16">
+         <property name="text">
+          <string>Playing field masks:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="3">
+        <widget class="QPushButton" name="docs_pushButton_02">
+         <property name="text">
+          <string>See documentation</string>
+         </property>
         </widget>
        </item>
       </layout>
-     </item>
-     <item row="27" column="0" colspan="3">
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QRadioButton" name="r_identical">
-         <property name="text">
-          <string>Identical</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="r_independent">
-         <property name="text">
-          <string>Independent</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="r_start">
-         <property name="text">
-          <string>Identical at start</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="17" column="0">
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="14" column="0">
-      <widget class="QLabel" name="label_22">
-       <property name="font">
-        <font>
-         <bold>true</bold>
-         <underline>true</underline>
-        </font>
-       </property>
-       <property name="text">
-        <string>Events </string>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="2">
-      <widget class="QSpinBox" name="s_EE_frequency">
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>100000</number>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="0" colspan="3">
-      <widget class="QLabel" name="EE_Label_3">
-       <property name="text">
-        <string>EE mode:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="0" colspan="3">
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
-        <widget class="QRadioButton" name="r_once_EE">
-         <property name="text">
-          <string>Single shot EE</string>
-         </property>
-         <attribute name="buttonGroup">
-          <string notr="true">button_group_once_pers</string>
-         </attribute>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="r_persistent_EE">
-         <property name="text">
-          <string>Persistent EE</string>
-         </property>
-         <attribute name="buttonGroup">
-          <string notr="true">button_group_once_pers</string>
-         </attribute>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="11" column="0">
-      <widget class="QLabel" name="EE_Label_2">
-       <property name="text">
-        <string>EE mechanism:</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-  </widget>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections>

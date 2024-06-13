@@ -1,9 +1,11 @@
 #include "settings.h"
 #include "ui_settings.h"
 #include "mainwindow.h"
+#include "version.h"
 
 #include <QFormLayout>
 #include <QComboBox>
+#include <QDesktopServices>
 
 Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
     QDialog(parent),
@@ -14,6 +16,12 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
     ui->setupUi(this);
     setWindowTitle("Simulation Settings");
     setWindowIcon(QIcon ("://resources/icon.png"));
+
+    //Sort out labels
+    ui->docs_label_01->setWordWrap(true);
+    ui->docs_label_01->setText("This tab provides settings regarding the organisms, the simulation, and how the two interact. Click the button below for the relevant page of the TREvoSim documentation");
+    ui->docs_label_02->setWordWrap(true);
+    ui->docs_label_01->setText("This tab provides settings for the environment, and also events and playing fields. Click the button below for the relevant page of the TREvoSim documentation");
 
     //Organism tab set up
     //Connect slots for on the fly maxima
@@ -28,6 +36,8 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
     QObject::connect(ui->c_ecosystem_engineers, &QCheckBox::stateChanged, this, &Settings::slotEngineersChanged);
     QObject::connect(ui->c_stochastic, &QCheckBox::stateChanged, this, &Settings::slotStochasticChanged);
     QObject::connect(ui->button_group_once_pers, &QButtonGroup::buttonClicked, this, &Settings::slotEngineersRadioClicked);
+    QObject::connect(ui->docs_pushButton_01, &QPushButton::clicked, this, &Settings::docs1);
+    QObject::connect(ui->docs_pushButton_02, &QPushButton::clicked, this, &Settings::docs2);
 
     ui->s_genome_size->setValue(settings->genomeSize);
     ui->s_select_size->setValue(settings->speciesSelectSize);
@@ -400,6 +410,16 @@ void Settings::slotEngineersRadioClicked()
         ui->s_EE_frequency->setEnabled(true);
         ui->EE_Label->setEnabled(true);
     }
+}
+
+void Settings::docs1()
+{
+    QDesktopServices::openUrl(QUrl(QString(DOCSURLS1)));
+}
+
+void Settings::docs2()
+{
+    QDesktopServices::openUrl(QUrl(QString(DOCSURLS2)));
 }
 
 Settings::~Settings()

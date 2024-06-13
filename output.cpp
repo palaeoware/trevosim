@@ -3,7 +3,6 @@
 #include "version.h"
 
 #include <QDesktopServices>
-#include <QDesktopServices>
 #include <QMessageBox>
 
 
@@ -57,9 +56,9 @@ Output::Output(QWidget *parent, simulationVariables *simSettings) :
     //Sort out running log outputs
     ui->output_title_2->setFont(font);
     ui->output_title_2->setText("Running log output");
-    ui->intro_2->setAlignment(Qt::AlignJustify);
-    ui->intro_2->setWordWrap(true);
-    ui->intro_2->setText("This output dialogue allows you to set the text for a running log that reflects the state of a simulation as it runs. You can output, for example, the playing field, or the tree at a user-defined frequency. For more details of how to write outputs, please see the TREvoSim documentation (available by clicking the button below).");
+    ui->intro_3->setAlignment(Qt::AlignJustify);
+    ui->intro_3->setWordWrap(true);
+    ui->intro_3->setText("This output dialogue allows you to set the text for a running log that reflects the state of a simulation as it runs. You can output, for example, the playing field, or the tree at a user-defined frequency. For more details of how to write outputs, please see the TREvoSim documentation (available by clicking the button below).");
     QObject::connect(ui->docsPushButton_2, &QPushButton::clicked, this, &Output::docs);
 
     ui->s_frequency->setValue(settings->runningLogFrequency);
