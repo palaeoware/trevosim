@@ -23,15 +23,17 @@ Output::Output(QWidget *parent, simulationVariables *simSettings) :
     ui->output_title->setFont(font);
     ui->output_title->setText("End of run outputs");
 
-    ui->intro->setAlignment(Qt::AlignJustify);
+    ui->intro_01->setAlignment(Qt::AlignJustify);
 
     ui->label_f1->setFont(font);
     ui->label_f2->setFont(font);
     ui->label_f3->setFont(font);
 
-    ui->intro->setWordWrap(true);
-    //ui->intro->setText("Using this output options dialogue you can set the text for up to two output files with the matrix and, if you so wish, the tree as well. You can also select to have the tree saved as a .nex file. In order to write the matrix into the file (tab-delineated, with taxon names Species_0 .... Species_n) type ||Matrix|| (||Stochastic_Matrix|| will output the stochastic character matrix). Similarly, to insert a tree TNT format, type ||TNT_Tree||, and for MrBayes ||MrBayes_Tree|| (this is a newick format, with branch lengths). Other useful things: ||Time|| will add a timestamp; ||Settings|| will write the settings to the file (comment out yourself as required); ||Character_Number|| will write character number; ||Taxon_Number|| will write taxon number; ||Count|| will add a counter for batch runs (starting from zero); ||Unresolvable|| will add a list of unresolvable taxa (if there are any, or a message confirming there are none if not); ||Identical|| will give a plain count of these; ||Alive_Record|| will print out a record of what was alive, when; and ||Uninformative|| will output the number of uninformative characters. Any issues, questions, unexpected behaviour, or seething resentment email RJG.\n");
-    ui->intro->setText("This output dialogue allows you to set the text for up to two output files to reflect the state of a simulation once it has completed. You can output, for example, the matrix and - if you so wish - the tree as well. You can also select to have the tree saved as a .nex file. For more details of how to write outputs, please see the TREvoSim documentation (available by clicking the button below).");
+    ui->intro_01->setWordWrap(true);
+    ui->intro_01->setText("This output dialogue allows you to set the text for up to two custom output files to reflect the state of a completed simulation. For example, you can output the matrix, the number of characters or terminals, and the tree (which can also be output as a separate file - see below). You can include commands for downstream analysis of the data. For more details of how to write outputs, please see the TREvoSim documentation (available by clicking the button below).");
+
+    ui->intro_02->setWordWrap(true);
+    ui->intro_02->setText("In addition to the two custom files above, this option allows you to save the tree as a .nex file.");
 
     QObject::connect(ui->docsPushButton, &QPushButton::clicked, this, &Output::docs);
 

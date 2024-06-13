@@ -41,7 +41,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="intro">
+        <widget class="QLabel" name="intro_01">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -60,16 +60,46 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="docsPushButton">
-         <property name="text">
-          <string>See documentation</string>
-         </property>
-        </widget>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <spacer name="horizontalSpacer_5">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="docsPushButton">
+           <property name="text">
+            <string>  See documentation  </string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_6">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
        </item>
        <item>
         <widget class="QLabel" name="label_f1">
          <property name="text">
-          <string>FIle One</string>
+          <string>Custom File One</string>
          </property>
         </widget>
        </item>
@@ -116,7 +146,7 @@
        <item>
         <widget class="QLabel" name="label_f2">
          <property name="text">
-          <string>File Two</string>
+          <string>Custom File Two</string>
          </property>
         </widget>
        </item>
@@ -161,9 +191,23 @@
         <widget class="QPlainTextEdit" name="string_f2"/>
        </item>
        <item>
+        <widget class="Line" name="line_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QLabel" name="label_f3">
          <property name="text">
           <string>Tree File</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="intro_02">
+         <property name="text">
+          <string>TextLabel</string>
          </property>
         </widget>
        </item>
