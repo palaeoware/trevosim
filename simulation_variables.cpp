@@ -52,13 +52,13 @@ simulationVariables::simulationVariables()
     randomSeed = false; //currently no GUI option for this
     randomOverwrite = false;
     stochasticLayer = false;
-    writeTree = true;
     expandingPlayingfield = false;
     matchFitnessPeaks = false;
     ecosystemEngineers = false;
     ecosystemEngineersArePersistent = false;
     ecosystemEngineersAddMask = false;
     writeRunningLog = false;
+    writeTree = true;
     writeFileOne = true;
     writeFileTwo = true;
     writeEE = false;
@@ -75,7 +75,8 @@ simulationVariables::simulationVariables()
     logFileExtension03 = ".nex";
     logFileString01 =
         "#NEXUS\n[||Settings||]\nBegin data;\nDimensions ntax=||Taxon_Number|| nchar=||Character_Number||;\nFormat datatype=standard missing=? gap=-;\nMatrix\n||Matrix||\n;\nend;\n\nBegin assumptions;\nTypeset * untitled = unord: 1-||Character_Number||;\nend;";
-    logFileString02 = "Please enter output text (options in output dialogue).";
+    logFileString02 =
+        "mxram 100;\nNSTATES nogaps;\nxread\n'Written on ||Time|| Variables: ||Settings||'\n||Character_Number|| ||Taxon_Number||\n||Matrix||\n;\npiwe-;\nkeep 0; hold 100000;\nrseed *;\nxmult = level 10; bbreak;\nexport - TREvoSim_run_||Count||_mpts.nex;\nxwipe;";
     logFileString03 = "#NEXUS\n\n[ ||Time|| ||Settings|| ] \n\n Begin trees;\nTranslate\n";
     runningLogString = "Please enter output text (options in output dialogue).";
     savePathDirectory = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);

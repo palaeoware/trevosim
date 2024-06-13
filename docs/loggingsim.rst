@@ -77,7 +77,8 @@ Keywords example
 As an example, the following -- entered as one of the custom files at the end of the run -- would output a block of text that could be run as a macro in tnt:
 
 ::
-
+ 
+  mxram 100;
   NSTATES nogaps;
   xread
   'Written on ||Time|| Variables: ||Settings||'
