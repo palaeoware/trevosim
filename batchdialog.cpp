@@ -2,7 +2,7 @@
 #include "ui_batchdialog.h"
 #include <QDebug>
 
-batchDialog::batchDialog(QWidget *parent, int *runForConstructor) :
+batchDialog::batchDialog(QWidget *parent, int *runForConstructor, int defaultValue):
     QDialog(parent),
     ui(new Ui::batchDialog)
 {

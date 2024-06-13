@@ -402,7 +402,7 @@ void MainWindow::runForTriggered()
     /******** Batch mode - multiple runs *****/
     int runBatchFor = -1;
     //Use custom dialogue to allow word wrap
-    batchDialog bDialogue(this, &runBatchFor);
+    batchDialog bDialogue(this, &runBatchFor, 25);
     //Does not modify runBatchFor unless box is accepted
     bDialogue.exec();
     //Return if dialogue cancelled

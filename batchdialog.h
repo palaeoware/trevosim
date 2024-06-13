@@ -12,7 +12,7 @@ class batchDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit batchDialog(QWidget *parent = nullptr, int *runForConstructor = nullptr);
+    explicit batchDialog(QWidget *parent, int *runForConstructor, int defaultValue);
     ~batchDialog();
 
 private:
