@@ -28,8 +28,7 @@ TREvoSim provides functionality for two types of logs. All logs are placed withi
     
     - Two custom output files -- the options allow  you to define file name, content (replacing keywords in ||double pipes|| with the requested information -- see :ref:`loggingsim`) and extension.
     - A standard nex tree file.
-    - A working log which includes all operations the software performs across a run if you want to inspect its workings (this file can be very large).
-
+    
 :Running log: 
 
     This tab allows a running log to be defined that can record the state of the simulation at user-requested frequencies (see :ref:`loggingsim`). The tab includes options for:

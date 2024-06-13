@@ -463,8 +463,8 @@ bool simulation::run()
         if (simSettings->writeRunningLog && (iterations % simSettings->runningLogFrequency == 0) && !calculateStripUninformativeFactorRunning)
         {
             //We need to do most of the text processing here, as many of the things we may want to report in a running log are local in scope to the run function
-            //Text is stored in the simulation settings as runningLogHeader and runningLogBody
-            QString logTextOut = simSettings->runningLogBody;
+            //Text is stored in the simulation settings as runningLogString
+            QString logTextOut = simSettings->runningLogString;
 
             if (logTextOut.contains("||Unresolvable||") || logTextOut.contains( "||Identical||"))
             {
@@ -2179,7 +2179,6 @@ bool simulation::writeRunningLog(const int iterations, const QString logFileStri
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) return false;
 
     QTextStream fileTextStream(&file);
-    fileTextStream << simSettings->runningLogHeader;
     fileTextStream << logFileString;
     file.close();
     return true;

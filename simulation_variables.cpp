@@ -77,8 +77,7 @@ simulationVariables::simulationVariables()
         "#NEXUS\n[||Settings||]\nBegin data;\nDimensions ntax=||Taxon_Number|| nchar=||Character_Number||;\nFormat datatype=standard missing=? gap=-;\nMatrix\n||Matrix||\n;\nend;\n\nBegin assumptions;\nTypeset * untitled = unord: 1-||Character_Number||;\nend;";
     logFileString02 = "Please enter output text (options in output dialogue).";
     logFileString03 = "#NEXUS\n\n[ ||Time|| ||Settings|| ] \n\n Begin trees;\nTranslate\n";
-    runningLogHeader = "Please enter output text (options in output dialogue).";
-    runningLogBody = "Please enter output text (options in output dialogue).";
+    runningLogString = "Please enter output text (options in output dialogue).";
     savePathDirectory = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
 }
 
@@ -207,8 +206,7 @@ bool simulationVariables::loadSettings(QFile *settingsFile)
             if (settingsFileIn.name().toString() == "logFileString02")logFileString02 = settingsFileIn.readElementText();
             if (settingsFileIn.name().toString() == "savePathDirectory")savePathDirectory = (settingsFileIn.readElementText());
             if (settingsFileIn.name().toString() == "stripUninformativeFactorSettings")stripUninformativeFactorSettings = settingsFileIn.readElementText();
-            if (settingsFileIn.name().toString() == "runningLogHeader")runningLogHeader = settingsFileIn.readElementText();
-            if (settingsFileIn.name().toString() == "runningLogBody")runningLogBody = settingsFileIn.readElementText();
+            if (settingsFileIn.name().toString() == "runningLogString")runningLogString = settingsFileIn.readElementText();
 
             if (settingsFileIn.name().toString() == "stochasticMap")
             {
@@ -446,12 +444,8 @@ void simulationVariables::saveSettings(QFile *settingsFile)
     settingsFileOut.writeCharacters(stripUninformativeFactorSettings);
     settingsFileOut.writeEndElement();
 
-    settingsFileOut.writeStartElement("runningLogHeader");
-    settingsFileOut.writeCharacters(runningLogHeader);
-    settingsFileOut.writeEndElement();
-
-    settingsFileOut.writeStartElement("runningLogBody");
-    settingsFileOut.writeCharacters(runningLogBody);
+    settingsFileOut.writeStartElement("runningLogString");
+    settingsFileOut.writeCharacters(runningLogString);
     settingsFileOut.writeEndElement();
 
     QString map;

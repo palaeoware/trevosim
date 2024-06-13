@@ -298,19 +298,9 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>Header text</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPlainTextEdit" name="running_log_header"/>
-       </item>
-       <item>
         <widget class="QLabel" name="label_6">
          <property name="text">
-          <string>Body text</string>
+          <string>Custom running log</string>
          </property>
         </widget>
        </item>
