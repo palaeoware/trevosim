@@ -127,7 +127,7 @@ void Output::on_buttonBox_accepted()
 
 void Output::docs()
 {
-    QDesktopServices::openUrl(QUrl(QString(DOCSURL)));
+    QDesktopServices::openUrl(QUrl(QString(DOCSURLLOG)));
 }
 
 Output::~Output()

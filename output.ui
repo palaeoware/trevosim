@@ -332,7 +332,7 @@
          <item>
           <widget class="QCheckBox" name="c_work_log">
            <property name="text">
-            <string>Write full working-log</string>
+            <string>Write full working log</string>
            </property>
           </widget>
          </item>

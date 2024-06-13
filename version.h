@@ -24,6 +24,7 @@
 
 //Documentation
 #define DOCSURL "https://trevosim.readthedocs.io/"
+#define DOCSURLLOG "https://trevosim.readthedocs.io/en/latest/loggingsim.html"
 
 //Email
 #define EMAIL "palaeoware@gmail.com"
