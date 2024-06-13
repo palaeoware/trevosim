@@ -27,6 +27,7 @@ Output::Output(QWidget *parent, simulationVariables *simSettings) :
 
     ui->label_f1->setFont(font);
     ui->label_f2->setFont(font);
+    ui->label_f3->setFont(font);
 
     ui->intro->setWordWrap(true);
     //ui->intro->setText("Using this output options dialogue you can set the text for up to two output files with the matrix and, if you so wish, the tree as well. You can also select to have the tree saved as a .nex file. In order to write the matrix into the file (tab-delineated, with taxon names Species_0 .... Species_n) type ||Matrix|| (||Stochastic_Matrix|| will output the stochastic character matrix). Similarly, to insert a tree TNT format, type ||TNT_Tree||, and for MrBayes ||MrBayes_Tree|| (this is a newick format, with branch lengths). Other useful things: ||Time|| will add a timestamp; ||Settings|| will write the settings to the file (comment out yourself as required); ||Character_Number|| will write character number; ||Taxon_Number|| will write taxon number; ||Count|| will add a counter for batch runs (starting from zero); ||Unresolvable|| will add a list of unresolvable taxa (if there are any, or a message confirming there are none if not); ||Identical|| will give a plain count of these; ||Alive_Record|| will print out a record of what was alive, when; and ||Uninformative|| will output the number of uninformative characters. Any issues, questions, unexpected behaviour, or seething resentment email RJG.\n");
@@ -49,7 +50,7 @@ Output::Output(QWidget *parent, simulationVariables *simSettings) :
     ui->c_write_file_02->setChecked(settings->writeFileTwo);
 
     ui->c_write_tree->setChecked(settings->writeTree);
-    ui->c_work_log->setChecked(settings->workingLog);
+    ui->file_03_base->setText(settings->logFileNameBase03);
 
     //Sort out running log outputs
     ui->output_title_2->setFont(font);
@@ -65,7 +66,12 @@ Output::Output(QWidget *parent, simulationVariables *simSettings) :
 
     ui->running_log_header->insertPlainText(settings->runningLogHeader);
     ui->running_log_body->insertPlainText(settings->runningLogBody);
+
+    ui->c_work_log->setChecked(settings->workingLog);
 }
+
+//make labels bold
+//save file base name 03
 
 void Output::on_buttonBox_accepted()
 {
@@ -104,6 +110,9 @@ void Output::on_buttonBox_accepted()
     }
 
     settings->logFileString02 = ui->string_f2->toPlainText();
+
+    settings->logFileNameBase03 = ui->file_03_base->text();
+    settings->logFileNameBase03.replace(" ", "_");
 
     settings->writeEE = ui->c_write_ee->isChecked();
     settings->writeFileOne = ui->c_write_file_01->isChecked();
