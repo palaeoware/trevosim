@@ -200,6 +200,7 @@ bool simulationVariables::loadSettings(QFile *settingsFile)
             //Strings
             if (settingsFileIn.name().toString() == "logFileNameBase01")logFileNameBase01 = settingsFileIn.readElementText();
             if (settingsFileIn.name().toString() == "logFileNameBase02")logFileNameBase02 = settingsFileIn.readElementText();
+            if (settingsFileIn.name().toString() == "logFileNameBase03")logFileNameBase03 = settingsFileIn.readElementText();
             if (settingsFileIn.name().toString() == "logFileExtension01")logFileExtension01 = settingsFileIn.readElementText();
             if (settingsFileIn.name().toString() == "logFileExtension02")logFileExtension02 = settingsFileIn.readElementText();
             if (settingsFileIn.name().toString() == "logFileString01")logFileString01 = settingsFileIn.readElementText();
@@ -414,6 +415,11 @@ void simulationVariables::saveSettings(QFile *settingsFile)
 
     settingsFileOut.writeStartElement("logFileNameBase02");
     settingsFileOut.writeCharacters(logFileNameBase02);
+    settingsFileOut.writeEndElement();
+
+
+    settingsFileOut.writeStartElement("logFileNameBase03");
+    settingsFileOut.writeCharacters(logFileNameBase03);
     settingsFileOut.writeEndElement();
 
     settingsFileOut.writeStartElement("logFileExtension01");
