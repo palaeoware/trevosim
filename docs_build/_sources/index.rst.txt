@@ -44,5 +44,5 @@ Table of Contents
    settings
    settings2
    loggingsim
-   commands
+   filecommands
    tests
