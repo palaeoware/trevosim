@@ -685,7 +685,7 @@ void MainWindow::setFactor()
 {
     bool ok;
 
-    double tempFactor = QInputDialog::getDouble(this, "Set factor...", "Please set the required strip uninformative factor here.", 1.0, 1.0, 2000.0, 2, &ok);
+    double tempFactor = QInputDialog::getDouble(this, "Set factor...", "Please set the required strip uninformative factor here.", simSettings->stripUninformativeFactor, 1.0, 2000.0, 2, &ok);
     if (!ok)
     {
         return;
