@@ -322,7 +322,6 @@
     <addaction name="actionSave_settings"/>
     <addaction name="actionSave_settings_as"/>
     <addaction name="actionLoad_settings_from_file"/>
-    <addaction name="actionRestore_default_settings"/>
     <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuCommands">
@@ -333,6 +332,7 @@
     <addaction name="actionSet_uninformative_factor"/>
     <addaction name="actionRecalculate_uninformative_factor_for_current_settings"/>
     <addaction name="actionRun_tests"/>
+    <addaction name="actionRestore_default_settings"/>
    </widget>
    <addaction name="menuTools"/>
    <addaction name="menuCommands"/>
