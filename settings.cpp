@@ -21,7 +21,7 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
     ui->docs_label_01->setWordWrap(true);
     ui->docs_label_01->setText("This tab provides settings regarding the organisms, the simulation, and how the two interact. Click the button below for the relevant page of the TREvoSim documentation");
     ui->docs_label_02->setWordWrap(true);
-    ui->docs_label_01->setText("This tab provides settings for the environment, and also events and playing fields. Click the button below for the relevant page of the TREvoSim documentation");
+    ui->docs_label_02->setText("This tab provides settings for the environment, and also events and playing fields. Click the button below for the relevant page of the TREvoSim documentation");
 
     //Organism tab set up
     //Connect slots for on the fly maxima
