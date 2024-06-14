@@ -106,6 +106,9 @@
 <dt class="field-odd">Stochastic layer</dt>
 <dd class="field-odd"><p>This tick box dictates whether a stochastic layer is used. The stochastic layer is a secondary string of bits that can be used to abstract the fitness calculation from the genome and its mutations, through a mechanism based on many-to-one mapping. When this box is ticked, on settings close, another dialogue is launched that allows you to - for every possible combination of 4 bits - define an output, i.e. 0 or 1, referred to here as the map. When the setting is enabled, each organism stores an internal genome four times the length of the organism’s gnome. During the simulation, mutations are applied to the stochastic layer (at the user defined rate per 100 characters), but all other operations employ the standard genome. When mutations are applied, the map is then used to convert bits from the stochastic layer into the genome that is used elsewhere (i.e. for every four stochastic bits, the output is 1 standard bit, based on the map). This abstraction process could be considered, for instance, a highly simplified parallel to e.g. ontogeny: it removes the fitness of the organism from direct control of its genome, and thus facilitates silent mutations and neutral theory of evolution type / less strongly adaptationist dynamics.</p>
 </dd>
+<dt class="field-even">Depth of layer</dt>
+<dd class="field-even"><p>In future versions, to allow further abstraction, varying the number of layers created from this map is planned (e.g. if the depth is two, then a second stochastic layer will be created from the first, the second being sixteen times the length of the organismal genome, and dictating the makeup of the first). This is not currently implemented, and so at present, this option is limited to one.</p>
+</dd>
 </dl>
 </section>
 <section id="simulations">
