@@ -24,11 +24,6 @@ Load settings from file...
 
 Load settings file (ctrl + o) opens a saved settings file and updates the simulation settings accordingly.
 
-Restore default settings
-^^^^^^^^^^^^^^^^^^^^^^^^
-
-If at any point you require default settings, this menu option (or shortcut ctrl + shift + d) restores all settings to default.
-
 Commands 
 --------
 
@@ -51,4 +46,9 @@ This menu command (or shortcut ctrl + shift + f) opens a dialogue that allows th
 Recalculate uninformative factor for current settings
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The multiplication factor required to achieve a set number of informative characters via subsampling depends on the settings of any given run. Selecting this option calculates and sets this factor empirically after the settings dialogue is closed by conducting a ten-run batch and working out the proportion of informative characters within those runs. This needs to be recalculated after any settings are changed. If it is not, or has not been set, the software will run with a large factor, and thus be slower than necessary.
+The multiplication factor required to achieve a set number of informative characters via subsampling depends on the settings of any given run. Selecting this option (or ctrl + shift + r) calculates and sets this factor empirically after the settings dialogue is closed by conducting a ten-run batch and working out the proportion of informative characters within those runs. This needs to be recalculated after any settings are changed. If it is not, or has not been set, the software will run with a large factor, and thus be slower than necessary.
+
+Restore default settings
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+If at any point you require default settings, this menu option (or shortcut ctrl + shift + d) restores all settings to default.

@@ -50,6 +50,12 @@ Default settings
 
 TREvoSim's default simulation parameters are intended to be a good general place to start when thinking about phylogenetic questions. Their outputs (trees, characters) are benchmarked against twelve total evidence empirical datasets. Details of the measures used, the script used to generate them, the source of the empirical data, and the output graphs from the script, are available in the folder *Benchmarking* in the source code repository.
 
+Software behaviour 
+------------------
+
+Within each session, TREvoSim keeps a counter of the run number, which it increments when you press play (to run a simulation) or when you run a batch. Cancelling a batch part way through will result in this counter not being updated, and any runs written at the point of cancellation being subsequently overwritten. This counter is reset between sessions, and runs from subsequent instances will overwrite older ones if the output location remains unchanged. TREvoSim saves all other settings between  sessions -- although these can be reset to default if required (see :ref:`Restore default settings`). 
+
+
 Issues and support
 ------------------
 
