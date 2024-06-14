@@ -34,6 +34,7 @@ public:
     int runForIterations;
     int ecosystemEngineeringFrequency;
     int runningLogFrequency;
+    int replicates;
 
     //Bools
     bool discardDeleterious;

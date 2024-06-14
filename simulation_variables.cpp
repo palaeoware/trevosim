@@ -33,6 +33,7 @@ simulationVariables::simulationVariables()
     runForIterations = 1000;
     runForTaxa = 32;
     runningLogFrequency = 50;
+    replicates = 25;
 
     //Doubles
     environmentMutationRate = 1.0;
@@ -123,6 +124,7 @@ QString simulationVariables::printSettings() const
                        << " ecosystemEngineeringFrequency " << ecosystemEngineeringFrequency
                        << " ecosystemEngineersAddMask " << ecosystemEngineersAddMask
                        << " runningLogFrequency " << runningLogFrequency
+                       << " replicates " << replicates
                        << " expandingPlayingfield" << expandingPlayingfield
                        << " stochasticLayer " << stochasticLayer
                        << " stochasticDepth " << stochasticDepth
@@ -169,6 +171,7 @@ bool simulationVariables::loadSettings(QFile *settingsFile)
             if (settingsFileIn.name().toString() == "runMode")runMode = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "ecosystemEngineeringFrequency")ecosystemEngineeringFrequency = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "runningLogFrequency")runningLogFrequency = settingsFileIn.readElementText().toInt();
+            if (settingsFileIn.name().toString() == "replicates")replicates = settingsFileIn.readElementText().toInt();
 
             //Double
             if (settingsFileIn.name().toString() == "stripUninformativeFactor")stripUninformativeFactor = settingsFileIn.readElementText().toDouble();
@@ -311,6 +314,10 @@ void simulationVariables::saveSettings(QFile *settingsFile)
 
     settingsFileOut.writeStartElement("runningLogFrequency");
     settingsFileOut.writeCharacters(QString("%1").arg(runningLogFrequency));
+    settingsFileOut.writeEndElement();
+
+    settingsFileOut.writeStartElement("replicates");
+    settingsFileOut.writeCharacters(QString("%1").arg(replicates));
     settingsFileOut.writeEndElement();
 
     //Double

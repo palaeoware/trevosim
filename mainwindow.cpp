@@ -402,11 +402,12 @@ void MainWindow::runForTriggered()
     /******** Batch mode - multiple runs *****/
     int runBatchFor = -1;
     //Use custom dialogue to allow word wrap
-    batchDialog bDialogue(this, &runBatchFor, 25);
+    batchDialog bDialogue(this, &runBatchFor, simSettings->replicates);
     //Does not modify runBatchFor unless box is accepted
     bDialogue.exec();
     //Return if dialogue cancelled
     if (runBatchFor == -1) return;
+    else simSettings->replicates = runBatchFor;
 
     QString label = "It looks like the strip uninformative factor for these settings is unexpected - i.e. it is less than one. Would you like to recalculate it for these settings?<br /><br />";
     if ((simSettings->stripUninformative) && (simSettings->stripUninformativeFactor < 1.))
