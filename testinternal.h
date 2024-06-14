@@ -7,7 +7,8 @@ class testinternal
 {
 public:
     testinternal(MainWindow *theMainWindowCon);
-    bool callTest(int i, QString &outString);
+    bool callTest(int testNumber, QString &outString);
+    QString testDescription(int testNumber);
 
 private:
     bool testZero(QString &outString);
@@ -33,6 +34,7 @@ private:
     bool testTwenty(QString &outString);
     MainWindow *theMainWindow;
     bool error;
+    QMap<int, QString> testList;
 };
 
 #endif // TESTINTERNAL_H

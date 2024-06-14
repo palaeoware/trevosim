@@ -18,7 +18,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="7. Settings - Environment and Extinction" href="settings2.html" />
+    <link rel="next" title="7. Settings - Environment, events and playing fields" href="settings2.html" />
     <link rel="prev" title="5. Window Layout" href="windowlayout.html" /> 
 </head>
 
@@ -52,9 +52,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#simulations">6.2. Simulations</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="settings2.html">7. Settings - Environment and Extinction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings2.html">7. Settings - Environment, events and playing fields</a></li>
 <li class="toctree-l1"><a class="reference internal" href="loggingsim.html">8. Logging the Simulation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="commands.html">9. Menu commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="filecommands.html">9. Menu commands</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tests.html">10. Tests</a></li>
 </ul>
 
@@ -106,6 +106,9 @@
 <dt class="field-odd">Stochastic layer</dt>
 <dd class="field-odd"><p>This tick box dictates whether a stochastic layer is used. The stochastic layer is a secondary string of bits that can be used to abstract the fitness calculation from the genome and its mutations, through a mechanism based on many-to-one mapping. When this box is ticked, on settings close, another dialogue is launched that allows you to - for every possible combination of 4 bits - define an output, i.e. 0 or 1, referred to here as the map. When the setting is enabled, each organism stores an internal genome four times the length of the organism’s gnome. During the simulation, mutations are applied to the stochastic layer (at the user defined rate per 100 characters), but all other operations employ the standard genome. When mutations are applied, the map is then used to convert bits from the stochastic layer into the genome that is used elsewhere (i.e. for every four stochastic bits, the output is 1 standard bit, based on the map). This abstraction process could be considered, for instance, a highly simplified parallel to e.g. ontogeny: it removes the fitness of the organism from direct control of its genome, and thus facilitates silent mutations and neutral theory of evolution type / less strongly adaptationist dynamics.</p>
 </dd>
+<dt class="field-even">Depth of layer</dt>
+<dd class="field-even"><p>In future versions, to allow further abstraction, varying the number of layers created from this map is planned (e.g. if the depth is two, then a second stochastic layer will be created from the first, the second being sixteen times the length of the organismal genome, and dictating the makeup of the first). This is not currently implemented, and so at present, this option is limited to one.</p>
+</dd>
 </dl>
 </section>
 <section id="simulations">
@@ -139,10 +142,10 @@
 <dd class="field-odd"><p>Optionally, TREvoSim can accept only mutations which are neutral, or improve the fitness of an organism.</p>
 </dd>
 <dt class="field-even">Strip uninformative characters via subsampling</dt>
-<dd class="field-even"><p>TREvoSim gives the option of writing matrices of only parsimony informative characters. When this option is checked, the software attempts to provide the requested character number of only informative characters. It achieves this by multiplying the number of characters and species difference by an empirically calculated factor (see below) at the start of a run. After a run has completed, informative characters are randomly subsampled to the requested number of characters; if there are not enough characters to achieve this, in batch mode the run is discarded and restarted, in single run mode an error message is provided.</p>
+<dd class="field-even"><p>TREvoSim gives the option of writing matrices of only parsimony informative characters. When this option is checked, the software attempts to provide the requested character number of only informative characters. It achieves this by multiplying the number of characters and species difference by a factor (the strip uninformative factor) at the start of a run, that defaults to a value of 5.0. After a run has completed, informative characters are randomly subsampled to the requested number of characters; if there are not enough characters to achieve this, in batch mode the run is discarded and restarted, in single run mode an error message is provided. Note that the strip uninformative factor can be set manually, or recalculated empirically for the current settings (see <a class="reference internal" href="filecommands.html#set-uninformative-factor"><span class="std std-ref">Set uninformative factor</span></a> / <a class="reference internal" href="filecommands.html#recalculate-uninformative-factor-for-current-settings"><span class="std std-ref">Recalculate uninformative factor for current settings</span></a> ).</p>
 </dd>
-<dt class="field-odd">Recalculate multiplication factor on dialogue close</dt>
-<dd class="field-odd"><p>The multiplication factor required to achieve a set number of informative characters via subsampling depends on the settings of any given run. Selecting this option calculates and sets this factor empirically after the settings dialogue is closed by conducting a ten-run batch and working out the proportion of informative characters within those runs. This needs to be recalculated after any settings are changed. If it is not, or has not been set, the software will run with a large factor, and thus be slower than necessary.</p>
+<dt class="field-odd">Random seed</dt>
+<dd class="field-odd"><p>By default, the organism used to initialise a simulation is one near peak fitness for the starting environment(s), to prevent the resulting tree from documenting a lineage adapting to a fitness peak (this results in a highly asymmetrical tree). When checked, this option switches to using a random individual to initialise the simulation.</p>
 </dd>
 </dl>
 </section>
@@ -153,7 +156,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="windowlayout.html" class="btn btn-neutral float-left" title="5. Window Layout" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="settings2.html" class="btn btn-neutral float-right" title="7. Settings - Environment and Extinction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="settings2.html" class="btn btn-neutral float-right" title="7. Settings - Environment, events and playing fields" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

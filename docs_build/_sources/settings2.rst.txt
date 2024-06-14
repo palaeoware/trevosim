@@ -1,7 +1,7 @@
 .. _settings2:
 
-Settings - Environment and Extinction
-=====================================
+Settings - Environment, events and playing fields
+=================================================
 
 Clicking on the settings button of the toolbar will launch a settings dialogue which has two tabs - one with settings for the organisms in the simulation, and one controlling the environment for the simulation.
 

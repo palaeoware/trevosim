@@ -25,7 +25,6 @@
         <file alias="icon_undock.png">resources/darkstyle/icon_undock.png</file>
         <file alias="icon_vline.png">resources/darkstyle/icon_vline.png</file>
         <file alias="icon_about_button.png">resources/darkstyle/icon_about_button.png</file>
-        <file alias="icon_genome_button.png">resources/darkstyle/icon_genome_button.png</file>
         <file alias="icon_log_button.png">resources/darkstyle/icon_log_button.png</file>
         <file alias="icon_settings_1_button.png">resources/darkstyle/icon_settings_1_button.png</file>
         <file alias="icon_settings_2_button.png">resources/darkstyle/icon_settings_2_button.png</file>

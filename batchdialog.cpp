@@ -2,7 +2,7 @@
 #include "ui_batchdialog.h"
 #include <QDebug>
 
-batchDialog::batchDialog(QWidget *parent, int *runForConstructor) :
+batchDialog::batchDialog(QWidget *parent, int *runForConstructor, int defaultValue):
     QDialog(parent),
     ui(new Ui::batchDialog)
 {
@@ -11,6 +11,7 @@ batchDialog::batchDialog(QWidget *parent, int *runForConstructor) :
     font.setWeight( QFont::Bold );
     ui->batch_title->setFont(font);
     ui->batch_title->setText("How many replicates would you like to run?");
+    ui->runForSpinBox->setValue(defaultValue);
 
     QString label =
         QString(" TREvoSim will run the first replicate in serial."

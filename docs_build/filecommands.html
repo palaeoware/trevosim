@@ -48,17 +48,23 @@
 <li class="toctree-l1"><a class="reference internal" href="algorithmconcepts.html">4. Algorithm and Concepts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="windowlayout.html">5. Window Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="settings.html">6. Settings - Organisms and simulation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="settings2.html">7. Settings - Environment and Extinction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings2.html">7. Settings - Environment, events and playing fields</a></li>
 <li class="toctree-l1"><a class="reference internal" href="loggingsim.html">8. Logging the Simulation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">9. Menu commands</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#save-current-settings">9.1. Save Current Settings</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#save-settings-as">9.2. Save settings as…</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#load-settings-from-file">9.3. Load settings from file…</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#restore-default-settings">9.4. Restore default settings</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#fitness-histogram">9.5. Fitness histogram</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#run-tests">9.6. Run tests</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#set-uninformative-factor">9.7. Set uninformative factor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#random-seed">9.8. Random Seed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#file">9.1. File</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#save-current-settings">9.1.1. Save Current Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#save-settings-as">9.1.2. Save settings as…</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load-settings-from-file">9.1.3. Load settings from file…</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#restore-default-settings">9.1.4. Restore default settings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#commands">9.2. Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fitness-histogram">9.2.1. Fitness histogram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-tests">9.2.2. Run tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#set-uninformative-factor">9.2.3. Set uninformative factor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#recalculate-uninformative-factor-for-current-settings">9.2.4. Recalculate uninformative factor for current settings</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tests.html">10. Tests</a></li>
@@ -80,7 +86,7 @@
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
       <li><span class="section-number">9. </span>Menu commands</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/commands.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/filecommands.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -88,40 +94,46 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <span class="target" id="commands"></span><section id="menu-commands">
+  <span class="target" id="filecommands"></span><section id="menu-commands">
 <h1><span class="section-number">9. </span>Menu commands<a class="headerlink" href="#menu-commands" title="Permalink to this headline">¶</a></h1>
-<p>TREvoSim has a series of options which can be selected using the Commands menu at the top left of the program (above the run button). These are as follows.</p>
+<p>TREvoSim has a series of options which can be selected using the menu options at the top left of the program window (above the run button). These are as follows.</p>
+<section id="file">
+<h2><span class="section-number">9.1. </span>File<a class="headerlink" href="#file" title="Permalink to this headline">¶</a></h2>
 <section id="save-current-settings">
-<h2><span class="section-number">9.1. </span>Save Current Settings<a class="headerlink" href="#save-current-settings" title="Permalink to this headline">¶</a></h2>
+<h3><span class="section-number">9.1.1. </span>Save Current Settings<a class="headerlink" href="#save-current-settings" title="Permalink to this headline">¶</a></h3>
 <p>By default TREvoSim saves the simulation settings between sessions (it writes a settings file to the same folder as the software binary / executable on close). This menu command (or shortcut ctrl + s) rewrites that setting file without closing the program.</p>
 </section>
 <section id="save-settings-as">
-<h2><span class="section-number">9.2. </span>Save settings as…<a class="headerlink" href="#save-settings-as" title="Permalink to this headline">¶</a></h2>
+<h3><span class="section-number">9.1.2. </span>Save settings as…<a class="headerlink" href="#save-settings-as" title="Permalink to this headline">¶</a></h3>
 <p>This opens a file save dialogue, and then writes a TREvoSim settings file to the requested location (shortcut ctrl + shift + s). TREvoSim settings files are written in an XML document that can be opened in any text application.</p>
 </section>
 <section id="load-settings-from-file">
-<h2><span class="section-number">9.3. </span>Load settings from file…<a class="headerlink" href="#load-settings-from-file" title="Permalink to this headline">¶</a></h2>
+<h3><span class="section-number">9.1.3. </span>Load settings from file…<a class="headerlink" href="#load-settings-from-file" title="Permalink to this headline">¶</a></h3>
 <p>Load settings file (ctrl + o) opens a saved settings file and updates the simulation settings accordingly.</p>
 </section>
 <section id="restore-default-settings">
-<h2><span class="section-number">9.4. </span>Restore default settings<a class="headerlink" href="#restore-default-settings" title="Permalink to this headline">¶</a></h2>
+<h3><span class="section-number">9.1.4. </span>Restore default settings<a class="headerlink" href="#restore-default-settings" title="Permalink to this headline">¶</a></h3>
 <p>If at any point you require default settings, this menu option (or shortcut ctrl + shift + d) restores all settings to default.</p>
 </section>
+</section>
+<section id="commands">
+<h2><span class="section-number">9.2. </span>Commands<a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h2>
 <section id="fitness-histogram">
-<h2><span class="section-number">9.5. </span>Fitness histogram<a class="headerlink" href="#fitness-histogram" title="Permalink to this headline">¶</a></h2>
-<p>The fitness algorithm for TREvoSim is described in Keating et al. (2020). The fitness landscape varies depends on the simulation settings. This menu command (shortcut ctrl + shift + h) provides a basic assessment of that landscape by showing the distribution of fitnesses for every possible genome for the current settings. It provides an option to select how many bits in the test organism’s genome as larger genome sizes (e.g. <a href="#id1"><span class="problematic" id="id2">|</span></a>gt|16) take exponentially longer given the need to try every potential genome rearrangement.</p>
+<h3><span class="section-number">9.2.1. </span>Fitness histogram<a class="headerlink" href="#fitness-histogram" title="Permalink to this headline">¶</a></h3>
+<p>The fitness algorithm for TREvoSim is described in Keating et al. (2020). The fitness landscape varies depends on the simulation settings. This menu command (shortcut ctrl + shift + h) provides a basic assessment of that landscape by showing the distribution of fitnesses for every possible genome for the current settings. It provides an option to select how many bits in the test organism’s genome as larger genome sizes (e.g. &gt; 16) take exponentially longer given the need to try every potential genome rearrangement.</p>
 </section>
 <section id="run-tests">
-<h2><span class="section-number">9.6. </span>Run tests<a class="headerlink" href="#run-tests" title="Permalink to this headline">¶</a></h2>
+<h3><span class="section-number">9.2.2. </span>Run tests<a class="headerlink" href="#run-tests" title="Permalink to this headline">¶</a></h3>
 <p>TREvoSim includes a test mode, which is launched by clicking the Tests button on the main toolbar, this menu command, or the shortcut ctrl + shift + t (see <a class="reference internal" href="tests.html#tests"><span class="std std-ref">Tests</span></a> )</p>
 </section>
 <section id="set-uninformative-factor">
-<h2><span class="section-number">9.7. </span>Set uninformative factor<a class="headerlink" href="#set-uninformative-factor" title="Permalink to this headline">¶</a></h2>
-<p>This menu command (or shortcut ctrl + shift + f) opens a dialogue that allows the strip uninformative factor to be set manually.</p>
+<h3><span class="section-number">9.2.3. </span>Set uninformative factor<a class="headerlink" href="#set-uninformative-factor" title="Permalink to this headline">¶</a></h3>
+<p>This menu command (or shortcut ctrl + shift + f) opens a dialogue that allows the strip uninformative factor to be set manually (see <a class="reference internal" href="settings.html#simulations"><span class="std std-ref">Simulations</span></a> - Strip uninformative characters via subsampling).</p>
 </section>
-<section id="random-seed">
-<h2><span class="section-number">9.8. </span>Random Seed<a class="headerlink" href="#random-seed" title="Permalink to this headline">¶</a></h2>
-<p>By default, the organism used to initialise a simulation is one near peak fitness for the starting environment(s), to prevent the resulting tree from documenting a lineage adapting to a fitness peak (this results in a highly asymmetrical tree). This menu command (shortcut ctrl + shift + r) toggles between this approach, and one in which a random individual is used to initialise the simulation.</p>
+<section id="recalculate-uninformative-factor-for-current-settings">
+<h3><span class="section-number">9.2.4. </span>Recalculate uninformative factor for current settings<a class="headerlink" href="#recalculate-uninformative-factor-for-current-settings" title="Permalink to this headline">¶</a></h3>
+<p>The multiplication factor required to achieve a set number of informative characters via subsampling depends on the settings of any given run. Selecting this option calculates and sets this factor empirically after the settings dialogue is closed by conducting a ten-run batch and working out the proportion of informative characters within those runs. This needs to be recalculated after any settings are changed. If it is not, or has not been set, the software will run with a large factor, and thus be slower than necessary.</p>
+</section>
 </section>
 </section>
 

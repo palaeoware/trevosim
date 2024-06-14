@@ -9,8 +9,7 @@
 #include "output.h"
 #include "about.h"
 
-
-#include <algorithm>
+//#include <algorithm>
 #include <QProgressDialog>
 #include <QShortcut>
 #include <QStandardPaths>
@@ -60,6 +59,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mainToolBar->setIconSize(QSize(25, 25));
     startButton = new QAction(QIcon(QPixmap(":/darkstyle/icon_play_button_green.png")), QString("Run"), this);
     pauseButton = new QAction(QIcon(QPixmap(":/darkstyle/icon_pause_button_orange.png")), QString("Pause"), this);
+    stopButton = new QAction(QIcon(QPixmap(":/darkstyle/icon_stop_button_red.png")), QString("Stop"), this);
     resetButton = new QAction(QIcon(QPixmap(":/darkstyle/icon_reset_button_red.png")), QString("Reset"), this);
     runForButton = new QAction(QIcon(QPixmap(":/darkstyle/icon_play_n_button_green.png")), QString("Batch..."), this);
     settingsButton = new QAction(QIcon(QPixmap(":/darkstyle/icon_settings_2_button.png")), QString("Settings"), this);
@@ -68,6 +68,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     startButton->setEnabled(true);
     pauseButton->setEnabled(false);
+    stopButton->setEnabled(false);
     resetButton->setEnabled(true);
     runForButton->setEnabled(true);
     settingsButton->setEnabled(true);
@@ -77,6 +78,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mainToolBar->addAction(startButton);
     ui->mainToolBar->addSeparator();
     ui->mainToolBar->addAction(pauseButton);
+    ui->mainToolBar->addSeparator();
+    ui->mainToolBar->addAction(stopButton);
     ui->mainToolBar->addSeparator();
     ui->mainToolBar->addAction(resetButton);
     ui->mainToolBar->addSeparator();
@@ -92,6 +95,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QObject::connect(startButton, &QAction::triggered, this, &MainWindow::startTriggered);
     QObject::connect(pauseButton, &QAction::triggered, this, &MainWindow::pauseTriggered);
+    QObject::connect(stopButton, &QAction::triggered, this, &MainWindow::escape);
     QObject::connect(resetButton, &QAction::triggered, this, &MainWindow::resetTriggered);
     QObject::connect(runForButton, &QAction::triggered, this, &MainWindow::runForTriggered);
     QObject::connect(settingsButton, &QAction::triggered, this, &MainWindow::settingsTriggered);
@@ -103,14 +107,16 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->actionSave_settings_as, &QAction::triggered, this, &MainWindow::saveAs);
     QObject::connect(ui->actionLoad_settings_from_file, &QAction::triggered, this, &MainWindow::open);
     QObject::connect(ui->actionSet_uninformative_factor, &QAction::triggered, this, &MainWindow::setFactor);
+    QObject::connect(ui->actionRecalculate_uninformative_factor_for_current_settings, &QAction::triggered, this, &MainWindow::recalculateStripUniformativeFactor);
+
     QObject::connect(ui->actionRun_tests, &QAction::triggered, this, &MainWindow::doTests);
     QObject::connect(ui->actionRestore_default_settings, &QAction::triggered, this, &MainWindow::defaultSettings);
-
-    QObject::connect(ui->actionRandom_seed, &QAction::triggered, this, &MainWindow::setRandomSeed);
 
     new QShortcut(QKeySequence(Qt::Key_Escape), this, SLOT(escape()));
     new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_M), this, SLOT(setMultiplePlayingFields()));
     new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_X), this, SLOT(selectionHistogram()));
+
+
 
     QDir settingsPath;
     settingsPath.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation));
@@ -249,21 +255,6 @@ void MainWindow::setTreeDisplay(QString treeString)
     ui->treeDisplay->updateGeometry();
 }
 
-void MainWindow::setRandomSeed()
-{
-    simSettings->randomSeed = !simSettings->randomSeed;
-    if (simSettings->randomSeed)
-    {
-        setStatus("Simulation will initialise with random phenome");
-        ui->actionRandom_seed->setChecked(true);
-    }
-    else
-    {
-        setStatus("Simulation will initialise with phenome near peak fitness");
-        ui->actionRandom_seed->setChecked(false);
-    }
-}
-
 void MainWindow::load()
 {
     QFile settingsFile(settingsFileString);
@@ -327,10 +318,10 @@ void MainWindow::startTriggered()
     //First sort GUI
     startRunGUI();
 
-    if ((simSettings->stripUninformative) && (simSettings->stripUninformativeFactorSettings != simSettings->printSettings()) && runs == 0)
-        if (QMessageBox::question(this, "Hmmm",
-                                  "It looks like you have not calculated the strip uninformative factor for these settings. Would you like to?<br /><br />If you have manually set the factor, you should select no here otherwise your chosen value will be overwritten.",
-                                  QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) recalculateStripUniformativeFactor(true);
+    if ((simSettings->stripUninformative) && (simSettings->stripUninformativeFactor < 1.))
+        if (QMessageBox::question(this, "Error",
+                                  "It looks like the strip uninformative factor for these settings is unexpected - i.e. it is less than one. Would you like to recalculate it for these settings?<br /><br />",
+                                  QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) recalculateStripUniformativeFactor();
 
     bool error = false;
     //Create a new simulation object - sending it important settings.
@@ -396,17 +387,17 @@ void MainWindow::runForTriggered()
     /******** Batch mode - multiple runs *****/
     int runBatchFor = -1;
     //Use custom dialogue to allow word wrap
-    batchDialog bDialogue(this, &runBatchFor);
+    batchDialog bDialogue(this, &runBatchFor, simSettings->replicates);
     //Does not modify runBatchFor unless box is accepted
     bDialogue.exec();
     //Return if dialogue cancelled
     if (runBatchFor == -1) return;
+    else simSettings->replicates = runBatchFor;
 
-    QString label =
-        "It looks like you have not calculated the strip uninformative factor for these settings. Would you like to?<br /><br />If you have manually set the factor, you should select no here otherwise your chosen value will be overwritten.";
-    if ((simSettings->stripUninformative) && (simSettings->stripUninformativeFactorSettings != simSettings->printSettings()))
+    QString label = "It looks like the strip uninformative factor for these settings is unexpected - i.e. it is less than one. Would you like to recalculate it for these settings?<br /><br />";
+    if ((simSettings->stripUninformative) && (simSettings->stripUninformativeFactor < 1.))
         if (QMessageBox::question(this, "Hmmm", label, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes)
-            recalculateStripUniformativeFactor(true);
+            recalculateStripUniformativeFactor();
 
     startRunGUI();
     batchRunning = true;
@@ -487,9 +478,6 @@ void MainWindow::settingsTriggered()
     resetTriggered();
     if (simSettings->runMode == RUN_MODE_TAXON) resizeGrid(simSettings->runForTaxa, simSettings->genomeSize);
     else resizeGrid(500, simSettings->genomeSize, 1);
-
-    if (sdialogue->recalculateStripUninformativeFactorOnClose) recalculateStripUniformativeFactor(false);
-
 }
 
 void MainWindow::resizeGrid(const int speciesNumber, const int genomeSize, const int hideFrom)
@@ -565,7 +553,7 @@ void MainWindow::printGenome(const Organism *org, int row)
     }
 }
 
-void MainWindow::recalculateStripUniformativeFactor(bool running)
+void MainWindow::recalculateStripUniformativeFactor()
 {
     bool tempStripUninformative = simSettings->stripUninformative;
     simSettings->stripUninformative = true;
@@ -601,7 +589,7 @@ void MainWindow::recalculateStripUniformativeFactor(bool running)
     hideProgressBar();
 
     //Reset gui etc.
-    if (!running)finishRunGUI();
+    finishRunGUI();
 
     simSettings->stripUninformative = tempStripUninformative;
 
@@ -616,6 +604,7 @@ void MainWindow::startRunGUI()
 {
     startButton->setEnabled(false);
     pauseButton->setEnabled(true);
+    stopButton->setEnabled(true);
     resetButton->setEnabled(false);
     runForButton->setEnabled(false);
     settingsButton->setEnabled(false);
@@ -627,6 +616,7 @@ void MainWindow::finishRunGUI()
 {
     startButton->setEnabled(true);
     pauseButton->setEnabled(false);
+    stopButton->setEnabled(false);
     resetButton->setEnabled(true);
     runForButton->setEnabled(true);
     settingsButton->setEnabled(true);
@@ -695,7 +685,7 @@ void MainWindow::setFactor()
 {
     bool ok;
 
-    double tempFactor = QInputDialog::getDouble(this, "Set factor...", "Required factor?", 1.0, 1.0, 2000.0, 2, &ok);
+    double tempFactor = QInputDialog::getDouble(this, "Set factor...", "Please set the required strip uninformative factor here.", 1.0, 1.0, 2000.0, 2, &ok);
     if (!ok)
     {
         return;
@@ -708,6 +698,7 @@ void MainWindow::countPeaks()
 {
     //Save settings to load at end
     save();
+    startRunGUI();
 
     //Create a new simulation object - sending it important settings.
     bool error = false;
@@ -747,6 +738,8 @@ void MainWindow::countPeaks()
     if (simSettings->runMode == RUN_MODE_TAXON) resizeGrid(simSettings->runForTaxa, simSettings->genomeSize);
     else resizeGrid(1, simSettings->genomeSize);
 
+    finishRunGUI();
+
     resetTriggered();
 
     hideProgressBar();
@@ -772,12 +765,15 @@ void MainWindow::doTests()
     //Save settings to load at end
     save();
 
-    int testCount = 17;
+    //Create this here so we can use QMap list of tests to populate drop downs
+    testinternal testObject(this);
+
+    int testCount = 19;
     int testStart = 0;
 
     QStringList items;
     items << tr("All");
-    for (int i = 0; i < testCount; i++) items << QString::number(i);
+    for (int i = 0; i < testCount; i++) items << QString::number(i) + " - " + testObject.testDescription(i);
 
     bool ok;
     QString item = QInputDialog::getItem(this, tr("TREvoSim tests"), tr("Which test?"), items, 0, false, &ok);
@@ -811,8 +807,6 @@ void MainWindow::doTests()
         setStatus("Tests cancelled");
         return;
     }
-
-    testinternal testObject(this);
 
     QElapsedTimer timer;
     timer.start();

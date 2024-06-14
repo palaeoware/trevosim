@@ -28,8 +28,7 @@ TREvoSim provides functionality for two types of logs. All logs are placed withi
     
     - Two custom output files -- the options allow  you to define file name, content (replacing keywords in ||double pipes|| with the requested information -- see :ref:`loggingsim`) and extension.
     - A standard nex tree file.
-    - A working log which includes all operations the software performs across a run if you want to inspect its workings (this file can be very large).
-
+    
 :Running log: 
 
     This tab allows a running log to be defined that can record the state of the simulation at user-requested frequencies (see :ref:`loggingsim`). The tab includes options for:
@@ -50,3 +49,8 @@ Default settings
 ----------------
 
 TREvoSim's default simulation parameters are intended to be a good general place to start when thinking about phylogenetic questions. Their outputs (trees, characters) are benchmarked against twelve total evidence empirical datasets. Details of the measures used, the script used to generate them, the source of the empirical data, and the output graphs from the script, are available in the folder *Benchmarking* in the source code repository.
+
+Issues and support
+------------------
+
+Should you wish to report issues with the software, request new features, or seek guidance on any aspect of TREvoSim, you can do so by  `submitting an issue on the TREvoSim GitHub page <https://github.com/palaeoware/trevosim/issues>`_.

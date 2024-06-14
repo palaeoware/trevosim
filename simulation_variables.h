@@ -34,6 +34,7 @@ public:
     int runForIterations;
     int ecosystemEngineeringFrequency;
     int runningLogFrequency;
+    int replicates;
 
     //Bools
     bool discardDeleterious;
@@ -75,8 +76,7 @@ public:
     QString logFileString01;
     QString logFileString02;
     QString logFileString03;
-    QString runningLogHeader;
-    QString runningLogBody;
+    QString runningLogString;
 
     //And saving files
     QString savePathDirectory;

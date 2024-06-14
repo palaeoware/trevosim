@@ -463,8 +463,8 @@ bool simulation::run()
         if (simSettings->writeRunningLog && (iterations % simSettings->runningLogFrequency == 0) && !calculateStripUninformativeFactorRunning)
         {
             //We need to do most of the text processing here, as many of the things we may want to report in a running log are local in scope to the run function
-            //Text is stored in the simulation settings as runningLogHeader and runningLogBody
-            QString logTextOut = simSettings->runningLogBody;
+            //Text is stored in the simulation settings as runningLogString
+            QString logTextOut = simSettings->runningLogString;
 
             if (logTextOut.contains("||Unresolvable||") || logTextOut.contains( "||Identical||"))
             {
@@ -628,19 +628,21 @@ bool simulation::run()
     outValues["Count"] = doPadding(runs, 3);
     outValues["Root"] = printGenomeString(&bestOrganism);
 
-    if (!writeFile(simSettings->logFileNameBase01, simSettings->logFileExtension01, simSettings->logFileString01, outValues, speciesList))
-    {
-        warning("Error!", "Error opening output file 1 to write to.");
-        clearVectors(playingFields, speciesList);
-        return false;
-    }
+    if (simSettings->writeFileOne)
+        if (!writeFile(simSettings->logFileNameBase01, simSettings->logFileExtension01, simSettings->logFileString01, outValues, speciesList))
+        {
+            warning("Error!", "Error opening output file 1 to write to.");
+            clearVectors(playingFields, speciesList);
+            return false;
+        }
 
-    if (!writeFile(simSettings->logFileNameBase02, simSettings->logFileExtension02, simSettings->logFileString02, outValues, speciesList))
-    {
-        warning("Error!", "Error opening output file 2 to write to.");
-        clearVectors(playingFields, speciesList);
-        return false;
-    }
+    if (simSettings->writeFileTwo)
+        if (!writeFile(simSettings->logFileNameBase02, simSettings->logFileExtension02, simSettings->logFileString02, outValues, speciesList))
+        {
+            warning("Error!", "Error opening output file 2 to write to.");
+            clearVectors(playingFields, speciesList);
+            return false;
+        }
 
     QString fileNameString03;
     fileNameString03 = simSettings->logFileNameBase03;
@@ -650,7 +652,7 @@ bool simulation::run()
 
     if (simSettings->writeTree)
     {
-        //File 03 is tree file in .nex format - withour zero padding
+        //File 03 is tree file in .nex format - without zero padding
         QFile file03(fileNameString03);
         if (!file03.open(QIODevice::WriteOnly | QIODevice::Text))
         {
@@ -680,10 +682,10 @@ bool simulation::run()
         file03TextStream << "\t\t;\n\ntree tree1 = [&R]";
         QString newickString(printNewickWithBranchLengths(0, speciesList, true));
         // Remove text for phangorn
-        newickString.remove("S_000");
-        newickString.remove("S_00");
-        newickString.remove("S_0");
-        newickString.remove("S_");
+        newickString.remove("Species_000");
+        newickString.remove("Species_00");
+        newickString.remove("Species_0");
+        newickString.remove("Species_");
 
         file03TextStream << newickString << ";\n\nEND;";
         file03.close();
@@ -1500,9 +1502,13 @@ bool simulation::stripUninformativeCharacters(QVector <Organism *> &speciesList,
     if (!requiredCharacterNumber && !simSettings->test)
     {
         if (theMainWindow != nullptr)
-            warning("Oops",
-                    "It seems there are not enough informative characters to pull this off. Best either try different settings, or email RJG and he can sort. This may be a one off - you could try running a batch of 1, and the program will try repeatedly with these settings - though after ten or more repeats you may want to cancel and change the settings.");
-
+        {
+            QString label = "It seems there are not enough informative characters to pull this off.\n\n"
+                            "By default, TREvoSim over generates characters by a factor of 5x before trying to strip down to those that are parsimony uninformative. "
+                            "Under these settings, it seems that 5x is not enough. Choosing the menu option \'Recalculate uninformative factor for current settings\' will allow you to recalculate this factor for the current settings, and \'Set uninformative factor' will allow you to set it manually to a large number.\n\n"
+                            "Alternatively, this may be a one off - you could try running a batch of 1, and the program will try repeatedly with these settings - though after ten or more repeats you may want to cancel and change the settings.";
+            warning("Oops", label);
+        }
         if (simSettings->workingLog) workLogTextStream << "Return at !requiredCharacterNumber\n";
         return false;
     }
@@ -1886,9 +1892,18 @@ QString simulation::printMatrix(const QVector <Organism *> &speciesList)
     QString matrixString;
     QTextStream matrixTextStream(&matrixString);
 
-    for (int i = 0; i < speciesList.length(); i++)
+    int totalSpeciesCount = speciesList.length();
+
+    //Zero padding
+    int padding = 0;
+    if (totalSpeciesCount < 100) padding = 2;
+    else if (totalSpeciesCount < 1000) padding = 3;
+    else padding = 4;
+
+
+    for (int i = 0; i < totalSpeciesCount; i++)
     {
-        matrixTextStream << "Species_" << i << "\t";
+        matrixTextStream << "Species_" << doPadding(i, padding) << "\t";
         for (auto j : qAsConst(speciesList[i]->genome)) j ? matrixTextStream << 1 : matrixTextStream << 0 ;
         matrixTextStream << "\n";
     }
@@ -1966,15 +1981,15 @@ QString simulation::printNewickWithBranchLengths(int species, QVector <Organism 
     QString speciesID;
     if (phangornTree)
     {
-        if (totalSpeciesCount < 100) speciesID = QString("S_%1").arg(speciesList[species]->speciesID + 1, 2, 10, QChar('0'));
-        else if (totalSpeciesCount < 1000) speciesID = QString("S_%1").arg(speciesList[species]->speciesID + 1, 3, 10, QChar('0'));
-        else speciesID = QString("S_%1").arg(speciesList[species]->speciesID + 1, 4, 10, QChar('0'));
+        if (totalSpeciesCount < 100) speciesID = QString("Species_%1").arg(speciesList[species]->speciesID + 1, 2, 10, QChar('0'));
+        else if (totalSpeciesCount < 1000) speciesID = QString("Species_%1").arg(speciesList[species]->speciesID + 1, 3, 10, QChar('0'));
+        else speciesID = QString("Species_%1").arg(speciesList[species]->speciesID + 1, 4, 10, QChar('0'));
     }
     else
     {
-        if (totalSpeciesCount < 100) speciesID = QString("S_%1").arg(speciesList[species]->speciesID, 2, 10, QChar('0'));
-        else if (totalSpeciesCount < 1000) speciesID = QString("S_%1").arg(speciesList[species]->speciesID, 3, 10, QChar('0'));
-        else speciesID = QString("S_%1").arg(speciesList[species]->speciesID, 4, 10, QChar('0'));
+        if (totalSpeciesCount < 100) speciesID = QString("Species_%1").arg(speciesList[species]->speciesID, 2, 10, QChar('0'));
+        else if (totalSpeciesCount < 1000) speciesID = QString("Species_%1").arg(speciesList[species]->speciesID, 3, 10, QChar('0'));
+        else speciesID = QString("Species_%1").arg(speciesList[species]->speciesID, 4, 10, QChar('0'));
     }
     //For terminal cases (reused for branches to nodes below)
     int branchLength = speciesList[species]->extinct - speciesList[species]->cladogenesis;
@@ -2164,7 +2179,6 @@ bool simulation::writeRunningLog(const int iterations, const QString logFileStri
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) return false;
 
     QTextStream fileTextStream(&file);
-    fileTextStream << simSettings->runningLogHeader;
     fileTextStream << logFileString;
     file.close();
     return true;
@@ -2261,6 +2275,9 @@ int simulation::countPeaks(int genomeSize, int repeat, int environment)
     quint16 minimum = ~0;
     for (quint64 x = 0; x < max; x++)
     {
+
+        while (theMainWindow->pauseFlag == true && !theMainWindow->escapePressed) qApp->processEvents();
+        if (theMainWindow->escapePressed) return -1;
 
         //Create genome from number
         for (int i = 0; i < genomeSize; i++)

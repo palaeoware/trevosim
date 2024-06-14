@@ -1,6 +1,0 @@
-.. _concepts:
-
-Concepts and Example Usage
-==========================
-
-To do. 

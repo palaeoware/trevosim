@@ -7,12 +7,40 @@ testinternal::testinternal(MainWindow *theMainWindowCon)
 {
     theMainWindow = theMainWindowCon;
     error = false;
+
+    //This is currently used (June 2024) to return the test description
+    //Long term it would be good to create a test class for each test which returns a description and includes the test code
+    testList.insert(0, "Fitness Algorithm");
+    testList.insert(1, "Mask initialisation");
+    testList.insert(2, "Masks during simulation");
+    testList.insert(3, "Initialisation of playing field");
+    testList.insert(4, "Stochastic mapping");
+    testList.insert(5, "Mutation rates");
+    testList.insert(6, "Coin toss");
+    testList.insert(7, "Speciation");
+    testList.insert(8, "Overwrite");
+    testList.insert(9, "Perturbations");
+    testList.insert(10, "Strip uninformative");
+    testList.insert(11, "Unresolvable taxa");
+    testList.insert(12, "Memory use");
+    testList.insert(13, "Extinction");
+    testList.insert(14, "Difference to parent");
+    testList.insert(15, "Print matrix");
+    testList.insert(16, "Print tree");
+    testList.insert(17, "Ecosystem engineers");
+    testList.insert(18, "Playing field mixing");
 }
 
-bool testinternal::callTest(int i, QString &outString)
+QString testinternal::testDescription(int testNumber)
+{
+    if (testList.contains(testNumber)) return testList.value(testNumber);
+    else return "No description available";
+}
+
+bool testinternal::callTest(int testNumber, QString &outString)
 {
     bool pass;
-    switch (i)
+    switch (testNumber)
     {
     case 0:
         pass = testZero(outString);
@@ -1431,6 +1459,7 @@ bool testinternal::testSixteen(QString &outString)
     return testFlag;
 }
 
+//Check ecosystem engineering
 bool testinternal::testSeventeen(QString &outString)
 {
     bool testFlag = true;
@@ -1439,29 +1468,300 @@ bool testinternal::testSeventeen(QString &outString)
     out << "Check ecosystem engineers.\n\n";
 
     simulationVariables simSettings;
+    simSettings.runForIterations = 200;
+    simSettings.runMode = RUN_MODE_ITERATION;
+    simSettings.test = 17;
     simulation x(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
     x.run();
 
-    if (error) return false;
+    simSettings.ecosystemEngineers = true;
+
+    QVector <Organism *> speciesList;
+    for (int i = 0; i < x.speciesCount + 1; i ++)
+    {
+        Organism *org = new Organism(50, false);
+        speciesList.append(org);
+    }
+
+    //Apply only once, but on second time - should have no effect
+    out << "Apply EE with persistent off, for second time - should have no effect\n";
+    x.ecosystemEngineeringOccurring = 2;
+    simSettings.ecosystemEngineersArePersistent = false;
+    x.applyEcosystemEngineering(speciesList, false);
+
+    int total = 0;
+    for (auto p : qAsConst(x.playingFields))
+        for (auto o : p->playingField)
+            if (o->ecosystemEngineer) total ++;
+
+    out << "Have applied EE: count of organisms with EE status in playing field should be 0. It is : " << total << ".\n";
+    if (total != 0) testFlag = false;
+
+    bool identical = false;
+
+    for (auto p : qAsConst(x.playingFields))
+        for (auto o : p->playingField)
+            if (o->ecosystemEngineer)
+                for (auto &m : p->masks)
+                    for (auto &n : m)
+                    {
+                        if (o->genome == n) identical = true;
+                    }
+    out << "Have applied EE and checked that no mask is identical to genome. Check returned: " << identical << ".\n";
+    if (identical == true) testFlag = false;
+
+    total = 0;
+    for (auto o : speciesList)
+        if (o->ecosystemEngineer)
+            total ++;
+    out << "Have applied EE: count of organisms with EE status in species list should be 0. It is : " << total << ".\n\n";
+    if (total != 0) testFlag = false;
 
 
-    out << "To do.\n";
+    //Apply once, first time
+    out << "Apply EE once, for first time - should have an effect.\n";
+    x.ecosystemEngineeringOccurring = 1;
+    x.applyEcosystemEngineering(speciesList, false);
 
-    /*OK so we need to check that:
-     * When we send it ecosystemengineer == 1 that it picks an EE, and then writes over masks with its genome
-     * When ecosystem engineeer >1 it pciks an EE and then uses that to write the mask
-     * That this is true across laying fields
-     */
+    total = 0;
+    for (auto p : qAsConst(x.playingFields))
+        for (auto o : p->playingField)
+            if (o->ecosystemEngineer) total ++;
+
+    out << "Have applied EE: count of organisms with EE status in playing field should be >0. It is : " << total << ".\n";
+    if (total == 0) testFlag = false;
+
+    identical = false;
+
+    for (auto p : qAsConst(x.playingFields))
+        for (auto o : p->playingField)
+            if (o->ecosystemEngineer)
+                for (auto &m : p->masks)
+                    for (auto &n : m)
+                    {
+                        if (o->genome == n) identical = true;
+                    }
+    out << "Have applied EE and checked that one mask is identical to genome. Check returned: " << identical << ".\n";
+    if (identical == false) testFlag = false;
+
+    total = 0;
+    for (auto o : speciesList)
+        if (o->ecosystemEngineer)
+            total ++;
+    out << "Have applied EE: count of organisms with EE status in species list should be 1. It is : " << total << ".\n\n";
+    if (total != 1) testFlag = false;
+
+
+    //Apply again, second time, persistent
+    out << "Apply EE for second time - should overwrite mask.\n";
+    x.ecosystemEngineeringOccurring = 2;
+    simSettings.ecosystemEngineersArePersistent = true;
+
+    for (auto p : qAsConst(x.playingFields))
+        for (auto o : p->playingField)
+            if (o->ecosystemEngineer)
+                for (auto &g : o->genome)
+                    g = false;
+
+    x.applyEcosystemEngineering(speciesList, false);
+
+    identical = false;
+    for (auto p : qAsConst(x.playingFields))
+        for (auto o : p->playingField)
+            if (o->ecosystemEngineer)
+                for (auto &m : p->masks)
+                    for (auto &n : m)
+                    {
+                        if (o->genome == n) identical = true;
+                    }
+    out << "Have applied EE and checked that one mask is identical to genome. Check returned: " << identical << ".\n";
+    if (identical == false) testFlag = false;
+
+    if (testFlag) out << "\nEE tests passed.\n";
 
     return testFlag;
 }
 
+//Check playing field mixing
 bool testinternal::testEighteen(QString &outString)
 {
     bool testFlag = true;
     QTextStream out(&outString);
 
-    out << "Check playing field mixing.\n\n";
+    out << "Check playing field mixing. The mixing mechanism relies on random numbers to provide a probability of mixing, and as such, on occasions, this test will fail due to the stochastic nature of the process. If this happens, you may want to repeat the test again and see if the warnings dissappear.\n\n";
+
+    simulationVariables simSettings;
+    simSettings.runForIterations = 2;
+    simSettings.runMode = RUN_MODE_ITERATION;
+    simSettings.playingfieldSize = 100;
+    simSettings.test = 18;
+    simSettings.playingfieldNumber = 2;
+    simSettings.mixingProbabilityOneToZero = 20;
+    simSettings.mixing = true;
+    simulation x(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
+    x.run();
+
+    QVector <Organism *> speciesList;
+    for (int i = 0; i < x.speciesCount + 1; i ++)
+    {
+        Organism *org = new Organism(50, false);
+        org->speciesID = 0;//Set this to zero to stop extinction function complaining
+        speciesList.append(org);
+    }
+
+    //Assign known genomes to members of each playing field
+    bool base = false;
+    for (auto p : qAsConst(x.playingFields))
+    {
+        base = !base;
+        for (auto o : p->playingField)
+            for (auto &g : o->genome)
+                g = base;
+    }
+
+    for (int i = 0; i < 100; i++) x.applyPlayingfieldMixing(speciesList);
+
+    int cnt = 0;
+
+    for (auto o : x.playingFields[0]->playingField)
+        if (o->genome[0])
+            cnt++;
+
+    out << "Playing field zero was originally 100 genomes, all zero. mixingProbabilityOneToZero was set to 20 and mixing applied 100 times, so ~20 should have been overwritten, and the count of all zero genomes should be ~80. It is "
+        << cnt << "\n";
+
+    if (cnt < 75 || cnt > 85)
+    {
+        out << "\n\nThis number seems off what we should expect, although since we're dealing with random numbers, there may be nothing untoward - try repating test\n\n";
+        testFlag = false;
+    }
+
+    cnt = 0;
+
+    for (auto o : x.playingFields[1]->playingField)
+        if (o->genome[0])
+            cnt++;
+
+    out << "Playing field one was originally 100 genomes, all ones. This should still be the same as mixingProbabilityZeroToOne is zero, and so we should count no all zero genomes. Count is " << cnt <<
+        "\n\n";
+
+    if (cnt != 0)
+    {
+        testFlag = false;
+    }
+
+    simSettings.mixingProbabilityOneToZero = 0;
+    simSettings.mixingProbabilityZeroToOne = 20;
+
+    simulation y(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
+    y.run();
+
+    //Assign known genomes to members of each playing field
+    base = false;
+    for (auto p : qAsConst(y.playingFields))
+    {
+        base = !base;
+        for (auto o : p->playingField)
+            for (auto &g : o->genome)
+                g = base;
+    }
+
+    for (int i = 0; i < 100; i++) y.applyPlayingfieldMixing(speciesList);
+
+    cnt = 0;
+
+    for (auto o : y.playingFields[0]->playingField)
+        if (o->genome[0])
+            cnt++;
+
+    out << "Playing field zero was originally 100 genomes, all zero. This should still be the same as mixingProbabilityOneToZero is zero, so none should have been overwritten, and the count of all zero genomes should be 100. It is "
+        << cnt << "\n";
+
+    if (cnt != 100)
+    {
+        testFlag = false;
+    }
+
+    cnt = 0;
+
+    for (auto o : y.playingFields[1]->playingField)
+        if (o->genome[0])
+            cnt++;
+
+    out << "Playing field one was originally 100 genomes, all ones. mixingProbabilityZeroToOne was set to 20 and and mixing applied 100 times, and so we should count ~20 all zero genomes. Count is " <<
+        cnt << "\n\n";
+
+    if (cnt > 25 || cnt < 15)
+    {
+        out << "\n\nThis number seems off what we should expect, although since we're dealing with random numbers, there may be nothing untoward - try repating test\n\n";
+        testFlag = false;
+    }
+
+
+    simSettings.mixingProbabilityOneToZero = 50;
+    simSettings.mixingProbabilityZeroToOne = 0;
+    simSettings.playingfieldNumber = 3;
+
+    simulation z(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
+    z.run();
+
+    //Assign known genomes to members of each playing field
+    base = false;
+    for (auto p : qAsConst(z.playingFields))
+    {
+        base = !base;
+        for (auto o : p->playingField)
+            for (auto &g : o->genome)
+                g = base;
+    }
+
+    for (int i = 0; i < 100; i++) z.applyPlayingfieldMixing(speciesList);
+
+    cnt = 0;
+
+    for (auto o : z.playingFields[0]->playingField)
+        if (o->genome[0])
+            cnt++;
+
+    out << "Now testing three playing fields. Playing field mixing was set to fifty, then repeated 100 times, and PF 0 and 3 were all zeros, PF1 was all ones. As such, we should have ~25 mixed individuals in PF0 & PF3 (though slightly fewer in PF0 as they have been overwritten by those from PF3). Playing field zero count of organisms that are all zero should be ~75-85. It is "
+        << cnt << "\n";
+
+    if (cnt < 65 || cnt > 90)
+    {
+        out << "\n\nThis number seems off what we should expect, although since we're dealing with random numbers, there may be nothing untoward - try repating test\n\n";
+        testFlag = false;
+    }
+
+    cnt = 0;
+
+    for (auto o : z.playingFields[1]->playingField)
+        if (o->genome[0])
+            cnt++;
+
+    out << "PF1 was originally 100 genomes, all ones. Some of these will have been overwritten from PF0 and PF3 - around 35 all zeros would be sensible. Count is " << cnt << "\n\n";
+
+    if (cnt > 45 || cnt < 25)
+    {
+        out << "\n\nThis number seems off what we should expect, although since we're dealing with random numbers, there may be nothing untoward - try repating test\n\n";
+        testFlag = false;
+    }
+
+    cnt = 0;
+    for (auto o : z.playingFields[2]->playingField)
+        if (o->genome[0])
+            cnt++;
+
+    out << "PF3 is similar to PF1, and and thus there should be ~25 all ones. Count of all zeros is " << cnt << "\n\n";
+
+    if (cnt > 85 || cnt < 65)
+    {
+        out << "\n\nThis number seems off what we should expect, although since we're dealing with random numbers, there may be nothing untoward - try repating test\n\n";
+        testFlag = false;
+    }
 
     return testFlag;
 }

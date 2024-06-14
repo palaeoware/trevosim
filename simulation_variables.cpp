@@ -33,12 +33,13 @@ simulationVariables::simulationVariables()
     runForIterations = 1000;
     runForTaxa = 32;
     runningLogFrequency = 50;
+    replicates = 25;
 
     //Doubles
     environmentMutationRate = 1.0;
     organismMutationRate = 2.0;
     selectionCoinToss = 10.0;
-    stripUninformativeFactor = -1.;
+    stripUninformativeFactor = 5.;
 
     //Bools
     stripUninformative = false;
@@ -49,16 +50,16 @@ simulationVariables::simulationVariables()
     mixing = false;
     mixingPerturbation = false;
     noSelection = false;
-    randomSeed = false; //currently no GUI option for this
+    randomSeed = false;
     randomOverwrite = false;
     stochasticLayer = false;
-    writeTree = true;
     expandingPlayingfield = false;
     matchFitnessPeaks = false;
     ecosystemEngineers = false;
     ecosystemEngineersArePersistent = false;
     ecosystemEngineersAddMask = false;
     writeRunningLog = false;
+    writeTree = true;
     writeFileOne = true;
     writeFileTwo = true;
     writeEE = false;
@@ -74,11 +75,11 @@ simulationVariables::simulationVariables()
     logFileExtension02 = ".tnt";
     logFileExtension03 = ".nex";
     logFileString01 =
-        "#NEXUS\n[||Settings||]\nBegin data;\nDimensions ntax=||Taxon_Number|| nchar=||Character_Number||;\nFormat datatype=standard missing=? gap=-;\nMATRIX\n||Matrix||\n\n;\nBEGIN ASSUMPTIONS;\nTYPESET * UNTITLED = unord: 1-||Character_Number||;\nEND;";
-    logFileString02 = "Please enter output text (options in output dialogue).";
+        "#NEXUS\n[||Settings||]\nBegin data;\nDimensions ntax=||Taxon_Number|| nchar=||Character_Number||;\nFormat datatype=standard missing=? gap=-;\nMatrix\n||Matrix||\n;\nend;\n\nBegin assumptions;\nTypeset * untitled = unord: 1-||Character_Number||;\nend;";
+    logFileString02 =
+        "mxram 100;\nNSTATES nogaps;\nxread\n'Written on ||Time|| Variables: ||Settings||'\n||Character_Number|| ||Taxon_Number||\n||Matrix||\n;\npiwe-;\nkeep 0; hold 100000;\nrseed *;\nxmult = level 10; bbreak;\nexport - TREvoSim_run_||Count||_mpts.nex;\nxwipe;";
     logFileString03 = "#NEXUS\n\n[ ||Time|| ||Settings|| ] \n\n Begin trees;\nTranslate\n";
-    runningLogHeader = "Please enter output text (options in output dialogue).";
-    runningLogBody = "Please enter output text (options in output dialogue).";
+    runningLogString = "Please enter output text (options in output dialogue).";
     savePathDirectory = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
 }
 
@@ -108,6 +109,7 @@ QString simulationVariables::printSettings() const
                        << " writeFileTwo " << writeFileTwo
                        << " writeEE " << writeEE
                        << " noSelection " << noSelection
+                       << " randomSeed " << randomSeed
                        << " sansomianSpeciation " << sansomianSpeciation
                        << " discardDeleterious " << discardDeleterious
                        << " fitnessTarget " << fitnessTarget
@@ -123,6 +125,7 @@ QString simulationVariables::printSettings() const
                        << " ecosystemEngineeringFrequency " << ecosystemEngineeringFrequency
                        << " ecosystemEngineersAddMask " << ecosystemEngineersAddMask
                        << " runningLogFrequency " << runningLogFrequency
+                       << " replicates " << replicates
                        << " expandingPlayingfield" << expandingPlayingfield
                        << " stochasticLayer " << stochasticLayer
                        << " stochasticDepth " << stochasticDepth
@@ -169,6 +172,7 @@ bool simulationVariables::loadSettings(QFile *settingsFile)
             if (settingsFileIn.name().toString() == "runMode")runMode = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "ecosystemEngineeringFrequency")ecosystemEngineeringFrequency = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "runningLogFrequency")runningLogFrequency = settingsFileIn.readElementText().toInt();
+            if (settingsFileIn.name().toString() == "replicates")replicates = settingsFileIn.readElementText().toInt();
 
             //Double
             if (settingsFileIn.name().toString() == "stripUninformativeFactor")stripUninformativeFactor = settingsFileIn.readElementText().toDouble();
@@ -180,6 +184,7 @@ bool simulationVariables::loadSettings(QFile *settingsFile)
             if (settingsFileIn.name().toString() == "stripUninformative")stripUninformative = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "writeTree")writeTree = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "noSelection")noSelection = settingsFileIn.readElementText().toInt();
+            if (settingsFileIn.name().toString() == "randomSeed")randomSeed = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "sansomianSpeciation")sansomianSpeciation = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "discardDeleterious")discardDeleterious = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "environmentalPerturbation")environmentalPerturbation = settingsFileIn.readElementText().toInt();
@@ -200,14 +205,14 @@ bool simulationVariables::loadSettings(QFile *settingsFile)
             //Strings
             if (settingsFileIn.name().toString() == "logFileNameBase01")logFileNameBase01 = settingsFileIn.readElementText();
             if (settingsFileIn.name().toString() == "logFileNameBase02")logFileNameBase02 = settingsFileIn.readElementText();
+            if (settingsFileIn.name().toString() == "logFileNameBase03")logFileNameBase03 = settingsFileIn.readElementText();
             if (settingsFileIn.name().toString() == "logFileExtension01")logFileExtension01 = settingsFileIn.readElementText();
             if (settingsFileIn.name().toString() == "logFileExtension02")logFileExtension02 = settingsFileIn.readElementText();
             if (settingsFileIn.name().toString() == "logFileString01")logFileString01 = settingsFileIn.readElementText();
             if (settingsFileIn.name().toString() == "logFileString02")logFileString02 = settingsFileIn.readElementText();
             if (settingsFileIn.name().toString() == "savePathDirectory")savePathDirectory = (settingsFileIn.readElementText());
             if (settingsFileIn.name().toString() == "stripUninformativeFactorSettings")stripUninformativeFactorSettings = settingsFileIn.readElementText();
-            if (settingsFileIn.name().toString() == "runningLogHeader")runningLogHeader = settingsFileIn.readElementText();
-            if (settingsFileIn.name().toString() == "runningLogBody")runningLogBody = settingsFileIn.readElementText();
+            if (settingsFileIn.name().toString() == "runningLogString")runningLogString = settingsFileIn.readElementText();
 
             if (settingsFileIn.name().toString() == "stochasticMap")
             {
@@ -313,6 +318,10 @@ void simulationVariables::saveSettings(QFile *settingsFile)
     settingsFileOut.writeCharacters(QString("%1").arg(runningLogFrequency));
     settingsFileOut.writeEndElement();
 
+    settingsFileOut.writeStartElement("replicates");
+    settingsFileOut.writeCharacters(QString("%1").arg(replicates));
+    settingsFileOut.writeEndElement();
+
     //Double
     settingsFileOut.writeStartElement("stripUninformativeFactor");
     settingsFileOut.writeCharacters(QString("%1").arg(stripUninformativeFactor));
@@ -341,6 +350,10 @@ void simulationVariables::saveSettings(QFile *settingsFile)
 
     settingsFileOut.writeStartElement("noSelection");
     settingsFileOut.writeCharacters(QString("%1").arg(noSelection));
+    settingsFileOut.writeEndElement();
+
+    settingsFileOut.writeStartElement("randomSeed");
+    settingsFileOut.writeCharacters(QString("%1").arg(randomSeed));
     settingsFileOut.writeEndElement();
 
     settingsFileOut.writeStartElement("sansomianSpeciation");
@@ -416,6 +429,11 @@ void simulationVariables::saveSettings(QFile *settingsFile)
     settingsFileOut.writeCharacters(logFileNameBase02);
     settingsFileOut.writeEndElement();
 
+
+    settingsFileOut.writeStartElement("logFileNameBase03");
+    settingsFileOut.writeCharacters(logFileNameBase03);
+    settingsFileOut.writeEndElement();
+
     settingsFileOut.writeStartElement("logFileExtension01");
     settingsFileOut.writeCharacters(logFileExtension01);
     settingsFileOut.writeEndElement();
@@ -440,12 +458,8 @@ void simulationVariables::saveSettings(QFile *settingsFile)
     settingsFileOut.writeCharacters(stripUninformativeFactorSettings);
     settingsFileOut.writeEndElement();
 
-    settingsFileOut.writeStartElement("runningLogHeader");
-    settingsFileOut.writeCharacters(runningLogHeader);
-    settingsFileOut.writeEndElement();
-
-    settingsFileOut.writeStartElement("runningLogBody");
-    settingsFileOut.writeCharacters(runningLogBody);
+    settingsFileOut.writeStartElement("runningLogString");
+    settingsFileOut.writeCharacters(runningLogString);
     settingsFileOut.writeEndElement();
 
     QString map;

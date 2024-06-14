@@ -40,7 +40,7 @@ public:
     simulationVariables *simSettings;
 
     //Access functions for updating GUI from simulation object
-    void recalculateStripUniformativeFactor(bool running);
+    void recalculateStripUniformativeFactor();
     void setStatus(QString message);
     void setPath(QString newPath);
     void addProgressBar(int min, int max);
@@ -60,6 +60,7 @@ private:
     //GUI objects
     QAction *startButton;
     QAction *pauseButton;
+    QAction *stopButton;
     QAction *resetButton;
     QAction *runForButton;
     QAction *settingsButton;
@@ -91,7 +92,6 @@ private slots:
     void saveAs();
     void open();
     void escape();
-    void setRandomSeed();
     void selectionHistogram();
     void setFactor();
 
