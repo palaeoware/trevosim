@@ -1505,7 +1505,9 @@ bool simulation::stripUninformativeCharacters(QVector <Organism *> &speciesList,
         {
             QString label = "It seems there are not enough informative characters to pull this off.\n\n"
                             "By default, TREvoSim over generates characters by a factor of 5x before trying to strip down to those that are parsimony uninformative. "
-                            "Under these settings, it seems that 5x is not enough. Choosing the menu option \'Recalculate uninformative factor for current settings\' will allow you to recalculate this factor for the current settings, and \'Set uninformative factor' will allow you to set it manually to a large number.\n\n"
+                            "Under your current settings (in which the strip uninformative factor is " + QString::number(simSettings->stripUninformativeFactor) +
+                            ") TREvoSim has not managed to recover enough informative characters. It has only recovered " + QString::number(speciesList[0]->genome.size()) +
+                            " characters. Choosing the menu option \'Recalculate uninformative factor for current settings\' will allow you to recalculate this factor for the current settings, and \'Set uninformative factor' will allow you to set it manually to a large number.\n\n"
                             "Alternatively, this may be a one off - you could try running a batch of 1, and the program will try repeatedly with these settings - though after ten or more repeats you may want to cancel and change the settings.";
             warning("Oops", label);
         }
