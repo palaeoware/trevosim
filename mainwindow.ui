@@ -317,21 +317,26 @@
    </property>
    <widget class="QMenu" name="menuTools">
     <property name="title">
-     <string>Commands</string>
+     <string>File</string>
     </property>
     <addaction name="actionSave_settings"/>
     <addaction name="actionSave_settings_as"/>
     <addaction name="actionLoad_settings_from_file"/>
     <addaction name="actionRestore_default_settings"/>
     <addaction name="separator"/>
-    <addaction name="actionFitness_histogram"/>
-    <addaction name="actionRun_tests"/>
-    <addaction name="actionSet_uninformative_factor"/>
-    <addaction name="separator"/>
-    <addaction name="actionRecalculate_uninformative_factor_for_current_settings"/>
     <addaction name="actionRandom_seed"/>
    </widget>
+   <widget class="QMenu" name="menuCommands">
+    <property name="title">
+     <string>Commands</string>
+    </property>
+    <addaction name="actionFitness_histogram"/>
+    <addaction name="actionSet_uninformative_factor"/>
+    <addaction name="actionRecalculate_uninformative_factor_for_current_settings"/>
+    <addaction name="actionRun_tests"/>
+   </widget>
    <addaction name="menuTools"/>
+   <addaction name="menuCommands"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <property name="toolButtonStyle">
