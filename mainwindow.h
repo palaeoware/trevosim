@@ -92,7 +92,6 @@ private slots:
     void saveAs();
     void open();
     void escape();
-    void setRandomSeed();
     void selectionHistogram();
     void setFactor();
 

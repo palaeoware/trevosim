@@ -50,7 +50,7 @@ simulationVariables::simulationVariables()
     mixing = false;
     mixingPerturbation = false;
     noSelection = false;
-    randomSeed = false; //currently no GUI option for this
+    randomSeed = false;
     randomOverwrite = false;
     stochasticLayer = false;
     expandingPlayingfield = false;
@@ -109,6 +109,7 @@ QString simulationVariables::printSettings() const
                        << " writeFileTwo " << writeFileTwo
                        << " writeEE " << writeEE
                        << " noSelection " << noSelection
+                       << " randomSeed " << randomSeed
                        << " sansomianSpeciation " << sansomianSpeciation
                        << " discardDeleterious " << discardDeleterious
                        << " fitnessTarget " << fitnessTarget
@@ -183,6 +184,7 @@ bool simulationVariables::loadSettings(QFile *settingsFile)
             if (settingsFileIn.name().toString() == "stripUninformative")stripUninformative = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "writeTree")writeTree = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "noSelection")noSelection = settingsFileIn.readElementText().toInt();
+            if (settingsFileIn.name().toString() == "randomSeed")randomSeed = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "sansomianSpeciation")sansomianSpeciation = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "discardDeleterious")discardDeleterious = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "environmentalPerturbation")environmentalPerturbation = settingsFileIn.readElementText().toInt();
@@ -348,6 +350,10 @@ void simulationVariables::saveSettings(QFile *settingsFile)
 
     settingsFileOut.writeStartElement("noSelection");
     settingsFileOut.writeCharacters(QString("%1").arg(noSelection));
+    settingsFileOut.writeEndElement();
+
+    settingsFileOut.writeStartElement("randomSeed");
+    settingsFileOut.writeCharacters(QString("%1").arg(randomSeed));
     settingsFileOut.writeEndElement();
 
     settingsFileOut.writeStartElement("sansomianSpeciation");

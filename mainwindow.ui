@@ -324,7 +324,6 @@
     <addaction name="actionLoad_settings_from_file"/>
     <addaction name="actionRestore_default_settings"/>
     <addaction name="separator"/>
-    <addaction name="actionRandom_seed"/>
    </widget>
    <widget class="QMenu" name="menuCommands">
     <property name="title">
@@ -432,6 +431,9 @@
   <action name="actionRecalculate_uninformative_factor_for_current_settings">
    <property name="text">
     <string>Recalculate uninformative factor for current settings</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+R</string>
    </property>
   </action>
  </widget>

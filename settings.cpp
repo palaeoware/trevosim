@@ -58,6 +58,7 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
     ui->c_extinction->setChecked(settings->environmentalPerturbation);
     ui->c_mixing_perturbation->setChecked(settings->mixingPerturbation);
     ui->c_noSelection->setChecked(settings->noSelection);
+    ui->c_randomSeed->setChecked(settings->randomSeed);
     ui->c_random_overwrite->setChecked(settings->randomOverwrite);
     ui->c_stochastic->setChecked(settings->stochasticLayer);
     ui->c_expanding_playingfield->setChecked(settings->expandingPlayingfield);
@@ -137,6 +138,7 @@ void Settings::on_buttonBox_accepted()
     settings->mixing = ui->c_mixing->isChecked();
     settings->mixingPerturbation = ui->c_mixing->isChecked();
     settings->noSelection = ui->c_noSelection->isChecked();
+    settings->randomSeed = ui->c_randomSeed->isChecked();
     settings->randomOverwrite = ui->c_random_overwrite->isChecked();
     settings->stochasticLayer = ui->c_stochastic->isChecked();
     settings->expandingPlayingfield = ui->c_expanding_playingfield->isChecked();

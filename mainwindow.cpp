@@ -112,11 +112,11 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->actionRun_tests, &QAction::triggered, this, &MainWindow::doTests);
     QObject::connect(ui->actionRestore_default_settings, &QAction::triggered, this, &MainWindow::defaultSettings);
 
-    QObject::connect(ui->actionRandom_seed, &QAction::triggered, this, &MainWindow::setRandomSeed);
-
     new QShortcut(QKeySequence(Qt::Key_Escape), this, SLOT(escape()));
     new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_M), this, SLOT(setMultiplePlayingFields()));
     new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_X), this, SLOT(selectionHistogram()));
+
+
 
     QDir settingsPath;
     settingsPath.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation));
@@ -253,21 +253,6 @@ void MainWindow::setTreeDisplay(QString treeString)
     int h = static_cast<int>(ui->treeDisplay->document()->size().height());
     ui->treeDisplay->setFixedHeight(h);
     ui->treeDisplay->updateGeometry();
-}
-
-void MainWindow::setRandomSeed()
-{
-    simSettings->randomSeed = !simSettings->randomSeed;
-    if (simSettings->randomSeed)
-    {
-        setStatus("Simulation will initialise with random phenome");
-        ui->actionRandom_seed->setChecked(true);
-    }
-    else
-    {
-        setStatus("Simulation will initialise with phenome near peak fitness");
-        ui->actionRandom_seed->setChecked(false);
-    }
 }
 
 void MainWindow::load()
