@@ -116,8 +116,6 @@ MainWindow::MainWindow(QWidget *parent) :
     new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_M), this, SLOT(setMultiplePlayingFields()));
     new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_X), this, SLOT(selectionHistogram()));
 
-
-
     QDir settingsPath;
     settingsPath.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation));
     settingsFileString = (QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + "/" + QString(PRODUCTNAME) + "_settings.xml");
@@ -403,7 +401,7 @@ void MainWindow::runForTriggered()
     batchRunning = true;
 
     QVector<int> runsList(runBatchFor);
-    std::iota(runsList.begin(), runsList.end(), 0);
+    std::iota(runsList.begin(), runsList.end(), runs);
 
     bool errorStart = false;
     //Create a new simulation object - sending it important settings.
@@ -464,6 +462,8 @@ void MainWindow::runForTriggered()
     }
     //Run up to 50 times so this cannot get caught in an infinite loop
     while (runsList.count() > 0 && count < 50 && batchRunning == true);
+
+    runs += runBatchFor;
 
     //Reset gui etc.
     batchRunning = false;
