@@ -777,6 +777,7 @@ void MainWindow::doTests()
 
     bool ok;
     QString item = QInputDialog::getItem(this, tr("TREvoSim tests"), tr("Which test?"), items, 0, false, &ok);
+    auto itemSplit = item.split(" - ");
 
     setStatus("Starting tests");
     QProgressDialog progress("Doing tests...", "Cancel", 0, testCount, this);
@@ -787,8 +788,8 @@ void MainWindow::doTests()
     {
         if (item != "All")
         {
-            testCount = item.toInt() + 1;
-            testStart = item.toInt();
+            testCount = itemSplit[0].toInt() + 1;
+            testStart = itemSplit[0].toInt();
             progress.close();
         }
         else
