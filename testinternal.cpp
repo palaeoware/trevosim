@@ -125,7 +125,7 @@ bool testinternal::testZero(QString &outString)
     simSettings.fitnessTarget = 0;
     simSettings.maskNumber = 3;
     simulation x(0, &simSettings, &error, theMainWindow);
-    if (error) testFlag = false;
+    if (error) return false;
 
     //Fitness requires an organism - create an organism with 50 bits, no stochastic genome, all bits are initialised to zero
     Organism org(simSettings.genomeSize, false);
@@ -160,7 +160,7 @@ bool testinternal::testZero(QString &outString)
     simSettings.fitnessTarget = 50;
     out << "Set masks to two, and fitness target back to 50.\n";
     simulation y(0, &simSettings, &error, theMainWindow);
-    if (error) testFlag = false;
+    if (error) return false;
 
     //Now set masks in simulation to 1
     for (auto p : std::as_const(y.playingFields))
@@ -183,7 +183,7 @@ bool testinternal::testZero(QString &outString)
     simSettings.environmentNumber = 2;
     simSettings.fitnessTarget = 0;
     simulation z(0, &simSettings, &error, theMainWindow);
-    if (error) testFlag = false;
+    if (error) return false;
 
     //Now set masks in environment 0 simulation to 1
     for (auto p : std::as_const(z.playingFields))
@@ -1210,8 +1210,9 @@ bool testinternal::testThirteen(QString &outString)
 
     QHash<QString, QVector <int> > extinct = x.checkForExtinct(speciesList);
 
-    for (auto s : std::as_const(extinct)) x.speciesExtinction(speciesList[s[0]], x.playingFields[s[1]]->playingField[s[2]], (x.iterations + 1), simSettings.sansomianSpeciation, simSettings.stochasticLayer,
-                                                             true);
+    for (auto s : std::as_const(extinct)) x.speciesExtinction(speciesList[s[0]], x.playingFields[s[1]]->playingField[s[2]], (x.iterations + 1), simSettings.sansomianSpeciation,
+                                                                  simSettings.stochasticLayer,
+                                                                  true);
 
     for (int i = 0; i < 20; i ++)
         if (speciesList[i]->extinct != 0)
@@ -1227,8 +1228,9 @@ bool testinternal::testThirteen(QString &outString)
     extinct = x.checkForExtinct(speciesList);
 
     for (auto s : std::as_const(extinct)) out << "Species is extinct: " << s[0] << "\n";
-    for (auto s : std::as_const(extinct)) x.speciesExtinction(speciesList[s[0]], x.playingFields[s[1]]->playingField[s[2]], (x.iterations + 1), simSettings.sansomianSpeciation, simSettings.stochasticLayer,
-                                                             true);
+    for (auto s : std::as_const(extinct)) x.speciesExtinction(speciesList[s[0]], x.playingFields[s[1]]->playingField[s[2]], (x.iterations + 1), simSettings.sansomianSpeciation,
+                                                                  simSettings.stochasticLayer,
+                                                                  true);
 
     for (int i = 0; i < 20; i ++)
         if (speciesList[i]->extinct != 0)
@@ -1257,8 +1259,9 @@ bool testinternal::testThirteen(QString &outString)
     x.playingFields[1]->playingField[6]->speciesID = 1;
     extinct = x.checkForExtinct(speciesList);
     for (auto s : std::as_const(extinct)) out << "Species is extinct: " << s[0] << "\n";
-    for (auto s : std::as_const(extinct)) x.speciesExtinction(speciesList[s[0]], x.playingFields[s[1]]->playingField[s[2]], (x.iterations + 1), simSettings.sansomianSpeciation, simSettings.stochasticLayer,
-                                                             true);
+    for (auto s : std::as_const(extinct)) x.speciesExtinction(speciesList[s[0]], x.playingFields[s[1]]->playingField[s[2]], (x.iterations + 1), simSettings.sansomianSpeciation,
+                                                                  simSettings.stochasticLayer,
+                                                                  true);
 
     for (int i = 0; i < 20; i ++)
         if (speciesList[i]->extinct == 69)
