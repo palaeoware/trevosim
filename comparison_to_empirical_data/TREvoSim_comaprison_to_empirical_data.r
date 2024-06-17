@@ -12,24 +12,22 @@ rm(list = ls())
 
 ########################################################################################################################
 
-# This script analyses TREvoSim runs, benchmarking them against empirical datasets. 
-# It was written by Nicolás Mongiardino Koch and Russell Garwood, extra steps function courtesy of Joe Keating.
+# This script analyses TREvoSim runs, and then compares them against empirical datasets.
+# It was written by Nicolás Mongiardino Koch and Russell Garwood, with an extra steps function courtesy of Joe Keating.
 # The empirical datasets are sourced from this paper:
 # Mongiardino Koch, N., Garwood, R.J. and Parry, L.A., 2021. Fossils improve phylogenetic analyses of morphological characters. Proceedings of the Royal Society B, 288(1950), p.20210044.
-# The above paper cites the source of each dataset used for the analysis
+# The above paper cites the source of each dataset used for the analysis.
 
 ########################################################################################################################
 
 #Directory with empirical data:
-empiricalWD <- "./Empirical_data/"
+empiricalWD <- "./Empirical_data"
 #Directory with TREvoSim outputs in it:
-sourceWD <- "/home/russell/Desktop/Programming/TREvoSim/analysis/"
+sourceWD <- "./TREvoSim_output_defaults_2024"
 #Directory to output graphs
-outputWD <- "/home/russell/Desktop/"
+outputWD <- "./Graphs_out/"
 
 #You can use the following switches to determine whether it:
-###Calculates rates using an MK model
-calcRates <- FALSE
 ###Counts the number of extant taxa
 countExtant <- TRUE
 ###Counts the number of parsimony steps on the true tree
@@ -91,25 +89,25 @@ steps <- function(tree, mdata) {
 empiricalTreeness <- function() {
   #Get empirical data
   trees <- list.files(empiricalWD, pattern = ".tre", full.names = TRUE)
-  
+
   #Treeness for empirical
   empiricalTreenessVector = vector(length = length(trees))
-  
+
   for (i in 1:length(trees)) {
     tree <- read.tree(trees[i])
     empiricalTreenessVector[i] = treeness(tree)
   }
-  
+
   return(empiricalTreenessVector)
 }
 
 empiricalColless <- function() {
   #Get empirical data
   trees = list.files(empiricalWD, pattern = ".tre", full.names = TRUE)
-  
+
   #Treeshape for empirical
   empiricalTreeshapeVector = vector(length = length(trees))
-  
+
   for (i in 1:length(trees)) {
     tree = read.tree(trees[i])
     #Use the corrected colless so number of tips is not an isssue. See:
@@ -118,50 +116,50 @@ empiricalColless <- function() {
     n = length(tree$tip.label)
     empiricalTreeshapeVector[i] = colless(tree)/((n - 1) * (n - 2)/2)
   }
-  
+
   return(empiricalTreeshapeVector)
 }
 
 empiricalSteps <- function() {
   #Get emprical data
   empiricalStepsDF <- data.frame()
-  
+
   if (length(list.files(empiricalWD, pattern = "empirical_steps.csv")) == 1) {
     empiricalStepsDF <- read.csv(list.files(empiricalWD, pattern = "empirical_steps.csv", full.names = TRUE), stringsAsFactors = FALSE)
     return(empiricalStepsDF)
   }
-  
+
   matrices = list.files(empiricalWD, pattern = ".nex", full.names = TRUE)
   if ("matrix.nex" %in% matrices) {
     matrices = matrices[1:(length(matrices) - 1)]
   }
   trees = gsub(".nex", ".tre", matrices)
-  
+
   #Now extra steps for empirical
   lengths = vector(length = length(trees))
-  
+
   for (i in 1:length(matrices)) {
     matrix = ReadMorphNexus(matrices[i])
     matrix2 = matrix$Matrix_1$Matrix
     tree = read.tree(trees[i])
-    
+
     if (length(tree$tip.label) != nrow(matrix2)) {
       tree = drop.tip(tree, tree$tip.label[which(tree$tip.label %not in% rownames(matrix$Matrix_1$Matrix))])
     }
-    
+
     if (length(which(rownames(matrix2) %not in% tree$tip.label)) > 0) {
       matrix2 = matrix2[-which(rownames(matrix2) %not in% tree$tip.label), ]
     }
-    
+
     if (!is.binary(tree)) {
       tree = multi2di(tree, random = T)
     }
-    
+
     binary = (matrix$Matrix_1$MaxVals == 1)
     to_calculate = which(binary)
-    
+
     steps = vector(length = length(to_calculate))
-    
+
     for (j in 1:length(to_calculate)) {
       character = matrix2[, to_calculate[j]]
       character[which(character == "0")] = "a"
@@ -209,11 +207,18 @@ matrixFiles <- matrixFiles[!grepl("tree", matrixFiles)]
 for (i in 1:length(treeFiles)) {
   simTree <- read.nexus(treeFiles[i])
   plot(simTree, show.tip.label = FALSE)
-  simMatrix <- read_nexus_matrix(matrixFiles[i])
+  #simMatrix <-
+
+    read_nexus_matrix(matrixFiles[i])
+
+  matrixFiles[i]
+
+  readNexus(matrixFiles[i])
+
   #ReadMorphNexus(matrixFiles[i]);
   simMatrix <- simMatrix$matrix_1$matrix
   #simMatrix$Matrix_1$Matrix
-  
+
   #Count extant if requested
   if (countExtant) {
     #identify extinct and extant taxa (0/1)
@@ -222,24 +227,24 @@ for (i in 1:length(treeFiles)) {
     #square brackets asking for the row corresponding to the root node (which is always ntax + 1), and the columns from 1 to ntax
     dist_taxa <- dist.nodes(simTree)[(length(simTree$tip.label) + 1), (1:length(simTree$tip.label))]
     maxt <- max(dist_taxa)
-    
+
     #Count number of fossils - note L ensures this is an integer.
     extantCount = length(which(dist_taxa == maxt))
     cat("Extant count is", extantCount, "\n")
     counts[i] <- extantCount
   }
-  
+
   #Treeshape if requested
   if (calcTreeshape) {
     #See comment in empirical treeshape for mor info on this calculation
     n = length(simTree$tip.label)
     treeshapes[i] <- colless(simTree)/((n - 1) * (n - 2)/2)
   }
-  
+
   #Calculate treeness if requested
   if (calcTreeness)
     simTreenessVector[i] = treeness(simTree)
-  
+
   #Count parsimony steps if requested
   #Given the number of characters, no need to go above really
   if (countSteps && i < 25) {
@@ -248,43 +253,6 @@ for (i in 1:length(treeFiles)) {
     steps_run$plot <- i
     extraStepsDF <- rbind(extraStepsDF, steps_run)
     cat("Mean extra steps is ", mean(as.numeric(steps_run$steps), na.rm = TRUE), "\n")
-  }
-  
-  #Calc rates using an MK model if requested
-  if (calcRates) {
-    cat("Now working on fitting MK model to all characters\n")
-    #next up rates using fitDiscrete of package geiger
-    #modify matrix to comply with Claddis format
-    matrix = readLines(matrixFiles[i])
-    assumptions = paste("\nBEGIN ASSUMPTIONS;", "TYPESET * UNTITLED = unord: 1-300;", "END;\n", sep = "\n")
-    matrix = paste(c(matrix, assumptions), collapse = "\n")
-    cat(matrix, file = "matrix.nex")
-    
-    #read modified matrix
-    matrix = ReadMorphNexus("matrix.nex")
-    matrix = matrix$Matrix_1$Matrix
-    
-    #estimate rate of evolution under equal-rates model
-    rate = vector(length = ncol(matrix))
-    
-    rate <- mclapply(1:length(rate), doFitMK, fSimTree = simTree, fSimMatrix = matrix, mc.cores = (numCores - 2))
-    #Convert output of lapply into something useful
-    rate2 <- simplify2array(rate)
-    
-    ##Non parallel version
-    #for(j in 1:length(rate))
-    #{
-    #  cat('*')
-    #  rate[j] = fitMk(simTree, matrix[,j], model = 'ER')$rates
-    #}
-    
-    #multiply by age of root
-    ##Below doesn't work - allrates not declared yet.
-    ##all_rates = c(all_rates, rate*max(nodeHeights(tree)))
-    #This is what I assume was required
-    all_rates <- rate2 * max(nodeHeights(simTree))
-    meanRates[i] <- mean(all_rates[all_rates < 10])  #high value outliers are those for which fitting of the Mk model failed
-    cat("Mean rate is", meanRates[[i]], "\n")
   }
 }
 
@@ -301,25 +269,25 @@ for (i in 1:length(treeFiles)) {
 if (countExtant) {
   ## Do outputs for counts
   outputDF <- data.frame()
-  
+
   outputDF <- do.call(rbind, Map(data.frame, counts = counts))
-  
+
   write.csv(outputDF, "counts.csv")
   cat("Mean extant is", mean(outputDF$counts), "\n")
   cat("Min extant is", min(outputDF$counts), "\n")
   cat("Max extant is", max(outputDF$counts), "\n")
-  
+
   mid <- (max(outputDF) + min(outputDF))/2
-  
-  ggplot(data = outputDF, aes(x = counts, fill = ..x..)) + 
-    geom_histogram(color = "#000000") + 
-    theme_minimal() + 
-    scale_fill_gradient2(low = vapoRwave:::newRetro_palette[3], mid = vapoRwave:::newRetro_palette[2], high = vapoRwave:::newRetro_palette[1], midpoint = mid) + 
-    theme(panel.border = element_rect(color = "black", fill = NA)) + 
-    scale_y_continuous(expand = expansion(mult = c(0, 0.1))) + 
-    labs(title = "TREvoSim extant count", x = "Number of extant terminals", y = "Count") + 
+
+  ggplot(data = outputDF, aes(x = counts, fill = ..x..)) +
+    geom_histogram(color = "#000000") +
+    theme_minimal() +
+    scale_fill_gradient2(low = vapoRwave:::newRetro_palette[3], mid = vapoRwave:::newRetro_palette[2], high = vapoRwave:::newRetro_palette[1], midpoint = mid) +
+    theme(panel.border = element_rect(color = "black", fill = NA)) +
+    scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
+    labs(title = "TREvoSim extant count", x = "Number of extant terminals", y = "Count") +
     theme(plot.title = element_text(hjust = 0.5)) + theme(legend.position = "none")
-  
+
   ggsave(paste(outputWD, "Counts_histogram.pdf", sep = ""))
 }
 
@@ -328,20 +296,20 @@ if (calcTreeshape) {
   colnames(empiricalTreeshapeDF) <- "treeshape"
   empiricalTreeshapeDF$plot <- "Empirical"
   simTreeshapeDF <- do.call(rbind, Map(data.frame, ts = treeshapes))
-  
+
   colnames(simTreeshapeDF) <- "treeshape"
   simTreeshapeDF$plot <- "Simulated"
   allTreeshapeDF <- rbind(empiricalTreeshapeDF, simTreeshapeDF)
-  
-  ggplot(data = allTreeshapeDF, aes(y = treeshape, x = plot)) + 
-    geom_boxplot(fill = "#396ff6") + 
-    theme_minimal() + 
-    theme(panel.border = element_rect(color = "black", fill = NA)) + 
-    ylim(0, 1) + 
-    labs(title = "TREvoSim vs Empirical treeshape", x = "Data type", y = "Treeshape (corrected Colless)") + 
-    theme(plot.title = element_text(hjust = 0.5)) + 
+
+  ggplot(data = allTreeshapeDF, aes(y = treeshape, x = plot)) +
+    geom_boxplot(fill = "#396ff6") +
+    theme_minimal() +
+    theme(panel.border = element_rect(color = "black", fill = NA)) +
+    ylim(0, 1) +
+    labs(title = "TREvoSim vs Empirical treeshape", x = "Data type", y = "Treeshape (corrected Colless)") +
+    theme(plot.title = element_text(hjust = 0.5)) +
     theme(legend.position = "none")
-  
+
   ggsave(paste(outputWD, "TREvoSim_treeshape_plot.pdf", sep = ""))
 }
 
@@ -352,31 +320,31 @@ if (countSteps) {
   extraStepsDF <- data.frame(extraStepsDF)
   keeps <- c("steps", "plot")
   extraStepsDF2 <- extraStepsDF[keeps]
-  
+
   #Change plot number for graphing
   extraStepsDF2$plot = "Simulated"
-  
+
   #Combine DFs
   allSteps <- rbind(allRatesEmpirical, extraStepsDF2)
-  
+
   #Pretty colours to make graphs A E S T H E T I C
   RJGaesthetic <- palette(c(vapoRwave:::newRetro_palette, "#792096", "#396ff6", "#44B05B", "#FA41CA", "#852942"))
   #Sometimes above doesn't stick - do it twice to see if that helps
   RJGaesthetic <- palette(c(vapoRwave:::newRetro_palette, "#792096", "#396ff6", "#44B05B", "#FA41CA", "#852942"))
-  
+
   #And write CSV in case it doesn't
   write.csv(allSteps, "allSteps.csv")
-  
+
   #Plot
-  ggplot(data = allSteps, aes(y = steps, x = plot, group = plot, fill = plot)) + 
-    geom_violin(adjust = 1.5) + theme_minimal() + theme(panel.border = element_rect(color = "black", fill = NA)) + 
+  ggplot(data = allSteps, aes(y = steps, x = plot, group = plot, fill = plot)) +
+    geom_violin(adjust = 1.5) + theme_minimal() + theme(panel.border = element_rect(color = "black", fill = NA)) +
     scale_y_log10() +
-    scale_x_discrete(guide = guide_axis(n.dodge = 2)) + 
-    scale_fill_manual(values = RJGaesthetic) + 
+    scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
+    scale_fill_manual(values = RJGaesthetic) +
     stat_summary(fun.y = mean, geom = "point", shape = 21, size = 2, fill = "white", color = "black", stroke = 0.5) +
-    labs(title = "TREvoSim vs Empirical extra parsimony steps", x = "Dataset", y = "Number of steps") + 
+    labs(title = "TREvoSim vs Empirical extra parsimony steps", x = "Dataset", y = "Number of steps") +
     theme(plot.title = element_text(hjust = 0.5)) + theme(legend.position = "none")
-  
+
   ggsave(paste(outputWD, "TREvoSim_homoplasy_plots.pdf", sep = ""))
 }
 
@@ -389,13 +357,13 @@ if (calcTreeness) {
   colnames(simTreenessDF) <- "treeness"
   simTreenessDF$plot <- "Simulated"
   allTreenessDF <- rbind(empiricalTreenessDF, simTreenessDF)
-  
-  ggplot(data = allTreenessDF, aes(y = treeness, x = plot)) + 
-    geom_boxplot(fill = "#792096") + 
-    theme_minimal() + 
-    theme(panel.border = element_rect(color = "black", fill = NA)) + ylim(0, 1) + 
-    labs(title = "TREvoSim vs Empirical treeness", x = "Data type", y = "Treeness") + theme(plot.title = element_text(hjust = 0.5)) + 
+
+  ggplot(data = allTreenessDF, aes(y = treeness, x = plot)) +
+    geom_boxplot(fill = "#792096") +
+    theme_minimal() +
+    theme(panel.border = element_rect(color = "black", fill = NA)) + ylim(0, 1) +
+    labs(title = "TREvoSim vs Empirical treeness", x = "Data type", y = "Treeness") + theme(plot.title = element_text(hjust = 0.5)) +
     theme(legend.position = "none")
-  
+
   ggsave(paste(outputWD, "TREvoSim_treeness_plots.pdf", sep = ""))
 }

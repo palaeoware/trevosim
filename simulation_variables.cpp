@@ -75,7 +75,8 @@ simulationVariables::simulationVariables()
     logFileExtension02 = ".tnt";
     logFileExtension03 = ".nex";
     logFileString01 =
-        "#NEXUS\n[||Settings||]\nBegin data;\nDimensions ntax=||Taxon_Number|| nchar=||Character_Number||;\nFormat datatype=standard missing=? gap=-;\nMatrix\n||Matrix||\n;\nend;\n\nBegin assumptions;\nTypeset * untitled = unord: 1-||Character_Number||;\nend;";
+        "#NEXUS\n[||Settings||]\n\nBEGIN DATA;\n	DIMENSIONS NTAX=||Taxon_Number|| NCHAR=||Character_Number||;\n	FORMAT SYMBOLS= " 0 1
+        " MISSING=? GAP=- ;\nMATRIX\n\n||Matrix||\n;\nend;\n\nBEGIN ASSUMPTIONS;\n 	TYPESET * untitled = unord: 1-||Character_Number||;\nEND;";
     logFileString02 =
         "mxram 100;\nNSTATES nogaps;\nxread\n'Written on ||Time|| Variables: ||Settings||'\n||Character_Number|| ||Taxon_Number||\n||Matrix||\n;\npiwe-;\nkeep 0; hold 100000;\nrseed *;\nxmult = level 10; bbreak;\nexport - TREvoSim_run_||Count||_mpts.nex;\nxwipe;";
     logFileString03 = "#NEXUS\n\n[ ||Time|| ||Settings|| ] \n\n Begin trees;\nTranslate\n";

@@ -1,0 +1,15 @@
+#NEXUS
+[||Settings||]
+
+BEGIN DATA;
+	DIMENSIONS NTAX=||Taxon_Number|| NCHAR=||Character_Number||;
+	FORMAT SYMBOLS= " 0 1 " MISSING=? GAP=- ;
+MATRIX
+
+||Matrix||
+;
+end;
+
+BEGIN ASSUMPTIONS;
+ 	TYPESET * untitled = unord: 1-||Character_Number||;
+END;
