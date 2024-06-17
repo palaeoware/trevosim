@@ -670,13 +670,20 @@ bool simulation::run()
 
         file03TextStream << logFileString03Tmp;
 
+        //Zero padding
+        int totalSpeciesCount = speciesList.length();
+        int padding = 0;
+        if (totalSpeciesCount < 100) padding = 2;
+        else if (totalSpeciesCount < 1000) padding = 3;
+        else padding = 4;
+
         for (int i = 0; i < speciesList.count(); i++)
         {
             file03TextStream << (QString("%1").arg(i + 1));
             //if (simSettings->runForTaxa < 100)file03TextStream << (QString("%1").arg(i + 1));
             //else file03TextStream << (QString("S_%1").arg(i + 1, 3, 10, QChar('0')));
 
-            file03TextStream << "\t\t" << "Species_" << i << ",\n";
+            file03TextStream << "\t\t" << "Species_" << doPadding(i, padding) << ",\n";
         }
 
         file03TextStream << "\t\t;\n\ntree tree1 = [&R]";

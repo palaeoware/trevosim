@@ -66,6 +66,12 @@ doFitMK <- function(characterNo, fSimTree, fSimMatrix) {
 #Constant characters will return NA.
 #tree = object of class 'phylo'.
 #mdata = binary character matrix of class 'list', e.g. as produced by the 'read.nexus.data' function
+
+#tree<-simTree
+#mdata<-read.nexus.data(matrixFiles[1])
+#tree<-read.nexus("/home/russell/Desktop/TREvoSim_output_unrooted/TREvoSim_tree_000.nex")
+#mdata<-read.nexus.data("/home/russell/Desktop/TREvoSim_output_unrooted/TREvoSim_000.nex")
+
 steps <- function(tree, mdata) {
   char_results <- data.frame(character = 0, steps = 0)
   levelInData <- levels(as.factor(unlist(mdata)))
@@ -245,7 +251,7 @@ for (i in 1:length(treeFiles)) {
     tree<-simTree
     mdata<-read.nexus.data(matrixFiles[1])
     mdata2<-read.nexus.data(matrixFiles[1])
-    steps_run <- steps(simTree, read.nexus.data(matrixFiles[i])
+    steps_run <- steps(simTree, read.nexus.data(matrixFiles[i]))
     steps_run$plot <- i
     extraStepsDF <- rbind(extraStepsDF, steps_run)
     cat("Mean extra steps is ", mean(as.numeric(steps_run$steps), na.rm = TRUE), "\n")
