@@ -207,14 +207,7 @@ matrixFiles <- matrixFiles[!grepl("tree", matrixFiles)]
 for (i in 1:length(treeFiles)) {
   simTree <- read.nexus(treeFiles[i])
   plot(simTree, show.tip.label = FALSE)
-  #simMatrix <-
-
-    read_nexus_matrix(matrixFiles[i])
-
-  matrixFiles[i]
-
-  readNexus(matrixFiles[i])
-
+  simMatrix <- read_nexus_matrix(matrixFiles[i])
   #ReadMorphNexus(matrixFiles[i]);
   simMatrix <- simMatrix$matrix_1$matrix
   #simMatrix$Matrix_1$Matrix
@@ -249,7 +242,10 @@ for (i in 1:length(treeFiles)) {
   #Given the number of characters, no need to go above really
   if (countSteps && i < 25) {
     cat("Running extra steps analysis, dataset ", i, " - will only do the first 25 datasets out of ", length(treeFiles), ".\n")
-    steps_run <- steps(simTree, read.nexus.data(matrixFiles[i]))
+    tree<-simTree
+    mdata<-read.nexus.data(matrixFiles[1])
+    mdata2<-read.nexus.data(matrixFiles[1])
+    steps_run <- steps(simTree, read.nexus.data(matrixFiles[i])
     steps_run$plot <- i
     extraStepsDF <- rbind(extraStepsDF, steps_run)
     cat("Mean extra steps is ", mean(as.numeric(steps_run$steps), na.rm = TRUE), "\n")

@@ -1,0 +1,43 @@
+#NEXUS
+
+[ Mon Jun 17 15:32:36 2024 variables : genomeSize 128 speciesSelectSize 128 fitnessSize 128 runForTaxa 32 runForIterations 1000 playingfieldSize 20 speciesDifference 4 environmentMutationRate 1 organismMutationRate 2 unresolvableCutoff 5 environmentNumber 1 maskNumber 5 runMode 1 stripUninformative 0 writeTree 1 writeRunningLog 0 writeFileOne 1 writeFileTwo 1 writeEE 0 noSelection 0 randomSeed 0 sansomianSpeciation 1 discardDeleterious 0 fitnessTarget 50 playingfieldNumber 1 mixing 0 mixingProbabilityZeroToOne 0 mixingProbabilityOneToZero 0 playingfieldMasksMode 0 selection 10 randomOverwrite 0 ecosystemEngineers 0 ecosystemEngineersArePersistent 0 ecosystemEngineeringFrequency 10 ecosystemEngineersAddMask 0 runningLogFrequency 50 replicates 100 expandingPlayingfield0 stochasticLayer 0 stochasticDepth 1 matchFitnessPeaks 0 stochasticMap 0000000000000000 ] 
+
+ Begin trees;
+Translate
+1		Species_0,
+2		Species_1,
+3		Species_2,
+4		Species_3,
+5		Species_4,
+6		Species_5,
+7		Species_6,
+8		Species_7,
+9		Species_8,
+10		Species_9,
+11		Species_10,
+12		Species_11,
+13		Species_12,
+14		Species_13,
+15		Species_14,
+16		Species_15,
+17		Species_16,
+18		Species_17,
+19		Species_18,
+20		Species_19,
+21		Species_20,
+22		Species_21,
+23		Species_22,
+24		Species_23,
+25		Species_24,
+26		Species_25,
+27		Species_26,
+28		Species_27,
+29		Species_28,
+30		Species_29,
+31		Species_30,
+32		Species_31,
+		;
+
+tree tree1 = [&R](2:2,(3:45,((((26:2,(30:5,18:5):6):12,((27:9,(29:7,21:7):2):10,(22:2,(31:2,16:2):15):2):4):5,(20:20,4:6):8):18,(5:2,(6:2,(7:2,(8:2,(9:18,(10:35,((19:21,(28:8,11:8):13):16,(12:35,(13:2,(14:3,(15:2,(17:2,(23:13,(24:13,(25:2,(32:1,1:1):11):1):1):11):4):2):2):2):2):1):2):1):1):2):1):1):1):1):7;
+
+END;
