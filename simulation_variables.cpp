@@ -14,7 +14,7 @@ simulationVariables::simulationVariables()
     genomeSize = 128;
     speciesSelectSize = 128;
     fitnessSize = 128;
-    fitnessTarget = 50;
+    fitnessTarget = 0;
     playingfieldSize = 20;
     playingfieldNumber = 1;
     ecosystemEngineeringFrequency = 10;
@@ -23,7 +23,7 @@ simulationVariables::simulationVariables()
     speciesDifference = 4;
     unresolvableCutoff = 5;
     environmentNumber = 1;
-    maskNumber = 5;
+    maskNumber = 3;
     mixingProbabilityZeroToOne = 0;
     mixingProbabilityOneToZero = 0;
     stochasticDepth = 1;
@@ -31,13 +31,13 @@ simulationVariables::simulationVariables()
     test = 0;
     runMode = RUN_MODE_TAXON;
     runForIterations = 1000;
-    runForTaxa = 32;
+    runForTaxa = 64;
     runningLogFrequency = 50;
     replicates = 25;
 
     //Doubles
     environmentMutationRate = 1.0;
-    organismMutationRate = 2.0;
+    organismMutationRate = 5.0;
     selectionCoinToss = 10.0;
     stripUninformativeFactor = 5.;
 

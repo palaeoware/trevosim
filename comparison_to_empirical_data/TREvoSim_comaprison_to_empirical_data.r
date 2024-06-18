@@ -29,7 +29,7 @@ outputWD <- "./Graphs_out/"
 
 #You can use the following switches to determine whether it:
 ###Counts the number of extant taxa
-countExtant <- TRUE
+countExtant <- FALSE
 ###Counts the number of parsimony steps on the true tree
 countSteps <- TRUE
 ###Calculates the treeness of the tree
@@ -369,3 +369,4 @@ if (calcTreeness) {
 
   ggsave(paste(outputWD, "TREvoSim_treeness_plots.pdf", sep = ""))
 }
+

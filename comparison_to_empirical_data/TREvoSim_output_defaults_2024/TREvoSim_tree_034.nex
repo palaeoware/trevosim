@@ -1,6 +1,6 @@
 #NEXUS
 
-[ Mon Jun 17 16:31:33 2024 variables : genomeSize 128 speciesSelectSize 128 fitnessSize 128 runForTaxa 32 runForIterations 1000 playingfieldSize 20 speciesDifference 4 environmentMutationRate 1 organismMutationRate 2 unresolvableCutoff 5 environmentNumber 1 maskNumber 5 runMode 1 stripUninformative 0 writeTree 1 writeRunningLog 0 writeFileOne 1 writeFileTwo 1 writeEE 0 noSelection 0 randomSeed 0 sansomianSpeciation 1 discardDeleterious 0 fitnessTarget 50 playingfieldNumber 1 mixing 0 mixingProbabilityZeroToOne 0 mixingProbabilityOneToZero 0 playingfieldMasksMode 0 selection 10 randomOverwrite 0 ecosystemEngineers 0 ecosystemEngineersArePersistent 0 ecosystemEngineeringFrequency 10 ecosystemEngineersAddMask 0 runningLogFrequency 50 replicates 100 expandingPlayingfield0 stochasticLayer 0 stochasticDepth 1 matchFitnessPeaks 0 stochasticMap 0000000000000000 ] 
+[ Tue Jun 18 12:05:45 2024 variables : genomeSize 128 speciesSelectSize 128 fitnessSize 128 runForTaxa 64 runForIterations 1000 playingfieldSize 20 speciesDifference 4 environmentMutationRate 1 organismMutationRate 5 unresolvableCutoff 5 environmentNumber 1 maskNumber 3 runMode 1 stripUninformative 0 writeTree 1 writeRunningLog 0 writeFileOne 1 writeFileTwo 1 writeEE 0 noSelection 0 randomSeed 0 sansomianSpeciation 1 discardDeleterious 0 fitnessTarget 0 playingfieldNumber 1 mixing 0 mixingProbabilityZeroToOne 0 mixingProbabilityOneToZero 0 playingfieldMasksMode 0 selection 10 randomOverwrite 0 ecosystemEngineers 0 ecosystemEngineersArePersistent 0 ecosystemEngineeringFrequency 10 ecosystemEngineersAddMask 0 runningLogFrequency 50 replicates 100 expandingPlayingfield0 stochasticLayer 0 stochasticDepth 1 matchFitnessPeaks 0 stochasticMap 0000000000000000 ] 
 
  Begin trees;
 Translate
@@ -36,8 +36,40 @@ Translate
 30		Species_29,
 31		Species_30,
 32		Species_31,
+33		Species_32,
+34		Species_33,
+35		Species_34,
+36		Species_35,
+37		Species_36,
+38		Species_37,
+39		Species_38,
+40		Species_39,
+41		Species_40,
+42		Species_41,
+43		Species_42,
+44		Species_43,
+45		Species_44,
+46		Species_45,
+47		Species_46,
+48		Species_47,
+49		Species_48,
+50		Species_49,
+51		Species_50,
+52		Species_51,
+53		Species_52,
+54		Species_53,
+55		Species_54,
+56		Species_55,
+57		Species_56,
+58		Species_57,
+59		Species_58,
+60		Species_59,
+61		Species_60,
+62		Species_61,
+63		Species_62,
+64		Species_63,
 		;
 
-tree tree1 = [&R](2:2,(3:28,(((22:11,(25:7,(27:2,(28:6,(30:3,12:3):3):2):2):3):20,((19:21,(29:5,13:5):16):10,4:31):2):10,(5:2,((23:12,6:12):29,((16:14,(24:2,7:11):14):15,(8:2,((26:9,(31:2,(32:1,9:1):1):7):29,(10:11,(11:2,(14:8,(15:8,(17:11,(18:5,((21:3,20:15):2,1:17):5):2):2):4):4):1):3):1):1):1):1):1):1):1):14;
+tree tree1 = [&R]((((((24:2,10:4):14,(((23:2,(32:2,19:5):9):4,(22:9,16:13):3):3,(17:12,(25:2,(30:2,9:3):5):8):1):6):2,((12:12,11:10):1,8:12):3):1,4:12):4,((40:12,(46:5,20:11):6):20,((45:3,44:2):1,(50:9,2:15):6):24):17):2,(3:2,(5:17,(6:2,(7:2,(((37:16,14:3):23,13:1):1,(15:3,(18:2,(((54:2,29:7):25,((64:1,47:1):17,21:18):18):8,((((43:2,38:22):5,((58:2,48:7):10,34:17):10):4,(42:23,(51:14,(60:5,26:5):9):9):8):8,((39:2,27:26):12,(28:14,(31:5,(((52:2,((63:2,55:2):8,((62:2,57:3):5,41:8):2):3):11,((61:4,49:4):12,(53:2,33:12):4):8):8,(35:4,(36:2,(56:2,(59:3,1:6):3):20):1):2):2):3):1):1):5):3):3):2):7):1):1):2):1):0;
 
 END;
