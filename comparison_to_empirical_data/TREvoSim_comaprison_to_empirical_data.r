@@ -6,6 +6,7 @@ library(tidyverse)
 library(vapoRwave)
 library(parallel)
 library(treestats)
+library(TreeTools)
 
 #Clear environment
 rm(list = ls())
@@ -107,7 +108,7 @@ empiricalTreeness <- function() {
   return(empiricalTreenessVector)
 }
 
-empiricalColless <- function() {
+empiricalTreeshape <- function() {
   #Get empirical data
   trees = list.files(empiricalWD, pattern = ".tre", full.names = TRUE)
 
@@ -115,12 +116,14 @@ empiricalColless <- function() {
   empiricalTreeshapeVector = vector(length = length(trees))
 
   for (i in 1:length(trees)) {
+    if (i==4 || i==9) next
     tree = read.tree(trees[i])
     #Use the corrected colless so number of tips is not an isssue. See:
     #library(treebalance) collessI( method = 'corrected')
     #And associated book
     n = length(tree$tip.label)
-    empiricalTreeshapeVector[i] = colless(tree)/((n - 1) * (n - 2)/2)
+    empiricalTreeshapeVector[i] = TotalCopheneticIndex(tree) / TCIContext(tree)$maximum
+    #empiricalTreeshapeVector[i] = colless(tree)/((n - 1) * (n - 2)/2)
   }
 
   return(empiricalTreeshapeVector)
@@ -199,7 +202,7 @@ extraStepsDF <- data.frame()
 #Or if that CSV exists, will just read it in
 cat("Doing empirical data.\n")
 empiricalTreenessVector <- empiricalTreeness()
-empiricalTreeshapeVector <- empiricalColless()
+empiricalTreeshapeVector <- empiricalTreeshape()
 allRatesEmpirical <- empiricalSteps()
 cat("Done.\n")
 
@@ -237,7 +240,8 @@ for (i in 1:length(treeFiles)) {
   if (calcTreeshape) {
     #See comment in empirical treeshape for mor info on this calculation
     n = length(simTree$tip.label)
-    treeshapes[i] <- colless(simTree)/((n - 1) * (n - 2)/2)
+    treeshapes[i] <- TotalCopheneticIndex(simTree) / TCIContext(simTree)$maximum
+    #treeshapes[i] <- colless(simTree)/((n - 1) * (n - 2)/2)
   }
 
   #Calculate treeness if requested
@@ -308,7 +312,7 @@ if (calcTreeshape) {
     theme_minimal() +
     theme(panel.border = element_rect(color = "black", fill = NA)) +
     ylim(0, 1) +
-    labs(title = "TREvoSim vs Empirical treeshape", x = "Data type", y = "Treeshape (corrected Colless)") +
+    labs(title = "TREvoSim vs Empirical treeshape", x = "Data type", y = "Treeshape (normalised total cophenetic index)") +
     theme(plot.title = element_text(hjust = 0.5)) +
     theme(legend.position = "none")
 
