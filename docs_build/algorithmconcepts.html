@@ -48,7 +48,12 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">4. Algorithm and Concepts</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#trevosim-algorithm-description">4.1. TREvoSim Algorithm Description</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#tree-rooting">4.2. Tree Rooting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#default-settings">4.3. Default settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#default-settings">4.3. Default settings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#homoplasy-extra-steps">4.3.1. Homoplasy - Extra steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tree-shape-asymmetry">4.3.2. Tree shape - Asymmetry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tree-shape-treeness">4.3.3. Tree shape - Treeness</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="windowlayout.html">5. Window Layout</a></li>
@@ -91,12 +96,35 @@
 </section>
 <section id="tree-rooting">
 <h2><span class="section-number">4.2. </span>Tree Rooting<a class="headerlink" href="#tree-rooting" title="Permalink to this headline">¶</a></h2>
-<p>TREvoSim trees differ in some respects from how we typically think of empirical trees, and this is particularly true when it comes to rooting. If we consider the root to be the last common ancestor of everything in the tree (a relatively common definition, most often applied to a species), then this will be – in our case – an early individual within species zero, but not species zero itself. Due to the nature of the TREvoSim algorithm, under many settings, species zero will remain in existence for a significant period of time after the existence of this individual, diversify, and give birth to other species. As such, if we consider the root to be the oldest point in a tree, it will be the node splitting species zero (and typically its associated clade) from species one. Species zero may nest uptree somewhere: as a species it has the oldest origin, but typically an extinction later than a number of other taxa in the tree, and it is a direct ancestor of a number of the species in a tree (the genome is written at extinction by default, and so its characters best represent its latest state). Given this, TREvoSim roots on the earliest node, rather than species zero- i.e. the root lies between species 1 and (assuming this species does not evolve into its own clade, which is often the case), the other taxa. Typically, this distinction (between the individual and the species) matters most where character polarisation is important, as opposed to the tree topology per se. Given this there is the option to output character states at the root (i.e. the organism that is used to seed the simulation) in the logs (see <a class="reference internal" href="loggingsim.html#loggingsim"><span class="std std-ref">Logging the Simulation</span></a> )</p>
+<p>TREvoSim trees differ in some respects from how we typically think of empirical trees, and this is particularly true when it comes to rooting. If we consider the root to be the last common ancestor of everything in the tree (a relatively common definition, most often applied to a species), then this will be – in our case – an early individual within species zero, but not species zero itself. Due to the nature of the TREvoSim algorithm, under many settings, species zero will remain in existence for a significant period of time after the existence of this individual, diversify, and give birth to other species. As such, if we consider the root to be the oldest point in a tree, it will be the node splitting species zero (and typically its associated clade) from species one. Species zero may nest uptree somewhere: as a species it has the oldest origin, but typically an extinction later than a number of other taxa in the tree, and it is a direct ancestor of a number of the species in a tree (the genome is written at extinction by default, and so its characters best represent its latest state). Given this, TREvoSim roots on the earliest node, rather than species zero- i.e. the root lies between species 1 and (assuming this species does not evolve into its own clade, which is often the case), the other taxa. Typically, this distinction (between the individual and the species) matters most where character polarisation is important, as opposed to the tree topology per se. Given this, there is the option to output character states at the root (i.e. the organism that is used to seed the simulation) in the logs (see <a class="reference internal" href="loggingsim.html#loggingsim"><span class="std std-ref">Logging the Simulation</span></a> ).</p>
 </section>
 <section id="default-settings">
 <h2><span class="section-number">4.3. </span>Default settings<a class="headerlink" href="#default-settings" title="Permalink to this headline">¶</a></h2>
-<p>TREvoSim’s default simulation parameters are chosen so as to represent a sensible place to start with phylogenetic questions in mind. One hundred outputs from runs made using the default parameters are included in the repository (/comparison_to_empirical_data/TREvoSim_output_defaults_2024/), and</p>
-<p>Their outputs (trees, characters) are benchmarked against twelve total evidence empirical datasets. Details of the measures used, the script used to generate them, the source of the empirical data, and the output graphs from the script, are available in the folder <em>Benchmarking</em> in the source code repository.</p>
+<p>TREvoSim’s default simulation parameters are chosen so as to represent a sensible place to start with phylogenetic questions in mind. One hundred outputs from runs made using the default parameters are included in the repository (folder /comparison_to_empirical_data/TREvoSim_output_defaults_2024/), in addition to twelve empirical, total evidence datasets (folder /comparison_to_empirical_data/Empirical_data/ ;  data source can be found in Mongiardino Koch et al. 2021, see <a class="reference internal" href="index.html#index"><span class="std std-ref">Welcome to TREvoSim’s User Manual</span></a>). Also in the folder /comparison_to_empirical_data/ is an R script that compares three aspects of the output data to the properties of the empirical trees/data, outlined below. This script can either be run within R by following the instructions to update the working directory within the R script, or on systems that can run a bash script, by providing the file run_rscript.sh with execute permissions and running it, which by default outputs comparison graphs (below) to /comparison_to_empirical_data/Graphs_out. The script can be modified to quantify other outputs as desired; if you would like to add further quantification to the script but are not able to do so, feel free to raise an issue (see <a class="reference internal" href="introduction.html#issues-and-support"><span class="std std-ref">Issues and support</span></a>).</p>
+<section id="homoplasy-extra-steps">
+<h3><span class="section-number">4.3.1. </span>Homoplasy - Extra steps<a class="headerlink" href="#homoplasy-extra-steps" title="Permalink to this headline">¶</a></h3>
+<p>To quantify the homoplasy within data generated under default settings, the script graphs the average number of extra steps for each character for the empirical datasets (evaluated against the total evidence tree), and for the simulated data (evaluated against the true tree). This comparison is shown in the violin plot below:</p>
+<figure class="align-center">
+<img alt="_images/steps.png" src="_images/steps.png" />
+</figure>
+<p>The TREvoSim data (“simulated”; actually the results for all characters of the first 25 replicates provided with in the repository) is shown in blue third from the right, all other datasets are labelled with taxonomic group, and represent the distribution of extra steps for all characters in the analysis. Note the log scale on the Y axis. The dots show the mean for each dataset. The number of extra steps against the comparison tree of choice (total evidence for empirical, true tree for TREvoSim data), is comparable across datasets.</p>
+</section>
+<section id="tree-shape-asymmetry">
+<h3><span class="section-number">4.3.2. </span>Tree shape - Asymmetry<a class="headerlink" href="#tree-shape-asymmetry" title="Permalink to this headline">¶</a></h3>
+<p>The tree asymmetry (= imbalance), is also calculated from the script. The box plots below show the asymmetry for all TREvoSim trees (100 replicates) next to those for all empirical trees (twelve total evidence analyses) quantified through the total cophenetic index normalised against the maximum possible value:</p>
+<figure class="align-center">
+<img alt="_images/tree_asymmetry.png" src="_images/tree_asymmetry.png" />
+</figure>
+<p>TREvoSim trees (“simulated”) have a wider range of asymmetries than is present in the empirical data (although the box plot also represents a higher number of data points). The mean demonstrates that TREvoSim trees are generally more asymmetrical than empirical datasets.</p>
+</section>
+<section id="tree-shape-treeness">
+<h3><span class="section-number">4.3.3. </span>Tree shape - Treeness<a class="headerlink" href="#tree-shape-treeness" title="Permalink to this headline">¶</a></h3>
+<p>The script also provides a quantification of the normalised treeness (=stemminess) of a tree: the fraction of total tree length that is on internal branches of the tree. This comparison is shown in the box plots below, between 100 TREvoSim replicates and the 12 total evidence trees:</p>
+<figure class="align-center">
+<img alt="_images/treeness.png" src="_images/treeness.png" />
+</figure>
+<p>TREvoSim (“simulated”) trees have a similar mean, and spread, of normalised treeness values to that found in empirical data.</p>
+</section>
 </section>
 </section>
 
@@ -111,7 +139,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Russell J. Garwood, Alan R.T. Spencer, Mark D. Sutton.</p>
+    <p>&#169; Copyright (TREvoSim documentation) 2024, Russell J. Garwood, Alan R.T. Spencer.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

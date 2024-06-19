@@ -22,8 +22,8 @@ import sphinx_rtd_theme
 # -- Project information -----------------------------------------------------
 
 project = 'TREvoSim'
-copyright = '2024, Russell J. Garwood, Alan R.T. Spencer, Mark D. Sutton'
-author = 'Russell J. Garwood, Alan R.T. Spencer, Mark D. Sutton'
+copyright = '(TREvoSim documentation) 2024, Russell J. Garwood, Alan R.T. Spencer'
+author = 'Russell J. Garwood, Alan R.T. Spencer'
 
 # The short X.Y version
 version = '3.0.0'
