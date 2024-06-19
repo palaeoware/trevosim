@@ -1,15 +1,25 @@
+## If packages aren't installed, install them, then load them
+packages <- c("phangorn", "phytools", "phylobase", "Claddis", "tidyverse", "vapoRwave", "treestats", "TreeTools")
+if(length(packages[!packages %in% installed.packages()[,"Package"]]) > 0){
+  install.packages(packages[!packages %in% installed.packages()[,"Package"]])
+}
+
 library(phangorn)
 library(phytools)
 library(phylobase)
 library(Claddis)
 library(tidyverse)
 library(vapoRwave)
-library(parallel)
 library(treestats)
 library(TreeTools)
 
 #Clear environment
 rm(list = ls())
+
+#If not running from the included bash script, set working directory here
+#To run on the default outputs, this should be the absolute path to the folder comparison_to_empirical_data within the TREvoSim repository
+#Otherwise you will need to change some or all of the details below to point to the relevant folders
+#setwd("########################")
 
 ########################################################################################################################
 
@@ -37,9 +47,6 @@ countSteps <- TRUE
 calcTreeness <- TRUE
 ###Calculates the tree symmetry
 calcTreeshape <- TRUE
-
-#Number of cores for parallelisation (currently only implemented for MK rate fitting)
-numCores <- detectCores()
 
 #Not in operator
 `%not in%` <- function(x, table) is.na(match(x, table, nomatch = NA_integer_))
@@ -116,6 +123,8 @@ empiricalTreeshape <- function() {
   empiricalTreeshapeVector = vector(length = length(trees))
 
   for (i in 1:length(trees)) {
+    # When first coded (19 June 24) there is an error in the maximum value of the index for the trees below, and thus these are skipped
+    # This was immediately fixed in TreeTools, so this skipping code can be removed when that filters through to a release
     if (i==4 || i==9) next
     tree = read.tree(trees[i])
     #Use the corrected colless so number of tips is not an isssue. See:
@@ -278,7 +287,7 @@ if (countExtant) {
 
   outputDF <- do.call(rbind, Map(data.frame, counts = counts))
 
-  write.csv(outputDF, "counts.csv")
+  #write.csv(outputDF, "counts.csv")
   cat("Mean extant is", mean(outputDF$counts), "\n")
   cat("Min extant is", min(outputDF$counts), "\n")
   cat("Max extant is", max(outputDF$counts), "\n")
@@ -339,7 +348,7 @@ if (countSteps) {
   RJGaesthetic <- palette(c(vapoRwave:::newRetro_palette, "#792096", "#396ff6", "#44B05B", "#FA41CA", "#852942"))
 
   #And write CSV in case it doesn't
-  write.csv(allSteps, "allSteps.csv")
+  #write.csv(allSteps, "allSteps.csv")
 
   #Plot
   ggplot(data = allSteps, aes(y = steps, x = plot, group = plot, fill = plot)) +
