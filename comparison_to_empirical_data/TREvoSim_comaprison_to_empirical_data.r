@@ -376,7 +376,7 @@ if (calcTreeshape) {
     theme_minimal() +
     theme(panel.border = element_rect(color = "black", fill = NA)) +
     ylim(0, 1) +
-    labs(title = "TREvoSim vs Empirical tree asymmetry", x = "Data type", y = "Tree asymmetry (J1 index)") +
+    labs(title = "TREvoSim vs Empirical tree symmetry", x = "Data type", y = "Tree asymmetry (J1 index)") +
     theme(plot.title = element_text(hjust = 0.5)) +
     theme(legend.position = "none")
   ggsave(paste(outputWD, "TREvoSim_j1_plot.pdf", sep = ""))
