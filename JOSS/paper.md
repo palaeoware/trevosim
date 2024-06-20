@@ -90,7 +90,7 @@ TREvoSim v3.0.0 includes a suite of new features that allow the investigation of
 
 ## Character options
 
-New options allow finer control of TREvoSim functions that employ genome characters. Characters in TREvoSim are used in several portions of the algorithm -- they form the basis of calculating fitness of organisms, and are also employed in the identification of species. In previous versions of REvoSim, all characters were used for both functions, through a user-defined total character number. From v3, a separate limit on the character count used for species selection and/or the fitness calculation can be applied (in the default settings, all are the same). When this differs from the total character number, only a subset of characters (those from zero to the limit) are included in the defined operations, and others can evolve independent of these processes (i.e., in the absence of selective forces, akin to more neutral drift-like processes).  
+New options allow finer control of TREvoSim functions that employ genome characters. Characters in TREvoSim are used in several portions of the algorithm -- they form the basis of calculating fitness of organisms, and are also employed in the identification of species. In previous versions of TREvoSim, all characters were used for both functions, through a user-defined total character number. From v3, a separate limit on the character count used for species selection and/or the fitness calculation can be applied (in the default settings, all are the same). When this differs from the total character number, only a subset of characters (those from zero to the limit) are included in the defined operations, and others can evolve independent of these processes (i.e., in the absence of selective forces, akin to more neutral drift-like processes).  
 
 ## Default simulation parameters
 
@@ -158,7 +158,7 @@ RJG developed and coded TREvoSim, with support on testing and releasing from ART
 
 # Availability 
 
-TREvoSim v3.0.0 source code and binaries are freely available from [Zenodo](https://doi.org/10.5281/zenodo.10866261) and [GitHub](https://github.com/palaeoware/trevosim). Newer releases of the REvoSim software will be available on GitHub. Fully documentation is available from [ReadTheDocs](https://trevosim.readthedocs.io/en/latest/).
+TREvoSim v3.0.0 source code and binaries are freely available from [Zenodo](https://doi.org/10.5281/zenodo.10866261) and [GitHub](https://github.com/palaeoware/trevosim). Newer releases of the TREvoSim software will be available on GitHub. Fully documentation is available from [ReadTheDocs](https://trevosim.readthedocs.io/en/latest/).
 
 # Acknowledgements 
 
