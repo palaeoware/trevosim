@@ -113,12 +113,12 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
     for (int p = 0; p < simSettings->playingfieldNumber; p++) playingFields.append(new playingFieldStructure);
     //This should either be to playingfieldSize if PFs do not expand
     if (!simSettings->expandingPlayingfield)
-        for (auto p : qAsConst(playingFields))
+        for (auto p : std::as_const(playingFields))
             for (int i = 0; i < simSettings->playingfieldSize; i++)
                 p->playingField.append(new Organism(runGenomeSize, simSettings->stochasticLayer));
     //Or just one, if they do expand
     else
-        for (auto p : qAsConst(playingFields))
+        for (auto p : std::as_const(playingFields))
             p->playingField.append(new Organism(runGenomeSize, simSettings->stochasticLayer));
     //Note organisms are populated here, but actually set during the initialisation function
 
@@ -131,7 +131,7 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
     //So this is playing field number / environment number / mask number / bits
     //This will fill the masks using random numbers as requried - if we need to match fitness peaks, we will do so below.
     if (!simSettings->matchFitnessPeaks)
-        for (auto p : qAsConst(playingFields))
+        for (auto p : std::as_const(playingFields))
         {
             for (int k = 0; k < simSettings->environmentNumber; k++)
             {
@@ -154,7 +154,7 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
     else
     {
         //First let's populate them with false / 0 bits
-        for (auto p : qAsConst(playingFields))
+        for (auto p : std::as_const(playingFields))
         {
             for (int k = 0; k < simSettings->environmentNumber; k++)
             {
@@ -169,7 +169,7 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
 
         //Now let's do the ones
         //We need to shuffle their position between environments to allow multiple fitness peaks - keep a record
-        for (auto p : qAsConst(playingFields))
+        for (auto p : std::as_const(playingFields))
         {
             QVector <QVector <bool> > used;
             for (int i = 0; i < simSettings->environmentNumber; i++)
@@ -244,8 +244,8 @@ bool simulation::run()
         warning("Oops", "This has not initialised this correctly. Please try different settings or email RJG.");
         return false;
     }
-    else for (auto p : qAsConst(playingFields))
-            for (auto o : qAsConst(p->playingField)) *o = bestOrganism;
+    else for (auto p : std::as_const(playingFields))
+            for (auto o : std::as_const(p->playingField)) *o = bestOrganism;
     \
 
     if (simSettings->test == 3) return true;
@@ -296,7 +296,7 @@ bool simulation::run()
 
         int playingFieldNumber = -1;
         //Do the iteration for all playing fields
-        for (auto pf : qAsConst(playingFields))
+        for (auto pf : std::as_const(playingFields))
         {
             /******** Sort playing field by fitness *****/
             //std::sort(playingField.begin(),playingField.end(),[](const Organism* OL, const Organism* OR){return OL->fitness<OR->fitness;});
@@ -392,7 +392,7 @@ bool simulation::run()
         // For each species, Loop through playing field and count and when one instance of a species exists, overwrite genome in species list, and update display
         QHash<QString, QVector <int> > extinct = checkForExtinct(speciesList);
 
-        for (auto s : qAsConst(extinct))
+        for (auto s : std::as_const(extinct))
         {
             speciesExtinction(speciesList[s[0]], playingFields[s[1]]->playingField[s[2]], (iterations + 1), simSettings->sansomianSpeciation, simSettings->stochasticLayer);
             if (simSettings->workingLog) workLogTextStream << "\nFor write genome at extinction, replacing species list species " << speciesList[s[0]]->speciesID <<
@@ -540,8 +540,8 @@ bool simulation::run()
     });
 
     //Go down playing fields
-    for (auto pf : qAsConst(playingFields))
-        for (auto o : qAsConst(pf->playingField))
+    for (auto pf : std::as_const(playingFields))
+        for (auto o : std::as_const(pf->playingField))
         {
             int flag = 0;
             //Check if the entry on playing field has previously been recorded/updated - if so ignore
@@ -670,13 +670,20 @@ bool simulation::run()
 
         file03TextStream << logFileString03Tmp;
 
+        //Zero padding
+        int totalSpeciesCount = speciesList.length();
+        int padding = 0;
+        if (totalSpeciesCount < 100) padding = 2;
+        else if (totalSpeciesCount < 1000) padding = 3;
+        else padding = 4;
+
         for (int i = 0; i < speciesList.count(); i++)
         {
             file03TextStream << (QString("%1").arg(i + 1));
             //if (simSettings->runForTaxa < 100)file03TextStream << (QString("%1").arg(i + 1));
             //else file03TextStream << (QString("S_%1").arg(i + 1, 3, 10, QChar('0')));
 
-            file03TextStream << "\t\t" << "Species_" << i << ",\n";
+            file03TextStream << "\t\t" << "Species_" << doPadding(i, padding) << ",\n";
         }
 
         file03TextStream << "\t\t;\n\ntree tree1 = [&R]";
@@ -807,7 +814,7 @@ Organism simulation::initialise()
             //Currently implemented using the best mean fitness of all organisms tried
             QVector <int> fitnesses;
 
-            for (auto p : qAsConst(playingFields))
+            for (auto p : std::as_const(playingFields))
             {
                 fitnesses.append(fitness(p->playingField[0], p->masks, runFitnessSize, runFitnessTarget, runMaskNumber));
             }
@@ -934,7 +941,7 @@ void simulation::mutateOrganism(Organism &progeny, const playingFieldStructure *
             workLogTextStream << "Now doing stochastic mapping for selected progeny. Post mutation genome is\n" ;
             QString genomeString;
 
-            for (auto i : qAsConst(progeny.genome))
+            for (auto i : std::as_const(progeny.genome))
                 if (i)genomeString.append("1");
                 else genomeString.append("0");
 
@@ -984,7 +991,7 @@ void simulation::newSpecies(Organism &progeny, Organism &parent, playingFieldStr
 
     //Reset timer on all of this species to avoid clustering of speciation events as multiple individuals hit n mutations
     //Do this independently for each playing field (i.e. only in this playing field this time) - this obviously has implications if after mixing the species are very different in different playing fields - many more speciations, lower diversity in any given PF.
-    for (auto o : qAsConst(pf->playingField))
+    for (auto o : std::as_const(pf->playingField))
         if (o->speciesID == parentSpecies)
             for (int j = 0; j < runGenomeSize; j++)o->parentGenome[j] = progeny.genome[j];
 
@@ -1102,7 +1109,7 @@ void simulation::mutateEnvironment()
     if (static_cast<double>(QRandomGenerator::global()->generate()) < (numberEnvironmentMutationsFractional * static_cast<double>(maxRand - 150))) numberEnvironmentMutationsInteger++;
 
     //Mutate irrespective of playing field mode settings if there are multiple ones
-    for (auto pf : qAsConst(playingFields))
+    for (auto pf : std::as_const(playingFields))
         for (int k = 0; k < numberEnvironmentMutationsInteger; k++)
             for (int j = 0; j < simSettings->environmentNumber; j++)
                 for (int i = 0; i < runMaskNumber; i++)
@@ -1147,7 +1154,7 @@ void simulation::applyPerturbation()
         if (simSettings->workingLog) workLogTextStream << "\n\nAbout to set up environmental perturbation. Old masks are:\n\n" << printPlayingField(playingFields) << "\n";
 
         //Bork current masks to create environmental perturbation - makes sense to have these as independent and different unless pf masks set to be identical
-        for (auto pf : qAsConst(playingFields))
+        for (auto pf : std::as_const(playingFields))
             for (int k = 0; k < simSettings->environmentNumber; k++)
                 for (int j = 0; j < runMaskNumber; j++)
                     //I is reference so as to allow us to modify contents
@@ -1343,7 +1350,7 @@ void simulation::applyEcosystemEngineering(QVector <Organism *> &speciesList, bo
         //If EE are meant to add a mask, we should increase the mask number here
         if (simSettings->ecosystemEngineersAddMask) runMaskNumber++;
 
-        for (auto p : qAsConst(playingFields))
+        for (auto p : std::as_const(playingFields))
         {
             //EE works either by copying over genome to a prexisting mask - thus improving fitness of the EE species - or to the mask added just above (this was initialised with the simulation, but has been ignored until now)
             //Either way, we can write over the last mask for each environment (-1 because indexing starts at zero)
@@ -1404,7 +1411,7 @@ void simulation::applyEcosystemEngineering(QVector <Organism *> &speciesList, bo
         if (writeEcosystemEngineers) out << "Playing field " << selectEngineerPlayingfield << " organism number " << selectEngineerPosition <<  " selected. Genome is " <<
                                              printGenomeString(playingFields[selectEngineerPlayingfield]->playingField[selectEngineerPosition]) << ".\n";
 
-        for (auto p : qAsConst(playingFields))
+        for (auto p : std::as_const(playingFields))
             for (int environmentNumber = 0; environmentNumber < p->masks.count(); environmentNumber++)
                 for (int i = 0; i < p->masks[environmentNumber][runMaskNumber - 1].length(); i++)
                     p->masks[environmentNumber][runMaskNumber - 1][i] = playingFields[selectEngineerPlayingfield]->playingField[selectEngineerPosition]->genome[i];
@@ -1505,7 +1512,9 @@ bool simulation::stripUninformativeCharacters(QVector <Organism *> &speciesList,
         {
             QString label = "It seems there are not enough informative characters to pull this off.\n\n"
                             "By default, TREvoSim over generates characters by a factor of 5x before trying to strip down to those that are parsimony uninformative. "
-                            "Under these settings, it seems that 5x is not enough. Choosing the menu option \'Recalculate uninformative factor for current settings\' will allow you to recalculate this factor for the current settings, and \'Set uninformative factor' will allow you to set it manually to a large number.\n\n"
+                            "Under your current settings (in which the strip uninformative factor is " + QString::number(simSettings->stripUninformativeFactor) +
+                            ") TREvoSim has not managed to recover enough informative characters. It has only recovered " + QString::number(speciesList[0]->genome.size()) +
+                            " characters. Choosing the menu option \'Recalculate uninformative factor for current settings\' will allow you to recalculate this factor for the current settings, and \'Set uninformative factor' will allow you to set it manually to a large number.\n\n"
                             "Alternatively, this may be a one off - you could try running a batch of 1, and the program will try repeatedly with these settings - though after ten or more repeats you may want to cancel and change the settings.";
             warning("Oops", label);
         }
@@ -1758,12 +1767,12 @@ QString simulation::printPlayingField(const QVector <playingFieldStructure *> &p
         out << "Playing field: " << p << "\n";
         p++;
         int cnt = 0;
-        for (auto o : qAsConst(pf->playingField))
+        for (auto o : std::as_const(pf->playingField))
         {
             out << "\nPlayingfield pos: " << cnt << " \nSpecies ID: " << o->speciesID << "\nGenome:\t";
-            for (auto i : qAsConst(o->genome)) i ? out << 1 : out << 0 ;
+            for (auto i : std::as_const(o->genome)) i ? out << 1 : out << 0 ;
             out << "\nParent genome:\t";
-            for (auto i : qAsConst(o->parentGenome)) i ? out << 1 : out << 0 ;
+            for (auto i : std::as_const(o->parentGenome)) i ? out << 1 : out << 0 ;
 
             out << "\nFitness:\t" << o->fitness;
             out << "\nEcosystem engineer:\t" << o->ecosystemEngineer;
@@ -1786,10 +1795,10 @@ QString simulation::printPlayingFieldSemiconcise(const QVector <playingFieldStru
         int cnt = 0;
         //out << "\nPlaying field number,Playingfield position,Species ID,Genome,Ecosystem engineer\n";
         out << "\nPlaying field number,Playingfield position,Species ID,Ecosystem engineer,Genome\n";
-        for (auto o : qAsConst(pf->playingField))
+        for (auto o : std::as_const(pf->playingField))
         {
             out << p << "," << cnt << "," << o->speciesID << "," << o->ecosystemEngineer << ",";
-            for (auto i : qAsConst(o->genome)) i ? out << 1 : out << 0 ;
+            for (auto i : std::as_const(o->genome)) i ? out << 1 : out << 0 ;
             out << "\n";
             cnt++;
         }
@@ -1810,10 +1819,10 @@ QString simulation::printPlayingFieldConcise(const QVector <playingFieldStructur
         int cnt = 0;
         //out << "\nPlaying field number,Playingfield position,Species ID,Genome,Ecosystem engineer\n";
         out << "\nPlaying field number,Playingfield position,Species ID,Ecosystem engineer\n";
-        for (auto o : qAsConst(pf->playingField))
+        for (auto o : std::as_const(pf->playingField))
         {
             out << p << "," << cnt << "," << o->speciesID << "," << o->ecosystemEngineer << "\n";
-            //for (auto i : qAsConst(o->genome)) i ? out << 1 : out << 0 ;
+            //for (auto i : std::as_const(o->genome)) i ? out << 1 : out << 0 ;
             //out << "," << o->ecosystemEngineer << "\n";
             cnt++;
         }
@@ -1839,7 +1848,7 @@ QString simulation::printMasks(const QVector <playingFieldStructure *> &playingF
             for (int maskNumber = 0; maskNumber < runMaskNumber; maskNumber++)
             {
                 out << "Mask number " << maskNumber << " :\t";
-                for (auto i : qAsConst(p->masks[environmentNumber][maskNumber])) i ? out << 1 : out << 0 ;
+                for (auto i : std::as_const(p->masks[environmentNumber][maskNumber])) i ? out << 1 : out << 0 ;
                 out << "\n";
 
             }
@@ -1860,7 +1869,7 @@ QString simulation::printMasks(const QVector <playingFieldStructure *> &playingF
         for (int maskNumber = 0; maskNumber < runMaskNumber; maskNumber++)
         {
             out << "Mask number " << maskNumber << " :\t";
-            for (auto i : qAsConst(playingFields[playingfield]->masks[environmentNumber][maskNumber])) i ? out << 1 : out << 0 ;
+            for (auto i : std::as_const(playingFields[playingfield]->masks[environmentNumber][maskNumber])) i ? out << 1 : out << 0 ;
             out << "\n";
         }
     }
@@ -1880,7 +1889,7 @@ QString simulation::printSpeciesList(const QVector <Organism *> &speciesList)
     {
         out << "Entry " << cnt << " is species " << o->speciesID << " ";
         cnt++;
-        for (auto i : qAsConst(o->genome)) i ? out << 1 : out << 0 ;
+        for (auto i : std::as_const(o->genome)) i ? out << 1 : out << 0 ;
         out << "\tBorn: " << o->born << "\tExtinct: " << o->extinct << "\n";
     }
 
@@ -1904,7 +1913,7 @@ QString simulation::printMatrix(const QVector <Organism *> &speciesList)
     for (int i = 0; i < totalSpeciesCount; i++)
     {
         matrixTextStream << "Species_" << doPadding(i, padding) << "\t";
-        for (auto j : qAsConst(speciesList[i]->genome)) j ? matrixTextStream << 1 : matrixTextStream << 0 ;
+        for (auto j : std::as_const(speciesList[i]->genome)) j ? matrixTextStream << 1 : matrixTextStream << 0 ;
         matrixTextStream << "\n";
     }
 
@@ -1921,7 +1930,7 @@ QString simulation::printStochasticMatrix(const QVector <Organism *> &speciesLis
     for (int i = 0; i < speciesList.length(); i++)
     {
         matrixTextStream << "Species_" << i << "\t";
-        for (auto j : qAsConst(speciesList[i]->stochasticGenome)) j ? matrixTextStream << 1 : matrixTextStream << 0 ;
+        for (auto j : std::as_const(speciesList[i]->stochasticGenome)) j ? matrixTextStream << 1 : matrixTextStream << 0 ;
         matrixTextStream << "\n";
     }
     return matrixString;
@@ -2365,5 +2374,4 @@ void simulation::printCountPeaks(int genomeSize, QVector <quint64> &totals, QVec
     peaksTextStream << "\n";
     peaksFile.close();
 }
-
 

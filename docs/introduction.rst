@@ -45,10 +45,10 @@ Quick start
 
 The TREvoSim defaults will allow you to create exemplar data in TREvoSim by hitting the Run button on the toolbar. This will output a nexus file with the final character matrix in it that can be loaded in e.g. R for analysis, placed in a folder called *TREvoSim_output*, the default location of which is your desktop. It will also output a nexus formatted tree file in this folder. 
 
-Default settings
-----------------
+Defaults
+--------
 
-TREvoSim's default simulation parameters are intended to be a good general place to start when thinking about phylogenetic questions. Their outputs (trees, characters) are benchmarked against twelve total evidence empirical datasets. Details of the measures used, the script used to generate them, the source of the empirical data, and the output graphs from the script, are available in the folder *Benchmarking* in the source code repository.
+TREvoSim's default simulation parameters are intended to be a good general place to start when thinking about phylogenetic questions. See :ref:`Default settings` for more information. 
 
 Software behaviour 
 ------------------

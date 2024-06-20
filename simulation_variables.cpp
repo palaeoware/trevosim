@@ -14,7 +14,7 @@ simulationVariables::simulationVariables()
     genomeSize = 128;
     speciesSelectSize = 128;
     fitnessSize = 128;
-    fitnessTarget = 50;
+    fitnessTarget = 0;
     playingfieldSize = 20;
     playingfieldNumber = 1;
     ecosystemEngineeringFrequency = 10;
@@ -23,7 +23,7 @@ simulationVariables::simulationVariables()
     speciesDifference = 4;
     unresolvableCutoff = 5;
     environmentNumber = 1;
-    maskNumber = 5;
+    maskNumber = 3;
     mixingProbabilityZeroToOne = 0;
     mixingProbabilityOneToZero = 0;
     stochasticDepth = 1;
@@ -31,13 +31,13 @@ simulationVariables::simulationVariables()
     test = 0;
     runMode = RUN_MODE_TAXON;
     runForIterations = 1000;
-    runForTaxa = 32;
+    runForTaxa = 64;
     runningLogFrequency = 50;
     replicates = 25;
 
     //Doubles
     environmentMutationRate = 1.0;
-    organismMutationRate = 2.0;
+    organismMutationRate = 5.0;
     selectionCoinToss = 10.0;
     stripUninformativeFactor = 5.;
 
@@ -75,7 +75,7 @@ simulationVariables::simulationVariables()
     logFileExtension02 = ".tnt";
     logFileExtension03 = ".nex";
     logFileString01 =
-        "#NEXUS\n[||Settings||]\nBegin data;\nDimensions ntax=||Taxon_Number|| nchar=||Character_Number||;\nFormat datatype=standard missing=? gap=-;\nMatrix\n||Matrix||\n;\nend;\n\nBegin assumptions;\nTypeset * untitled = unord: 1-||Character_Number||;\nend;";
+        "#NEXUS\n[||Settings||]\n\nBEGIN DATA;\n	DIMENSIONS NTAX=||Taxon_Number|| NCHAR=||Character_Number||;\n	FORMAT SYMBOLS= \" 0 1 \" MISSING=? GAP=- ;\nMATRIX\n\n||Matrix||\n;\nend;\n\nBEGIN ASSUMPTIONS;\n 	TYPESET * UNTITLED = unord: 1-||Character_Number||;\nEND;";
     logFileString02 =
         "mxram 100;\nNSTATES nogaps;\nxread\n'Written on ||Time|| Variables: ||Settings||'\n||Character_Number|| ||Taxon_Number||\n||Matrix||\n;\npiwe-;\nkeep 0; hold 100000;\nrseed *;\nxmult = level 10; bbreak;\nexport - TREvoSim_run_||Count||_mpts.nex;\nxwipe;";
     logFileString03 = "#NEXUS\n\n[ ||Time|| ||Settings|| ] \n\n Begin trees;\nTranslate\n";

@@ -125,14 +125,14 @@ bool testinternal::testZero(QString &outString)
     simSettings.fitnessTarget = 0;
     simSettings.maskNumber = 3;
     simulation x(0, &simSettings, &error, theMainWindow);
-    if (error) testFlag = false;
+    if (error) return false;
 
     //Fitness requires an organism - create an organism with 50 bits, no stochastic genome, all bits are initialised to zero
     Organism org(simSettings.genomeSize, false);
     out << "Organism genome is: " << x.printGenomeString(&org) << "\n";
 
     //Now set masks in simulation to 1
-    for (auto p : qAsConst(x.playingFields))
+    for (auto p : std::as_const(x.playingFields))
         for (int k = 0; k < simSettings.environmentNumber; k++)
             for (int j = 0; j < simSettings.maskNumber; j++)
                 for (auto &i : p->masks[k][j]) i = true;
@@ -160,10 +160,10 @@ bool testinternal::testZero(QString &outString)
     simSettings.fitnessTarget = 50;
     out << "Set masks to two, and fitness target back to 50.\n";
     simulation y(0, &simSettings, &error, theMainWindow);
-    if (error) testFlag = false;
+    if (error) return false;
 
     //Now set masks in simulation to 1
-    for (auto p : qAsConst(y.playingFields))
+    for (auto p : std::as_const(y.playingFields))
         for (int k = 0; k < simSettings.environmentNumber; k++)
             for (int j = 0; j < simSettings.maskNumber; j++)
                 for (auto &i : p->masks[k][j]) i = true;
@@ -183,15 +183,15 @@ bool testinternal::testZero(QString &outString)
     simSettings.environmentNumber = 2;
     simSettings.fitnessTarget = 0;
     simulation z(0, &simSettings, &error, theMainWindow);
-    if (error) testFlag = false;
+    if (error) return false;
 
     //Now set masks in environment 0 simulation to 1
-    for (auto p : qAsConst(z.playingFields))
+    for (auto p : std::as_const(z.playingFields))
         for (int j = 0; j < simSettings.maskNumber; j++)
             for (auto &i : p->masks[0][j]) i = true;
 
     //Now set masks in environment 1 simulation to 0
-    for (auto p : qAsConst(z.playingFields))
+    for (auto p : std::as_const(z.playingFields))
         for (int j = 0; j < simSettings.maskNumber; j++)
             for (auto &i : p->masks[1][j]) i = false;
 
@@ -378,8 +378,8 @@ bool testinternal::testThree(QString &outString)
     x.run();
 
     Organism org(*x.playingFields[0]->playingField[0]);
-    for (auto p : qAsConst(x.playingFields))
-        for (auto o : qAsConst(p->playingField))
+    for (auto p : std::as_const(x.playingFields))
+        for (auto o : std::as_const(p->playingField))
             if (!(*o == org)) testFlag = false;
 
     QString flagString = testFlag ? "true" : "false";
@@ -392,8 +392,8 @@ bool testinternal::testThree(QString &outString)
     y.run();
 
     org = *y.playingFields[0]->playingField[0];
-    for (auto p : qAsConst(y.playingFields))
-        for (auto o : qAsConst(p->playingField))
+    for (auto p : std::as_const(y.playingFields))
+        for (auto o : std::as_const(p->playingField))
             if (!(*o == org)) testFlag = false;
     flagString = testFlag ? "true" : "false";
     out << "Mode independent - checked if all organisms are the same after initialisation and returned " << flagString << ".\n";
@@ -404,8 +404,8 @@ bool testinternal::testThree(QString &outString)
     if (error) return false;
     z.run();
     org = *z.playingFields[0]->playingField[0];
-    for (auto p : qAsConst(z.playingFields))
-        for (auto o : qAsConst(p->playingField))
+    for (auto p : std::as_const(z.playingFields))
+        for (auto o : std::as_const(p->playingField))
             if (!(*o == org)) testFlag = false;
     flagString = testFlag ? "true" : "false";
     out << "Mode identical at start - checked if all organisms are the same after initialisation and returned " << flagString << ".\n";
@@ -436,20 +436,20 @@ bool testinternal::testFour(QString &outString)
     Organism org(20, true);
     org.initialise(20, simSettings.stochasticMap);
     out << "\nStochastic genome is: ";
-    for (auto i : qAsConst(org.stochasticGenome)) i ? out << "1" : out << "0";
+    for (auto i : std::as_const(org.stochasticGenome)) i ? out << "1" : out << "0";
     out << "\nGenome is: ";
-    for (auto i : qAsConst(org.genome)) i ? out << "1" : out << "0";
-    for (auto i : qAsConst(org.genome)) if (i) testFlag = false;
+    for (auto i : std::as_const(org.genome)) i ? out << "1" : out << "0";
+    for (auto i : std::as_const(org.genome)) if (i) testFlag = false;
 
     out << "\nStochastic map has been updated and is now:\n";
     for (auto &i : simSettings.stochasticMap) i = 1;
     for (auto i : simSettings.stochasticMap) i ? out << "1" : out << "0";
     org.initialise(20, simSettings.stochasticMap);
     out << "\nStochastic genome is: ";
-    for (auto i : qAsConst(org.stochasticGenome)) i ? out << "1" : out << "0";
+    for (auto i : std::as_const(org.stochasticGenome)) i ? out << "1" : out << "0";
     out << "\nGenome is: ";
-    for (auto i : qAsConst(org.genome)) i ? out << "1" : out << "0";
-    for (auto i : qAsConst(org.genome)) if (!i) testFlag = false;
+    for (auto i : std::as_const(org.genome)) i ? out << "1" : out << "0";
+    for (auto i : std::as_const(org.genome)) if (!i) testFlag = false;
 
     QString flagString = testFlag ? "true" : "false";
     out << "\n\nGiven the mapping the first genome should be all zeros, no matter what the stochastic genome, and the second all ones. TRevoSIm tested this and returned " << flagString << ".";
@@ -725,17 +725,17 @@ bool testinternal::testSeven(QString &outString)
     out << "Parent cladogenesis at iteration " << parentSpecies.cladogenesis << " (should be 66).\n";
     if (newSpecies.parentSpeciesID != 10)testFlag = false;
     out << "New species parent species ID " << newSpecies.parentSpeciesID << " (should be 10).\n";
-    for (auto i : qAsConst(newSpecies.parentGenome)) if (i != 1)testFlag = false;
+    for (auto i : std::as_const(newSpecies.parentGenome)) if (i != 1)testFlag = false;
     out << "New species parent genome: ";
-    for (auto i : qAsConst(newSpecies.parentGenome)) i ? out << "1" : out << "0";
+    for (auto i : std::as_const(newSpecies.parentGenome)) i ? out << "1" : out << "0";
     out << " (should be all 1s).\n";
-    for (auto i : qAsConst(newSpecies.genome)) if (i != 1)testFlag = false;
+    for (auto i : std::as_const(newSpecies.genome)) if (i != 1)testFlag = false;
     out << "New species genome: ";
-    for (auto i : qAsConst(newSpecies.genome)) i ? out << "1" : out << "0";
+    for (auto i : std::as_const(newSpecies.genome)) i ? out << "1" : out << "0";
     out << " (should be all 1s).\n";
-    for (auto i : qAsConst(x.playingFields[0]->playingField[8]->parentGenome)) if (i != 1)testFlag = false;
+    for (auto i : std::as_const(x.playingFields[0]->playingField[8]->parentGenome)) if (i != 1)testFlag = false;
     out << "Species 10 parent genome in playing field is now: ";
-    for (auto i :  qAsConst(x.playingFields[0]->playingField[8]->parentGenome)) i ? out << "1" : out << "0";
+    for (auto i :  std::as_const(x.playingFields[0]->playingField[8]->parentGenome)) i ? out << "1" : out << "0";
     out << " (should be all 1s).\n";
 
     if (testFlag) out << "\nNew species tests passed.\n";
@@ -1191,8 +1191,8 @@ bool testinternal::testThirteen(QString &outString)
 
     if (error) return false;
 
-    for (auto pf : qAsConst(x.playingFields))
-        for (auto o : qAsConst(pf->playingField))
+    for (auto pf : std::as_const(x.playingFields))
+        for (auto o : std::as_const(pf->playingField))
             o->initialise(simSettings.genomeSize);
 
     x.iterations = 66;
@@ -1210,8 +1210,9 @@ bool testinternal::testThirteen(QString &outString)
 
     QHash<QString, QVector <int> > extinct = x.checkForExtinct(speciesList);
 
-    for (auto s : qAsConst(extinct)) x.speciesExtinction(speciesList[s[0]], x.playingFields[s[1]]->playingField[s[2]], (x.iterations + 1), simSettings.sansomianSpeciation, simSettings.stochasticLayer,
-                                                             true);
+    for (auto s : std::as_const(extinct)) x.speciesExtinction(speciesList[s[0]], x.playingFields[s[1]]->playingField[s[2]], (x.iterations + 1), simSettings.sansomianSpeciation,
+                                                                  simSettings.stochasticLayer,
+                                                                  true);
 
     for (int i = 0; i < 20; i ++)
         if (speciesList[i]->extinct != 0)
@@ -1226,15 +1227,16 @@ bool testinternal::testThirteen(QString &outString)
 
     extinct = x.checkForExtinct(speciesList);
 
-    for (auto s : qAsConst(extinct)) out << "Species is extinct: " << s[0] << "\n";
-    for (auto s : qAsConst(extinct)) x.speciesExtinction(speciesList[s[0]], x.playingFields[s[1]]->playingField[s[2]], (x.iterations + 1), simSettings.sansomianSpeciation, simSettings.stochasticLayer,
-                                                             true);
+    for (auto s : std::as_const(extinct)) out << "Species is extinct: " << s[0] << "\n";
+    for (auto s : std::as_const(extinct)) x.speciesExtinction(speciesList[s[0]], x.playingFields[s[1]]->playingField[s[2]], (x.iterations + 1), simSettings.sansomianSpeciation,
+                                                                  simSettings.stochasticLayer,
+                                                                  true);
 
     for (int i = 0; i < 20; i ++)
         if (speciesList[i]->extinct != 0)
         {
             out << "Extinct at " << speciesList[i]->extinct << "\nGenome should be all zeros. It is: ";
-            for (auto b : qAsConst(speciesList[i]->genome))
+            for (auto b : std::as_const(speciesList[i]->genome))
             {
                 out << (b ? "1" : "0");
                 if (b)
@@ -1256,16 +1258,17 @@ bool testinternal::testThirteen(QString &outString)
     x.playingFields[0]->playingField[11]->speciesID = 4;
     x.playingFields[1]->playingField[6]->speciesID = 1;
     extinct = x.checkForExtinct(speciesList);
-    for (auto s : qAsConst(extinct)) out << "Species is extinct: " << s[0] << "\n";
-    for (auto s : qAsConst(extinct)) x.speciesExtinction(speciesList[s[0]], x.playingFields[s[1]]->playingField[s[2]], (x.iterations + 1), simSettings.sansomianSpeciation, simSettings.stochasticLayer,
-                                                             true);
+    for (auto s : std::as_const(extinct)) out << "Species is extinct: " << s[0] << "\n";
+    for (auto s : std::as_const(extinct)) x.speciesExtinction(speciesList[s[0]], x.playingFields[s[1]]->playingField[s[2]], (x.iterations + 1), simSettings.sansomianSpeciation,
+                                                                  simSettings.stochasticLayer,
+                                                                  true);
 
     for (int i = 0; i < 20; i ++)
         if (speciesList[i]->extinct == 69)
         {
             out << "Extinct at " << speciesList[i]->extinct << "\nGenome should not be all zeros. It is: ";
             int count = 0;
-            for (auto b : qAsConst(speciesList[i]->genome))
+            for (auto b : std::as_const(speciesList[i]->genome))
             {
                 out << (b ? "1" : "0");
                 if (!b) count++;
@@ -1491,7 +1494,7 @@ bool testinternal::testSeventeen(QString &outString)
     x.applyEcosystemEngineering(speciesList, false);
 
     int total = 0;
-    for (auto p : qAsConst(x.playingFields))
+    for (auto p : std::as_const(x.playingFields))
         for (auto o : p->playingField)
             if (o->ecosystemEngineer) total ++;
 
@@ -1500,7 +1503,7 @@ bool testinternal::testSeventeen(QString &outString)
 
     bool identical = false;
 
-    for (auto p : qAsConst(x.playingFields))
+    for (auto p : std::as_const(x.playingFields))
         for (auto o : p->playingField)
             if (o->ecosystemEngineer)
                 for (auto &m : p->masks)
@@ -1525,7 +1528,7 @@ bool testinternal::testSeventeen(QString &outString)
     x.applyEcosystemEngineering(speciesList, false);
 
     total = 0;
-    for (auto p : qAsConst(x.playingFields))
+    for (auto p : std::as_const(x.playingFields))
         for (auto o : p->playingField)
             if (o->ecosystemEngineer) total ++;
 
@@ -1534,7 +1537,7 @@ bool testinternal::testSeventeen(QString &outString)
 
     identical = false;
 
-    for (auto p : qAsConst(x.playingFields))
+    for (auto p : std::as_const(x.playingFields))
         for (auto o : p->playingField)
             if (o->ecosystemEngineer)
                 for (auto &m : p->masks)
@@ -1558,7 +1561,7 @@ bool testinternal::testSeventeen(QString &outString)
     x.ecosystemEngineeringOccurring = 2;
     simSettings.ecosystemEngineersArePersistent = true;
 
-    for (auto p : qAsConst(x.playingFields))
+    for (auto p : std::as_const(x.playingFields))
         for (auto o : p->playingField)
             if (o->ecosystemEngineer)
                 for (auto &g : o->genome)
@@ -1567,7 +1570,7 @@ bool testinternal::testSeventeen(QString &outString)
     x.applyEcosystemEngineering(speciesList, false);
 
     identical = false;
-    for (auto p : qAsConst(x.playingFields))
+    for (auto p : std::as_const(x.playingFields))
         for (auto o : p->playingField)
             if (o->ecosystemEngineer)
                 for (auto &m : p->masks)
@@ -1613,7 +1616,7 @@ bool testinternal::testEighteen(QString &outString)
 
     //Assign known genomes to members of each playing field
     bool base = false;
-    for (auto p : qAsConst(x.playingFields))
+    for (auto p : std::as_const(x.playingFields))
     {
         base = !base;
         for (auto o : p->playingField)
@@ -1661,7 +1664,7 @@ bool testinternal::testEighteen(QString &outString)
 
     //Assign known genomes to members of each playing field
     base = false;
-    for (auto p : qAsConst(y.playingFields))
+    for (auto p : std::as_const(y.playingFields))
     {
         base = !base;
         for (auto o : p->playingField)
@@ -1711,7 +1714,7 @@ bool testinternal::testEighteen(QString &outString)
 
     //Assign known genomes to members of each playing field
     base = false;
-    for (auto p : qAsConst(z.playingFields))
+    for (auto p : std::as_const(z.playingFields))
     {
         base = !base;
         for (auto o : p->playingField)
