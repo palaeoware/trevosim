@@ -433,7 +433,11 @@ bool simulation::run()
         else if (simSettings->runMode == RUN_MODE_ITERATION && iterations == simSettings->runForIterations) simulationComplete = true;
 
         /************* Write GUI if not running in parallel *************/
-        if (theMainWindow != nullptr) writeGUI(speciesList);
+        if (theMainWindow != nullptr)
+        {
+            qApp->processEvents();
+            writeGUI(speciesList);
+        }
 
         /************* Write alive record *************/
         QVector <QVector <int> > speciesAlive;
@@ -2229,11 +2233,11 @@ bool simulation::writeEEFile(const int iterations, const QString logFileString)
 
 void simulation::writeGUI(QVector<Organism *> &speciesList)
 {
-    if (GUIUPdateTime > 200 && (iterations % 50 != 0))return;
-    else if (GUIUPdateTime > 100 && (iterations % 10 != 0))return;
+    //if (GUIUPdateTime > 200 && (iterations % 50 != 0))return;
+    //else if (GUIUPdateTime > 100 && (iterations % 10 != 0))return;
 
-    QElapsedTimer timer;
-    timer.start();
+    //QElapsedTimer timer;
+    //timer.start();
 
     if (simSettings->runMode != RUN_MODE_TAXON)
     {
@@ -2260,9 +2264,7 @@ void simulation::writeGUI(QVector<Organism *> &speciesList)
     else if (theMainWindow->batchRunning)status.prepend(QString("Run number: %1; ").arg(runs));
     theMainWindow->setStatus(status);
 
-    qApp->processEvents();
-
-    GUIUPdateTime = timer.elapsed();
+    //GUIUPdateTime = timer.elapsed();
 }
 
 QString simulation::doPadding(int number, int significantFigures)
