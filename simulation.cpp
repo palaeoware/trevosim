@@ -1626,7 +1626,7 @@ bool simulation::checkForUnresolvableTaxa(QVector<Organism *> &speciesList, QStr
         {
             message.append(QString("\n\n"));
             message.append(
-                QString("In this case, you are above the cutoff of resolvable taxa - there are %1 identical terminals. If you are in batch mode, this will carry on trying until you have hit the requested number of runs. If you're not, you may want to try again (or hit run for, and then enter one run to automatically run it till one sticks).").arg(
+                QString("In this case, you are above the cutoff of resolvable taxa - there are %1 identical terminals. If you are in batch mode, this will carry on trying until you have hit the requested number of runs. If you're not, you may want to try again (or hit batch, and then enter one run to automatically run it till one sticks).").arg(
                     unresolvableCount));
         }
 
