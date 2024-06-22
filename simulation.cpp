@@ -62,8 +62,6 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
 
     //Get system max rand
     maxRand = QRandomGenerator::max();
-    //Initialise variable for GUI update time
-    GUIUPdateTime = 0;
 
     /***** Apply settings *****/
     //In some settings, genome size or mask number etc. will change - but this risks messing with a global. Other variables can change due to rounding from multiplying/dividing by float. Hence keep copy of the actual values and reset at end to make sure nothing changes
@@ -270,6 +268,10 @@ bool simulation::run()
     //Need to track when EE are first applied in order to apply with known frequency
     int EEstart = 0;
 
+    QElapsedTimer timer;
+    timer.start();
+    int lastGUIUpdate = 0;
+
     /************* Start simulation *************/
     do
     {
@@ -436,7 +438,14 @@ bool simulation::run()
         if (theMainWindow != nullptr)
         {
             qApp->processEvents();
-            writeGUI(speciesList);
+            //If you update the GUI every iteration, this is the majority of the trevosim running time, as it takes so long
+            //As such, this is here to only do it every 10 ms
+            //It does, at times, make the GUI appear non-responsive - if you cancel it happens next GUI update, which may be after the run has finished
+            if ((timer.elapsed() - lastGUIUpdate) > 10)
+            {
+                writeGUI(speciesList);
+                lastGUIUpdate = timer.elapsed();
+            }
         }
 
         /************* Write alive record *************/
@@ -568,7 +577,7 @@ bool simulation::run()
 
     //Everything is extinct now - update this prior to GUI
     for (auto &s : extinctList) s = true;
-    if (theMainWindow != nullptr) writeGUI(speciesList);
+    //if (theMainWindow != nullptr) writeGUI(speciesList);
 
     if (simSettings->workingLog)
     {
@@ -2233,12 +2242,6 @@ bool simulation::writeEEFile(const int iterations, const QString logFileString)
 
 void simulation::writeGUI(QVector<Organism *> &speciesList)
 {
-    //if (GUIUPdateTime > 200 && (iterations % 50 != 0))return;
-    //else if (GUIUPdateTime > 100 && (iterations % 10 != 0))return;
-
-    //QElapsedTimer timer;
-    //timer.start();
-
     if (simSettings->runMode != RUN_MODE_TAXON)
     {
         if (theMainWindow->rowMax() < speciesList.count())
@@ -2264,7 +2267,6 @@ void simulation::writeGUI(QVector<Organism *> &speciesList)
     else if (theMainWindow->batchRunning)status.prepend(QString("Run number: %1; ").arg(runs));
     theMainWindow->setStatus(status);
 
-    //GUIUPdateTime = timer.elapsed();
 }
 
 QString simulation::doPadding(int number, int significantFigures)
