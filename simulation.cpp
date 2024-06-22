@@ -1630,17 +1630,7 @@ bool simulation::checkForUnresolvableTaxa(QVector<Organism *> &speciesList, QStr
                     unresolvableCount));
         }
 
-        if (!simSettings->test)
-        {
-            QMessageBox *warningBox2 = new QMessageBox;
-            //Delete when closed so no memory leak
-            warningBox2->setAttribute(Qt::WA_DeleteOnClose, true);
-            warningBox2->setWindowTitle("Warning");
-            warningBox2->setText(message);
-            warningBox2->show();
-            //Close after three minutes.
-            QTimer::singleShot(180000, warningBox2, SLOT(close()));
-        }
+        if (!simSettings->test && theMainWindow != nullptr) QMessageBox::warning(theMainWindow, "Warning - Unresolvable clades", message, QMessageBox::Ok, QMessageBox::Ok);
 
         if (simSettings->workingLog) workLogTextStream << message;
     }
