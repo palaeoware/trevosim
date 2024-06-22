@@ -538,7 +538,6 @@ void MainWindow::printBlank(int row)
     {
         QTableWidgetItem *item(ui->character_Display->item(row, i));
         item->setText("_");
-        qApp->processEvents();
     }
 }
 
@@ -549,7 +548,6 @@ void MainWindow::printGenome(const Organism *org, int row)
         QTableWidgetItem *item(ui->character_Display->item(row, i));
         if (org->genome[i] == false)item->setText("0");
         else item->setText("1");
-        qApp->processEvents();
     }
 }
 

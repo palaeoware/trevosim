@@ -437,11 +437,8 @@ bool simulation::run()
         /************* Write GUI if not running in parallel *************/
         if (theMainWindow != nullptr)
         {
-            qApp->processEvents();
-            //If you update the GUI every iteration, this is the majority of the trevosim running time, as it takes so long
-            //As such, this is here to only do it every 10 ms
-            //It does, at times, make the GUI appear non-responsive - if you cancel it happens next GUI update, which may be after the run has finished
-            if ((timer.elapsed() - lastGUIUpdate) > 10)
+            //Update GUI every five milliseconds
+            if ((timer.elapsed() - lastGUIUpdate) > 5)
             {
                 writeGUI(speciesList);
                 lastGUIUpdate = timer.elapsed();
@@ -577,7 +574,7 @@ bool simulation::run()
 
     //Everything is extinct now - update this prior to GUI
     for (auto &s : extinctList) s = true;
-    //if (theMainWindow != nullptr) writeGUI(speciesList);
+    if (theMainWindow != nullptr) writeGUI(speciesList);
 
     if (simSettings->workingLog)
     {
@@ -2267,6 +2264,7 @@ void simulation::writeGUI(QVector<Organism *> &speciesList)
     else if (theMainWindow->batchRunning)status.prepend(QString("Run number: %1; ").arg(runs));
     theMainWindow->setStatus(status);
 
+    qApp->processEvents();
 }
 
 QString simulation::doPadding(int number, int significantFigures)
