@@ -581,23 +581,44 @@ bool simulation::run()
     QList <int> uninformativeCoding;
     QList <int> uninformativeNonCoding;
 
-    //Test for informative
+    //Test for informative characters - this is a seperate operation to actually stripping them
     testForUninformative(speciesList, uninformativeCoding, uninformativeNonCoding);
 
     int uninformativeNumber = uninformativeCoding.length() + uninformativeNonCoding.length();
+    informativeCharacters = runGenomeSize - uninformativeNumber;
+    //If calculateStripUninformativeFactor is running, all we care about is uninformativeCharacters, so return here
+    if (calculateStripUninformativeFactorRunning) return true;
 
-    if (theMainWindow != nullptr)
+    if (theMainWindow != nullptr && !simSettings->stripUninformative && uninformativeNumber > 0)
     {
         QString statusString =
             QString ("There are %1 uninformative characters in your matrix, and the software is not set to strip these out. This is not necessarily a problem, but I thought you should know.").arg(
                 uninformativeNumber);
-
-        if (!simSettings->stripUninformative && uninformativeNumber > 0) theMainWindow->setStatus(statusString);
+        theMainWindow->setStatus(statusString);
     }
 
     //Strip the characters if requried
     if (simSettings->stripUninformative)
     {
+        //Check whether we have enough coding and non coding characters
+        bool requiredCharacterNumber = testForCharacterNumber(uninformativeCoding, uninformativeNonCoding);
+        if (!requiredCharacterNumber && !simSettings->test)
+        {
+            if (theMainWindow != nullptr)
+            {
+                QString label = "It seems there are not enough informative characters to pull this off.\n\n"
+                                "By default, TREvoSim over generates characters by a factor of 5x before trying to strip down to those that are parsimony uninformative. "
+                                "Under your current settings (in which the strip uninformative factor is " + QString::number(simSettings->stripUninformativeFactor) +
+                                ") TREvoSim has not managed to recover enough informative characters. It has only recovered " + QString::number(speciesList[0]->genome.size()) +
+                                " characters. Choosing the menu option \'Recalculate uninformative factor for current settings\' will allow you to recalculate this factor for the current settings, and \'Set uninformative factor' will allow you to set it manually to a large number.\n\n"
+                                "Alternatively, this may be a one off - you could try running a batch of 1, and the program will try repeatedly with these settings - though after ten or more repeats you may want to cancel and change the settings.";
+                warning("Oops", label);
+            }
+            if (simSettings->workingLog) workLogTextStream << "Return at !requiredCharacterNumber\n";
+            clearVectors(playingFields, speciesList);
+            return false;
+        }
+
         bool stripped = stripUninformativeCharacters(speciesList, uninformativeCoding, uninformativeNonCoding);
         if (!stripped)
         {
@@ -605,7 +626,6 @@ bool simulation::run()
             return false;
         }
     }
-    if (calculateStripUninformativeFactorRunning) return true;
 
     /******** Check for intrisnically unresolvable clades *****/
     int unresolvableCount = 0;
@@ -1445,8 +1465,23 @@ void simulation::testForUninformative(QVector <Organism *> &speciesList, QList <
         }
 }
 
+bool simulation::testForCharacterNumber(QList <int> &uninformativeCoding, QList <int> &uninformativeNonCoding)
+{
+    //Deal with informative v.s. uninformative characters
+    int requiredNonCodingCharacterNumber = simSettings->genomeSize - simSettings->fitnessSize;
+    int requiredCodingCharacterNumber = simSettings->fitnessSize;
+
+    int recoveredNonCodingCharacterNumber = (runGenomeSize - runFitnessSize) - uninformativeNonCoding.length();
+    int recoveredCodingCharacterNumber = runFitnessSize - uninformativeCoding.length();
+
+    if (recoveredNonCodingCharacterNumber < requiredNonCodingCharacterNumber || recoveredCodingCharacterNumber < requiredCodingCharacterNumber ) return false;
+    else return true;
+}
+
 bool simulation::stripUninformativeCharacters(QVector <Organism *> &speciesList, const QList <int> &uninformativeCoding, const QList <int> &uninformativeNonCoding)
 {
+    if (!simSettings->stripUninformative) return false;
+
     if (simSettings->workingLog) workLogTextStream << "Stripping uninformativeCoding characters. Prior to removal:\n" << printSpeciesList(speciesList) << "\n";
 
     //Keep a marker so swtich between coding and non coding is recorded when characters removed (if required).
@@ -1455,19 +1490,19 @@ bool simulation::stripUninformativeCharacters(QVector <Organism *> &speciesList,
     //Delete uninformative characters - both coding and non
     for (int j = 0; j < speciesList.length(); j++)
     {
+        //Start with noncoding, from end, and work back, to avoid numbering issues post-deletion
         if (runGenomeSize != runFitnessSize)
             for (int h = uninformativeNonCoding.size() - 1; h >= 0; h--) speciesList[j]->genome.removeAt(uninformativeNonCoding[h]);
-        //Start at end and work back to avoid numbering issues post-deletion.
 
+        //Now do coding, start at end and work back to avoid numbering issues post-deletion.
         for (int i = uninformativeCoding.size() - 1; i >= 0; i--)
         {
             speciesList[j]->genome.removeAt(uninformativeCoding[i]);
-            // Start at end and work back to avoid numbering issues post - deletion.
-            if (j == 0)codingGenomeEnd--;
+            if (j == 0) codingGenomeEnd--;
         }
     }
 
-    //Sort out variables
+    //Sort out variables by returning to requested size
     if (simSettings->stripUninformative)
     {
         runGenomeSize = simSettings->genomeSize;
@@ -1478,49 +1513,27 @@ bool simulation::stripUninformativeCharacters(QVector <Organism *> &speciesList,
 
     //Subsample characters from those which are informative to hit requested genome size - fine to just use simSettings->genomeSize of list if all coding
     //If not, need to fill partitions as required to ensure right mix of non-coding and coding - do this by lopping off end of coding genome.
-    if (runGenomeSize != runFitnessSize && simSettings->stripUninformative)
+    if (runGenomeSize != runFitnessSize)
     {
-        //Subsample here
+        //This has been checked, but let's check again
+        if (codingGenomeEnd < runFitnessSize) return false;
+        //Subsample coding genome here to requested size
         for (int j = 0; j < speciesList.length(); j++)
             for (int k = codingGenomeEnd; k > runFitnessSize; k--)
-                speciesList[j]->genome.removeAt(k); //Start at end and work back to avoid numbering issues post-deletion.
+                speciesList[j]->genome.removeAt(k);
     }
 
-    if (calculateStripUninformativeFactorRunning)
+    //This has been checked, but let's check again
+    if (speciesList[0]->genome.size() < runGenomeSize) return false;
+
+    //Now do non coding
+    if (speciesList[0]->genome.size() > runGenomeSize)
     {
-        //Record how many characters here, no need to do anything more
-        informativeCharacters = speciesList[0]->genome.size();
-        return true;
+        for (int j = 0; j < speciesList.length(); j++)
+            for (int i = speciesList[j]->genome.size() - 1; i >= runGenomeSize; i--)
+                speciesList[j]->genome.removeAt(i);
     }
 
-    bool requiredCharacterNumber = true;
-
-    if (simSettings->stripUninformative)
-    {
-        if (runGenomeSize == runFitnessSize && speciesList[0]->genome.size() < runGenomeSize) requiredCharacterNumber = false;
-        if (speciesList[0]->genome.size() > runGenomeSize)
-        {
-            for (int j = 0; j < speciesList.length(); j++)
-                for (int i = speciesList[j]->genome.size() - 1; i >= runGenomeSize; i--)
-                    speciesList[j]->genome.removeAt(i);
-        }
-    }
-
-    if (!requiredCharacterNumber && !simSettings->test)
-    {
-        if (theMainWindow != nullptr)
-        {
-            QString label = "It seems there are not enough informative characters to pull this off.\n\n"
-                            "By default, TREvoSim over generates characters by a factor of 5x before trying to strip down to those that are parsimony uninformative. "
-                            "Under your current settings (in which the strip uninformative factor is " + QString::number(simSettings->stripUninformativeFactor) +
-                            ") TREvoSim has not managed to recover enough informative characters. It has only recovered " + QString::number(speciesList[0]->genome.size()) +
-                            " characters. Choosing the menu option \'Recalculate uninformative factor for current settings\' will allow you to recalculate this factor for the current settings, and \'Set uninformative factor' will allow you to set it manually to a large number.\n\n"
-                            "Alternatively, this may be a one off - you could try running a batch of 1, and the program will try repeatedly with these settings - though after ten or more repeats you may want to cancel and change the settings.";
-            warning("Oops", label);
-        }
-        if (simSettings->workingLog) workLogTextStream << "Return at !requiredCharacterNumber\n";
-        return false;
-    }
 
     if (simSettings->workingLog) workLogTextStream << "After removal:\n" << printSpeciesList(speciesList) << "\n";
 
