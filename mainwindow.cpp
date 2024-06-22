@@ -313,13 +313,14 @@ void MainWindow::save()
 
 void MainWindow::startTriggered()
 {
-    //First sort GUI
-    startRunGUI();
 
     if ((simSettings->stripUninformative) && (simSettings->stripUninformativeFactor < 1.))
         if (QMessageBox::question(this, "Error",
                                   "It looks like the strip uninformative factor for these settings is unexpected - i.e. it is less than one. Would you like to recalculate it for these settings?<br /><br />",
                                   QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) recalculateStripUniformativeFactor();
+
+    //First sort GUI
+    startRunGUI();
 
     bool error = false;
     //Create a new simulation object - sending it important settings.
@@ -553,6 +554,7 @@ void MainWindow::printGenome(const Organism *org, int row)
 
 void MainWindow::recalculateStripUniformativeFactor()
 {
+    qDebug() << "recalculateStripUniformativeFactor";
     bool tempStripUninformative = simSettings->stripUninformative;
     simSettings->stripUninformative = true;
     simSettings->stripUninformativeFactor = 1.0;
@@ -563,10 +565,12 @@ void MainWindow::recalculateStripUniformativeFactor()
 
     addProgressBar(0, 10);
 
+    //If someone cancels, we probably still want to have a sensible estimate
+    int runsCompleted = 0;
+
     for (int i = 0; i < 10; i++)
     {
         setProgressBar(i);
-        resetTriggered();
 
         bool error = false;
         //Start a simulation - last bool here tells it we are running the strip uninformative calculation, which is required for constructor
@@ -574,13 +578,17 @@ void MainWindow::recalculateStripUniformativeFactor()
         bool success = false;
         if (!error) success = theSimulation.run();
 
-        if (success) stripUninformativeFactorMean += static_cast<double>(simSettings->genomeSize) / static_cast<double>(theSimulation.returninformativeCharacters());
+        if (success)
+        {
+            stripUninformativeFactorMean += static_cast<double>(simSettings->genomeSize) / static_cast<double>(theSimulation.returninformativeCharacters());
+            runsCompleted++;
+        }
 
         if (error || !success) setStatus("Error calculating strip uninformative");
     }
 
     //Divide by 9 here to add some extra given variability of strip ununformative factor
-    simSettings->stripUninformativeFactor = (stripUninformativeFactorMean / 9.);
+    simSettings->stripUninformativeFactor = (stripUninformativeFactorMean / (static_cast<double>(runsCompleted) * 0.9));
     if (simSettings->stripUninformativeFactor > 20.)simSettings->stripUninformativeFactor = 20.;
     if (simSettings->stripUninformativeFactor < 1.) simSettings->stripUninformativeFactor = 1.;
 
@@ -588,6 +596,7 @@ void MainWindow::recalculateStripUniformativeFactor()
 
     //Reset gui etc.
     finishRunGUI();
+    resetTriggered();
 
     simSettings->stripUninformative = tempStripUninformative;
 
