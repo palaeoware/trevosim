@@ -2263,7 +2263,7 @@ QString simulation::doPadding(int number, int significantFigures)
 }
 
 //Count peaks returns best fitness level, for matching fitness peaks, if called with repeats -1, then it should also be sent an environment
-//If called with repats (from main window) it prints the histogram file
+//If called with repeats (from main window) it prints the histogram file
 int simulation::countPeaks(int genomeSize, int repeat, int environment)
 {
     QVector <quint64> totals;

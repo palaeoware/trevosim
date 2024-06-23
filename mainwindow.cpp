@@ -729,6 +729,7 @@ void MainWindow::countPeaks()
     quint16 pmax = static_cast<quint16>(-1);
 
     addProgressBar(0, pmax);
+    int output = 0;
 
     for (int repeat = 0; repeat < repeats; repeat++)
     {
@@ -737,7 +738,15 @@ void MainWindow::countPeaks()
         setStatus(QString("Repeat %1/%2").arg(repeat).arg(repeats));
 
         //Then set it running - send pointer to main window for GUI and access functions, and run number
-        if (!simError)theSimulation.countPeaks(genomeSize, repeat);
+        if (!simError) output = theSimulation.countPeaks(genomeSize, repeat);
+    }
+
+    if (output != -1)
+    {
+        QString message = QString("TREvoSim successfully completed %1 repeats of the fitness histogram for a genome size of %2.").arg(repeats).arg(genomeSize);
+        message.append(" You will find the results in the TREvoSim_output folder in the location:\n\n");
+        message.append(simSettings->savePathDirectory);
+        QMessageBox::information(this, "Success", message);
     }
 
     //Load previous settings again
