@@ -2330,7 +2330,7 @@ int simulation::countPeaks(int genomeSize, int repeat, int environment)
 
         //For now, let's just do this for the first playing field - we expect each playingfield to have the same properties in terms of peaks
         org.fitness = fitness(&org, playingFields[0]->masks, genomeSize, simSettings->fitnessTarget, runMaskNumber);
-        peaksTextStream << org.fitness << ", ";
+        peaksTextStream << org.fitness << "\n";
 
         if (x < 1000000)
         {
@@ -2341,7 +2341,7 @@ int simulation::countPeaks(int genomeSize, int repeat, int environment)
 
             //For now, let's just do this for the first playing field - we expect each playingfield to have the same properties in terms of peaks
             org.fitness = fitness(&org, playingFields[0]->masks, genomeSize, simSettings->fitnessTarget, runMaskNumber);
-            peaksTextStreamSample << org.fitness << ", ";
+            peaksTextStreamSample << org.fitness << "\n";
         }
 
         totals[org.fitness]++;
