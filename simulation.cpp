@@ -2281,8 +2281,8 @@ int simulation::countPeaks(int genomeSize, int repeat, int environment)
     for (int i = 1; i < 64; i++)lookups[i] = lookups[i - 1] * 2;
 
     quint64 max;
-    if (recordGenomes) max = static_cast<quint64>(pow(2., static_cast<double>(genomeSize)));
-    else max = 1000000;
+    max = static_cast<quint64>(pow(2., static_cast<double>(genomeSize)));
+
     //Progress bar max value is 2^16 - scale to this
     quint16 pmax = static_cast<quint16>(-1);
 
@@ -2290,6 +2290,21 @@ int simulation::countPeaks(int genomeSize, int repeat, int environment)
     if (recordGenomes)QRandomGenerator::global()->fillRange(toTest);
 
     if (recordGenomes)for (int i = 0; i < ((genomeSize * simSettings->maskNumber) + 1); i++) genomes.append(QVector <quint64 >());
+
+    //RJG - Set up save directory
+    if (!setupSaveDirectory()) warning("Error!", "Error opening peaks file to write to - error 1.");
+
+    QString peaksFileNameString = (QString(PRODUCTNAME) + "_fitness_histogram_" + doPadding(repeat, 4));
+    peaksFileNameString.prepend(savePathDirectory.absolutePath() + QDir::separator());
+    QFile peaksFile(peaksFileNameString);
+    if (!peaksFile.open(QIODeviceBase::WriteOnly | QIODevice::Text))warning("Error!", "Error opening peaks file to write to - error 2.");
+    QTextStream peaksTextStream(&peaksFile);
+
+    QString peaksFileNameStringSample = (QString(PRODUCTNAME) + "_fitness_histogram_SAMPLE_" + doPadding(repeat, 4));
+    peaksFileNameStringSample.prepend(savePathDirectory.absolutePath() + QDir::separator());
+    QFile peaksFileSample(peaksFileNameStringSample);
+    if (!peaksFileSample.open(QIODeviceBase::WriteOnly | QIODevice::Text))warning("Error!", "Error opening peaks file to write to - error 2.");
+    QTextStream peaksTextStreamSample(&peaksFileSample);
 
     for (quint64 x = 0; x < max; x++)
     {
@@ -2302,17 +2317,8 @@ int simulation::countPeaks(int genomeSize, int repeat, int environment)
 
         //Create genome from number
         for (int i = 0; i < genomeSize; i++)
-            if (recordGenomes)
-            {
-                if (lookups[i] & x) org.genome[i] = true;
-                else org.genome[i] = false;
-            }
-            else
-            {
-
-                if (lookups[i] & toTest[x]) org.genome[i] = true;
-                else org.genome[i] = false;
-            }
+            if (lookups[i] & x) org.genome[i] = true;
+            else org.genome[i] = false;
         //Update GUI every now and then to show not crashed
 
         if ((x % 9999) == 0)theMainWindow->printGenome(&org, 0);
@@ -2324,13 +2330,29 @@ int simulation::countPeaks(int genomeSize, int repeat, int environment)
 
         //For now, let's just do this for the first playing field - we expect each playingfield to have the same properties in terms of peaks
         org.fitness = fitness(&org, playingFields[0]->masks, genomeSize, simSettings->fitnessTarget, runMaskNumber);
+        peaksTextStream << org.fitness << ", ";
+
+        if (x < 1000000)
+        {
+            for (int i = 0; i < genomeSize; i++)
+                if (lookups[i] & toTest[x]) org.genome[i] = true;
+                else org.genome[i] = false;
+
+
+            //For now, let's just do this for the first playing field - we expect each playingfield to have the same properties in terms of peaks
+            org.fitness = fitness(&org, playingFields[0]->masks, genomeSize, simSettings->fitnessTarget, runMaskNumber);
+            peaksTextStreamSample << org.fitness << ", ";
+        }
 
         totals[org.fitness]++;
         if (recordGenomes) genomes[org.fitness].append(x);
     }
 
+    peaksFile.close();
+    peaksFileSample.close();
+
     //Output
-    printCountPeaks(genomeSize, totals, genomes, repeat);
+    //printCountPeaks(genomeSize, totals, genomes, repeat);
     return 0;
 
 }
