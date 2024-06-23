@@ -2343,7 +2343,7 @@ void simulation::printCountPeaks(int genomeSize, QVector <quint64> &totals, QVec
     peaksTextStream << simSettings->printSettings();
     peaksTextStream << "\n";
 
-    //Remove this for now - if important, I can add ana ccess function to simulation
+    //Remove this for now - if important, I can add an access function to simulation
     for (int i = 0; i < simSettings->environmentNumber; i++)
     {
         peaksTextStream << "\nEnvironment number " << i;

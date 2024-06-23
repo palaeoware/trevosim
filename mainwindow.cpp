@@ -705,7 +705,6 @@ void MainWindow::countPeaks()
 {
     //Save settings to load at end
     save();
-    startRunGUI();
 
     //Create a new simulation object - sending it important settings.
     bool error = false;
@@ -715,6 +714,29 @@ void MainWindow::countPeaks()
 
     int repeats =  QInputDialog::getInt(this, "Fitness histogram...", "How many repeats?", 1, 1, 100000, 1, &error);
     if (!error) return;
+
+    //Check whether files may be overwritten
+    QDirIterator it(simSettings->savePathDirectory, QDirIterator::Subdirectories);
+    bool found = false;
+    while (it.hasNext())
+    {
+        QString filename = it.next();
+        QFileInfo file(filename);
+        if (file.isDir())  continue;
+        // If the filename contains target string - put it in the hitlist
+        if (file.fileName().contains("TREvoSim_fitness_histogram", Qt::CaseInsensitive))
+        {
+            found = true;
+            break;
+        }
+    }
+    if (found)
+    {
+        if (QMessageBox::warning(this, "Warning", "It looks like your output directory already has TREvoSim fitness histograms in it. These will be overwritten. Continue?",
+                                 QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel) return;
+    }
+
+    startRunGUI();
 
     //RJG - resize grid otherwise the print function will make. No need to record original settings, as dealt with in main window
     simSettings->genomeSize = genomeSize;
