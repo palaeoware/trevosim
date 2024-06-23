@@ -2272,58 +2272,67 @@ int simulation::countPeaks(int genomeSize, int repeat, int environment)
 
     Organism org(genomeSize, false);
 
+    bool recordGenomes = false;
+    if (genomeSize < 21) recordGenomes = true;
+
     //Lookups for printing genomes
     quint64 lookups[64];
     lookups[0] = 1;
     for (int i = 1; i < 64; i++)lookups[i] = lookups[i - 1] * 2;
 
-    quint64 max = static_cast<quint64>(pow(2., static_cast<double>(genomeSize)));
+    quint64 max;
+    if (recordGenomes) max = static_cast<quint64>(pow(2., static_cast<double>(genomeSize)));
+    else max = 1000000;
     //Progress bar max value is 2^16 - scale to this
     quint16 pmax = static_cast<quint16>(-1);
 
-    bool recordGenomes = false;
-    if (genomeSize < 25) recordGenomes = true;
+    quint64 toTest[1000000];
+    if (recordGenomes)QRandomGenerator::global()->fillRange(toTest);
 
-    if (recordGenomes)for (int i = 0; i < ((genomeSize * simSettings->maskNumber) + 1); i++)genomes.append(QVector <quint64 >());
+    if (recordGenomes)for (int i = 0; i < ((genomeSize * simSettings->maskNumber) + 1); i++) genomes.append(QVector <quint64 >());
 
-    quint16 minimum = ~0;
     for (quint64 x = 0; x < max; x++)
     {
-
-        while (theMainWindow->pauseFlag == true && !theMainWindow->escapePressed) qApp->processEvents();
-        if (theMainWindow->escapePressed) return -1;
+        //If we do this every 1000, the GUI remains responsive to pause and cancel
+        if (x % 1000 == 0)
+        {
+            while (theMainWindow->pauseFlag == true && !theMainWindow->escapePressed) qApp->processEvents();
+            if (theMainWindow->escapePressed) return -1;
+        }
 
         //Create genome from number
         for (int i = 0; i < genomeSize; i++)
-            if (lookups[i] & x)org.genome[i] = true;
-            else org.genome[i] = false;
-
-        //Update GUI every now and then to show not crashed
-        if (repeat != -1)
-        {
-            if ((x % 9999) == 0)theMainWindow->printGenome(&org, 0);
-            if ((x % 1000) == 0)
+            if (recordGenomes)
             {
-                double prog = (static_cast<double>(x) / static_cast<double>(max)) * pmax;
-                theMainWindow->setProgressBar(static_cast<int>(prog));
+                if (lookups[i] & x) org.genome[i] = true;
+                else org.genome[i] = false;
             }
+            else
+            {
+
+                if (lookups[i] & toTest[x]) org.genome[i] = true;
+                else org.genome[i] = false;
+            }
+        //Update GUI every now and then to show not crashed
+
+        if ((x % 9999) == 0)theMainWindow->printGenome(&org, 0);
+        if ((x % 1000) == 0)
+        {
+            double prog = (static_cast<double>(x) / static_cast<double>(max)) * pmax;
+            theMainWindow->setProgressBar(static_cast<int>(prog));
         }
+
         //For now, let's just do this for the first playing field - we expect each playingfield to have the same properties in terms of peaks
-        if (repeat == -1) org.fitness = fitness(&org, playingFields[0]->masks, genomeSize, simSettings->fitnessTarget, runMaskNumber, environment);
-        else org.fitness = fitness(&org, playingFields[0]->masks, genomeSize, simSettings->fitnessTarget, runMaskNumber);
+        org.fitness = fitness(&org, playingFields[0]->masks, genomeSize, simSettings->fitnessTarget, runMaskNumber);
 
         totals[org.fitness]++;
-        if (recordGenomes)genomes[org.fitness].append(x);
-        if (org.fitness < minimum)minimum = org.fitness;
+        if (recordGenomes) genomes[org.fitness].append(x);
     }
 
-    //-1 is default for repeat - if called with a number this is coming from main window, and we need to print
-    if (repeat == -1) return minimum;
-    else
-    {
-        printCountPeaks(genomeSize, totals, genomes, repeat);
-        return 0;
-    }
+    //Output
+    printCountPeaks(genomeSize, totals, genomes, repeat);
+    return 0;
+
 }
 
 void simulation::printCountPeaks(int genomeSize, QVector <quint64> &totals, QVector <QVector <quint64> > &genomes, int repeat)
