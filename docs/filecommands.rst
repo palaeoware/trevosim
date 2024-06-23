@@ -31,7 +31,7 @@ Commands
 Fitness histogram
 ^^^^^^^^^^^^^^^^^
 
-The fitness algorithm for TREvoSim is described in Keating et al. (2020). The fitness landscape varies depends on the simulation settings. This menu command (shortcut ctrl + shift + h) provides a basic assessment of that landscape by showing the distribution of fitnesses for every possible genome for the current settings. It provides an option to select how many bits in the test organism's genome as larger genome sizes (e.g. |gt| 16) take exponentially longer given the need to try every potential genome rearrangement.
+The fitness algorithm for TREvoSim is described in Keating et al. (2020). The fitness landscape varies depends on the simulation settings. This menu command (shortcut ctrl + shift + h) provides a basic assessment of that landscape by showing the distribution of fitnesses for every possible genome for the current settings. It provides an option to select how many bits in the test organism's genome: run times increase exponentially and larger genome sizes (e.g. |gt| 20) can take a significant amount of time.
 
 Run tests
 ^^^^^^^^^
