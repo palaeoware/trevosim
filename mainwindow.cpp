@@ -716,7 +716,8 @@ void MainWindow::countPeaks()
     if (!error) return;
 
     //Check whether files may be overwritten
-    QDirIterator it(simSettings->savePathDirectory, QDirIterator::Subdirectories);
+    QString path = simSettings->savePathDirectory + QString(PRODUCTNAME) + "_output";
+    QDirIterator it(path, QDirIterator::Subdirectories);
     bool found = false;
     while (it.hasNext())
     {
@@ -726,6 +727,7 @@ void MainWindow::countPeaks()
         // If the filename contains target string - put it in the hitlist
         if (file.fileName().contains("TREvoSim_fitness_histogram", Qt::CaseInsensitive))
         {
+            qDebug() << file.filesystemAbsoluteFilePath();
             found = true;
             break;
         }

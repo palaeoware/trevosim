@@ -2334,7 +2334,7 @@ void simulation::printCountPeaks(int genomeSize, QVector <quint64> &totals, QVec
     QString peaksFileNameString = (QString(PRODUCTNAME) + "_fitness_histogram_" + doPadding(repeat, 4));
     peaksFileNameString.prepend(savePathDirectory.absolutePath() + QDir::separator());
     QFile peaksFile(peaksFileNameString);
-    if (!peaksFile.open(QIODevice::Append | QIODevice::Text))warning("Error!", "Error opening peaks file to write to - error 2.");
+    if (!peaksFile.open(QIODeviceBase::WriteOnly | QIODevice::Text))warning("Error!", "Error opening peaks file to write to - error 2.");
     QTextStream peaksTextStream(&peaksFile);
 
     peaksTextStream << QString(PRODUCTNAME) << " peak count for " << simSettings->environmentNumber << " environment(s), " << simSettings->maskNumber << " masks, ";
