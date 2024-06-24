@@ -32,7 +32,7 @@ Output::Output(QWidget *parent, simulationVariables *simSettings) :
     ui->intro_01->setText("This output dialogue allows you to set the text for up to two custom output files to reflect the state of a completed simulation. For example, you can output the matrix, the number of characters or terminals, and the tree (which can also be output as a separate file - see below). You can include commands for downstream analysis of the data. For more details of how to write outputs, please see the TREvoSim documentation (available by clicking the button below).");
 
     ui->intro_02->setWordWrap(true);
-    ui->intro_02->setText("In addition to the two custom files above, this option allows you to save the tree as a .nex file. Provide a base name here - the word tree_ will be appended to the string you provide.");
+    ui->intro_02->setText("In addition to the two custom files above, this option allows you to save the tree as a .nex file. Provide a base name here.");
 
     QObject::connect(ui->docsPushButton, &QPushButton::clicked, this, &Output::docs);
 
