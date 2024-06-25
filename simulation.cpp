@@ -2286,10 +2286,50 @@ int simulation::countPeaks(int genomeSize, int repeat, int environment)
     //Progress bar max value is 2^16 - scale to this
     quint16 pmax = static_cast<quint16>(-1);
 
+    //quint64
     quint64 toTest[1000000];
-    if (recordGenomes)QRandomGenerator::global()->fillRange(toTest);
-
-    if (recordGenomes)for (int i = 0; i < ((genomeSize * simSettings->maskNumber) + 1); i++) genomes.append(QVector <quint64 >());
+    //OK, this won't work as with 32 bits, still have to do all those operations! Instead should just check against the last numbers to this point....
+    if (!recordGenomes)
+    {
+        //This should fill random list with around a million genomes, all of them non repeating as they are drawn from sequential numbers in for loop based on the probability of a random being less than an appropriate cutoff
+        //First create list of required size of random numbers to test every possible binary number in the requested number of bits to test
+        QList<quint64> randomList(pow(2., static_cast<double>(genomeSize)));
+        QRandomGenerator::global()->fillRange(randomList.data(), randomList.size());
+        //Since we may no have enough when done, keep track of unused binary numbers
+        QList<quint64> unused;
+        //This is our maximum random number
+        quint64 max = ~0;
+        //This creates a cutoff value by multiplying the max by the required faction
+        quint64 cutoff = (static_cast<double>(1000000) / pow(2., static_cast<double>(genomeSize))) * static_cast<double>(max);
+        quint64 cnt = 0;
+        //Now lets loop through every possible binary number in the requested number of bits
+        for (quint64 i = 0; i < randomList.size(); i++)
+        {
+            //When our random number is less than cutoff, add it to our list of genomes to test
+            if (randomList[i] < cutoff)
+            {
+                toTest[cnt] = i;
+                cnt++;
+                //If it's full, break
+                if (cnt == 1000000) break;
+            }
+            //Otherwise save unused for later
+            else
+            {
+                if (unused.size() < 1000000) unused.append(i);
+                //now need to figure out a way to make sure that these are drawn from throughout
+            }
+        }
+        //If we don't have enough, fill it up from unused numbers
+        while (cnt < 1000000)
+        {
+            quint64 selected = QRandomGenerator::global()->bounded(unused.size());
+            toTest[cnt] = unused.at(selected);
+            unused.removeAt(selected);
+            cnt++;
+        }
+    }
+    else for (int i = 0; i < ((genomeSize * simSettings->maskNumber) + 1); i++) genomes.append(QVector <quint64 >());
 
     for (quint64 x = 0; x < max; x++)
     {
