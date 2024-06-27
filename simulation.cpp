@@ -2369,16 +2369,17 @@ void simulation::printCountPeaks(int genomeSize, QVector <quint64> &totals, QVec
     for (int i = 1; i < 64; i++)lookups[i] = lookups[i - 1] * 2;
 
     peaksTextStream << "\n\nGenomes tested: " << max << ", distribution:\n";
-    for (int i = 0; i < genomeSize * simSettings->maskNumber + 1; i++)peaksTextStream << "Fit to environment: " << i << " Number of genomes: " << totals[i] << "\n";
+    peaksTextStream << "Fitness, Number of genomes\n";
+    for (int i = 0; i < genomeSize * simSettings->maskNumber + 1; i++)peaksTextStream << i << "," << totals[i] << "\n";
 
     bool sizeFlag = false;
-    peaksTextStream << "\n\nGenome fit to environment as follows:\n";
+    peaksTextStream << "\n\nGenomes associated with each fitness are as follows:\n";
     for (int i = 0; i < genomes.length(); i++)
         if (!genomes[i].empty())
         {
             if (!sizeFlag)
             {
-                peaksTextStream << "Fit to environment " << i << "\n";
+                peaksTextStream << "Fitness " << i << "\n";
                 for (int j = 0; j < genomes[i].length(); j++)
                     peaksTextStream << printGenomeInteger(genomes[i][j], genomeSize, lookups) << "\n";
             }
