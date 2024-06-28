@@ -62,8 +62,6 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
 
     //Get system max rand
     maxRand = QRandomGenerator::max();
-    //Initialise variable for GUI update time
-    GUIUPdateTime = 0;
 
     /***** Apply settings *****/
     //In some settings, genome size or mask number etc. will change - but this risks messing with a global. Other variables can change due to rounding from multiplying/dividing by float. Hence keep copy of the actual values and reset at end to make sure nothing changes
@@ -270,6 +268,10 @@ bool simulation::run()
     //Need to track when EE are first applied in order to apply with known frequency
     int EEstart = 0;
 
+    QElapsedTimer timer;
+    timer.start();
+    int lastGUIUpdate = 0;
+
     /************* Start simulation *************/
     do
     {
@@ -433,7 +435,15 @@ bool simulation::run()
         else if (simSettings->runMode == RUN_MODE_ITERATION && iterations == simSettings->runForIterations) simulationComplete = true;
 
         /************* Write GUI if not running in parallel *************/
-        if (theMainWindow != nullptr) writeGUI(speciesList);
+        if (theMainWindow != nullptr)
+        {
+            //Update GUI every five milliseconds
+            if ((timer.elapsed() - lastGUIUpdate) > 5)
+            {
+                writeGUI(speciesList);
+                lastGUIUpdate = timer.elapsed();
+            }
+        }
 
         /************* Write alive record *************/
         QVector <QVector <int> > speciesAlive;
@@ -581,23 +591,44 @@ bool simulation::run()
     QList <int> uninformativeCoding;
     QList <int> uninformativeNonCoding;
 
-    //Test for informative
+    //Test for informative characters - this is a seperate operation to actually stripping them
     testForUninformative(speciesList, uninformativeCoding, uninformativeNonCoding);
 
     int uninformativeNumber = uninformativeCoding.length() + uninformativeNonCoding.length();
+    informativeCharacters = runGenomeSize - uninformativeNumber;
+    //If calculateStripUninformativeFactor is running, all we care about is uninformativeCharacters, so return here
+    if (calculateStripUninformativeFactorRunning) return true;
 
-    if (theMainWindow != nullptr)
+    if (theMainWindow != nullptr && !simSettings->stripUninformative && uninformativeNumber > 0)
     {
         QString statusString =
             QString ("There are %1 uninformative characters in your matrix, and the software is not set to strip these out. This is not necessarily a problem, but I thought you should know.").arg(
                 uninformativeNumber);
-
-        if (!simSettings->stripUninformative && uninformativeNumber > 0) theMainWindow->setStatus(statusString);
+        theMainWindow->setStatus(statusString);
     }
 
     //Strip the characters if requried
     if (simSettings->stripUninformative)
     {
+        //Check whether we have enough coding and non coding characters
+        bool requiredCharacterNumber = testForCharacterNumber(uninformativeCoding, uninformativeNonCoding);
+        if (!requiredCharacterNumber && !simSettings->test)
+        {
+            if (theMainWindow != nullptr)
+            {
+                QString label = "It seems there are not enough informative characters to pull this off.\n\n"
+                                "By default, TREvoSim over generates characters by a factor of 5x before trying to strip down to those that are parsimony uninformative. "
+                                "Under your current settings (in which the strip uninformative factor is " + QString::number(simSettings->stripUninformativeFactor) +
+                                ") TREvoSim has not managed to recover enough informative characters. It has only recovered " + QString::number(speciesList[0]->genome.size()) +
+                                " characters. Choosing the menu option \'Recalculate uninformative factor for current settings\' will allow you to recalculate this factor for the current settings, and \'Set uninformative factor' will allow you to set it manually to a large number.\n\n"
+                                "Alternatively, this may be a one off - you could try running a batch of 1, and the program will try repeatedly with these settings - though after ten or more repeats you may want to cancel and change the settings.";
+                warning("Oops", label);
+            }
+            if (simSettings->workingLog) workLogTextStream << "Return at !requiredCharacterNumber\n";
+            clearVectors(playingFields, speciesList);
+            return false;
+        }
+
         bool stripped = stripUninformativeCharacters(speciesList, uninformativeCoding, uninformativeNonCoding);
         if (!stripped)
         {
@@ -605,7 +636,6 @@ bool simulation::run()
             return false;
         }
     }
-    if (calculateStripUninformativeFactorRunning) return true;
 
     /******** Check for intrisnically unresolvable clades *****/
     int unresolvableCount = 0;
@@ -1445,8 +1475,23 @@ void simulation::testForUninformative(QVector <Organism *> &speciesList, QList <
         }
 }
 
+bool simulation::testForCharacterNumber(QList <int> &uninformativeCoding, QList <int> &uninformativeNonCoding)
+{
+    //Deal with informative v.s. uninformative characters
+    int requiredNonCodingCharacterNumber = simSettings->genomeSize - simSettings->fitnessSize;
+    int requiredCodingCharacterNumber = simSettings->fitnessSize;
+
+    int recoveredNonCodingCharacterNumber = (runGenomeSize - runFitnessSize) - uninformativeNonCoding.length();
+    int recoveredCodingCharacterNumber = runFitnessSize - uninformativeCoding.length();
+
+    if (recoveredNonCodingCharacterNumber < requiredNonCodingCharacterNumber || recoveredCodingCharacterNumber < requiredCodingCharacterNumber ) return false;
+    else return true;
+}
+
 bool simulation::stripUninformativeCharacters(QVector <Organism *> &speciesList, const QList <int> &uninformativeCoding, const QList <int> &uninformativeNonCoding)
 {
+    if (!simSettings->stripUninformative) return false;
+
     if (simSettings->workingLog) workLogTextStream << "Stripping uninformativeCoding characters. Prior to removal:\n" << printSpeciesList(speciesList) << "\n";
 
     //Keep a marker so swtich between coding and non coding is recorded when characters removed (if required).
@@ -1455,19 +1500,19 @@ bool simulation::stripUninformativeCharacters(QVector <Organism *> &speciesList,
     //Delete uninformative characters - both coding and non
     for (int j = 0; j < speciesList.length(); j++)
     {
+        //Start with noncoding, from end, and work back, to avoid numbering issues post-deletion
         if (runGenomeSize != runFitnessSize)
             for (int h = uninformativeNonCoding.size() - 1; h >= 0; h--) speciesList[j]->genome.removeAt(uninformativeNonCoding[h]);
-        //Start at end and work back to avoid numbering issues post-deletion.
 
+        //Now do coding, start at end and work back to avoid numbering issues post-deletion.
         for (int i = uninformativeCoding.size() - 1; i >= 0; i--)
         {
             speciesList[j]->genome.removeAt(uninformativeCoding[i]);
-            // Start at end and work back to avoid numbering issues post - deletion.
-            if (j == 0)codingGenomeEnd--;
+            if (j == 0) codingGenomeEnd--;
         }
     }
 
-    //Sort out variables
+    //Sort out variables by returning to requested size
     if (simSettings->stripUninformative)
     {
         runGenomeSize = simSettings->genomeSize;
@@ -1478,49 +1523,27 @@ bool simulation::stripUninformativeCharacters(QVector <Organism *> &speciesList,
 
     //Subsample characters from those which are informative to hit requested genome size - fine to just use simSettings->genomeSize of list if all coding
     //If not, need to fill partitions as required to ensure right mix of non-coding and coding - do this by lopping off end of coding genome.
-    if (runGenomeSize != runFitnessSize && simSettings->stripUninformative)
+    if (runGenomeSize != runFitnessSize)
     {
-        //Subsample here
+        //This has been checked, but let's check again
+        if (codingGenomeEnd < runFitnessSize) return false;
+        //Subsample coding genome here to requested size
         for (int j = 0; j < speciesList.length(); j++)
             for (int k = codingGenomeEnd; k > runFitnessSize; k--)
-                speciesList[j]->genome.removeAt(k); //Start at end and work back to avoid numbering issues post-deletion.
+                speciesList[j]->genome.removeAt(k);
     }
 
-    if (calculateStripUninformativeFactorRunning)
+    //This has been checked, but let's check again
+    if (speciesList[0]->genome.size() < runGenomeSize) return false;
+
+    //Now do non coding
+    if (speciesList[0]->genome.size() > runGenomeSize)
     {
-        //Record how many characters here, no need to do anything more
-        informativeCharacters = speciesList[0]->genome.size();
-        return true;
+        for (int j = 0; j < speciesList.length(); j++)
+            for (int i = speciesList[j]->genome.size() - 1; i >= runGenomeSize; i--)
+                speciesList[j]->genome.removeAt(i);
     }
 
-    bool requiredCharacterNumber = true;
-
-    if (simSettings->stripUninformative)
-    {
-        if (runGenomeSize == runFitnessSize && speciesList[0]->genome.size() < runGenomeSize) requiredCharacterNumber = false;
-        if (speciesList[0]->genome.size() > runGenomeSize)
-        {
-            for (int j = 0; j < speciesList.length(); j++)
-                for (int i = speciesList[j]->genome.size() - 1; i >= runGenomeSize; i--)
-                    speciesList[j]->genome.removeAt(i);
-        }
-    }
-
-    if (!requiredCharacterNumber && !simSettings->test)
-    {
-        if (theMainWindow != nullptr)
-        {
-            QString label = "It seems there are not enough informative characters to pull this off.\n\n"
-                            "By default, TREvoSim over generates characters by a factor of 5x before trying to strip down to those that are parsimony uninformative. "
-                            "Under your current settings (in which the strip uninformative factor is " + QString::number(simSettings->stripUninformativeFactor) +
-                            ") TREvoSim has not managed to recover enough informative characters. It has only recovered " + QString::number(speciesList[0]->genome.size()) +
-                            " characters. Choosing the menu option \'Recalculate uninformative factor for current settings\' will allow you to recalculate this factor for the current settings, and \'Set uninformative factor' will allow you to set it manually to a large number.\n\n"
-                            "Alternatively, this may be a one off - you could try running a batch of 1, and the program will try repeatedly with these settings - though after ten or more repeats you may want to cancel and change the settings.";
-            warning("Oops", label);
-        }
-        if (simSettings->workingLog) workLogTextStream << "Return at !requiredCharacterNumber\n";
-        return false;
-    }
 
     if (simSettings->workingLog) workLogTextStream << "After removal:\n" << printSpeciesList(speciesList) << "\n";
 
@@ -1603,21 +1626,11 @@ bool simulation::checkForUnresolvableTaxa(QVector<Organism *> &speciesList, QStr
         {
             message.append(QString("\n\n"));
             message.append(
-                QString("In this case, you are above the cutoff of resolvable taxa - there are %1 identical terminals. If you are in batch mode, this will carry on trying until you have hit the requested number of runs. If you're not, you may want to try again (or hit run for, and then enter one run to automatically run it till one sticks).").arg(
+                QString("In this case, you are above the cutoff of resolvable taxa - there are %1 identical terminals. If you are in batch mode, this will carry on trying until you have hit the requested number of runs. If you're not, you may want to try again (or hit batch, and then enter one run to automatically run it till one sticks).").arg(
                     unresolvableCount));
         }
 
-        if (!simSettings->test)
-        {
-            QMessageBox *warningBox2 = new QMessageBox;
-            //Delete when closed so no memory leak
-            warningBox2->setAttribute(Qt::WA_DeleteOnClose, true);
-            warningBox2->setWindowTitle("Warning");
-            warningBox2->setText(message);
-            warningBox2->show();
-            //Close after three minutes.
-            QTimer::singleShot(180000, warningBox2, SLOT(close()));
-        }
+        if (!simSettings->test && theMainWindow != nullptr) QMessageBox::warning(theMainWindow, "Warning - Unresolvable clades", message, QMessageBox::Ok, QMessageBox::Ok);
 
         if (simSettings->workingLog) workLogTextStream << message;
     }
@@ -2216,12 +2229,6 @@ bool simulation::writeEEFile(const int iterations, const QString logFileString)
 
 void simulation::writeGUI(QVector<Organism *> &speciesList)
 {
-    if (GUIUPdateTime > 200 && (iterations % 50 != 0))return;
-    else if (GUIUPdateTime > 100 && (iterations % 10 != 0))return;
-
-    QElapsedTimer timer;
-    timer.start();
-
     if (simSettings->runMode != RUN_MODE_TAXON)
     {
         if (theMainWindow->rowMax() < speciesList.count())
@@ -2248,8 +2255,6 @@ void simulation::writeGUI(QVector<Organism *> &speciesList)
     theMainWindow->setStatus(status);
 
     qApp->processEvents();
-
-    GUIUPdateTime = timer.elapsed();
 }
 
 QString simulation::doPadding(int number, int significantFigures)
@@ -2258,7 +2263,7 @@ QString simulation::doPadding(int number, int significantFigures)
 }
 
 //Count peaks returns best fitness level, for matching fitness peaks, if called with repeats -1, then it should also be sent an environment
-//If called with repats (from main window) it prints the histogram file
+//If called with repeats (from main window) it prints the histogram file
 int simulation::countPeaks(int genomeSize, int repeat, int environment)
 {
     QVector <quint64> totals;
@@ -2267,58 +2272,66 @@ int simulation::countPeaks(int genomeSize, int repeat, int environment)
 
     Organism org(genomeSize, false);
 
+    bool recordGenomes = false;
+    if (genomeSize < 21) recordGenomes = true;
+
     //Lookups for printing genomes
     quint64 lookups[64];
     lookups[0] = 1;
     for (int i = 1; i < 64; i++)lookups[i] = lookups[i - 1] * 2;
 
-    quint64 max = static_cast<quint64>(pow(2., static_cast<double>(genomeSize)));
+    quint64 max;
+    if (recordGenomes) max = static_cast<quint64>(pow(2., static_cast<double>(genomeSize)));
+    else max = 1000000;
     //Progress bar max value is 2^16 - scale to this
     quint16 pmax = static_cast<quint16>(-1);
 
-    bool recordGenomes = false;
-    if (genomeSize < 25) recordGenomes = true;
+    quint64 toTest[1000000];
+    //This fills with randoms of quint64, but this doesn't matter because below, when setting genome, we only take the first gnomeSize bits, which will also be random!
+    if (!recordGenomes) QRandomGenerator::global()->fillRange(toTest);
+    else for (int i = 0; i < ((genomeSize * simSettings->maskNumber) + 1); i++) genomes.append(QVector <quint64 >());
 
-    if (recordGenomes)for (int i = 0; i < ((genomeSize * simSettings->maskNumber) + 1); i++)genomes.append(QVector <quint64 >());
-
-    quint16 minimum = ~0;
     for (quint64 x = 0; x < max; x++)
     {
-
-        while (theMainWindow->pauseFlag == true && !theMainWindow->escapePressed) qApp->processEvents();
-        if (theMainWindow->escapePressed) return -1;
+        //If we do this every 1000, the GUI remains responsive to pause and cancel
+        if (x % 1000 == 0)
+        {
+            while (theMainWindow->pauseFlag == true && !theMainWindow->escapePressed) qApp->processEvents();
+            if (theMainWindow->escapePressed) return -1;
+        }
 
         //Create genome from number
         for (int i = 0; i < genomeSize; i++)
-            if (lookups[i] & x)org.genome[i] = true;
-            else org.genome[i] = false;
-
-        //Update GUI every now and then to show not crashed
-        if (repeat != -1)
-        {
-            if ((x % 9999) == 0)theMainWindow->printGenome(&org, 0);
-            if ((x % 1000) == 0)
+            if (recordGenomes)
             {
-                double prog = (static_cast<double>(x) / static_cast<double>(max)) * pmax;
-                theMainWindow->setProgressBar(static_cast<int>(prog));
+                if (lookups[i] & x) org.genome[i] = true;
+                else org.genome[i] = false;
             }
+            else
+            {
+                if (lookups[i] & toTest[x]) org.genome[i] = true;
+                else org.genome[i] = false;
+            }
+        //Update GUI every now and then to show not crashed
+
+        if ((x % 9999) == 0)theMainWindow->printGenome(&org, 0);
+        if ((x % 1000) == 0)
+        {
+            double prog = (static_cast<double>(x) / static_cast<double>(max)) * pmax;
+            theMainWindow->setProgressBar(static_cast<int>(prog));
         }
+
         //For now, let's just do this for the first playing field - we expect each playingfield to have the same properties in terms of peaks
-        if (repeat == -1) org.fitness = fitness(&org, playingFields[0]->masks, genomeSize, simSettings->fitnessTarget, runMaskNumber, environment);
-        else org.fitness = fitness(&org, playingFields[0]->masks, genomeSize, simSettings->fitnessTarget, runMaskNumber);
+        org.fitness = fitness(&org, playingFields[0]->masks, genomeSize, simSettings->fitnessTarget, runMaskNumber);
 
         totals[org.fitness]++;
-        if (recordGenomes)genomes[org.fitness].append(x);
-        if (org.fitness < minimum)minimum = org.fitness;
+        if (recordGenomes) genomes[org.fitness].append(x);
     }
 
-    //-1 is default for repeat - if called with a number this is coming from main window, and we need to print
-    if (repeat == -1) return minimum;
-    else
-    {
-        printCountPeaks(genomeSize, totals, genomes, repeat);
-        return 0;
-    }
+    //Output
+    printCountPeaks(genomeSize, totals, genomes, repeat);
+    return 0;
+
 }
 
 void simulation::printCountPeaks(int genomeSize, QVector <quint64> &totals, QVector <QVector <quint64> > &genomes, int repeat)
@@ -2329,7 +2342,7 @@ void simulation::printCountPeaks(int genomeSize, QVector <quint64> &totals, QVec
     QString peaksFileNameString = (QString(PRODUCTNAME) + "_fitness_histogram_" + doPadding(repeat, 4));
     peaksFileNameString.prepend(savePathDirectory.absolutePath() + QDir::separator());
     QFile peaksFile(peaksFileNameString);
-    if (!peaksFile.open(QIODevice::Append | QIODevice::Text))warning("Error!", "Error opening peaks file to write to - error 2.");
+    if (!peaksFile.open(QIODeviceBase::WriteOnly | QIODevice::Text))warning("Error!", "Error opening peaks file to write to - error 2.");
     QTextStream peaksTextStream(&peaksFile);
 
     peaksTextStream << QString(PRODUCTNAME) << " peak count for " << simSettings->environmentNumber << " environment(s), " << simSettings->maskNumber << " masks, ";
@@ -2338,7 +2351,7 @@ void simulation::printCountPeaks(int genomeSize, QVector <quint64> &totals, QVec
     peaksTextStream << simSettings->printSettings();
     peaksTextStream << "\n";
 
-    //Remove this for now - if important, I can add ana ccess function to simulation
+    //Remove this for now - if important, I can add an access function to simulation
     for (int i = 0; i < simSettings->environmentNumber; i++)
     {
         peaksTextStream << "\nEnvironment number " << i;
@@ -2356,16 +2369,17 @@ void simulation::printCountPeaks(int genomeSize, QVector <quint64> &totals, QVec
     for (int i = 1; i < 64; i++)lookups[i] = lookups[i - 1] * 2;
 
     peaksTextStream << "\n\nGenomes tested: " << max << ", distribution:\n";
-    for (int i = 0; i < genomeSize * simSettings->maskNumber + 1; i++)peaksTextStream << "Fit to environment: " << i << " Number of genomes: " << totals[i] << "\n";
+    peaksTextStream << "Fitness, Number of genomes\n";
+    for (int i = 0; i < genomeSize * simSettings->maskNumber + 1; i++)peaksTextStream << i << "," << totals[i] << "\n";
 
     bool sizeFlag = false;
-    peaksTextStream << "\n\nGenome fit to environment as follows:\n";
+    peaksTextStream << "\n\nGenomes associated with each fitness are as follows:\n";
     for (int i = 0; i < genomes.length(); i++)
         if (!genomes[i].empty())
         {
             if (!sizeFlag)
             {
-                peaksTextStream << "Fit to environment " << i << "\n";
+                peaksTextStream << "Fitness " << i << "\n";
                 for (int j = 0; j < genomes[i].length(); j++)
                     peaksTextStream << printGenomeInteger(genomes[i][j], genomeSize, lookups) << "\n";
             }

@@ -39,7 +39,6 @@ private:
     int perturbationStart, perturbationEnd, perturbationOccurring;
     int ecosystemEngineeringOccurring;
     int environmentalPerturbationCopyRate;
-    int GUIUPdateTime;
     //One vector to keep a copy of masks, the other to keep a copy of which elements of the original masks have been copied over the perturbation masks
     QVector <QVector <QVector <QVector <bool> > > > environmentalPerturbationMasksCopy;
     QVector <QVector <QVector <QVector <bool> > > > environmentalPerturbationOverwriting;
@@ -96,6 +95,7 @@ private:
     void applyPlayingfieldMixing(QVector<Organism *> &speciesList);
     void applyEcosystemEngineering(QVector<Organism *> &speciesList, bool writeEcosystemEngineers);
     void testForUninformative(QVector <Organism *> &speciesList, QList <int> &uninformativeCoding, QList <int> &uninformativeNonCoding);
+    bool testForCharacterNumber(QList <int> &uninformativeCoding, QList <int> &uninformativeNonCoding);
     bool stripUninformativeCharacters(QVector<Organism *> &speciesList, const QList <int> &uninformativeCoding, const QList <int> &uninformativeNonCoding);
     bool checkForUnresolvableTaxa(QVector<Organism *> &speciesList, QString &unresolvableTaxonGroups, int &unresolvableCount);
     bool writeFile(const QString logFileNameBase, const QString logFileExtension, const QString logFileString, const QHash<QString, QString> &outValues, const QVector<Organism *> &speciesList);

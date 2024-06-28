@@ -2,6 +2,7 @@
 #include "simulation.h"
 
 #include <QCryptographicHash>
+#include <QRandomGenerator>
 
 testinternal::testinternal(MainWindow *theMainWindowCon)
 {
@@ -1043,6 +1044,8 @@ bool testinternal::testTen(QString &outString)
 
     simulationVariables simSettings;
     simSettings.runForTaxa = 20;
+    simSettings.stripUninformative = true;
+
     simulation x(0, &simSettings, &error, theMainWindow);
     if (error) return false;
 
@@ -1075,11 +1078,209 @@ bool testinternal::testTen(QString &outString)
     x.testForUninformative(speciesList, uninformativeCoding, uninformativeNonCoding);
     x.stripUninformativeCharacters(speciesList, uninformativeCoding, uninformativeNonCoding);
     out << "\nThere should be 17 informative characters.\n";
-    if (speciesList[0]->genome.length() != 17)testFlag = false;
+    if (speciesList[0]->genome.length() != 17) testFlag = false;
     out << "Stripped of uninformative characters, this matrix has " << speciesList[0]->genome.length() << " characters.\n";
     out << x.printMatrix(speciesList);
 
-    if (testFlag) out << "\nUninformative tests passed.\n";
+
+    QVector <Organism *> speciesList2;
+    int speciesList2Size = 0;
+    for (int i = 0; i < 20; i++)
+    {
+        Organism *org = new Organism(100, false);
+        QList<bool> genome;
+        for (int j = 0; j < 100; j++) genome.append(false);
+        org->setGenome(genome);
+        speciesList2.append(org);
+        speciesList2Size++;
+    }
+
+    out << "\nNow test the count of informative and uninformative characters\n";
+    x.runGenomeSize = 100;
+
+    for (int replicate = 0; replicate < 50; replicate++)
+    {
+
+        int uninformativeCount = 0;
+        int informativeCount = 0;
+
+        //If coded correctly, this should work irrespective of coding v.s. non coding characters
+        x.runFitnessSize = QRandomGenerator::global()->bounded(100);
+
+        //Blank genome
+        for (auto species : speciesList2)
+            for (auto &genomeBit : species->genome)
+                genomeBit = false;
+
+        int genomeSize = speciesList2[0]->genome.size();
+
+        for (int character = 0; character < genomeSize; character++)
+        {
+            int bits = QRandomGenerator::global()->bounded(speciesList2Size);
+            if (bits < 2 || bits > (speciesList2Size - 2))uninformativeCount++;
+            else informativeCount ++;
+            for (int i = 0; i < bits; i++) speciesList2[i]->genome[character] = true;
+        }
+
+        uninformativeCoding.clear();
+        uninformativeNonCoding.clear();
+        x.testForUninformative(speciesList2, uninformativeCoding, uninformativeNonCoding);
+
+        out << "Uninformative characters created: " << uninformativeCount << " Uninformative characters counted " << (uninformativeCoding.length() + uninformativeNonCoding.length()) << "\n";
+        if (uninformativeCount != (uninformativeCoding.length() + uninformativeNonCoding.length()))
+        {
+            out << "Error - uninformativeCount != sum of uninformative characters identified\n\n";
+            testFlag = false;
+        }
+    }
+
+
+    out << "\nNow test for cases where only part of the genome (i.e coding) is used in fitness calculation\n\n";
+
+    simulationVariables simSettings2;
+    simSettings2.runForTaxa = 20;
+    simSettings2.stripUninformative = true;
+    simSettings2.fitnessSize = 25;
+    simSettings2.genomeSize = 50;
+    simSettings2.speciesSelectSize = 50;
+
+    simulation y(0, &simSettings2, &error, theMainWindow);
+    if (error) return false;
+
+    QList<bool> informativeCharacter;
+    for (int j = 0; j < 20; j++)
+        if (j < 10) informativeCharacter.append(false);
+        else informativeCharacter.append(true);
+
+
+    out << "Test case where there not enough informative coding characters.\n";
+    int informativeCoding = 14;
+    int informativeNonCoding = 26;
+
+    //Make this 250 chars to match default factor
+    QVector <Organism *> speciesList3;
+    int speciesList3Size = 0;
+    for (int i = 0; i < 20; i++)
+    {
+        Organism *org = new Organism(250, false);
+        QList<bool> genome;
+        for (int j = 0; j < 250; j++) genome.append(false);
+        org->setGenome(genome);
+        speciesList3.append(org);
+        speciesList3Size++;
+    }
+
+    for (int character = 0; character < informativeCoding; character++)
+        for (int i = 0; i < speciesList3.size(); i++)
+            speciesList3[i]->genome[character] = informativeCharacter[i];
+
+    for (int character = speciesList3[0]->genome.size() - 1; character >= speciesList3[0]->genome.size() - informativeNonCoding; character--)
+        for (int i = 0; i < speciesList3.size(); i++)
+            speciesList3[i]->genome[character] = informativeCharacter[i];
+
+    uninformativeCoding.clear();
+    uninformativeNonCoding.clear();
+    y.testForUninformative(speciesList3, uninformativeCoding, uninformativeNonCoding);
+    bool continueToStrip = y.testForCharacterNumber(uninformativeCoding, uninformativeNonCoding);
+
+    if (continueToStrip)
+    {
+        testFlag = false;
+        out << "Failed to strip coding and non coding in this case test for character number should be false was " << continueToStrip << "\n";
+    }
+    else out << "Successfully identified informative characters in both coding and non coding genome, and did not attempt to strip characters.\n\n";
+
+
+    out << "Test case where there not enough informative noncoding characters.\n";
+    informativeCoding = 26;
+    informativeNonCoding = 24;
+
+    for (auto species : speciesList3)
+        for (auto &genomeBit : species->genome)
+            genomeBit = false;
+
+    for (int character = 0; character < informativeCoding; character++)
+        for (int i = 0; i < speciesList3.size(); i++)
+            speciesList3[i]->genome[character] = informativeCharacter[i];
+
+    for (int character = speciesList3[0]->genome.size() - 1; character >= speciesList3[0]->genome.size() - informativeNonCoding; character--)
+        for (int i = 0; i < speciesList3.size(); i++)
+            speciesList3[i]->genome[character] = informativeCharacter[i];
+
+    uninformativeCoding.clear();
+    uninformativeNonCoding.clear();
+    y.testForUninformative(speciesList3, uninformativeCoding, uninformativeNonCoding);
+    continueToStrip = y.testForCharacterNumber(uninformativeCoding, uninformativeNonCoding);
+
+    if (continueToStrip)
+    {
+        testFlag = false;
+        out << "Failed to strip coding and non coding in this case test for character number should be false was " << continueToStrip << "\n";
+    }
+    else out << "Successfully identified informative characters in both coding and non coding genome, and did not attempt to strip characters.\n\n";
+
+
+    out << "Test case where there not enough informative coding or noncoding characters.\n";
+    informativeCoding = 10;
+    informativeNonCoding = 11;
+
+    for (auto species : speciesList3)
+        for (auto &genomeBit : species->genome)
+            genomeBit = false;
+
+    for (int character = 0; character < informativeCoding; character++)
+        for (int i = 0; i < speciesList3.size(); i++)
+            speciesList3[i]->genome[character] = informativeCharacter[i];
+
+    for (int character = speciesList3[0]->genome.size() - 1; character >= speciesList3[0]->genome.size() - informativeNonCoding; character--)
+        for (int i = 0; i < speciesList3.size(); i++)
+            speciesList3[i]->genome[character] = informativeCharacter[i];
+
+    uninformativeCoding.clear();
+    uninformativeNonCoding.clear();
+    y.testForUninformative(speciesList3, uninformativeCoding, uninformativeNonCoding);
+    continueToStrip = y.testForCharacterNumber(uninformativeCoding, uninformativeNonCoding);
+
+    if (continueToStrip)
+    {
+        testFlag = false;
+        out << "Failed to strip coding and non coding in this case test for character number should be false was " << continueToStrip << "\n";
+    }
+    else out << "Successfully identified informative characters in both coding and non coding genome, and did not attempt to strip characters.\n\n";
+
+
+    out << "Test case where there are enough informative characters in both coding and non.\n";
+    informativeCoding = 26;
+    informativeNonCoding = 26;
+
+
+    for (auto species : speciesList3)
+        for (auto &genomeBit : species->genome)
+            genomeBit = false;
+
+    for (int character = 0; character < informativeCoding; character++)
+        for (int i = 0; i < speciesList3.size(); i++)
+            speciesList3[i]->genome[character] = informativeCharacter[i];
+
+    for (int character = speciesList3[0]->genome.size() - 1; character >= speciesList3[0]->genome.size() - informativeNonCoding; character--)
+        for (int i = 0; i < speciesList3.size(); i++)
+            speciesList3[i]->genome[character] = informativeCharacter[i];
+
+    uninformativeCoding.clear();
+    uninformativeNonCoding.clear();
+    y.testForUninformative(speciesList3, uninformativeCoding, uninformativeNonCoding);
+    continueToStrip = y.testForCharacterNumber(uninformativeCoding, uninformativeNonCoding);
+    if (continueToStrip) y.stripUninformativeCharacters(speciesList3, uninformativeCoding, uninformativeNonCoding);
+
+    if (!continueToStrip || speciesList3[0]->genome.size() != 50)
+    {
+        testFlag = false;
+        out << "Failed to strip coding and non coding in this case = test for character number should be true was " << continueToStrip << " genome size was " << speciesList3[0]->genome.size() << "\n";
+    }
+    else out << "Successfully identified coding characters in both coding and non coding genome, and stripped to required length.\n\n";
+
+
+    if (testFlag) out << "Uninformative tests passed.\n";
     return testFlag;
 }
 

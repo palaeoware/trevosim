@@ -313,13 +313,14 @@ void MainWindow::save()
 
 void MainWindow::startTriggered()
 {
-    //First sort GUI
-    startRunGUI();
 
     if ((simSettings->stripUninformative) && (simSettings->stripUninformativeFactor < 1.))
         if (QMessageBox::question(this, "Error",
                                   "It looks like the strip uninformative factor for these settings is unexpected - i.e. it is less than one. Would you like to recalculate it for these settings?<br /><br />",
                                   QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) recalculateStripUniformativeFactor();
+
+    //First sort GUI
+    startRunGUI();
 
     bool error = false;
     //Create a new simulation object - sending it important settings.
@@ -538,7 +539,6 @@ void MainWindow::printBlank(int row)
     {
         QTableWidgetItem *item(ui->character_Display->item(row, i));
         item->setText("_");
-        qApp->processEvents();
     }
 }
 
@@ -549,12 +549,12 @@ void MainWindow::printGenome(const Organism *org, int row)
         QTableWidgetItem *item(ui->character_Display->item(row, i));
         if (org->genome[i] == false)item->setText("0");
         else item->setText("1");
-        qApp->processEvents();
     }
 }
 
 void MainWindow::recalculateStripUniformativeFactor()
 {
+    qDebug() << "recalculateStripUniformativeFactor";
     bool tempStripUninformative = simSettings->stripUninformative;
     simSettings->stripUninformative = true;
     simSettings->stripUninformativeFactor = 1.0;
@@ -565,10 +565,12 @@ void MainWindow::recalculateStripUniformativeFactor()
 
     addProgressBar(0, 10);
 
+    //If someone cancels, we probably still want to have a sensible estimate
+    int runsCompleted = 0;
+
     for (int i = 0; i < 10; i++)
     {
         setProgressBar(i);
-        resetTriggered();
 
         bool error = false;
         //Start a simulation - last bool here tells it we are running the strip uninformative calculation, which is required for constructor
@@ -576,13 +578,17 @@ void MainWindow::recalculateStripUniformativeFactor()
         bool success = false;
         if (!error) success = theSimulation.run();
 
-        if (success) stripUninformativeFactorMean += static_cast<double>(simSettings->genomeSize) / static_cast<double>(theSimulation.returninformativeCharacters());
+        if (success)
+        {
+            stripUninformativeFactorMean += static_cast<double>(simSettings->genomeSize) / static_cast<double>(theSimulation.returninformativeCharacters());
+            runsCompleted++;
+        }
 
         if (error || !success) setStatus("Error calculating strip uninformative");
     }
 
     //Divide by 9 here to add some extra given variability of strip ununformative factor
-    simSettings->stripUninformativeFactor = (stripUninformativeFactorMean / 9.);
+    simSettings->stripUninformativeFactor = (stripUninformativeFactorMean / (static_cast<double>(runsCompleted) * 0.9));
     if (simSettings->stripUninformativeFactor > 20.)simSettings->stripUninformativeFactor = 20.;
     if (simSettings->stripUninformativeFactor < 1.) simSettings->stripUninformativeFactor = 1.;
 
@@ -590,6 +596,7 @@ void MainWindow::recalculateStripUniformativeFactor()
 
     //Reset gui etc.
     finishRunGUI();
+    resetTriggered();
 
     simSettings->stripUninformative = tempStripUninformative;
 
@@ -698,16 +705,40 @@ void MainWindow::countPeaks()
 {
     //Save settings to load at end
     save();
-    startRunGUI();
 
     //Create a new simulation object - sending it important settings.
     bool error = false;
 
-    int genomeSize = QInputDialog::getInt(this, "Fitness histogram...", "How many bits?", 32, 1, 64, 1, &error);
+    int genomeSize = QInputDialog::getInt(this, "Fitness histogram...", "How many bits?", 16, 1, 64, 1, &error);
     if (!error) return;
 
     int repeats =  QInputDialog::getInt(this, "Fitness histogram...", "How many repeats?", 1, 1, 100000, 1, &error);
     if (!error) return;
+
+    //Check whether files may be overwritten
+    QString path = simSettings->savePathDirectory + QString(PRODUCTNAME) + "_output";
+    QDirIterator it(path, QDirIterator::Subdirectories);
+    bool found = false;
+    while (it.hasNext())
+    {
+        QString filename = it.next();
+        QFileInfo file(filename);
+        if (file.isDir())  continue;
+        // If the filename contains target string - put it in the hitlist
+        if (file.fileName().contains("TREvoSim_fitness_histogram", Qt::CaseInsensitive))
+        {
+            qDebug() << file.filesystemAbsoluteFilePath();
+            found = true;
+            break;
+        }
+    }
+    if (found)
+    {
+        if (QMessageBox::warning(this, "Warning", "It looks like your output directory already has TREvoSim fitness histograms in it. These will be overwritten. Continue?",
+                                 QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel) return;
+    }
+
+    startRunGUI();
 
     //RJG - resize grid otherwise the print function will make. No need to record original settings, as dealt with in main window
     simSettings->genomeSize = genomeSize;
@@ -722,6 +753,7 @@ void MainWindow::countPeaks()
     quint16 pmax = static_cast<quint16>(-1);
 
     addProgressBar(0, pmax);
+    int output = 0;
 
     for (int repeat = 0; repeat < repeats; repeat++)
     {
@@ -730,7 +762,15 @@ void MainWindow::countPeaks()
         setStatus(QString("Repeat %1/%2").arg(repeat).arg(repeats));
 
         //Then set it running - send pointer to main window for GUI and access functions, and run number
-        if (!simError)theSimulation.countPeaks(genomeSize, repeat);
+        if (!simError) output = theSimulation.countPeaks(genomeSize, repeat);
+    }
+
+    if (output != -1)
+    {
+        QString message = QString("TREvoSim successfully completed %1 repeats of the fitness histogram for a genome size of %2.").arg(repeats).arg(genomeSize);
+        message.append(" You will find the results in the TREvoSim_output folder in the location:\n\n");
+        message.append(simSettings->savePathDirectory);
+        QMessageBox::information(this, "Success", message);
     }
 
     //Load previous settings again
