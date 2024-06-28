@@ -188,6 +188,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Start runs at zero
     runs = 0;
+
+    //Set replicates to the default of 16
+    countPeaksReplicates = 16;
 }
 
 MainWindow::~MainWindow()
@@ -709,8 +712,9 @@ void MainWindow::countPeaks()
     //Create a new simulation object - sending it important settings.
     bool error = false;
 
-    int genomeSize = QInputDialog::getInt(this, "Fitness histogram...", "How many bits?", 16, 1, 64, 1, &error);
+    int genomeSize = QInputDialog::getInt(this, "Fitness histogram...", "How many bits?", countPeaksReplicates, 1, 64, 1, &error);
     if (!error) return;
+    if (genomeSize != countPeaksReplicates)countPeaksReplicates = genomeSize;
 
     int repeats =  QInputDialog::getInt(this, "Fitness histogram...", "How many repeats?", 1, 1, 100000, 1, &error);
     if (!error) return;
