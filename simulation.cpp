@@ -206,10 +206,6 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
                     }
                 }
             }
-
-            //On the fly test - needs to be made into a proper one down the line - but note, that this will only work when genome size is set to what you send count peaks
-            //otherwise, the first 16 bits will not have identical fitness peaks as they comprise different proportions of ones (this is only even over whole genome)
-            //for (int i = 0; i < simSettings->environmentNumber; i++) qDebug() << "Peak height: " << countPeaks(theMainWindow, 16, -1, i);
         }
     }
 
@@ -2267,7 +2263,7 @@ QString simulation::doPadding(int number, int significantFigures)
 int simulation::countPeaks(int genomeSize, int repeat, int environment)
 {
     QVector <quint64> totals;
-    for (int i = 0; i < ((genomeSize * simSettings->maskNumber) + 1); i++)totals.append(0);
+    for (int i = 0; i < ((genomeSize * simSettings->maskNumber) + 1); i++) totals.append(0);
     QVector <QVector <quint64> > genomes;
 
     Organism org(genomeSize, false);
@@ -2284,7 +2280,7 @@ int simulation::countPeaks(int genomeSize, int repeat, int environment)
     if (recordGenomes) max = static_cast<quint64>(pow(2., static_cast<double>(genomeSize)));
     else max = 1000000;
     //Progress bar max value is 2^16 - scale to this
-    quint16 pmax = static_cast<quint16>(-1);
+    quint16 pmax = static_cast<quint16>(~0);
 
     quint64 toTest[1000000];
     //This fills with randoms of quint64, but this doesn't matter because below, when setting genome, we only take the first gnomeSize bits, which will also be random!
