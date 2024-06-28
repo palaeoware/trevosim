@@ -2282,9 +2282,9 @@ int simulation::countPeaks(int genomeSize, int repeat, int environment)
     //Progress bar max value is 2^16 - scale to this
     quint16 pmax = static_cast<quint16>(~0);
 
-    quint64 toTest[1000000];
+    QList <quint64> toTest(1000000);
     //This fills with randoms of quint64, but this doesn't matter because below, when setting genome, we only take the first gnomeSize bits, which will also be random!
-    if (!recordGenomes) QRandomGenerator::global()->fillRange(toTest);
+    if (!recordGenomes) QRandomGenerator::global()->fillRange(toTest.data(), toTest.size());
     else for (int i = 0; i < ((genomeSize * simSettings->maskNumber) + 1); i++) genomes.append(QVector <quint64 >());
 
     for (quint64 x = 0; x < max; x++)
