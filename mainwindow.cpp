@@ -750,7 +750,7 @@ void MainWindow::countPeaks()
     resizeGrid(1, genomeSize);
 
     //Progress bar max value is 2^16 - scale to this
-    quint16 pmax = static_cast<quint16>(-1);
+    quint16 pmax = static_cast<quint16>(~0);
 
     addProgressBar(0, pmax);
     int output = 0;
@@ -761,7 +761,7 @@ void MainWindow::countPeaks()
         simulation theSimulation(0, simSettings, &simError, this);
         setStatus(QString("Repeat %1/%2").arg(repeat).arg(repeats));
 
-        //Then set it running - send pointer to main window for GUI and access functions, and run number
+        //Then set it running
         if (!simError) output = theSimulation.countPeaks(genomeSize, repeat);
     }
 
