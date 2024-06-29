@@ -455,7 +455,7 @@ bool testinternal::testFour(QString &outString)
     for (auto i : std::as_const(org.genome)) if (!i) testFlag = false;
 
     QString flagString = testFlag ? "true" : "false";
-    out << "\n\nGiven the mapping the first genome should be all zeros, no matter what the stochastic genome, and the second all ones. TRevoSIm tested this and returned " << flagString << ".";
+    out << "\n\nGiven the mapping the first genome should be all zeros, no matter what the stochastic genome, and the second all ones. TRevoSim tested this and returned " << flagString << ".";
 
     if (testFlag) out << "\n\nStochastic mapping tests passed.\n";
     return testFlag;
@@ -497,7 +497,7 @@ bool testinternal::testFive(QString &outString)
     double mean = static_cast<double>(cnt) / 10000;
     if (mean < 1.25 || mean > 1.31) testFlag = false;
     QString flagString = testFlag ? "true" : "false";
-    out << "Ran 10000 mutations of a 128 bit organism. At a rate of " << simSettings.organismMutationRate << " mutation per hundred characters per iteration this resulted in a mean of ";
+    out << "Ran 10000 i9nterations on a 128 bit organism. At a rate of " << simSettings.organismMutationRate << " mutation per hundred characters per iteration this resulted in a mean of ";
     out << mean << " mutations. TREvoSim expects this to be between 1.25 and 1.31 and returned " << flagString << "\n";
 
     simSettings.organismMutationRate = 2.;
@@ -519,7 +519,7 @@ bool testinternal::testFive(QString &outString)
     mean = static_cast<double>(cnt) / 10000;
     if (mean < 2.5 || mean > 2.62) testFlag = false;
     flagString = testFlag ? "true" : "false";
-    out << "Ran 10000 mutations of a 128 bit organism. At a rate of " << simSettings.organismMutationRate << " mutations per hundred characters per iteration this resulted in a mean of ";
+    out << "Ran 10000 iterations on a 128 bit organism. At a rate of " << simSettings.organismMutationRate << " mutations per hundred characters per iteration this resulted in a mean of ";
     out << mean << " mutations. TREvoSim expects this to be between 2.5 and 2.62 and returned " << flagString << "\n";
 
 
