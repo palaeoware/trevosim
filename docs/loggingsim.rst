@@ -43,7 +43,7 @@ Keywords
 Keywords within two vertical bars ( e.g. \|\|Matrix\|\| ) are replaced as a file is written as follows:
 
 :Character_Number: This outputs the character number.
-:Count: This is replaced with a counter for batch runs; incrementing by one using C++ numbering (i.e. starting from zero).
+:Count: This is replaced with a counter for batch runs; starting from zero and incrementing by one. This is padded with leading zeroes to three figures.
 :Ecosystem_Engineers: This prints a list of species, and their ecosystem engineering status (i.e. whether any members of this species are ecosystem engineers).
 :Iteration: This outputs the current iteration number. 
 :Matrix: This is replaced with the matrix from the run.
