@@ -83,6 +83,7 @@ void Output::on_buttonBox_accepted()
 
     settings->logFileNameBase01 = ui->file_01_base->text();
     settings->logFileNameBase01.replace(" ", "_");
+    settings->logFileNameBase01.replace("\\", "/");
     QString user_ext = ui->file_01_extension->text();
     if (user_ext.length() != 0)
     {
@@ -97,6 +98,7 @@ void Output::on_buttonBox_accepted()
 
     settings->logFileNameBase02 = ui->file_02_base->text();
     settings->logFileNameBase02.replace(" ", "_");
+    settings->logFileNameBase02.replace("\\", "/");
 
     user_ext = ui->file_02_extension->text();
     if (user_ext.length() != 0)
@@ -113,6 +115,7 @@ void Output::on_buttonBox_accepted()
 
     settings->logFileNameBase03 = ui->file_03_base->text();
     settings->logFileNameBase03.replace(" ", "_");
+    settings->logFileNameBase03.replace("\\", "/");
 
     settings->writeEE = ui->c_write_ee->isChecked();
     settings->writeFileOne = ui->c_write_file_01->isChecked();

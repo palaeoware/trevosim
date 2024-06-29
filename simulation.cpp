@@ -2109,6 +2109,20 @@ bool simulation::setupSaveDirectory(QString subFolder)
     }
     else savePathDirectory.cd(QString(PRODUCTNAME) + "_output");
 
+    QStringList basenames = {simSettings->logFileNameBase01, simSettings->logFileNameBase02, simSettings->logFileNameBase03};
+    for (auto const &basename : basenames)
+        if (basename.contains("\\"))
+        {
+            warning("Error", "Filename includes a backslash. Use forward slashes as separators in path and you should be all good.");
+            return false;
+        }
+        else if (basename.contains("/"))
+            if (!savePathDirectory.mkpath(basename.left(basename.lastIndexOf("/"))))
+            {
+                warning("Error", "Cant create subFolder " + subFolder + ". This could be a permissions issue.");
+                return false;
+            }
+
     if (subFolder.length() > 0)
     {
         subFolder.append(doPadding(runs, 3));
