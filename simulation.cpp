@@ -515,6 +515,7 @@ bool simulation::run()
             logTextOut.replace("||Time||", printTime(), Qt::CaseInsensitive);
             logTextOut.replace("||Settings||", simSettings->printSettings(), Qt::CaseInsensitive);
             logTextOut.replace("||Iteration||", QString::number(iterations), Qt::CaseInsensitive);
+            logTextOut.replace("||Root||", printGenomeString(&bestOrganism), Qt::CaseInsensitive);
 
             bool writeRunningLogSuccess = writeRunningLog(iterations, logTextOut);
 
