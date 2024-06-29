@@ -63,15 +63,17 @@ Output::Output(QWidget *parent, simulationVariables *simSettings) :
 
     ui->s_frequency->setValue(settings->runningLogFrequency);
     ui->c_write_running_log->setChecked(settings->writeRunningLog);
+    if (settings->writeRunningLog) ui->running_log_body->setEnabled(true);
+    else ui->running_log_body->setEnabled(false);
+
     ui->c_write_ee->setChecked(settings->writeEE);
 
     ui->running_log_body->insertPlainText(settings->runningLogString);
 
     ui->c_work_log->setChecked(settings->workingLog);
-}
 
-//make labels bold
-//save file base name 03
+    QObject::connect(ui->c_write_running_log, &QCheckBox::stateChanged, this, &Output::slotWriteRunningLogChanged);
+}
 
 void Output::on_buttonBox_accepted()
 {
@@ -131,6 +133,13 @@ void Output::docs()
 {
     QDesktopServices::openUrl(QUrl(QString(DOCSURLLOG)));
 }
+
+void Output::slotWriteRunningLogChanged()
+{
+    if (ui->c_write_running_log->isChecked())ui->running_log_body->setEnabled(true);
+    else ui->running_log_body->setEnabled(false);
+}
+
 
 Output::~Output()
 {

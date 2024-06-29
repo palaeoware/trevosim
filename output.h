@@ -20,6 +20,7 @@ public:
 private slots:
     void on_buttonBox_accepted();
     void docs();
+    void slotWriteRunningLogChanged();
 
 private:
     Ui::Output *ui;
