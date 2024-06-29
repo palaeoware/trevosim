@@ -496,9 +496,32 @@ bool testinternal::testFive(QString &outString)
 
     double mean = static_cast<double>(cnt) / 10000;
     QString flagString = testFlag ? "true" : "false";
-    out << "Ran 10000 mutations of a 128 bit organism. At a rate of " << simSettings.organismMutationRate << "mutation per hundred characters per iteration this resulted in a mean of ";
+    out << "Ran 10000 mutations of a 128 bit organism. At a rate of " << simSettings.organismMutationRate << " mutation per hundred characters per iteration this resulted in a mean of ";
     out << mean << " mutations. TREvoSim expects this to be between 1.25 and 1.31 and returned " << flagString << "\n";
     if (mean < 1.25 || mean > 1.31) testFlag = false;
+
+    simSettings.organismMutationRate = 2.;
+
+    Organism org3(simSettings.genomeSize, false);
+    cnt = 0;
+
+    for (int j = 0; j < 10000; j++)
+    {
+        if (theMainWindow)
+            theMainWindow->setProgressBar(j);
+        org3.initialise(simSettings.genomeSize);
+        Organism org4(org3);
+        x.mutateOrganism(org3, x.playingFields[0]);
+
+        for (int i = 0; i < org3.genome.length(); i++) if (org3.genome[i] != org4.genome[i]) cnt++;
+    }
+
+    mean = static_cast<double>(cnt) / 10000;
+    flagString = testFlag ? "true" : "false";
+    out << "Ran 10000 mutations of a 128 bit organism. At a rate of " << simSettings.organismMutationRate << " mutations per hundred characters per iteration this resulted in a mean of ";
+    out << mean << " mutations. TREvoSim expects this to be between 2.5 and 2.62 and returned " << flagString << "\n";
+    if (mean < 2.5 || mean > 2.62) testFlag = false;
+
 
     simSettings.environmentNumber = 2;
     simSettings.playingfieldNumber = 2;
