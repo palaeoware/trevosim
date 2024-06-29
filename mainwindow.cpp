@@ -353,13 +353,18 @@ void MainWindow::pauseTriggered()
 void MainWindow::resetDisplays()
 {
     /******* Sort out displays *******/
-// Clear table
+    // Clear table
     for (int i = 0; i < ui->character_Display->rowCount(); i++)
         for (int j = 0; j < ui->character_Display->columnCount(); j++)
         {
             QTableWidgetItem *item(ui->character_Display->item(i, j));
             item->setText(" ");
         }
+
+    //Clear tree string
+    QString TNTstring(" ");
+    setTreeDisplay(TNTstring);
+    ui->statusBar->clearMessage();
 }
 
 void MainWindow::resetTriggered()
@@ -369,11 +374,6 @@ void MainWindow::resetTriggered()
     resetDisplays();
     if (simSettings->runMode == RUN_MODE_TAXON) resizeGrid(simSettings->runForTaxa, simSettings->genomeSize);
     else resizeGrid(500, simSettings->genomeSize, 1);
-
-    //Clear tree string
-    QString TNTstring(" ");
-    setTreeDisplay(TNTstring);
-    ui->statusBar->clearMessage();
 
     /******* And variables / gui if required - i.e. if hit by user. Don't really need this, but there as safety net *******/
     if (!batchRunning)

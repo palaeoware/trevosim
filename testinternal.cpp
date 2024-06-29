@@ -233,6 +233,7 @@ bool testinternal::testOne(QString &outString)
     simSettings.genomeSize = 50;
     simSettings.fitnessSize = 50;
     simSettings.speciesSelectSize = 50;
+    simSettings.test = 1;
 
     //Mode identical
     simSettings.playingfieldMasksMode = MASKS_MODE_IDENTICAL;
@@ -430,6 +431,7 @@ bool testinternal::testFour(QString &outString)
     QTextStream out(&outString);
     simulationVariables simSettings;
     simSettings.stochasticLayer = true;
+    simSettings.test = 4;
     for (auto &i : simSettings.stochasticMap) i = 0;
 
     out << "Testing stochastic mapping.\n\nStochastic map is currently:\n";
@@ -474,6 +476,7 @@ bool testinternal::testFive(QString &outString)
 
     simulationVariables simSettings;
     simSettings.organismMutationRate = 1.;
+    simSettings.test = 5;
     simulation x(0, &simSettings, &error, theMainWindow);
     if (error) return false;
 
@@ -574,6 +577,7 @@ bool testinternal::testSix(QString &outString)
     simulationVariables simSettings;
     simSettings.selectionCoinToss = 2.;
     simSettings.playingfieldNumber = 4;
+    simSettings.test = 6;
     simulation x(0, &simSettings, &error, theMainWindow);
     if (error) return false;
 
@@ -682,6 +686,7 @@ bool testinternal::testSeven(QString &outString)
     simSettings.genomeSize = 50;
     simSettings.fitnessSize = 50;
     simSettings.speciesSelectSize = 50;
+    simSettings.test = 7;
 
     simulation x(0, &simSettings, &error, theMainWindow);
 
@@ -753,8 +758,8 @@ bool testinternal::testEight(QString &outString)
     out << "Testing overwrite code.\n\n";
 
     simulationVariables simSettings;
-
     simSettings.randomOverwrite = false;
+    simSettings.test = 8;
     simulation x(0, &simSettings, &error, theMainWindow);
     if (error) return false;
     for (auto &o : x.playingFields[0]->playingField) o->fitness = 0;
@@ -770,6 +775,7 @@ bool testinternal::testEight(QString &outString)
 
     simulationVariables simSettings2;
     simSettings2.randomOverwrite = true;
+    simSettings2.test = 8;
     simulation a(0, &simSettings2, &error, theMainWindow);
     if (error) return false;
     for (auto &o : a.playingFields[0]->playingField) o->fitness = 0;
@@ -913,6 +919,7 @@ bool testinternal::testNine(QString &outString)
         simSettings.mixingPerturbation = true;
         simSettings.mixingProbabilityOneToZero = 1;
         simSettings.mixingProbabilityZeroToOne = 2;
+        simSettings.test = 9;
         if (i == 0) out << "Playing field masks mode is identical - 0 should match 1.\n";
         if (i > 0)
         {
@@ -1045,6 +1052,7 @@ bool testinternal::testTen(QString &outString)
     simulationVariables simSettings;
     simSettings.runForTaxa = 20;
     simSettings.stripUninformative = true;
+    simSettings.test = 10;
 
     simulation x(0, &simSettings, &error, theMainWindow);
     if (error) return false;
@@ -1143,6 +1151,7 @@ bool testinternal::testTen(QString &outString)
     simSettings2.fitnessSize = 25;
     simSettings2.genomeSize = 50;
     simSettings2.speciesSelectSize = 50;
+    simSettings.test = 10;
 
     simulation y(0, &simSettings2, &error, theMainWindow);
     if (error) return false;
@@ -1340,6 +1349,7 @@ bool testinternal::testTwelve(QString &outString)
     QTextStream out(&outString);
     simulationVariables simSettings;
     simSettings.playingfieldNumber = 2;
+    simSettings.test = 12;
     simulation x(0, &simSettings, &error, theMainWindow);
     if (error) return false;
 
@@ -1386,6 +1396,7 @@ bool testinternal::testThirteen(QString &outString)
     simSettings.genomeSize = 50;
     simSettings.fitnessSize = 50;
     simSettings.speciesSelectSize = 50;
+    simSettings.test = 13;
 
     simulation x(0, &simSettings, &error, theMainWindow);
     for (int i = 0; i < 50; i++)x.extinctList.append(false);
@@ -1508,6 +1519,7 @@ bool testinternal::testFourteen(QString &outString)
     for (auto &p : org.parentGenome) p = true;
 
     simulationVariables simSettings;
+    simSettings.test = 14;
     simulation x(0, &simSettings, &error, theMainWindow);
     if (error) return false;
 
@@ -1561,6 +1573,7 @@ bool testinternal::testFifteen(QString &outString)
         speciesList.append(org);
     }
     simulationVariables simSettings;
+    simSettings.test = 15;
     simulation x(0, &simSettings, &error, theMainWindow);
     if (error) return false;
 
@@ -1965,6 +1978,13 @@ bool testinternal::testEighteen(QString &outString)
     {
         out << "\n\nThis number seems off what we should expect, although since we're dealing with random numbers, there may be nothing untoward - try repating test\n\n";
         testFlag = false;
+    }
+
+    simulationVariables simSettingsReset;
+    if (theMainWindow)
+    {
+        theMainWindow->resizeGrid(simSettingsReset.runForTaxa, simSettingsReset.genomeSize);
+        theMainWindow->resetDisplays();
     }
 
     return testFlag;
