@@ -51,7 +51,7 @@ Keywords within two vertical bars ( e.g. \|\|Matrix\|\| ) are replaced as a file
 
 ::
 
-  (S_01:13,(S_02:8,(S_03:13,(S_04:32,((S_06:4,(S_07:10,(S_08:6,(S_09:5,(S_10:10,(S_11:6,(S_12:6,(S_13:2,(((S_22:11,(S_23:12,(S_24:9,((S_26:28,((S_28:37,(S_29:2,(S_30:2,(S_31:1,S_27:1):1):38):23):20,S_25:12):31):41,S_21:31):24):27):1):70,S_14:13):42,(S_15:21,(S_16:2,(S_17:11,(S_18:2,(S_19:10,(S_20:14,S_05:25):7):1):4):2):1):2):1):13):58):6):2):2):5):2):36,S_00:20):3):1):3):7):85
+  (Species_01:6,(Species_02:2,(Species_03:2,(Species_04:3,(Species_05:2,Species_00:-4):1):1):1):1):0
 
 *Note* The mechanism used for tree writing differs between TNT and MrBayes outputs -- the tree topology is the same, but the taxon order differs.
 
@@ -61,7 +61,7 @@ Keywords within two vertical bars ( e.g. \|\|Matrix\|\| ) are replaced as a file
 
 ::
 
-  (((((00 (((((((((((((((05 20) 19) 18) 17) 16) 15) (14 ((((21 ((25 ((((27 31) 30) 29) 28)) 26)) 24) 23) 22))) 13) 12) 11) 10) 09) 08) 07) 06)) 04) 03) 02) 01)
+  (((((00 05) 04) 03) 02) 01)
 
 
 *Note* The mechanism used for tree writing differs between TNT and MrBayes outputs -- the tree topology is the same, but the taxon order differs.
