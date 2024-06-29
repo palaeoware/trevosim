@@ -321,7 +321,7 @@
        <item row="28" column="0">
         <widget class="QCheckBox" name="c_randomSeed">
          <property name="text">
-          <string>Random seed</string>
+          <string>Random starting individual</string>
          </property>
         </widget>
        </item>
