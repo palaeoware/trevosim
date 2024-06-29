@@ -10,15 +10,15 @@ The main window comprises a number of elements, outlined below.
 
 Toolbar
 -------
-The main toolbar appears as follows when the simulation is not running:
+The main toolbar appears with the pause and stop buttons greyed out (disabled) when the simulation is not running:
 
 .. figure:: _static/maintoolbar1.png
 
-And when it is running, as below:
+And when it is running, these are enabled, and all other buttons are disabled:
 
 .. figure:: _static/maintoolbar2.png
 
-The buttons control the simulation, as well as launching dialogues, and defining program output location.
+The buttons control the simulation, as well as launching dialogues, whilst the Save path text box defines the program output location.
 
 :Run: This button launches a simulation, and then runs it until the requested number of species has evolved (see :ref:`settings` ), the simulation is paused, or cancelled (escape key).
 :Pause: Pauses simulation, which can be resumed when requested by pressing pause again.
