@@ -18,7 +18,7 @@ A typical use case for this is when you would like to use the outputs of a finis
 
 The two text boxes allow custom file content to be written: text from these is written as provided to the file -- for example with run instructions or program commands -- and any of a series of keywords defined below included within two vertical bar ( | ) symbols are replaced as a file is written. The default outputs are shown in the figure above -- they create a vanilla nexus file which allows you to, for example, load the character matrix into R, and a TNT file which conducts a parsimony search on TREvoSim data before outputting the most parsimonious trees. 
 
-In addition to these two custom files, TREvoSim can output a tree for each run in a standard nexus format. The options at the bottom of the output tab allow you to define the basename for this file (the word tree is appended to the name provided). The output includes the tree and translate block, as well as a comment with the settings of the run written to it. 
+In addition to these two custom files, TREvoSim can output a tree for each run in a standard nexus format. The options at the bottom of the output tab allow you to define the basename for this file. The output includes the tree and translate block, as well as a comment with the settings of the run written to it. 
 
 Running log
 ^^^^^^^^^^^
