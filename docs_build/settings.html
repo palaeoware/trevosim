@@ -95,10 +95,10 @@
 <dd class="field-odd"><p>This defines the number of bits in character string for each organism, and ultimately the character number of the matrix output by the software.</p>
 </dd>
 <dt class="field-even">Characters for species identification</dt>
-<dd class="field-even"><p>This defines the number of characters used to identify species, between zero and the stated limit. By default this will update to be the same value as the genome size, but changing it to a smaller value allows a portion of characters that are not tied to species identity.</p>
+<dd class="field-even"><p>This defines the number of characters used to identify species. When this is different to the genome size, only the characters between zero and this number are used in the species delineation parts of the TREvoSim algorithm. By default (when the genome size is changed in the settings) this number will update to be the same value as the genome size, but changing it to a smaller value allows a portion of characters that are not tied to species identity.</p>
 </dd>
 <dt class="field-odd">Characters for fitness calculation</dt>
-<dd class="field-odd"><p>This defines the number of characters used in the fitness algorithm, between zero and the stated limit. By default this will update to be the same value as the genome size, but changing it to a smaller value allows for a ‘non-coding’ portion of the genome, with a more drift-like/stochastic behaviour (although this portion will hitch-hike and thus could reflect patterns driven by the selection of organisms).</p>
+<dd class="field-odd"><p>This defines the number of characters used in the fitness algorithm. When this is different to the genome size, on the characters between zero and this number are used to calculate fitness. By default this will update to be the same value as the genome size, but changing it to a smaller value allows for a ‘non-coding’ portion of the genome, with a more drift-like/stochastic behaviour (note, however, that this portion of genome is still part of an organism that is under selection).</p>
 </dd>
 <dt class="field-even">Rate of organism mutation</dt>
 <dd class="field-even"><p>This is the rate of mutation for the organisms in the simulation, in units of mutations per hundred characters per iteration.</p>
