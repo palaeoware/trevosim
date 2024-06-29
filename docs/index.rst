@@ -45,4 +45,4 @@ Table of Contents
    settings2
    loggingsim
    filecommands
-   tests
+   software_tests
