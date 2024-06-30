@@ -24,8 +24,12 @@ library(TreeTools)
 ########################################################################################################################
 
 # This script analyses TREvoSim runs, and then compares them against empirical datasets.
-# It was written by Nicolás Mongiardino Koch and Russell Garwood, with an extra steps function courtesy of Joe Keating.
-# It was reviewed for a JOSS paper by Martin Smith who made a number of very valuable improvements.
+# It was written by Nicolás Mongiardino Koch and Russell Garwood, with an extra steps function courtesy of Joe Keating, subsequently modified by Martin Smith.
+# It was reviewed for a JOSS paper by Martin Smith who made a number of very valuable improvements, including:
+## Improving the consistency, readability and user friendliness of the script
+## Modifying the normalisation of tree balance when written using TCI
+## The addition of a function in TreeTools, which is them employed here to provide J1 index for tree symmetry
+# These have been incorporated with thanks. See also discussion: https://github.com/palaeoware/trevosim/pull/53
 
 # The empirical datasets are sourced from this paper:
 # Mongiardino Koch, N., Garwood, R.J. and Parry, L.A., 2021. Fossils improve phylogenetic analyses of morphological characters. Proceedings of the Royal Society B, 288(1950), p.20210044.
@@ -341,7 +345,7 @@ if (calcTreeshape) {
     theme_minimal() +
     theme(panel.border = element_rect(color = "black", fill = NA)) +
     ylim(0, 1) +
-    labs(title = "TREvoSim vs Empirical tree symmetry", x = "Data type", y = "Tree asymmetry (normalised total cophenetic index)") +
+    labs(title = "TREvoSim vs Empirical tree asymmetry", x = "Data type", y = "Tree asymmetry (normalised total cophenetic index)") +
     theme(plot.title = element_text(hjust = 0.5)) +
     theme(legend.position = "none")
   ggsave(paste(outputWD, "TREvoSim_treeshape_plot.pdf", sep = ""), width = 6, height = 6)
@@ -351,7 +355,7 @@ if (calcTreeshape) {
     theme_minimal() +
     theme(panel.border = element_rect(color = "black", fill = NA)) +
     ylim(0, 1) +
-    labs(title = "TREvoSim vs Empirical tree asymmetry", x = "Data type", y = "Tree asymmetry (J1 index)") +
+    labs(title = "TREvoSim vs Empirical tree symmetry", x = "Data type", y = "Tree symmetry (J1 index)") +
     theme(plot.title = element_text(hjust = 0.5)) +
     theme(legend.position = "none")
   ggsave(paste(outputWD, "TREvoSim_j1_plot.pdf", sep = ""), width = 6, height = 6)
