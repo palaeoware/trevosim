@@ -71,20 +71,34 @@ treeness <- function(tree) {
 #tree<-read.nexus("/home/russell/Desktop/TREvoSim_output_unrooted/TREvoSim_tree_000.nex")
 #mdata<-read.nexus.data("/home/russell/Desktop/TREvoSim_output_unrooted/TREvoSim_000.nex")
 
-excessSteps <- function(tree, mdata) {
-  char_results <- data.frame(character = 0, steps = 0)
-  levelInData <- levels(as.factor(unlist(mdata)))
-  mdata_df <- as.data.frame(mdata)
-  for (z in 1:length(unlist(mdata[1]))) {
-    list_char <- as.list(mdata_df[z, ])
-    phy_char <- phyDat(list_char, type = "USER", levels = levelInData)
-    m_steps <- parsimony(tree, phy_char)
-    newrow <- data.frame(character = z, steps = m_steps - 1)
-    char_results <- rbind(char_results, newrow)
+excessSteps <- function(tree, mfile) {
+  mdata <- read.nexus.data(mfile)
+  mphy <- phyDat(mdata, type = "USER", levels = unique(unlist(mdata)))
+  matt <- attributes(mphy)
+
+  # Subtracting one led to negative scores for invariant characters.
+  # Instead subtract minumum steps.
+  # Taking a character at a time within vapply is also more efficient,
+  # speeding this bottleneck
+  xs <- vapply(seq_len(matt[["nr"]]), function (z) {
+    phy_char <- mphy[, z]
+    nStates <- length(unique(as.character(phy_char)))
+    minSteps <- nStates - 1L
+    parsimony(tree, phy_char) - minSteps
+  }, double(1))
+
+  if (any(xs < 0)) {
+    # Vectorised version of the below
+    xs[xs < 0] <- NA
+    # Is there a legitimate reason to see negative steps?
+    stop("Minimum steps incorrectly calculated")
   }
-  char_results <- char_results[-c(1), ]
+
+  char_results <- data.frame(steps = xs[matt[["index"]]])
+
   for (i in 1:length(char_results$steps)) if (char_results$steps[[i]] < 0) {
-    char_results$steps[[i]] <- NA
+    char_results$steps[[i]] <- NA # I think NA is meant: the string "NA" coerces
+    # $steps to mode 'character'
   }
   return(char_results)
 }
@@ -270,14 +284,14 @@ for (i in seq_along(treeFiles)) {
   #Count parsimony steps if requested
   #Given the number of characters, no need to go above really
   if (countSteps && i <= detailedAnalyses) {
-    steps_run <- excessSteps(simTree, read.nexus.data(matrixFiles[[i]]))
+    steps_run <- excessSteps(simTree, matrixFiles[[i]])
     steps_run$plot <- i
     extraStepsDF <- rbind(extraStepsDF, steps_run)
     progExtra = round(mean(as.numeric(steps_run$steps), na.rm = TRUE), 2)
     cli::cli_progress_update(prog, i)
   }
 }
-cli::cli_progress_done(prog)
+ cli::cli_progress_done(prog)
 
 ########################################################################################################################
 #Now move onto the graphing of this data, and save it in the outputWD
