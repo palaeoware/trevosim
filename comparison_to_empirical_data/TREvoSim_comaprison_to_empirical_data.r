@@ -377,19 +377,18 @@ if (countSteps) {
                     "#FF0076", "#FF4373", "#FF6B58", "#F8B660", "#792096",
                     "#396FF6", "#44B05B", "#FA41CA", "#852942")
 
-  #And write CSV in case it doesn't
-  #write.csv(allSteps, "allSteps.csv")
-
   #Plot
   ggplot(data = allSteps, aes(y = steps, x = plot, group = plot, fill = plot)) +
     geom_violin(adjust = 1.5) + theme_minimal() + theme(panel.border = element_rect(color = "black", fill = NA)) +
-    scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
+    scale_x_discrete(guide = guide_axis(n.dodge = 2), limits = c( "Amniota","Coccomorpha","Crocodylia","Echinoidea","Gnathostomata","Lemuriformes","Mammalia","Mysticeti","Panarthropoda","Serpentes","Testudines","Trilobita","Simulated" )) +
+    geom_vline(xintercept = 12.5, lwd=2,colour="lightgrey") +
     scale_fill_manual(values = RJGaesthetic) +
     stat_summary(fun = mean, geom = "point", shape = 21, size = 2, fill = "white", color = "black", stroke = 0.5) +
     labs(title = "TREvoSim vs Empirical extra parsimony steps", x = "Dataset", y = "Number of steps") +
     theme(plot.title = element_text(hjust = 0.5)) + theme(legend.position = "none")
+    #theme(axis.text.x = element_text(face = c('plain','plain','plain','plain','plain','plain','plain','plain','plain','plain','plain', 'plain','bold')))
 
-  ggsave(paste(outputWD, "TREvoSim_homoplasy_plots.pdf", sep = ""), width = 10, height = 6)
+  ggsave(paste(outputWD, "TREvoSim_homoplasy_plots.pdf", sep = ""), width = 8, height = 6)
 }
 
 if (calcTreeness) {
