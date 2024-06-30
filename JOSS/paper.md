@@ -124,10 +124,9 @@ This implements a limited period of increased rates of environmental change that
 
 New options allow finer control of TREvoSim functions that employ genome characters. Characters in TREvoSim are used in several portions of the algorithm -- they form the basis of calculating fitness of organisms, and are also employed in the identification of species. In previous versions of TREvoSim, all characters were used for both functions, through a user-defined total character number. From v3, a separate limit on the character count used for species selection and/or the fitness calculation can be applied (in the default settings, all are the same). When  either - or both - differ from the total character number, only a subset of characters (those from zero to the limit) are included in the defined operations, and others can evolve independent of these processes (i.e., in the absence of selective forces, akin to more neutral drift-like processes).
 
-
 ### Default simulation parameters
 
-New default values for simulation parameters are introduced with this release. These are benchmarked against three properties of 12 empirical, total evidence analyses [following the approach of, and using empirical data sourced from @Mongiardino_Koch_Garwood_Parry_2021]. The empirical data, analysis script, and resulting graphs have been placed in the folder Benchmarking within the source code repository.
+New default values for simulation parameters are introduced with this release. Outputs created using these default variables have been compared against twelve empirical, total evidence analyses [following the approach of, and using empirical data sourced from @Mongiardino_Koch_Garwood_Parry_2021] for three measures of tree shape and homoplasy. The empirical data, analysis script, and resulting graphs have been placed within the source code repository, and the results are presented in the documentation.
 
 ### Running log
 
