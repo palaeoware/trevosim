@@ -26,6 +26,8 @@ library(TreeTools)
 
 # This script analyses TREvoSim runs, and then compares them against empirical datasets.
 # It was written by Nicolás Mongiardino Koch and Russell Garwood, with an extra steps function courtesy of Joe Keating.
+# It was reviewed for a JOSS paper by Martin Smith who made a number of very valuable improvements.
+
 # The empirical datasets are sourced from this paper:
 # Mongiardino Koch, N., Garwood, R.J. and Parry, L.A., 2021. Fossils improve phylogenetic analyses of morphological characters. Proceedings of the Royal Society B, 288(1950), p.20210044.
 # The above paper cites the source of each dataset used for the analysis.
@@ -93,16 +95,26 @@ excessSteps <- function(tree, mdata) {
 empiricalTreeness <- function() {
   #Get empirical data
   trees <- list.files(empiricalWD, pattern = ".tre", full.names = TRUE)
+  nTrees <- length(trees)
+  if (!nTrees) {
+    stop("No trees found in ", empiricalWD)
+  }
 
   #Treeness for empirical
   empiricalTreenessVector = vector(length = length(trees))
 
-  for (i in 1:length(trees)) {
+  for (i in 1:seq_along(trees)) {
     tree <- read.tree(trees[i])
     empiricalTreenessVector[i] = treeness(tree)
   }
 
   return(empiricalTreenessVector)
+}
+
+TCI <- function(tree) {
+  context <- TCIContext(tree)
+  minimum <- context$minimum
+  (TotalCopheneticIndex(tree) - minimum) / (context$uniform.exp - minimum)
 }
 
 empiricalTreeshape <- function() {
@@ -115,21 +127,24 @@ empiricalTreeshape <- function() {
   for (i in 1:length(trees)) {
     # When first coded (19 June 24) there is an error in the maximum value of the index for the trees below, and thus these are skipped
     # This was immediately fixed in TreeTools, so this skipping code can be removed when that filters through to a release
-    if (i==4 || i==9) next
+    if (packageVersion("TreeTools") <= "1.11.1") {
+      if (i==4 || i==9) next
+    }
     tree = read.tree(trees[i])
-    #Use the corrected colless so number of tips is not an isssue. See:
-    #library(treebalance) collessI( method = 'corrected')
-    #And associated book
-    n = length(tree$tip.label)
-    empiricalTreeshapeVector[i] = TotalCopheneticIndex(tree) / TCIContext(tree)$maximum
-    #empiricalTreeshapeVector[i] = colless(tree)/((n - 1) * (n - 2)/2)
+    empiricalTreeshapeVector[i] <- TCI(tree)
   }
-
   return(empiricalTreeshapeVector)
 }
 
+#J1 balance (shape) index for empirical trees - courtesy of Martin Smith
+empiricalJ1 <- function() {
+  stopifnot(packageVersion("TreeTools") >= "1.11.1.9001")
+  vapply(list.files(empiricalWD, pattern = ".tre", full.names = TRUE),
+         function(tr) J1Index(read.tree(tr)), double(1), USE.NAMES = FALSE)
+}
+
 empiricalSteps <- function() {
-  #Get emprical data
+  #Get empirical data
   empiricalStepsDF <- data.frame()
 
   if (length(list.files(empiricalWD, pattern = "empirical_steps.csv")) == 1) {
@@ -170,11 +185,11 @@ empiricalSteps <- function() {
 
     for (j in 1:length(to_calculate)) {
       character = matrix2[, to_calculate[j]]
-      character[which(character == "0")] = "a"
-      character[which(character == "1")] = "c"
-      character[is.na(character)] = "-"
-      character[which(character == "")] = "-"
-      character[which(character != "a" & character != "c")] = "-"
+      character[character == "0"] <- "a"
+      character[character == "1"] <- "c"
+      character[is.na(character)] <- "-"
+      character[character == ""] <- "-"
+      character[character != "a" & character != "c"] <- "-"
       steps[j] = parsimony(tree, as.phyDat(character))
     }
     steps <- data.frame(steps)
@@ -192,9 +207,6 @@ empiricalSteps <- function() {
 #Create data structures and file lists
 files <- list.files(sourceWD)
 counts <- list()
-treeshapes <- list()
-meanRates <- list()
-simTreenessVector <- vector()
 extraStepsDF <- data.frame()
 
 #Do empirical for comparison - this will either calculate the data if not done so before and also output as a CSV
@@ -202,23 +214,30 @@ extraStepsDF <- data.frame()
 cat("Doing empirical data.\n")
 empiricalTreenessVector <- empiricalTreeness()
 empiricalTreeshapeVector <- empiricalTreeshape()
+empiricalJ1Vector <- empiricalJ1()
 allRatesEmpirical <- empiricalSteps()
 cat("Done.\n")
 
 #Create a list of the tree files from TREvoSim using a filter
 treeFiles <- list.files(sourceWD, pattern = "tree", full.names = TRUE)
+nTreeFiles <- length(treeFiles)
+treeshapes <- double(length(treeFiles))
+j1s <- double(length(treeFiles))
+simTreenessVector <- double(length(treeFiles))
 matrixFiles <- list.files(sourceWD, pattern = ".nex", full.names = TRUE)
 #Remove tree files
 matrixFiles <- matrixFiles[!grepl("tree", matrixFiles)]
 
+# Progress bar
+detailedAnalyses <- min(nTreeFiles, 25)
+prog <- cli::cli_progress_bar(
+  format = "Calculating extra steps [{i}/{detailedAnalyses}]. Mean = {progExtra}",
+  total = detailedAnalyses)
+
 #Now do analysis for each tree/matrix/replicate
-for (i in 1:length(treeFiles)) {
+for (i in seq_along(treeFiles)) {
   simTree <- read.nexus(treeFiles[i])
-  plot(simTree, show.tip.label = FALSE)
-  simMatrix <- read_nexus_matrix(matrixFiles[i])
-  #ReadMorphNexus(matrixFiles[i]);
-  simMatrix <- simMatrix$matrix_1$matrix
-  #simMatrix$Matrix_1$Matrix
+  simMatrix <- read_nexus_matrix(matrixFiles[i])[[c("matrix_1", "matrix")]]
 
   #Count extant if requested
   if (countExtant) {
@@ -237,29 +256,29 @@ for (i in 1:length(treeFiles)) {
 
   #Treeshape if requested
   if (calcTreeshape) {
-    #See comment in empirical treeshape for mor info on this calculation
-    n = length(simTree$tip.label)
-    treeshapes[i] <- TotalCopheneticIndex(simTree) / TCIContext(simTree)$maximum
-    #treeshapes[i] <- colless(simTree)/((n - 1) * (n - 2)/2)
+    #See comment in empirical treeshape for more info on this calculation
+    n <- length(simTree$tip.label)
+    treeshapes[[i]] <- TCI(simTree)
+    if (packageVersion("TreeTools") >= "1.11.1.9001") {
+      j1s[[i]] <- J1Index(simTree)
+    }
   }
 
   #Calculate treeness if requested
   if (calcTreeness)
-    simTreenessVector[i] = treeness(simTree)
+    simTreenessVector[[i]] <- treeness(simTree)
 
   #Count parsimony steps if requested
   #Given the number of characters, no need to go above really
-  if (countSteps && i < 25) {
-    cat("Running extra steps analysis, dataset ", i, " - will only do the first 25 datasets out of ", length(treeFiles), ".\n")
-    tree<-simTree
-    mdata<-read.nexus.data(matrixFiles[1])
-    mdata2<-read.nexus.data(matrixFiles[1])
-    steps_run <- excessSteps(simTree, read.nexus.data(matrixFiles[i]))
+  if (countSteps && i <= detailedAnalyses) {
+    steps_run <- excessSteps(simTree, matrixFiles[[i]])
     steps_run$plot <- i
     extraStepsDF <- rbind(extraStepsDF, steps_run)
-    cat("Mean extra steps is ", mean(as.numeric(steps_run$steps), na.rm = TRUE), "\n")
+    progExtra = round(mean(as.numeric(steps_run$steps), na.rm = TRUE), 2)
+    cli::cli_progress_update(prog, i)
   }
 }
+cli::cli_progress_done(prog)
 
 ########################################################################################################################
 #Now move onto the graphing of this data, and save it in the outputWD
@@ -297,32 +316,36 @@ if (countExtant) {
 }
 
 if (calcTreeshape) {
-  empiricalTreeshapeDF <- data.frame(empiricalTreeshapeVector)
-  colnames(empiricalTreeshapeDF) <- "treeshape"
+  empiricalTreeshapeDF <- data.frame(tci = empiricalTreeshapeVector, j1 = empiricalJ1Vector)
   empiricalTreeshapeDF$plot <- "Empirical"
-  simTreeshapeDF <- do.call(rbind, Map(data.frame, ts = treeshapes))
-
-  colnames(simTreeshapeDF) <- "treeshape"
+  simTreeshapeDF <- data.frame(tci = treeshapes, j1 = j1s)
   simTreeshapeDF$plot <- "Simulated"
   allTreeshapeDF <- rbind(empiricalTreeshapeDF, simTreeshapeDF)
 
-  ggplot(data = allTreeshapeDF, aes(y = treeshape, x = plot)) +
-    geom_boxplot(fill = "#396ff6") +
+  ggplot(data = allTreeshapeDF, aes(y = tci, x = plot)) +
+    # Notches are helpful to judge whether difference in medians is significant
+    geom_boxplot(fill = "#396ff6", notch = TRUE) +
     theme_minimal() +
     theme(panel.border = element_rect(color = "black", fill = NA)) +
     ylim(0, 1) +
     labs(title = "TREvoSim vs Empirical tree asymmetry", x = "Data type", y = "Tree asymmetry (normalised total cophenetic index)") +
     theme(plot.title = element_text(hjust = 0.5)) +
     theme(legend.position = "none")
-
   ggsave(paste(outputWD, "TREvoSim_treeshape_plot.pdf", sep = ""), width = 6, height = 6)
+
+  ggplot(data = allTreeshapeDF, aes(y = j1, x = plot)) +
+    geom_boxplot(fill = "#396ff6", notch = TRUE) +
+    theme_minimal() +
+    theme(panel.border = element_rect(color = "black", fill = NA)) +
+    ylim(0, 1) +
+    labs(title = "TREvoSim vs Empirical tree asymmetry", x = "Data type", y = "Tree asymmetry (J1 index)") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    theme(legend.position = "none")
+  ggsave(paste(outputWD, "TREvoSim_j1_plot.pdf", sep = ""), width = 6, height = 6)
 }
 
 # Now graph the extra steps - empirical and simulated
 if (countSteps) {
-  # The below is required to get data into a format ggplot can work with - otherwise it seems to treat them all as strings
-  extraStepsDF <- apply(extraStepsDF, 2, as.numeric)
-  extraStepsDF <- data.frame(extraStepsDF)
   keeps <- c("steps", "plot")
   extraStepsDF2 <- extraStepsDF[keeps]
 
@@ -333,9 +356,9 @@ if (countSteps) {
   allSteps <- rbind(allRatesEmpirical, extraStepsDF2)
 
   #Pretty colours to make graphs A E S T H E T I C
-  RJGaesthetic <- palette(c(vapoRwave:::newRetro_palette, "#792096", "#396ff6", "#44B05B", "#FA41CA", "#852942"))
-  #Sometimes above doesn't stick - do it twice to see if that helps
-  RJGaesthetic <- palette(c(vapoRwave:::newRetro_palette, "#792096", "#396ff6", "#44B05B", "#FA41CA", "#852942"))
+  RJGaesthetic <- c("#9239F6", "#903495", "#6F3460", "#4A354F", "#D20076",
+                    "#FF0076", "#FF4373", "#FF6B58", "#F8B660", "#792096",
+                    "#396FF6", "#44B05B", "#FA41CA", "#852942")
 
   #And write CSV in case it doesn't
   #write.csv(allSteps, "allSteps.csv")
@@ -343,10 +366,9 @@ if (countSteps) {
   #Plot
   ggplot(data = allSteps, aes(y = steps, x = plot, group = plot, fill = plot)) +
     geom_violin(adjust = 1.5) + theme_minimal() + theme(panel.border = element_rect(color = "black", fill = NA)) +
-    scale_y_log10() +
     scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
     scale_fill_manual(values = RJGaesthetic) +
-    stat_summary(fun.y = mean, geom = "point", shape = 21, size = 2, fill = "white", color = "black", stroke = 0.5) +
+    stat_summary(fun = mean, geom = "point", shape = 21, size = 2, fill = "white", color = "black", stroke = 0.5) +
     labs(title = "TREvoSim vs Empirical extra parsimony steps", x = "Dataset", y = "Number of steps") +
     theme(plot.title = element_text(hjust = 0.5)) + theme(legend.position = "none")
 
