@@ -70,7 +70,7 @@ treeness <- function(tree) {
 #tree<-read.nexus("/home/russell/Desktop/TREvoSim_output_unrooted/TREvoSim_tree_000.nex")
 #mdata<-read.nexus.data("/home/russell/Desktop/TREvoSim_output_unrooted/TREvoSim_000.nex")
 
-steps <- function(tree, mdata) {
+excessSteps <- function(tree, mdata) {
   char_results <- data.frame(character = 0, steps = 0)
   levelInData <- levels(as.factor(unlist(mdata)))
   mdata_df <- as.data.frame(mdata)
@@ -83,7 +83,7 @@ steps <- function(tree, mdata) {
   }
   char_results <- char_results[-c(1), ]
   for (i in 1:length(char_results$steps)) if (char_results$steps[[i]] < 0) {
-    char_results$steps[[i]] <- "NA"
+    char_results$steps[[i]] <- NA
   }
   return(char_results)
 }
@@ -254,7 +254,7 @@ for (i in 1:length(treeFiles)) {
     tree<-simTree
     mdata<-read.nexus.data(matrixFiles[1])
     mdata2<-read.nexus.data(matrixFiles[1])
-    steps_run <- steps(simTree, read.nexus.data(matrixFiles[i]))
+    steps_run <- excessSteps(simTree, read.nexus.data(matrixFiles[i]))
     steps_run$plot <- i
     extraStepsDF <- rbind(extraStepsDF, steps_run)
     cat("Mean extra steps is ", mean(as.numeric(steps_run$steps), na.rm = TRUE), "\n")
@@ -315,7 +315,7 @@ if (calcTreeshape) {
     theme(plot.title = element_text(hjust = 0.5)) +
     theme(legend.position = "none")
 
-  ggsave(paste(outputWD, "TREvoSim_treeshape_plot.pdf", sep = ""))
+  ggsave(paste(outputWD, "TREvoSim_treeshape_plot.pdf", sep = ""), width = 6, height = 6)
 }
 
 # Now graph the extra steps - empirical and simulated
@@ -350,7 +350,7 @@ if (countSteps) {
     labs(title = "TREvoSim vs Empirical extra parsimony steps", x = "Dataset", y = "Number of steps") +
     theme(plot.title = element_text(hjust = 0.5)) + theme(legend.position = "none")
 
-  ggsave(paste(outputWD, "TREvoSim_homoplasy_plots.pdf", sep = ""))
+  ggsave(paste(outputWD, "TREvoSim_homoplasy_plots.pdf", sep = ""), width = 10, height = 6)
 }
 
 if (calcTreeness) {
@@ -370,6 +370,6 @@ if (calcTreeness) {
     labs(title = "TREvoSim vs Empirical treeness", x = "Data type", y = "Treeness") + theme(plot.title = element_text(hjust = 0.5)) +
     theme(legend.position = "none")
 
-  ggsave(paste(outputWD, "TREvoSim_treeness_plots.pdf", sep = ""))
+  ggsave(paste(outputWD, "TREvoSim_treeness_plots.pdf", sep = ""), width = 6, height = 6)
 }
 
