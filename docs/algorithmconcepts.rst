@@ -28,7 +28,7 @@ To quantify the homoplasy within data generated under default settings, the scri
 .. figure:: _static/steps.png
     :align: center
 
-The TREvoSim data ("simulated"; actually the results for all characters of the first 25 replicates provided with in the repository) is shown in blue third from the right, all other datasets are labelled with taxonomic group, and represent the distribution of extra steps for all characters in the analysis. Note the log scale on the Y axis. The dots show the mean for each dataset. The number of extra steps against the comparison tree of choice (total evidence for empirical, true tree for TREvoSim data), is comparable across datasets.
+The TREvoSim data ("simulated"; actually the results for all characters of the first 25 replicates provided with in the repository) is shown far right, in blue; all other datasets are labelled with taxonomic group, and represent the distribution of extra steps for all characters in the analysis. The dots show the mean for each dataset. The number of extra steps against the comparison tree of choice (total evidence for empirical, true tree for TREvoSim data), is comparable across datasets.
 
 Tree shape - Asymmetry
 ^^^^^^^^^^^^^^^^^^^^^^
