@@ -33,13 +33,12 @@ The TREvoSim data ("simulated"; actually the results for all characters of the f
 Tree shape - Asymmetry
 ^^^^^^^^^^^^^^^^^^^^^^
 
-The tree asymmetry (= imbalance), is also calculated from the script. The box plots below show the asymmetry for all TREvoSim trees (100 replicates) next to those for all empirical trees (twelve total evidence analyses) quantified through the total cophenetic index normalised against the maximum possible value:
+The tree asymmetry (= imbalance) and symmetry, is also calculated from the script. The box plots below show the symmetry for all TREvoSim trees (100 replicates) next to those for all empirical trees (twelve total evidence analyses) quantified through the J :sup:`1` index of (`Lemant et al. (2022) <https://academic.oup.com/sysbio/article/71/5/1210/6567363>`_):
 
 .. figure:: _static/tree_asymmetry.png
     :align: center
 
-TREvoSim trees ("simulated") have a wider range of asymmetries than is present in the empirical data (although the box plot also represents a higher number of data points). The mean demonstrates that TREvoSim trees are generally more asymmetrical than empirical datasets.
-
+With other metrics, the mechanism normalisation appears to have an impact on the results, whereas this measure is intrinsically normalized. There is further discussion in this pull request on the  (`TREvoSim github <https://github.com/palaeoware/trevosim/pull/53>`_). TREvoSim trees ("simulated") are generally slightly less symmetrical than those in the empirical data, and the two have a broadly similar range. Thanks to Martin Smith for his contributions to this discussion and associated improvements to the analysis and scripts.
 
 Tree shape - Treeness
 ^^^^^^^^^^^^^^^^^^^^^
@@ -49,4 +48,4 @@ The script also provides a quantification of the normalised treeness (=stemmines
 .. figure:: _static/treeness.png
     :align: center
 
-TREvoSim ("simulated") trees have a similar mean, and spread, of normalised treeness values to that found in empirical data. 
+TREvoSim ("simulated") trees have a similar median, and spread, of normalised treeness values to that found in empirical data. 
