@@ -88,51 +88,56 @@ TREvoSim v1.0.0 was developed to investigate the accuracy and precision of phylo
 
 TREvoSim v3.0.0 includes a suite of new features that allow the investigation of an expanded range of evolutionary processes. These new features are briefly introduced (in alphabetical order) below, and fully described in the [TREvoSim documentation](https://trevosim.readthedocs.io/en/latest/).
 
-## Character options
+## Model enhancements 
 
-New options allow finer control of TREvoSim functions that employ genome characters. Characters in TREvoSim are used in several portions of the algorithm -- they form the basis of calculating fitness of organisms, and are also employed in the identification of species. In previous versions of REvoSim, all characters were used for both functions, through a user-defined total character number. From v3, a separate limit on the character count used for species selection and/or the fitness calculation can be applied (in the default settings, all are the same). When this differs from the total character number, only a subset of characters (those from zero to the limit) are included in the defined operations, and others can evolve independent of these processes (i.e., in the absence of selective forces, akin to more neutral drift-like processes).  
 
-## Default simulation parameters
-
-New default values for simulation parameters are introduced with this release. These are benchmarked against three properties of 12 empirical, total evidence analyses [following the approach of, and using empirical data sourced from @Mongiardino_Koch_Garwood_Parry_2021]. The empirical data, analysis script, and resulting graphs have been placed in the folder Benchmarking within the source code repository.
-
-## Ecosystem engineering
+### Ecosystem engineering
 
 A new ecosystem engineering system allows organism-environment feedback to be investigated. When the ecosystem engineering option is enabled (it is disabled in default settings), a species is assigned ecosystem engineering status halfway through a run, and passes this status to descendents. When this occurs, the genome of that organism is either used to overwrite an environmental mask, or added to the environment as an additional mask. Overwriting a mask reduces the hamming distance between engineers and masks, and -- assuming a low fitness target -- thus directly improves their fitness relative to non-engineers. In contrast, adding a mask changes the fitness landscape changes the nature of the fitness landscape for all organisms, but with a weaker direct benefit to ecosystem engineers. Ecosystem engineering can occur just once (‘one-shot’ ecosystem engineering) or can be repeated after the first application (‘persistent’). When a mask is added in the first application, it is overwritten in subsequent applications when ecosystem engineers are persistent. A new facility to log the ecosystem-engineering status of individuals is provided. 
 
-## Expanding playing field 
+### Expanding playing field 
 
 This new option alters competition such that it occurs between species rather than between individuals (i.e. it removes intra-species competition from the simulation). When enabled (disabled by default), this is achieved by allowing only one individual from each species to be present in the playing field at any time. As such, the playing field grows to accommodate new species, which appear following the standard speciation rules. On duplication of an individual, juveniles overwrite the previous member of their species in the playing field. Otherwise, the playing field operates as normal, i.e. it is ordered by fitness and a coin toss is used to link fitness to fecundity.  
 
-## Running log
-
-In previous versions, TREvoSim only allowed outputs at the end of a run. From v3, an additional logging system has been added, called the running log, that allows the user to create a customised file recording many aspects of the simulation state -- for example, the tree and the character data -- during a run. The user can define all log outputs using the logging options (which are outlined in the documentation), and can also dictate the frequency with which the running log is written. 
-
-## Match peaks
+### Match peaks
 
 When there are multiple environments for any given playing field, by default masks are seeded with random numbers, and may thus have different peak fitness values. This new option instead seeds each playing field with environments that have the same peak fitness. This is achieved by doing a site-wise randomisation of the sequence of zeros and ones across masks, between environments. For example, with three masks in a given environment, the first bit may be 1,0,0 for masks 1,2 and 3 respectively -- when this option is enabled, that may be moved to bit three between the first and second environment, and this is repeated for all sites. This operation ensures that the best achievable fitness will remain the same, but will be achieved by a different genome across environments. As the simulation progresses and mutations to the masks occur, matching peaks are no longer guaranteed. Additionally, the simulation uses a heuristic algorithm to generate an initial seed organism that has the same fitness in each environment (in >99% of cases) when this option is selected. In general, this option allows finer control of the fitness landscape. 
 
-## No selection
+### No selection
 
 Another new addition is a no selection mode — when this is enabled, organisms for replication are chosen from the playing field at random, rather than using fitness to determine replication probability. When this option is enabled, the simulation functions under drift. 
 
-## Playing field mixing
+### Playing field mixing
 
 By default TREvoSim playing fields are independent data structures, and organisms in one playing field do not compete with those in others during a simulation. This new option allows configurable mixing of organisms between playing fields, which can be asymmetrical if desired. Playing field mixing  can facilitate the study of, for example, the dynamics of invasive species or biotic interchanges. 
 
-## Perturbations
+### Stochastic layer
+
+Provides a layer of abstraction between an organism’s genome and the bits used for the fitness calculation. It achieves this using many-to-one mapping, the map being defined by the user. This feature removes direct control of fitness from the organism genome, allowing e.g. neutral mutations and less strongly adaptationist dynamics.
+
+### Perturbations
 
 This implements a limited period of increased rates of environmental change that occurs halfway through a run (when half the requested species have evolved, or at half the requested iteration number). This is intended for study of scenarios where evolutionary dynamics are driven by variations in the rate of environmental change. There is an option to also increase mixing between playing fields during a perturbation. 
 
-## Simulation modes
+## Software modifications 
+
+### Character limits
+
+New options allow finer control of TREvoSim functions that employ genome characters. Characters in TREvoSim are used in several portions of the algorithm -- they form the basis of calculating fitness of organisms, and are also employed in the identification of species. In previous versions of REvoSim, all characters were used for both functions, through a user-defined total character number. From v3, a separate limit on the character count used for species selection and/or the fitness calculation can be applied (in the default settings, all are the same). When either - or both - differ from the total character number, only a subset of characters (those from zero to the limit) are included in the defined operations, and others can evolve independent of these processes (i.e., in the absence of selective forces, akin to more neutral drift-like processes).  
+
+### Default simulation parameters
+
+New default values for simulation parameters are introduced with this release. These are benchmarked against three properties of 12 empirical, total evidence analyses [following the approach of, and using empirical data sourced from @Mongiardino_Koch_Garwood_Parry_2021]. The empirical data, analysis script, and resulting graphs have been placed in the folder Benchmarking within the source code repository.
+
+### Running log
+
+In previous versions, TREvoSim only allowed outputs at the end of a run. From v3, an additional logging system has been added, called the running log, that allows the user to create a customised file recording many aspects of the simulation state -- for example, the tree and the character data -- during a run. The user can define all log outputs using the logging options (which are outlined in the documentation), and can also dictate the frequency with which the running log is written. 
+
+### Simulation modes
 
 Simulation-termination can now be configured to occur after either a user-defined number of iterations, or when a user-defined number of species have evolved; only the latter was previously available. This provides increased flexibility in experimental design. 
 
-## Stochastic layer
-
-Provides a layer of abstraction between an organism’s genome and the bits used for the fitness calculation. It achieves this using many-to-one mapping, the map being defined by the user. This feature removes direct control of fitness from the organism genome, allowing e.g. neutral mutations and less strongly adaptationist dynamics
-
-## Codebase Tests
+### Codebase Tests
 
 TREvoSim v3.0.0 introduces a test suite covering all aspects of the simulation mechanics. These are included in the build pipeline, which will fail if any tests return a failure. 
 
