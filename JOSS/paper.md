@@ -90,7 +90,6 @@ TREvoSim v3.0.0 includes a suite of new features that allow the investigation of
 
 ## Model enhancements 
 
-
 ### Ecosystem engineering
 
 A new ecosystem engineering system allows organism-environment feedback to be investigated. When the ecosystem engineering option is enabled (it is disabled in default settings), a species is assigned ecosystem engineering status halfway through a run, and passes this status to descendents. When this occurs, the genome of that organism is either used to overwrite an environmental mask, or added to the environment as an additional mask. Overwriting a mask reduces the hamming distance between engineers and masks, and -- assuming a low fitness target -- thus directly improves their fitness relative to non-engineers. In contrast, adding a mask changes the fitness landscape changes the nature of the fitness landscape for all organisms, but with a weaker direct benefit to ecosystem engineers. Ecosystem engineering can occur just once (‘one-shot’ ecosystem engineering) or can be repeated after the first application (‘persistent’). When a mask is added in the first application, it is overwritten in subsequent applications when ecosystem engineers are persistent. A new facility to log the ecosystem-engineering status of individuals is provided. 
@@ -123,7 +122,8 @@ This implements a limited period of increased rates of environmental change that
 
 ### Character limits
 
-New options allow finer control of TREvoSim functions that employ genome characters. Characters in TREvoSim are used in several portions of the algorithm -- they form the basis of calculating fitness of organisms, and are also employed in the identification of species. In previous versions of REvoSim, all characters were used for both functions, through a user-defined total character number. From v3, a separate limit on the character count used for species selection and/or the fitness calculation can be applied (in the default settings, all are the same). When either - or both - differ from the total character number, only a subset of characters (those from zero to the limit) are included in the defined operations, and others can evolve independent of these processes (i.e., in the absence of selective forces, akin to more neutral drift-like processes).  
+New options allow finer control of TREvoSim functions that employ genome characters. Characters in TREvoSim are used in several portions of the algorithm -- they form the basis of calculating fitness of organisms, and are also employed in the identification of species. In previous versions of TREvoSim, all characters were used for both functions, through a user-defined total character number. From v3, a separate limit on the character count used for species selection and/or the fitness calculation can be applied (in the default settings, all are the same). When  either - or both - differ from the total character number, only a subset of characters (those from zero to the limit) are included in the defined operations, and others can evolve independent of these processes (i.e., in the absence of selective forces, akin to more neutral drift-like processes).
+
 
 ### Default simulation parameters
 
@@ -163,7 +163,7 @@ RJG developed and coded TREvoSim, with support on testing and releasing from ART
 
 # Availability 
 
-TREvoSim v3.0.0 source code and binaries are freely available from [Zenodo](https://doi.org/10.5281/zenodo.10866261) and [GitHub](https://github.com/palaeoware/trevosim). Newer releases of the REvoSim software will be available on GitHub. Fully documentation is available from [ReadTheDocs](https://trevosim.readthedocs.io/en/latest/).
+TREvoSim v3.0.0 source code and binaries are freely available from [Zenodo](https://doi.org/10.5281/zenodo.10866261) and [GitHub](https://github.com/palaeoware/trevosim). Newer releases of the TREvoSim software will be available on GitHub. Fully documentation is available from [ReadTheDocs](https://trevosim.readthedocs.io/en/latest/).
 
 # Acknowledgements 
 
