@@ -10,7 +10,6 @@ library(phangorn)
 library(phytools)
 library(phylobase)
 library(tidyverse)
-library(vapoRwave)
 library(treestats)
 library(TreeTools)
 
@@ -103,7 +102,7 @@ empiricalTreeness <- function() {
   #Treeness for empirical
   empiricalTreenessVector = vector(length = length(trees))
 
-  for (i in 1:seq_along(trees)) {
+  for (i in seq_along(trees)) {
     tree <- read.tree(trees[i])
     empiricalTreenessVector[i] = treeness(tree)
   }
@@ -271,7 +270,7 @@ for (i in seq_along(treeFiles)) {
   #Count parsimony steps if requested
   #Given the number of characters, no need to go above really
   if (countSteps && i <= detailedAnalyses) {
-    steps_run <- excessSteps(simTree, matrixFiles[[i]])
+    steps_run <- excessSteps(simTree, read.nexus.data(matrixFiles[[i]]))
     steps_run$plot <- i
     extraStepsDF <- rbind(extraStepsDF, steps_run)
     progExtra = round(mean(as.numeric(steps_run$steps), na.rm = TRUE), 2)
@@ -328,7 +327,7 @@ if (calcTreeshape) {
     theme_minimal() +
     theme(panel.border = element_rect(color = "black", fill = NA)) +
     ylim(0, 1) +
-    labs(title = "TREvoSim vs Empirical tree asymmetry", x = "Data type", y = "Tree asymmetry (normalised total cophenetic index)") +
+    labs(title = "TREvoSim vs Empirical tree symmetry", x = "Data type", y = "Tree asymmetry (normalised total cophenetic index)") +
     theme(plot.title = element_text(hjust = 0.5)) +
     theme(legend.position = "none")
   ggsave(paste(outputWD, "TREvoSim_treeshape_plot.pdf", sep = ""), width = 6, height = 6)
