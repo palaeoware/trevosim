@@ -1,25 +1,26 @@
 ## If packages aren't installed, install them, then load them
-packages <- c("phangorn", "phytools", "phylobase", "Claddis", "tidyverse", "vapoRwave", "treestats", "TreeTools")
+packages <- c("cli", "phangorn", "phytools", "phylobase", "Claddis", "tidyverse", "treestats", "TreeTools")
 if(length(packages[!packages %in% installed.packages()[,"Package"]]) > 0){
   install.packages(packages[!packages %in% installed.packages()[,"Package"]])
 }
 
+library(Claddis)
+library(cli)
 library(phangorn)
 library(phytools)
 library(phylobase)
-library(Claddis)
 library(tidyverse)
 library(vapoRwave)
 library(treestats)
 library(TreeTools)
 
-#Clear environment
-rm(list = ls())
-
 #If not running from the included bash script, set working directory here
 #To run on the default outputs, this should be the absolute path to the folder comparison_to_empirical_data within the TREvoSim repository
 #Otherwise you will need to change some or all of the details below to point to the relevant folders
 #setwd("########################")
+
+#If you wish to clear your environment before running this script, uncomment and run the line below
+#rm(list = ls())
 
 ########################################################################################################################
 
@@ -55,18 +56,7 @@ calcTreeshape <- TRUE
 #Function to calculate treeness
 #i.e. sum of internal branch lengths/total branch lengths
 treeness <- function(tree) {
-  return(1 - (sum(tree$edge.length[which(tree$edge[, 2] %in% c(1:length(tree$tip.label)))])/sum(tree$edge.length)))
-}
-
-########################################################################################################################
-#Function to calculate FitMK - this approach works because it doesn't matter what order we spit out the values
-#mclapply won't work if you just send the columns to mclapply, but this way we can user an iterator - here characterNo
-doFitMK <- function(characterNo, fSimTree, fSimMatrix) {
-  #Print to show progress is happening
-  ###Note this will only work when called from terminal - won't have any effect in R studio
-  cat("*")
-  #Fit MK to data
-  return(fitMk(simTree, matrix[, characterNo], model = "ER")$rates)
+  return(1 - (sum(tree$edge.length[tree$edge[, 2] <= length(tree$tip.label)])/sum(tree$edge.length)))
 }
 
 ########################################################################################################################
