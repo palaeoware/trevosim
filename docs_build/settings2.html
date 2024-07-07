@@ -96,7 +96,7 @@
 <dd class="field-odd"><p>The environment in TREvoSim - which comprises a series of random numbers, or masks - also mutates, allowing lineages to track fitness peaks. This setting dictates the rate of mutation for the environment, in units of mutations per hundred characters per iteration.</p>
 </dd>
 <dt class="field-even">Number of environments</dt>
-<dd class="field-even"><p>From v2.0.0 TREvoSim allows multiple environments (i.e. numerous sets of masks). During a simulation the fitness of each organism is calculated for every environment, and the organism’s overall fitness is defined as that from the environment to which it is best suited (i.e. for which it has the highest fitness).</p>
+<dd class="field-even"><p>From v2.0.0 TREvoSim allows multiple environments (i.e. numerous sets of masks). During a simulation the fitness of each organism is calculated for every environment, and the organism’s overall fitness is defined as that from the environment to which it is best suited (i.e. for which it has maximal fitness). Increasing the environment number can thus be visualised as flattening the fitness landscape, as the number of less fit genomic configurations are reduced, and ‘valleys’ become shallower.</p>
 </dd>
 <dt class="field-odd">Masks per environment</dt>
 <dd class="field-odd"><p>This dictates the number of masks (random numbers) in the environment. Fitness is calculated by summing the differences between the genome and all masks, and thus the more masks there are the flatter the fitness landscape is likely to be. This can be explored using the <a class="reference internal" href="filecommands.html#fitness-histogram"><span class="std std-ref">Fitness histogram</span></a> functionality.</p>

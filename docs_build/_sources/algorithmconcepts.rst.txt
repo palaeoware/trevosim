@@ -6,7 +6,81 @@ Algorithm and Concepts
 TREvoSim Algorithm Description
 ------------------------------
 
-To do. 
+TREvoSim has been developed across several publications, and the algorithm was first described in Keating et al. (2020, v1.0.0), with modifications outlined in Mongiardino Koch et al (2021, v2.0.0). The simulation approach also shares features with the spatially explicit eco-evolutionary simulation package REvoSim (Garwood et. al. 2019, Furness et. al. 2023). The latest version of the algorithm is described here to avoid having to build a picture by accessing multiple publications. Note, this is modified after those previous descriptions, and so employs the same wording in places.
+
+TREvoSim employs digital organisms in the form of binary strings of a user-defined length (e.g. 0010110011101010011011). The zeros and ones comprising the string are here referred to as the genome of the digital organism, and ultimately provide the binary characters that can be used at the end of a simulation for, for example, phylogenetic inference, and they are also used to assign fitness to organisms relative to an environment, as outlined below. When a simulation runs, organisms compete, replicate, and mutate. The simulation incorporates a species concept, and speciation is emergent in the simulation, allowing the software to output a phylogenetic tree showing species relationships during or at the end of a run. 
+
+This overview employs figures from Garwood et al. (2024) -- in all, user defined variables are shown in green font, and the values shown are the default. For clarity, the description eschews listing every potential modification to the algorithm that can be achieved through modifying the software settings, as this would obfuscate important functions in potentially unnecessary detail (although it does mention a number of key choices). Where a setting modifies the algorithm outlined below, this is described fully in the information included on the settings pages in this documentation. The implications of changing a setting are also described in these pages, wherever possible.
+
+Data structures
+^^^^^^^^^^^^^^^
+
+Organisms reside in a structure called the playing field -- a list of organisms that, once a simulation is running, are sorted by fitness. The length of this list is user defined (this size is the limit on the number of organisms 'alive' at any given point during the simulation, and can include members of different species, as well as multiple organisms from the same species). All organisms within a single playing field compete with each other, and the default size of the playing field is 20 organisms. Associated with the playing field is one (by default), or several, environments. Environments in TREvoSim are a user-defined quantity of random numbers (= masks) that default to the same length as the organism genome. The default TREvoSim environment consists of 5 masks, of 128 characters. See below for a summary. 
+
+.. figure:: _static/data_structures.png
+    :width: 400
+    :align: center
+
+If so desired, simulations can employ more than one playing field, which can have the same, or different, environment(s). 
+
+If you wish to modify TREvoSim code, bear in mind that there are numerous other data structures present in the underlying code. You can find an overview of these at the start of mainwindow.cpp
+
+Fitness calculation 
+^^^^^^^^^^^^^^^^^^^
+
+Every iteration, the fitness of every organism in the playing field is calculated (using an approach first described in Garwood et al. 2019, and further detailed in Keating et al. 2020). To calculate fitness, TREvoSim uses an exclusive OR function (i.e. one that takes two inputs, outputs 1 where they differ, and 0 when they are the same) to calculate the `Hamming distance  <https://en.wikipedia.org/wiki/Hamming_distance>`_ between the genome of the organism, and each mask in an environment in turn. For example, if there are five masks, the genome is compared to each in turn. The output of this operation has a one wherever inputs differ. The ones are summed across all output strings, so with five masks, by comparing every bit of the organism genome to the equivalent bit of each mask and summing the results, TREvoSim calculates a value between 0 and 5n. Fitness is then an integer calculated as the distance from a used-defined target value: by default that is zero, creating a sharp fitness peak in the environment (a small number of possible genome configurations can achieve maximal fitness), but setting this to e.g. 2.5n will allow a far wider range of genomic configurations to achieve maximal fitness. This approach is summarised in the figure below.
+
+.. figure:: _static/fitness_calculation.png
+    :width: 400
+    :align: center
+
+Where multiple environments exist, each organism within a playing field is compared to all environments associated with that playing field, and assigned the maximal fitness achieved across all comparisons. This fitness calculation is carried out independently for each playing field when there are multiple playing fields.
+
+TREvoSim algorithm - Summary
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The algorithm used for each TREvoSim iteration is described in full below. Key points are: members of the playing field compete, and their fitness is linked to reproductive success; and species within TREvoSim are defined based on Hamming distance (character distance) to past organisms within an evolving lineage. Key points are shown in the image below.
+
+.. figure:: _static/algorithm.png
+    :width: 400
+    :align: center
+
+TREvoSim algorithm - Initialisation 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+To initialise the simulation, the software fills the playing field (or all, if there are several) with a clone of an individual designated as the first member of species zero. Initializing with a single organism is a necessary simplification to allow all organisms in the simulation to belong to the same phylogeny. By default, the chosen organism is close to a fitness peak for the starting masks (thus preventing the simulation being a single lineage adapting to one fitness peak; if multiple playing fields are present TREvoSim opts for the maximal possible fitness of starting individual that is the same across playing fields). Masks are initialised with random strings.
+
+A limited number of options are provided to give elements of user control to the initialisation: the initialising organism can be changed to a random individual if required, and fitness peaks across environments can be of equal height -- see :ref:`settings2`. 
+
+
+TREvoSim algorithm - Iteration 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+After initialisation, a simulation can be run, either until the requested number of species has evolved, or until a user defined iteration. The simulation iteration algorithm employs the following steps, which are applied every iteration to every playing field (if there are more than one) independently.
+
+1) Organisms are stored within the playing field are sorted by fitness, with the fittest organisms at the top of the list. If a number of organisms have the same fitness (e.g., at initialization), these are randomly ordered.
+
+2) An organism is picked to be duplicated via from a geometric distribution with p = 0.5 (i.e. there is a 50% chance of selecting the first organism in the list, then if that is not chosen, a 50% chance of selecting the second, and so on). If the simulation reaches the end of the playing field without selecting an organism, it starts from the beginning again. Alternatively, there is the option to select a random individual from the playing field, without linking this to fitness (:ref:`No selection`). 
+
+3) The organism selected for duplication has a user-defined chance of mutation (defined as mutations per hundred characters per iteration; default 5.0 mutations per iteration per 100 genome bits). The user can select whether deleterious mutations are accepted.
+
+4) If the duplicated organism, after mutation, is sufficiently different to its character string at origination it is defined as a new species - the amount of difference required is the user defined variable species difference (default 4). Note that if this is not the first speciation in the lineage, distance is measured from the last species to diverge from its lineage -- see discussion below. If it is a new species this is recorded, and the tree display on the graphical user interface is updated.
+
+5) The duplicated, mutated organism is then returned to the playing field, overwriting the least fit organism in the playing field (or randomly selecting one of the least fit if multiple least fit organisms exist).
+
+6) Organisms in the playing field typically represent multiple species once a simulation is running. Thus the playing field is checked each iteration, and any species that have become extinct are identified. On extinction, the characters of the last surviving organism are appended to the character matrix (this is optional, but on by default, and ensures that if a single lineage has given birth to multiple species, the recorded character set is closest to the most recently branching terminal).
+
+7) Masks are then mutated at the end of each iteration (there is a user-defined chance of mutation per hundred bits per iteration, here 1.0), providing environmental change throughout the simulation.
+
+Once the requested number of species has been achieved, the simulation finishes, the character data of all extant taxa are appended to the character matrix (the fittest organism, or one of these, is selected if multiple organisms within a species are surviving). The final character matrix contains all extinct and extant species. If stripping of uninformative characters is requested, the number of characters, and species difference, are increased at the start of a run (using an empirically calculated factor based on the requested settings), and then informative characters are randomly subsampled at this stage to achieve the requested number of characters. A check for identical taxa is then conducted (the data are discarded and simulation repeated if the number of identical terminals is above a user-defined cutoff). The tree and character matrix are output through a customized logging system, which allows, e.g. standard (nexus/TNT) formats. See Supplementary Material, available on Zenodo, for examples of the output strings used in the current study.
+
+
+
+Tree and speciation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+If the duplicated organism, after mutation, is sufficiently different (species difference) to its character string at origination it is defined as a new species (if this is not the first speciation in the lineage, sd bits from the last species to diverge is used as benchmark). Comparison to last speciation (if one has occurred) rather than the original genome prevents bursts of speciation from closely related organisms sharing a common parent, but still allows cladogenesis within a species.
+
 
 
 Tree Rooting
@@ -28,7 +102,7 @@ To quantify the homoplasy within data generated under default settings, the scri
 .. figure:: _static/steps.png
     :align: center
 
-The TREvoSim data ("simulated"; actually the results for all characters of the first 25 replicates provided with in the repository) is shown in blue third from the right, all other datasets are labelled with taxonomic group, and represent the distribution of extra steps for all characters in the analysis. Note the log scale on the Y axis. The dots show the mean for each dataset. The number of extra steps against the comparison tree of choice (total evidence for empirical, true tree for TREvoSim data), is comparable across datasets.
+The TREvoSim data ("simulated"; actually the results for all characters of the first 25 replicates provided with in the repository) is shown far right, in blue; all other datasets are labelled with taxonomic group, and represent the distribution of extra steps for all characters in the analysis. The dots show the mean for each dataset. The number of extra steps against the comparison tree of choice (total evidence for empirical, true tree for TREvoSim data), is comparable across datasets.
 
 Tree shape - Asymmetry
 ^^^^^^^^^^^^^^^^^^^^^^
