@@ -62,7 +62,7 @@ After initialisation, a simulation can be run, either until the requested number
 
 3) The organism selected for duplication has a user-defined chance of mutation (defined as mutations per hundred characters per iteration; default 5.0 mutations per iteration per 100 genome bits). The user can select whether deleterious mutations are accepted.
 
-4) If the duplicated organism, after mutation, is sufficiently different to its character string at origination it is defined as a new species - the amount of difference required is the user defined variable species difference (default 4). Note that if this is not the first speciation in the lineage, distance is measured from the last species to diverge from its lineage -- see discussion below. If it is a new species this is recorded, and the tree display on the graphical user interface is updated.
+4) If the duplicated organism, after mutation, is sufficiently different to its character string at origination it is defined as a new species -- the amount of difference required is the user defined variable species difference (default 4). Note that if this is not the first speciation in the lineage, distance is measured from the last species to diverge from its lineage -- see discussion below. If it is a new species this is recorded, and the tree display on the graphical user interface is updated.
 
 5) The duplicated, mutated organism is then returned to the playing field, overwriting the least fit organism in the playing field by default (or randomly selecting one of the least fit if multiple least fit organisms exist). Alternatively ('Random overwrite') a random member of the playing field can be selected for overwriting.
 
@@ -74,15 +74,17 @@ After initialisation, a simulation can be run, either until the requested number
 
 Once the requested number of species or iterations has been achieved, the simulation finishes. At this point (assuming the Sansomian speciation option is enabled), the character data of all extant taxa are entered into the character matrix (the fittest organism, or one of these, is selected if multiple organisms within a species are alive). The final character matrix contains all extinct and extant species. 
 
-If stripping of uninformative characters is requested, the number of characters, and species difference, are increased at the start of a run and then informative characters are randomly subsampled at this stage to achieve the requested number of characters. A check for identical taxa is also conducted (the data are discarded and simulation repeated if the number of identical terminals is above a user-defined cutoff). End of run logs are then written, and the simulation terminates.
+If stripping of uninformative characters is requested, the number of characters, and species difference, are increased at the start of a run and then informative characters are randomly subsampled at this stage to achieve the requested number of characters. A check for identical taxa is also conducted (the data are discarded and simulation repeated if the number of identical terminals is above a user-defined cut off). End of run logs are then written, and the simulation terminates.
 
 Tree and speciation
 ^^^^^^^^^^^^^^^^^^^
 
-If the duplicated organism, after mutation, is sufficiently different (species difference) to its character string at origination it is defined as a new species (if this is not the first speciation in the lineage, sd bits from the last species to diverge is used as benchmark). Comparison to last speciation (if one has occurred) rather than the original genome prevents bursts of speciation from closely related organisms sharing a common parent, but still allows cladogenesis within a species.
+TREvoSim employs a lineage-based species concept, based on genomic distance. Under many settings, TREvoSim species are best thought of as a population with an element of genomic diversity, which might be considered as a pangenome. When an organism is duplicated, its current genomic configuration is compared to a reference genome. At first this is a copy of the species genome at origin (i.e. for the first speciation in any given lineage, once an individual is Hamming distance == species difference from its starting point, it is considered a new species). At any speciation within a lineage, the reference genome for comparison in the parent lineage is updated to the speciating genome. Hence, after the first speciation in any lineage, comparison is to the genome at last speciation: this prevents bursts of speciation from closely related organisms sharing a common parent, but still allows cladogenesis within a species. 
 
 .. figure:: _static/speciation_and_tree.png
     :align: center
+
+This is summarised in the image above: the modal genome of a species is shown with solid lines, and others with a dashed line. Species 2 arises in a mutated individual in Species 0 after Species 1 arises, though this taxon is relatively close to the root genome of Species 0, because the reference genome for Species 0 (the parent of both) is updated on the birth of Species 1. This is most notable as an edge effect with Species 0 due to simulation initialisation, as outlined below. 
 
 Tree Rooting
 ------------
