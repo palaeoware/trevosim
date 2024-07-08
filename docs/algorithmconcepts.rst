@@ -81,6 +81,9 @@ Tree and speciation
 
 If the duplicated organism, after mutation, is sufficiently different (species difference) to its character string at origination it is defined as a new species (if this is not the first speciation in the lineage, sd bits from the last species to diverge is used as benchmark). Comparison to last speciation (if one has occurred) rather than the original genome prevents bursts of speciation from closely related organisms sharing a common parent, but still allows cladogenesis within a species.
 
+.. figure:: _static/speciation_and_tree.png
+    :align: center
+
 Tree Rooting
 ------------
 
