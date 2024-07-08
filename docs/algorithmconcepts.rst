@@ -58,7 +58,7 @@ After initialisation, a simulation can be run, either until the requested number
 
 1) Calculate fitness for organisms in playing field, and sort playing field by fitness, with the fittest organisms at the top of the list. If a number of organisms have the same fitness (e.g., at initialization), these are randomly ordered.
 
-2) An organism is picked to be duplicated via from a geometric distribution with p = 0.5 (i.e. there is a 50% chance of selecting the first organism in the list, then if that is not chosen, a 50% chance of selecting the second, and so on). If the simulation reaches the end of the playing field without selecting an organism, it starts from the beginning again. Alternatively, there is the option to select a random individual from the playing field, without linking this to fitness ('No selection' mode). 
+2) An organism is picked to be duplicated via from a geometric distribution with p = 0.5 by default (i.e. there is a 50% chance of selecting the first organism in the list, then if that is not chosen, a 50% chance of selecting the second, and so on). If the simulation reaches the end of the playing field without selecting an organism, it starts from the beginning again. Alternatively, there is the option to select a random individual from the playing field, without linking this to fitness ('No selection' mode). 
 
 3) The organism selected for duplication has a user-defined chance of mutation (defined as mutations per hundred characters per iteration; default 5.0 mutations per iteration per 100 genome bits). The user can select whether deleterious mutations are accepted.
 
@@ -70,12 +70,14 @@ After initialisation, a simulation can be run, either until the requested number
 
 7) Masks are then mutated (user-defined chance of mutation per hundred bits per iteration, default 1.0), providing environmental change throughout the simulation.
 
-Once the requested number of species has been achieved, the simulation finishes, the character data of all extant taxa are appended to the character matrix (the fittest organism, or one of these, is selected if multiple organisms within a species are surviving). The final character matrix contains all extinct and extant species. If stripping of uninformative characters is requested, the number of characters, and species difference, are increased at the start of a run (using an empirically calculated factor based on the requested settings), and then informative characters are randomly subsampled at this stage to achieve the requested number of characters. A check for identical taxa is then conducted (the data are discarded and simulation repeated if the number of identical terminals is above a user-defined cutoff). The tree and character matrix are output through a customized logging system, which allows, e.g. standard (nexus/TNT) formats. See Supplementary Material, available on Zenodo, for examples of the output strings used in the current study.
+8) Optionally, other operations can occur during the iteration phase. For example, if requested, there can be mixing between playing fields. At half way through the simulation, a perturbation (elevated rates of environmental change) or ecosystsem engineering (organism environment feedback) can occur. The operation of these options is described under the relevant settings in the documentation.
 
+Once the requested number of species or iterations has been achieved, the simulation finishes. At this point (assuming the Sansomian speciation option is enabled), the character data of all extant taxa are entered inno the character matrix (the fittest organism, or one of these, is selected if multiple organisms within a species are alive). The final character matrix contains all extinct and extant species. 
 
+If stripping of uninformative characters is requested, the number of characters, and species difference, are increased at the start of a run and then informative characters are randomly subsampled at this stage to achieve the requested number of characters. A check for identical taxa is also conducted (the data are discarded and simulation repeated if the number of identical terminals is above a user-defined cutoff). End of run logs are then written, and the simulation terminates.
 
 Tree and speciation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^
 
 
 
