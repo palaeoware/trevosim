@@ -72,6 +72,7 @@ private:
     QProgressBar *progress;
     QString settingsFileString;
     int runs;
+    int countPeaksReplicates;
     bool testMode;
 
     void finishRunGUI();

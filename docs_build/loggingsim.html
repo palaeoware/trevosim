@@ -62,7 +62,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="filecommands.html">9. Menu commands</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tests.html">10. Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="software_tests.html">10. Tests</a></li>
 </ul>
 
         </div>
@@ -99,9 +99,9 @@
 <figure class="align-center">
 <img alt="_images/output_01.png" src="_images/output_01.png" />
 </figure>
-<p>A typical use case for this is when you would like to use the outputs of a finished simulation to do downstream analyses for e.g. phylogenetic methods. This tab provides options for two custom log files, which are placed, after a run, within the <em>TREvoSim_output</em> folder created on the save path. Basename defines the start of the filename. TREvoSim then adds a number to this name which iterates with subsequent runs. The file extension is also defined here.</p>
+<p>A typical use case for this is when you would like to use the outputs of a finished simulation to do downstream analyses for e.g. phylogenetic methods. This tab provides options for two custom log files, which are placed, after a run, within the <em>TREvoSim_output</em> folder created on the save path. Basename defines the start of the filename, and if you so wish, this can include forward slashes before the start of the file name to denote a path, that TREvoSim will create for you. TREvoSim then adds a number to the start of the filename you have suggested, and this number iterates with subsequent runs. The file extension is also defined in this dialogue in a separate text box.</p>
 <p>The two text boxes allow custom file content to be written: text from these is written as provided to the file – for example with run instructions or program commands – and any of a series of keywords defined below included within two vertical bar ( | ) symbols are replaced as a file is written. The default outputs are shown in the figure above – they create a vanilla nexus file which allows you to, for example, load the character matrix into R, and a TNT file which conducts a parsimony search on TREvoSim data before outputting the most parsimonious trees.</p>
-<p>In addition to these two custom files, TREvoSim can output a tree for each run in a standard nexus format. The options at the bottom of the output tab allow you to define the basename for this file (the word tree is appended to the name provided). The output includes the tree and translate block, as well as a comment with the settings of the run written to it.</p>
+<p>In addition to these two custom files, TREvoSim can output a tree for each run in a standard nexus format. The options at the bottom of the output tab allow you to define the basename for this file. The output includes the tree and translate block, as well as a comment with the settings of the run written to it.</p>
 </section>
 <section id="running-log">
 <h3><span class="section-number">8.1.2. </span>Running log<a class="headerlink" href="#running-log" title="Permalink to this headline">¶</a></h3>
@@ -109,8 +109,7 @@
 <figure class="align-center">
 <img alt="_images/output_02.png" src="_images/output_02.png" />
 </figure>
-<p>This is of utility for studying processes as they occur during a run, as it is output on a regular basis as the simulation progresses. Any text entered into the Custom running log text box is output to a new file (appended with an iterator) at the requested frequency. This can be used to record anything in the state of the simulation required to study a process of interest. It uses the same keywords (shown below) as the end run log, outputting data in the current state for the iteration at which the log is written.</p>
-<p>There are three further options at the base of the dialogue:</p>
+<p>This is of utility for studying processes as they occur during a run, as it is output on a regular basis as the simulation progresses. Any text entered into the Custom running log text box is output to a new file (appended with an iterator) at the requested frequency. This can be used to record anything in the state of the simulation required to study a process of interest. At the top of the dialogue are two options:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Write running log</dt>
 <dd class="field-odd"><p>By default the running log is not created or written to when a simulation runs. In order to write the files this option needs to be enabled.</p>
@@ -118,6 +117,10 @@
 <dt class="field-even">Frequency</dt>
 <dd class="field-even"><p>This dictates the frequency, in iterations, with which a new running log file is written.</p>
 </dd>
+</dl>
+<p>Below this is a free text box. This works the same way, and uses the same keywords (shown below) as the end run log, outputting data in the current state for the iteration at which the log is written – it is only possible to enter text into this box when the Write running log checkbox is ticked.</p>
+<p>There are then two further options at the base of the dialogue:</p>
+<dl class="field-list simple">
 <dt class="field-odd">Write full working log</dt>
 <dd class="field-odd"><p>When this is checked, TREvoSim outputs a text file that it appends to as it runs. This file outlines every step of each iteration, such as the state of the playing field, the environment, and the processes the software is going through. This helps understand and fact check any given run, but for significant playing field sizes, taxon numbers, or character numbers, it creates a large text file (10s – 100s of MB).</p>
 </dd>
@@ -135,52 +138,117 @@
 <dd class="field-odd"><p>This outputs the character number.</p>
 </dd>
 <dt class="field-even">Count</dt>
-<dd class="field-even"><p>This is replaced with a counter for batch runs; incrementing by one using C++ numbering (i.e. starting from zero).</p>
+<dd class="field-even"><p>This is replaced with a counter for batch runs; starting from zero and incrementing by one. This is padded with leading zeroes to three figures</p>
 </dd>
 <dt class="field-odd">Ecosystem_Engineers</dt>
-<dd class="field-odd"><p>This prints a list of species, and their ecosystem engineering status (i.e. whether any members of this species are ecosystem engineers).</p>
-</dd>
-<dt class="field-even">Iteration</dt>
-<dd class="field-even"><p>This outputs the current iteration number.</p>
-</dd>
-<dt class="field-odd">Matrix</dt>
-<dd class="field-odd"><p>This is replaced with the matrix from the run.</p>
-</dd>
-<dt class="field-even">MrBayes_Tree</dt>
-<dd class="field-even"><p>This writes a tree in standard Newick format, including branch lengths (these are based on iteration number throughout), e.g.</p>
+<dd class="field-odd"><p>This prints a list of species, and their ecosystem engineering status (i.e. whether any members of this species are ecosystem engineers). A minimal example is shown below.</p>
 </dd>
 </dl>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">S_01</span><span class="p">:</span><span class="mi">13</span><span class="p">,(</span><span class="n">S_02</span><span class="p">:</span><span class="mi">8</span><span class="p">,(</span><span class="n">S_03</span><span class="p">:</span><span class="mi">13</span><span class="p">,(</span><span class="n">S_04</span><span class="p">:</span><span class="mi">32</span><span class="p">,((</span><span class="n">S_06</span><span class="p">:</span><span class="mi">4</span><span class="p">,(</span><span class="n">S_07</span><span class="p">:</span><span class="mi">10</span><span class="p">,(</span><span class="n">S_08</span><span class="p">:</span><span class="mi">6</span><span class="p">,(</span><span class="n">S_09</span><span class="p">:</span><span class="mi">5</span><span class="p">,(</span><span class="n">S_10</span><span class="p">:</span><span class="mi">10</span><span class="p">,(</span><span class="n">S_11</span><span class="p">:</span><span class="mi">6</span><span class="p">,(</span><span class="n">S_12</span><span class="p">:</span><span class="mi">6</span><span class="p">,(</span><span class="n">S_13</span><span class="p">:</span><span class="mi">2</span><span class="p">,(((</span><span class="n">S_22</span><span class="p">:</span><span class="mi">11</span><span class="p">,(</span><span class="n">S_23</span><span class="p">:</span><span class="mi">12</span><span class="p">,(</span><span class="n">S_24</span><span class="p">:</span><span class="mi">9</span><span class="p">,((</span><span class="n">S_26</span><span class="p">:</span><span class="mi">28</span><span class="p">,((</span><span class="n">S_28</span><span class="p">:</span><span class="mi">37</span><span class="p">,(</span><span class="n">S_29</span><span class="p">:</span><span class="mi">2</span><span class="p">,(</span><span class="n">S_30</span><span class="p">:</span><span class="mi">2</span><span class="p">,(</span><span class="n">S_31</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="n">S_27</span><span class="p">:</span><span class="mi">1</span><span class="p">):</span><span class="mi">1</span><span class="p">):</span><span class="mi">38</span><span class="p">):</span><span class="mi">23</span><span class="p">):</span><span class="mi">20</span><span class="p">,</span><span class="n">S_25</span><span class="p">:</span><span class="mi">12</span><span class="p">):</span><span class="mi">31</span><span class="p">):</span><span class="mi">41</span><span class="p">,</span><span class="n">S_21</span><span class="p">:</span><span class="mi">31</span><span class="p">):</span><span class="mi">24</span><span class="p">):</span><span class="mi">27</span><span class="p">):</span><span class="mi">1</span><span class="p">):</span><span class="mi">70</span><span class="p">,</span><span class="n">S_14</span><span class="p">:</span><span class="mi">13</span><span class="p">):</span><span class="mi">42</span><span class="p">,(</span><span class="n">S_15</span><span class="p">:</span><span class="mi">21</span><span class="p">,(</span><span class="n">S_16</span><span class="p">:</span><span class="mi">2</span><span class="p">,(</span><span class="n">S_17</span><span class="p">:</span><span class="mi">11</span><span class="p">,(</span><span class="n">S_18</span><span class="p">:</span><span class="mi">2</span><span class="p">,(</span><span class="n">S_19</span><span class="p">:</span><span class="mi">10</span><span class="p">,(</span><span class="n">S_20</span><span class="p">:</span><span class="mi">14</span><span class="p">,</span><span class="n">S_05</span><span class="p">:</span><span class="mi">25</span><span class="p">):</span><span class="mi">7</span><span class="p">):</span><span class="mi">1</span><span class="p">):</span><span class="mi">4</span><span class="p">):</span><span class="mi">2</span><span class="p">):</span><span class="mi">1</span><span class="p">):</span><span class="mi">2</span><span class="p">):</span><span class="mi">1</span><span class="p">):</span><span class="mi">13</span><span class="p">):</span><span class="mi">58</span><span class="p">):</span><span class="mi">6</span><span class="p">):</span><span class="mi">2</span><span class="p">):</span><span class="mi">2</span><span class="p">):</span><span class="mi">5</span><span class="p">):</span><span class="mi">2</span><span class="p">):</span><span class="mi">36</span><span class="p">,</span><span class="n">S_00</span><span class="p">:</span><span class="mi">20</span><span class="p">):</span><span class="mi">3</span><span class="p">):</span><span class="mi">1</span><span class="p">):</span><span class="mi">3</span><span class="p">):</span><span class="mi">7</span><span class="p">):</span><span class="mi">85</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Applying</span> <span class="n">ecosystem</span> <span class="n">engineers</span> <span class="k">for</span> <span class="mi">1</span> <span class="n">time</span> <span class="n">on</span> <span class="n">iteration</span> <span class="mi">10</span>
+<span class="n">Masks</span> <span class="n">before</span> <span class="n">ecosystem</span> <span class="n">engineers</span> <span class="p">:</span>
+<span class="n">Playingfield</span> <span class="mi">0</span>
+<span class="n">Environment</span> <span class="mi">0</span>
+<span class="n">Mask</span> <span class="n">number</span> <span class="mi">0</span> <span class="p">:</span>       <span class="mi">0001101111</span>
+<span class="n">Mask</span> <span class="n">number</span> <span class="mi">1</span> <span class="p">:</span>       <span class="mi">0111110101</span>
+<span class="n">Mask</span> <span class="n">number</span> <span class="mi">2</span> <span class="p">:</span>       <span class="mi">1111001000</span>
+
+
+<span class="n">Playing</span> <span class="n">field</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+
+<span class="n">Playing</span> <span class="n">field</span> <span class="n">number</span><span class="p">,</span><span class="n">Playingfield</span> <span class="n">position</span><span class="p">,</span><span class="n">Species</span> <span class="n">ID</span><span class="p">,</span><span class="n">Ecosystem</span> <span class="n">engineer</span><span class="p">,</span><span class="n">Genome</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0111111101</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0101111101</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1111111001</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0111101101</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0111110101</span>
+
+
+<span class="n">Playing</span> <span class="n">field</span> <span class="mi">0</span> <span class="n">organism</span> <span class="n">number</span> <span class="mi">0</span> <span class="n">selected</span><span class="o">.</span> <span class="n">Genome</span> <span class="ow">is</span> <span class="mf">0111111101.</span>
+<span class="n">Masks</span> <span class="n">after</span> <span class="n">ecosystem</span> <span class="n">engineers</span><span class="p">:</span>
+<span class="n">Playingfield</span> <span class="mi">0</span>
+<span class="n">Environment</span> <span class="mi">0</span>
+<span class="n">Mask</span> <span class="n">number</span> <span class="mi">0</span> <span class="p">:</span>       <span class="mi">0001101111</span>
+<span class="n">Mask</span> <span class="n">number</span> <span class="mi">1</span> <span class="p">:</span>       <span class="mi">0111110101</span>
+<span class="n">Mask</span> <span class="n">number</span> <span class="mi">2</span> <span class="p">:</span>       <span class="mi">0111111101</span>
+
+
+<span class="n">Playing</span> <span class="n">field</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="n">after</span> <span class="n">ecosystem</span> <span class="n">engineers</span><span class="p">:</span>
+
+<span class="n">Playing</span> <span class="n">field</span> <span class="n">number</span><span class="p">,</span><span class="n">Playingfield</span> <span class="n">position</span><span class="p">,</span><span class="n">Species</span> <span class="n">ID</span><span class="p">,</span><span class="n">Ecosystem</span> <span class="n">engineer</span><span class="p">,</span><span class="n">Genome</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0111111101</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0101111101</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1111111001</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0111101101</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0111110101</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Iteration</dt>
+<dd class="field-odd"><p>This outputs the current iteration number.</p>
+</dd>
+<dt class="field-even">Matrix</dt>
+<dd class="field-even"><p>This is replaced with the matrix from the run. For example:</p>
+</dd>
+</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Species_00</span>    <span class="mi">0111011110</span>
+<span class="n">Species_01</span>    <span class="mi">0101011011</span>
+<span class="n">Species_02</span>    <span class="mi">0001011100</span>
+<span class="n">Species_03</span>    <span class="mi">0110111111</span>
+<span class="n">Species_04</span>    <span class="mi">1110101110</span>
+<span class="n">Species_05</span>    <span class="mi">1111111010</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">MrBayes_Tree</dt>
+<dd class="field-odd"><p>This writes a tree in standard Newick format, including branch lengths (these are based on iteration number throughout):</p>
+</dd>
+</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">Species_01</span><span class="p">:</span><span class="mi">2</span><span class="p">,(</span><span class="n">Species_02</span><span class="p">:</span><span class="mi">2</span><span class="p">,(</span><span class="n">Species_03</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="n">Species_00</span><span class="p">:</span><span class="mi">19</span><span class="p">):</span><span class="mi">5</span><span class="p">):</span><span class="mi">1</span><span class="p">):</span><span class="mi">13</span>
 </pre></div>
 </div>
 <p><em>Note</em> The mechanism used for tree writing differs between TNT and MrBayes outputs – the tree topology is the same, but the taxon order differs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Root</dt>
-<dd class="field-odd"><p>Writes the genome of the organism used to seed the simulation, thereby allowing characters to be polarised correctly with respect to the root of the tree (see <a class="reference internal" href="algorithmconcepts.html#algorithmconcepts"><span class="std std-ref">Algorithm and Concepts</span></a>).</p>
-</dd>
-<dt class="field-even">Settings</dt>
-<dd class="field-even"><p>Writes the settings to the file (this is provided as a useful way to record, with any output data, the set up for TREvoSim for any given run).</p>
-</dd>
-<dt class="field-odd">TNT_Tree</dt>
-<dd class="field-odd"><p>This writes a tree, if required, in TNT format (i.e. only brackets and terminal labels), e.g.</p>
+<dd class="field-odd"><p>Writes the genome of the organism used to seed the simulation, thereby allowing characters to be polarised correctly with respect to the root of the tree (see <a class="reference internal" href="algorithmconcepts.html#algorithmconcepts"><span class="std std-ref">Algorithm and Concepts</span></a>):</p>
 </dd>
 </dl>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(((((</span><span class="mi">00</span> <span class="p">(((((((((((((((</span><span class="mi">05</span> <span class="mi">20</span><span class="p">)</span> <span class="mi">19</span><span class="p">)</span> <span class="mi">18</span><span class="p">)</span> <span class="mi">17</span><span class="p">)</span> <span class="mi">16</span><span class="p">)</span> <span class="mi">15</span><span class="p">)</span> <span class="p">(</span><span class="mi">14</span> <span class="p">((((</span><span class="mi">21</span> <span class="p">((</span><span class="mi">25</span> <span class="p">((((</span><span class="mi">27</span> <span class="mi">31</span><span class="p">)</span> <span class="mi">30</span><span class="p">)</span> <span class="mi">29</span><span class="p">)</span> <span class="mi">28</span><span class="p">))</span> <span class="mi">26</span><span class="p">))</span> <span class="mi">24</span><span class="p">)</span> <span class="mi">23</span><span class="p">)</span> <span class="mi">22</span><span class="p">)))</span> <span class="mi">13</span><span class="p">)</span> <span class="mi">12</span><span class="p">)</span> <span class="mi">11</span><span class="p">)</span> <span class="mi">10</span><span class="p">)</span> <span class="mi">09</span><span class="p">)</span> <span class="mi">08</span><span class="p">)</span> <span class="mi">07</span><span class="p">)</span> <span class="mi">06</span><span class="p">))</span> <span class="mi">04</span><span class="p">)</span> <span class="mi">03</span><span class="p">)</span> <span class="mi">02</span><span class="p">)</span> <span class="mi">01</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">01000100000010010000011100001111</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Settings</dt>
+<dd class="field-odd"><p>Writes the current TREvoSim settings to the file (this is provided as a useful way to record, with any output data, the state of the TREvoSim variables for any given run). Shown below for the defaults:</p>
+</dd>
+</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">variables</span> <span class="p">:</span> <span class="n">genomeSize</span> <span class="mi">128</span> <span class="n">speciesSelectSize</span> <span class="mi">128</span> <span class="n">fitnessSize</span> <span class="mi">128</span> <span class="n">runForTaxa</span> <span class="mi">64</span> <span class="n">runForIterations</span> <span class="mi">1000</span> <span class="n">playingfieldSize</span> <span class="mi">20</span> <span class="n">speciesDifference</span> <span class="mi">4</span> <span class="n">environmentMutationRate</span> <span class="mi">1</span> <span class="n">organismMutationRate</span> <span class="mi">5</span> <span class="n">unresolvableCutoff</span> <span class="mi">5</span> <span class="n">environmentNumber</span> <span class="mi">1</span> <span class="n">maskNumber</span> <span class="mi">3</span> <span class="n">runMode</span> <span class="mi">1</span> <span class="n">stripUninformative</span> <span class="mi">0</span> <span class="n">writeTree</span> <span class="mi">1</span> <span class="n">writeRunningLog</span> <span class="mi">0</span> <span class="n">writeFileOne</span> <span class="mi">1</span> <span class="n">writeFileTwo</span> <span class="mi">1</span> <span class="n">writeEE</span> <span class="mi">0</span> <span class="n">noSelection</span> <span class="mi">0</span> <span class="n">randomSeed</span> <span class="mi">0</span> <span class="n">sansomianSpeciation</span> <span class="mi">1</span> <span class="n">discardDeleterious</span> <span class="mi">0</span> <span class="n">fitnessTarget</span> <span class="mi">0</span> <span class="n">playingfieldNumber</span> <span class="mi">1</span> <span class="n">mixing</span> <span class="mi">0</span> <span class="n">mixingProbabilityZeroToOne</span> <span class="mi">0</span> <span class="n">mixingProbabilityOneToZero</span> <span class="mi">0</span> <span class="n">playingfieldMasksMode</span> <span class="mi">0</span> <span class="n">selection</span> <span class="mi">10</span> <span class="n">randomOverwrite</span> <span class="mi">0</span> <span class="n">ecosystemEngineers</span> <span class="mi">0</span> <span class="n">ecosystemEngineersArePersistent</span> <span class="mi">0</span> <span class="n">ecosystemEngineeringFrequency</span> <span class="mi">10</span> <span class="n">ecosystemEngineersAddMask</span> <span class="mi">0</span> <span class="n">runningLogFrequency</span> <span class="mi">50</span> <span class="n">replicates</span> <span class="mi">25</span> <span class="n">expandingPlayingfield0</span> <span class="n">stochasticLayer</span> <span class="mi">0</span> <span class="n">stochasticDepth</span> <span class="mi">1</span> <span class="n">matchFitnessPeaks</span> <span class="mi">0</span> <span class="n">stochasticMap</span> <span class="mi">0000000000000000</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">TNT_Tree</dt>
+<dd class="field-odd"><p>This writes a tree, if required, in TNT format (i.e. only brackets and terminal labels):</p>
+</dd>
+</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(((</span><span class="mi">00</span> <span class="mi">03</span><span class="p">)</span> <span class="mi">02</span><span class="p">)</span> <span class="mi">01</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><em>Note</em> The mechanism used for tree writing differs between TNT and MrBayes outputs – the tree topology is the same, but the taxon order differs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Time</dt>
-<dd class="field-odd"><p>Adds a timestamp.</p>
+<dd class="field-odd"><p>Adds a timestamp:</p>
 </dd>
-<dt class="field-even">Taxon_Number</dt>
-<dd class="field-even"><p>Writes taxon number.</p>
+</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Written</span> <span class="n">on</span> <span class="n">Fri</span> <span class="n">Jun</span> <span class="mi">28</span> <span class="mi">07</span><span class="p">:</span><span class="mi">09</span><span class="p">:</span><span class="mi">14</span> <span class="mi">2024</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Taxon_Number</dt>
+<dd class="field-odd"><p>Writes the number of species that have existed since the start of the simulation at the iteration it is called.</p>
 </dd>
-<dt class="field-odd">Unresolvable</dt>
-<dd class="field-odd"><p>This prints a list of unresolvable taxa (or a notice that there are none if required).</p>
+<dt class="field-even">Unresolvable</dt>
+<dd class="field-even"><p>This prints a list of unresolvable taxa (or a notice that there are none if required).</p>
 </dd>
-<dt class="field-even">Uninformative</dt>
-<dd class="field-even"><p>Writes the number of uninformative characters.</p>
+<dt class="field-odd">Uninformative</dt>
+<dd class="field-odd"><p>Writes the number of uninformative characters.</p>
 </dd>
 </dl>
 <section id="keywords-example">

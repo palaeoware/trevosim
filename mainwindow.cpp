@@ -188,6 +188,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Start runs at zero
     runs = 0;
+
+    //Set replicates to the default of 16
+    countPeaksReplicates = 16;
 }
 
 MainWindow::~MainWindow()
@@ -350,13 +353,18 @@ void MainWindow::pauseTriggered()
 void MainWindow::resetDisplays()
 {
     /******* Sort out displays *******/
-// Clear table
+    // Clear table
     for (int i = 0; i < ui->character_Display->rowCount(); i++)
         for (int j = 0; j < ui->character_Display->columnCount(); j++)
         {
             QTableWidgetItem *item(ui->character_Display->item(i, j));
             item->setText(" ");
         }
+
+    //Clear tree string
+    QString TNTstring(" ");
+    setTreeDisplay(TNTstring);
+    ui->statusBar->clearMessage();
 }
 
 void MainWindow::resetTriggered()
@@ -366,11 +374,6 @@ void MainWindow::resetTriggered()
     resetDisplays();
     if (simSettings->runMode == RUN_MODE_TAXON) resizeGrid(simSettings->runForTaxa, simSettings->genomeSize);
     else resizeGrid(500, simSettings->genomeSize, 1);
-
-    //Clear tree string
-    QString TNTstring(" ");
-    setTreeDisplay(TNTstring);
-    ui->statusBar->clearMessage();
 
     /******* And variables / gui if required - i.e. if hit by user. Don't really need this, but there as safety net *******/
     if (!batchRunning)
@@ -709,8 +712,9 @@ void MainWindow::countPeaks()
     //Create a new simulation object - sending it important settings.
     bool error = false;
 
-    int genomeSize = QInputDialog::getInt(this, "Fitness histogram...", "How many bits?", 16, 1, 64, 1, &error);
+    int genomeSize = QInputDialog::getInt(this, "Fitness histogram...", "How many bits?", countPeaksReplicates, 1, 64, 1, &error);
     if (!error) return;
+    if (genomeSize != countPeaksReplicates)countPeaksReplicates = genomeSize;
 
     int repeats =  QInputDialog::getInt(this, "Fitness histogram...", "How many repeats?", 1, 1, 100000, 1, &error);
     if (!error) return;

@@ -515,6 +515,7 @@ bool simulation::run()
             logTextOut.replace("||Time||", printTime(), Qt::CaseInsensitive);
             logTextOut.replace("||Settings||", simSettings->printSettings(), Qt::CaseInsensitive);
             logTextOut.replace("||Iteration||", QString::number(iterations), Qt::CaseInsensitive);
+            logTextOut.replace("||Root||", printGenomeString(&bestOrganism), Qt::CaseInsensitive);
 
             bool writeRunningLogSuccess = writeRunningLog(iterations, logTextOut);
 
@@ -1337,8 +1338,8 @@ void simulation::applyPlayingfieldMixing(QVector<Organism *> &speciesList)
                 int selectOverwrite = QRandomGenerator::global()->bounded(playingFields[selectPlayingfield]->playingField.count());
                 int sourceForOverwrite = QRandomGenerator::global()->bounded(playingFields[i]->playingField.count());
                 //Check for extinction
-                speciesExtinction(speciesList[playingFields[selectPlayingfield]->playingField[selectOverwrite]->speciesID], playingFields[selectPlayingfield]->playingField[selectOverwrite], iterations,
-                                  simSettings->sansomianSpeciation, simSettings->stochasticLayer);
+                if (!simSettings->test) speciesExtinction(speciesList[playingFields[selectPlayingfield]->playingField[selectOverwrite]->speciesID], playingFields[selectPlayingfield]->playingField[selectOverwrite],
+                                                              iterations, simSettings->sansomianSpeciation, simSettings->stochasticLayer);
 
                 //OVerwerite selected with current organism
                 *playingFields[selectPlayingfield]->playingField[selectOverwrite] = *playingFields[i]->playingField[sourceForOverwrite];
@@ -1689,9 +1690,9 @@ void simulation::speciesExtinction(Organism *speciesListOrganism, const Organism
 {
     if (speciesListOrganism->speciesID != playingFieldOrganism->speciesID)
     {
-        if (!test) qInfo() << "There is a mismatch between species list species ID and playingfield species ID. Can't do extinction. Species list ID " << speciesListOrganism->speciesID <<
-                               " playingfield species ID " << playingFieldOrganism->speciesID << " born of " << playingFieldOrganism->parentSpeciesID << " at iteration " << playingFieldOrganism->cladogenesis << " current it " <<
-                               iterations;
+        if (!simSettings->test) qInfo() << "There is a mismatch between species list species ID and playingfield species ID. Can't do extinction. Species list ID " << speciesListOrganism->speciesID <<
+                                            " playingfield species ID " << playingFieldOrganism->speciesID << " born of " << playingFieldOrganism->parentSpeciesID << " at iteration " << playingFieldOrganism->cladogenesis << " current it " <<
+                                            iterations;
         return;
     }
 
@@ -2108,6 +2109,20 @@ bool simulation::setupSaveDirectory(QString subFolder)
         return false;
     }
     else savePathDirectory.cd(QString(PRODUCTNAME) + "_output");
+
+    QStringList basenames = {simSettings->logFileNameBase01, simSettings->logFileNameBase02, simSettings->logFileNameBase03};
+    for (auto const &basename : basenames)
+        if (basename.contains("\\"))
+        {
+            warning("Error", "Filename includes a backslash. Use forward slashes as separators in path and you should be all good.");
+            return false;
+        }
+        else if (basename.contains("/"))
+            if (!savePathDirectory.mkpath(basename.left(basename.lastIndexOf("/"))))
+            {
+                warning("Error", "Cant create subFolder " + subFolder + ". This could be a permissions issue.");
+                return false;
+            }
 
     if (subFolder.length() > 0)
     {

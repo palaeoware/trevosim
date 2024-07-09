@@ -22,7 +22,7 @@ w: `https://github.com/palaeoware <https://github.com/palaeoware>`_
 Relevant references
 -------------------
 
-Garwood, R.J., Spencer A.R.T. and Sutton, M.D., 2019. REvoSim: Organism-level simulation of macro- and microevolution. Palaeontology 62(3),339-355. `https://doi.org/10.1111/pala.12420 <https://doi.org/10.1111/pala.12420>`_ (describes the initial release of REvoSim, including fitness algorithm).
+Garwood, R.J., Spencer A.R.T. and Sutton, M.D., 2019. REvoSim: Organism-level simulation of macro- and microevolution. Palaeontology 62(3),339-355. `DOI: 10.1111/pala.12420 <https://doi.org/10.1111/pala.12420>`_ (describes the initial release of REvoSim, including fitness algorithm).
 
 Keating, J.N., Sansom, R.S., Sutton, M.D., Knight, C.G. and Garwood, R.J., 2020. Morphological phylogenetics evaluated using novel evolutionary simulations. Systematic Biology 69(5):897-912. `DOI: 10.1093/sysbio/syaa012 <https://doi.org/10.1093/sysbio/syaa012>`_ (describes, and utilises, TREvoSim v1.0.0)
 
@@ -45,4 +45,4 @@ Table of Contents
    settings2
    loggingsim
    filecommands
-   tests
+   software_tests

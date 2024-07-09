@@ -69,7 +69,7 @@
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
       <li><span class="section-number">10. </span>Tests</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/tests.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/software_tests.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -77,14 +77,14 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="tests">
-<span id="id1"></span><h1><span class="section-number">10. </span>Tests<a class="headerlink" href="#tests" title="Permalink to this headline">¶</a></h1>
-<p>TREvoSim has tests covering every function used in the simulation process. If you are working on the TREvoSim code, be aware that the tests are run as part of the build chain – when a test fails, so will the build. However, if you are a user, and would like to see the outputs of the tests, then this is possible by hitting the Test button on the toolbar menu, or Tests in the command menu. When this is selected, the main window is first split into two, and the software runs its test suite. The output of the results is then displayed on the panel on the right, shown below.</p>
+  <span class="target" id="software-tests"></span><section id="tests">
+<h1><span class="section-number">10. </span>Tests<a class="headerlink" href="#tests" title="Permalink to this headline">¶</a></h1>
+<p>TREvoSim has tests covering every function used in the simulation process. If you are a user, and would like to see the outputs of the tests, then this is possible by hitting the Test button on the toolbar menu, or Tests in the command menu. When this is selected, the main window is first split into two, and the software runs its test suite. The output of the results is then displayed on the panel on the right, shown below.</p>
 <figure class="align-default">
 <img alt="_images/windowLayout_test.png" src="_images/windowLayout_test.png" />
 </figure>
-<p>As such, it is possible to check TREvoSim is running as expected and described in the publications introducing the model (you can alternatively/additionally output a working log to check the internal workings of the software - see <a class="reference internal" href="loggingsim.html#loggingsim"><span class="std std-ref">Logging the Simulation</span></a>).</p>
-<p>The output in the test log describes each test, and also the expected output. The system then makes sure the output meets these expectations. Failed tests will be highlighted in green.</p>
+<p>If you are working on the TREvoSim code, and wish to check all tests are passing, you can do this by either running them in the software as outlined above, or using the option within QtCreator (Tools → Tests → Run all tests…). The latter is faster. The output in the test log describes each test, and also the expected output. The system then makes sure the output meets these expectations. Failed tests will be highlighted in green.</p>
+<p>These are provided so it is possible for the user to check TREvoSim is running as expected and described in the publications introducing the model: if there is an element of the TREvoSim functionality that is of particular importance to your science, the tests help provide insight into the mode of operation of that part of the simulation, and the coders expectations for how it works. More broadly, if you are interested in how the model runs, beyond looking at the source code, you can alternatively/additionally output a working log to check the internal workings of the software - see <a class="reference internal" href="loggingsim.html#loggingsim"><span class="std std-ref">Logging the Simulation</span></a>.</p>
 </section>
 
 

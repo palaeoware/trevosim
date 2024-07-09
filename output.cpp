@@ -63,15 +63,17 @@ Output::Output(QWidget *parent, simulationVariables *simSettings) :
 
     ui->s_frequency->setValue(settings->runningLogFrequency);
     ui->c_write_running_log->setChecked(settings->writeRunningLog);
+    if (settings->writeRunningLog) ui->running_log_body->setEnabled(true);
+    else ui->running_log_body->setEnabled(false);
+
     ui->c_write_ee->setChecked(settings->writeEE);
 
     ui->running_log_body->insertPlainText(settings->runningLogString);
 
     ui->c_work_log->setChecked(settings->workingLog);
-}
 
-//make labels bold
-//save file base name 03
+    QObject::connect(ui->c_write_running_log, &QCheckBox::stateChanged, this, &Output::slotWriteRunningLogChanged);
+}
 
 void Output::on_buttonBox_accepted()
 {
@@ -83,6 +85,7 @@ void Output::on_buttonBox_accepted()
 
     settings->logFileNameBase01 = ui->file_01_base->text();
     settings->logFileNameBase01.replace(" ", "_");
+    settings->logFileNameBase01.replace("\\", "/");
     QString user_ext = ui->file_01_extension->text();
     if (user_ext.length() != 0)
     {
@@ -97,6 +100,7 @@ void Output::on_buttonBox_accepted()
 
     settings->logFileNameBase02 = ui->file_02_base->text();
     settings->logFileNameBase02.replace(" ", "_");
+    settings->logFileNameBase02.replace("\\", "/");
 
     user_ext = ui->file_02_extension->text();
     if (user_ext.length() != 0)
@@ -113,6 +117,7 @@ void Output::on_buttonBox_accepted()
 
     settings->logFileNameBase03 = ui->file_03_base->text();
     settings->logFileNameBase03.replace(" ", "_");
+    settings->logFileNameBase03.replace("\\", "/");
 
     settings->writeEE = ui->c_write_ee->isChecked();
     settings->writeFileOne = ui->c_write_file_01->isChecked();
@@ -128,6 +133,13 @@ void Output::docs()
 {
     QDesktopServices::openUrl(QUrl(QString(DOCSURLLOG)));
 }
+
+void Output::slotWriteRunningLogChanged()
+{
+    if (ui->c_write_running_log->isChecked())ui->running_log_body->setEnabled(true);
+    else ui->running_log_body->setEnabled(false);
+}
+
 
 Output::~Output()
 {
