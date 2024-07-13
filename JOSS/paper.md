@@ -159,14 +159,14 @@ In addition to the published studies, cited previously, future directions includ
 
 # Author contributions
 
-RJG developed and coded TREvoSim, with support on testing and releasing from ARTS. RSS, LMC-C, MDS, and JNK contributed ideas during the initial phases and continued development of the software, and JK proposed the stochastic layer. Peak matching and associated features were developed in collaboration with CTMB, FSD, LAP and TJS, and ecosystem engineering was developed in collaboration with LAP, FSD and TJS. Mixing and perturbations were proposed by TJDH. Development of many of the features released in v2.0.0 was conducted in collaboration with, and empirical benchmarking was led by, NMK. The expanding playing field was developed with and analysed by TV. 
+RJG developed and coded TREvoSim, with support on testing and releasing from ARTS. RSS, LMC-C, MDS, and JNK contributed ideas during the initial phases and continued development of the software, and JNK proposed the stochastic layer. Peak matching and associated features were developed in collaboration with CTMB, FSD, LAP and TJS, and ecosystem engineering was developed in collaboration with LAP, FSD and TJS. Mixing and perturbations were proposed by TJDH. Development of many of the features released in v2.0.0 was conducted in collaboration with, and empirical benchmarking was led by, NMK. The expanding playing field was developed with and analysed by TV. 
 
 # Availability 
 
-TREvoSim v3.0.0 source code and binaries are freely available from [Zenodo](https://doi.org/10.5281/zenodo.10866261) and [GitHub](https://github.com/palaeoware/trevosim). Newer releases of the TREvoSim software will be available on GitHub. Fully documentation is available from [ReadTheDocs](https://trevosim.readthedocs.io/en/latest/).
+TREvoSim v3.0.0 source code and binaries are freely available from [Zenodo](https://doi.org/10.5281/zenodo.10866261) and [GitHub](https://github.com/palaeoware/trevosim). Newer releases of the TREvoSim software will be available on GitHub. Full documentation is available from [ReadTheDocs](https://trevosim.readthedocs.io/en/latest/).
 
 # Acknowledgements 
 
-RJG was supported by the NERC award NE/T000813/1 and the Alexander von Humboldt Foundation. Development began during the BBSRC grant BB/N015827/1 awarded to RSS and RJG. FSD is supported by the NERC fellowship NE/W00786X/1.
+RJG and RSS were supported by the NERC award NE/T000813/1 and development began during the BBSRC grant BB/N015827/1 awarded to RSS and RJG. RJG is supported by the Alexander von Humboldt Foundation; RJG and LAP by Leverhulme Trust Research Project Grant (RPG-2023-234); FSD by NERC fellowship NE/W00786X/1; and LAP by NERC fellowship NE/W007878/1.
 
 # References
