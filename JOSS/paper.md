@@ -93,7 +93,7 @@ TREvoSim v3.0.0 includes a suite of new features that allow the investigation of
 
 ### Ecosystem engineering
 
-A new ecosystem engineering system allows organism-environment feedback to be investigated. When the ecosystem engineering option is enabled (it is disabled in default settings), a species is assigned ecosystem engineering status halfway through a run, and passes this status to descendents. When this occurs, the genome of that organism is either used to overwrite an environmental mask, or added to the environment as an additional mask. Overwriting a mask reduces the hamming distance between engineers and masks, and -- assuming a low fitness target -- thus directly improves their fitness relative to non-engineers. In contrast, adding a mask changes the fitness landscape changes the nature of the fitness landscape for all organisms, but with a weaker direct benefit to ecosystem engineers. Ecosystem engineering can occur just once (‘one-shot’ ecosystem engineering) or can be repeated after the first application (‘persistent’). When a mask is added in the first application, it is overwritten in subsequent applications when ecosystem engineers are persistent. A new facility to log the ecosystem-engineering status of individuals is provided. 
+A new ecosystem engineering system allows the impact of organism-environment feedback to be investigated [@Butterfield_2011]. When the ecosystem engineering option is enabled (it is disabled in default settings), a species is assigned ecosystem engineering status halfway through a run, and passes this status to descendents. When this occurs, the genome of that organism is either used to overwrite an environmental mask, or added to the environment as an additional mask. Overwriting a mask reduces the hamming distance between engineers and masks, and -- assuming a low fitness target -- thus directly improves their fitness relative to non-engineers. In contrast, adding a mask changes the fitness landscape changes the nature of the fitness landscape for all organisms, but with a weaker direct benefit to ecosystem engineers. Ecosystem engineering can occur just once (‘one-shot’ ecosystem engineering) or can be repeated after the first application (‘persistent’). When a mask is added in the first application, it is overwritten in subsequent applications when ecosystem engineers are persistent. A new facility to log the ecosystem-engineering status of individuals is provided. 
 
 ### Expanding playing field 
 
@@ -117,7 +117,7 @@ Provides a layer of abstraction between an organism’s genome and the bits used
 
 ### Perturbations
 
-This implements a limited period of increased rates of environmental change that occurs halfway through a run (when half the requested species have evolved, or at half the requested iteration number). This is intended for study of scenarios where evolutionary dynamics are driven by variations in the rate of environmental change. There is an option to also increase mixing between playing fields during a perturbation. 
+This implements a limited period of increased rates of environmental change that occurs halfway through a run (when half the requested species have evolved, or at half the requested iteration number). This is intended for study of scenarios where evolutionary dynamics are driven by variations in the rate of environmental change[@Condamine_Rolland_Morlon_2013]. There is an option to also increase mixing between playing fields during a perturbation. 
 
 ## Software modifications 
 
