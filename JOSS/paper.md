@@ -101,7 +101,7 @@ This new option alters competition such that it occurs between species rather th
 
 ### Match peaks
 
-When there are multiple environments for any given playing field, by default masks are seeded with random numbers, and may thus have different peak fitness values. This new option instead seeds each playing field with environments that have the same peak fitness. This is achieved by doing a site-wise randomisation of the sequence of zeros and ones across masks, between environments. For example, with three masks in a given environment, the first bit may be 1,0,0 for masks 1,2 and 3 respectively -- when this option is enabled, that may be moved to bit three between the first and second environment, and this is repeated for all sites. This operation ensures that the best achievable fitness will remain the same, but will be achieved by a different genome across environments. As the simulation progresses and mutations to the masks occur, matching peaks are no longer guaranteed. Additionally, the simulation uses a heuristic algorithm to generate an initial seed organism that has the same fitness in each environment (in >99% of cases) when this option is selected. In general, this option allows finer control of the fitness landscape. 
+When there are multiple environments for any given playing field, by default masks are seeded with random numbers, and may thus have different peak fitness values. This new option instead seeds each playing field with environments that have the same peak fitness. This is achieved by doing a site-wise randomisation of the sequence of zeros and ones across masks, between environments. For example, with three masks in a given environment, the first site may be 1,0,0 for masks 1,2 and 3 respectively -- when this option is enabled, the pattern from site one may be moved to site seven between the first and second environment, and this is repeated for all sites. This operation ensures that the best achievable fitness at the start of a simulation will remain the same, but will be achieved by a different genome across environments. As the simulation progresses and mutations to the masks occur, matching peaks are no longer guaranteed. Additionally, the simulation uses a heuristic algorithm to generate an initial seed organism that has the same fitness in each environment (in >99% of cases) when this option is selected. In general, this option allows finer control of the fitness landscape. 
 
 ### No selection
 
@@ -113,7 +113,7 @@ By default TREvoSim playing fields are independent data structures, and organism
 
 ### Stochastic layer
 
-Provides a layer of abstraction between an organism’s genome and the bits used for the fitness calculation. It achieves this using many-to-one mapping, the map being defined by the user. This feature removes direct control of fitness from the organism genome, allowing e.g. neutral mutations and less strongly adaptationist dynamics.
+Provides a layer of abstraction between an organism’s genome and the bits used for the fitness calculation. It achieves this using many-to-one mapping, the map being defined by the user. For example, the sequence of bits 0110 in a genome might be used to create a 1 bit in the genome calculation, whilst are 1100 may mao to 0. As such, any individual bit does not necessarily have an impact on the fitness of an organism as a whole, allowing e.g. neutral mutations and less strongly adaptationist dynamics.
 
 ### Perturbations
 
