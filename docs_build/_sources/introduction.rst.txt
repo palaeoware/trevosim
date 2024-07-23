@@ -17,7 +17,7 @@ Variables can be defined by clicking on the Settings button in the toolbar. This
 :Organisms and simulation: This tab contains a series of settings that defines the parameters for the simulation setup, and properties of the organisms. See :ref:`settings`.
 :Environment and extinction: Variables defined within this tab control extrinsic factors that impact on the organisms. See :ref:`settings2`.
 
-Variables are saved on software exit, and thus persist between sessions. If required at any point it is possible to :ref:`Restore default settings`.
+Variables are saved on software exit, and thus persist between sessions. If required at any point, it is possible to :ref:`Restore default settings`.
 
 Output setup
 ------------
