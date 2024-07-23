@@ -59,7 +59,12 @@ _____
 
 ## 4. Contributing to the code
 
-Contribution to the code in this repository is welcome. Please read the [Repository Contribution](https://github.com/palaeoware/repoconventions)  document for a guide to our coding style and repository structure before submitting any code updates.
+Contribution to the code in this repository is welcome. Please read the [Repository Contribution](https://github.com/palaeoware/repoconventions) document for information on our licencing, code of conduct, coding style, and repository structure before submitting any code updates.
+
+We are grateful to the following for contributing code to TREvoSim:
+
+- Martin R Smith (@ms609)
+
 _____
 
 ## 5. Bug reporting and feature requests
