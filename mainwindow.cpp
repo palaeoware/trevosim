@@ -105,7 +105,10 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->actionFitness_histogram, &QAction::triggered, this, &MainWindow::countPeaks);
     QObject::connect(ui->actionSave_settings, &QAction::triggered, this, &MainWindow::save);
     QObject::connect(ui->actionSave_settings_as, &QAction::triggered, this, &MainWindow::saveAs);
-    QObject::connect(ui->actionLoad_settings_from_file, &QAction::triggered, this, &MainWindow::open);
+    QObject::connect(ui->actionLoad_settings_from_file, &QAction::triggered, this, [ = ]()
+    {
+        open();
+    });
     QObject::connect(ui->actionSet_uninformative_factor, &QAction::triggered, this, &MainWindow::setFactor);
     QObject::connect(ui->actionRecalculate_uninformative_factor_for_current_settings, &QAction::triggered, this, &MainWindow::recalculateStripUniformativeFactor);
 
@@ -191,6 +194,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Set replicates to the default of 16
     countPeaksReplicates = 16;
+
+    //Loaded from command - assume false
+    runFromCommand = false;
 }
 
 MainWindow::~MainWindow()
@@ -207,6 +213,45 @@ MainWindow::~MainWindow()
 void MainWindow::setStatus(QString message)
 {
     ui->statusBar->showMessage(message);
+}
+
+void MainWindow::runFromCommandLine(QString fileFromCommandLine)
+{
+    runFromCommand = true;
+
+    //Check if this works - it is easier to do this using the settings load command than the open and load commands herein
+    QFile settingsFile(fileFromCommandLine);
+    if (!settingsFile.open(QIODevice::ReadOnly) || !simSettings->loadSettings(&settingsFile))
+    {
+        qInfo().noquote() << "Couldn't load settings from file. Please check the path and try again. " + QString(PRODUCTNAME) + " will now quit.";
+        exit(0);
+    }
+    //Open deals with resizing the displays for us to avoid crashes, so call it despite having loaded the settings
+    else
+    {
+        settingsFile.close();
+        open(fileFromCommandLine);
+    }
+
+    qInfo() << "File loaded - starting simulation.";
+    //First sort GUI
+    startRunGUI();
+
+    bool error = false;
+    //Create a new simulation object - sending it important settings.
+    simulation theSimulation(runs, simSettings, &error, this);
+    //Then set it running - send pointer to main window for GUI and access functions, and run number
+    if (error)
+    {
+        qInfo() << "Failed to initialise simulation. " + QString(PRODUCTNAME) + " will now quit.";
+        exit(0);
+    }
+    else error = theSimulation.run();
+
+    if (!error) qInfo().noquote() << QString(PRODUCTNAME) + " has encountered an error. If the nature of this error is not obvious, please file an issue or contact the coders.";
+    else qInfo().noquote() << QString(PRODUCTNAME) + " has finished its run, and will now quit.";
+
+    exit(0);
 }
 
 void MainWindow::addProgressBar(int min, int max)
@@ -269,12 +314,13 @@ void MainWindow::load()
     setPath(simSettings->savePathDirectory);
 }
 
-void MainWindow::open()
+void MainWindow::open(QString fileName)
 {
-    settingsFileString = QFileDialog::getOpenFileName(this, tr("Open File"));
+    if (fileName.isNull())settingsFileString = QFileDialog::getOpenFileName(this, tr("Open File"));
     if (settingsFileString.length() < 3)
     {
-        QMessageBox::warning(this, "Erk", "There seems to have been an error - no filename.");
+        if (!runFromCommand)QMessageBox::warning(this, "Erk", "There seems to have been an error - no filename.");
+        else qInfo() <<  "There seems to have been an error - no filename.";
         settingsFileString = (QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + "/" + QString(PRODUCTNAME) + "_settings.xml");
         return;
     }

@@ -42,6 +42,7 @@ public:
     //Access functions for updating GUI from simulation object
     void recalculateStripUniformativeFactor();
     void setStatus(QString message);
+    void runFromCommandLine(QString fileFromCommandLine);
     void setPath(QString newPath);
     void addProgressBar(int min, int max);
     void setProgressBar(int value);
@@ -54,7 +55,7 @@ public:
     void hideRow(const int rowNumber);
     void showRow(const int rowNumber);
     int rowMax();
-    bool escapePressed, pauseFlag, batchRunning;
+    bool escapePressed, pauseFlag, batchRunning, runFromCommand;
 
 private:
     //GUI objects
@@ -91,7 +92,7 @@ private slots:
     void load();
     void save();
     void saveAs();
-    void open();
+    void open(QString fileName = QString());
     void escape();
     void selectionHistogram();
     void setFactor();
