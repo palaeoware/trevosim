@@ -201,7 +201,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'TREvoSim.tex', 'TREvoSim Documentation',
-     'Russell J. Garwood, Alan R.T. Spencer, Mark D. Sutton', 'manual'),
+     'Russell J. Garwood, Alan R.T. Spencer', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

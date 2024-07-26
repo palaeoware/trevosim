@@ -2083,7 +2083,8 @@ QString simulation::printEcosystemEngineers(const QVector <Organism *> &speciesL
 
 void simulation::warning(QString header, QString message)
 {
-    if (theMainWindow != nullptr) QMessageBox::warning(theMainWindow, header, message);
+    if (theMainWindow != nullptr && !theMainWindow->runFromCommand) QMessageBox::warning(theMainWindow, header, message);
+    if (theMainWindow != nullptr && theMainWindow->runFromCommand) qInfo () << "Warning - message: " << message;
 }
 
 bool simulation::setupSaveDirectory(QString subFolder)
