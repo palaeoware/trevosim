@@ -268,7 +268,7 @@ TREvoSim |gt| = v3 come with a suite of development tests that verify the core s
 
   .. code-block:: console
   
-  ./TREvoSimTest.app/Contents/MacOS/TREvoSimTest
+    $ ./TREvoSimTest.app/Contents/MacOS/TREvoSimTest
 
 #. From the QT Creator application. Once the test program has been build (see point 1 above) you can run the test suite with the QT Creator by going to the 'Tools |rarr| Tests |rarr| Run All Tests' from the main menu. This will build the application if not already done so and display the results in the 'Test Result' tab which normally appears at the bottom of the workspace.
 
