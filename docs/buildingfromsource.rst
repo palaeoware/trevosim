@@ -252,7 +252,7 @@ For v1.X, 2.X, v3.X
 
     * The .dmg will be created in the 'deploy' folder and will be called 'TREvoSim_Installer.dmg'.
     * Note you may need to edit the variables in the generate_dmg bash script to match your folder structure.
-    * On opening the .dmg installer pacakge will see the following drag n' drop installation instructions:
+    * On opening the .dmg installer package you will be greated by the following drag n' drop installation window:
 	
    .. figure:: _static/installer_macdmg.png 
 
