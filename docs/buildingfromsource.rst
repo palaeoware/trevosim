@@ -124,30 +124,30 @@ Ubuntu
 Compiling v3.X using command line
 """""""""""""""""""""""""""""""""
 
- This has been tested on Ubuntu 22.04 64-bit with QT v6.x using GCC (64-bit).
+This has been tested on Ubuntu 22.04 64-bit with QT v6.x using GCC (64-bit).
 
-1. Install GCC and Qt using system packages:
+#. Install GCC and Qt using system packages:
 
-.. code-block:: console
+    .. code-block:: console
 
-  sudo apt-get install build-essential libgl1-mesa-dev
-  sudo apt install qt6-base-dev libqt6core5compat6-dev
+      sudo apt-get install build-essential libgl1-mesa-dev
+      sudo apt install qt6-base-dev libqt6core5compat6-dev
 
 
-2. Download source code and navigate to folder, or alternatively clone using Git:
+#. Download source code and navigate to folder, or alternatively clone using Git:
 
-.. code-block:: console
+    .. code-block:: console
 
-  git clone https://github.com/palaeoware/trevosim.git
-  cd trevosim
+      git clone https://github.com/palaeoware/trevosim.git
+      cd trevosim
 
-3. Within TREvoSim folder, run the following command to build the software:
+#. Within TREvoSim folder, run the following command to build the software:
 
-.. code-block:: console
+    .. code-block:: console
 
- cmake --build .
+      cmake --build .
 
-4. Launch the software by double clicking on the TREvoSim binary that has been created in this folder.
+#. Launch the software by double clicking on the TREvoSim binary that has been created in this folder.
 
 
 Compiling v1.X & v2.X using command line
@@ -155,40 +155,40 @@ Compiling v1.X & v2.X using command line
 
 This has been tested on Ubuntu 18.04 and 2204, with QT v5.x using GCC (64-bit).
 
-1. Install GCC and Qt using system packages:
+#. Install GCC and Qt using system packages:
 
-.. code-block:: console
+    .. code-block:: console
 
-  sudo apt-get install build-essential libgl1-mesa-dev
-  sudo apt install qt5-default
+      sudo apt-get install build-essential libgl1-mesa-dev
+      sudo apt install qt5-default
 
-2. Download source code and navigate to folder, or alternatively clone using Git:
+#. Download source code and navigate to folder, or alternatively clone using Git:
 
-.. code-block:: console
+    .. code-block:: console
 
-  git clone https://github.com/palaeoware/trevosim.git
-  cd trevosim
+      git clone https://github.com/palaeoware/trevosim.git
+      cd trevosim
 
-3. Within REvoSim folder create makefile:
+#. Within REvoSim folder create makefile:
 
-.. code-block:: console
+    .. code-block:: console
 
-  qmake ./trevosim.pro
+      qmake ./trevosim.pro
 
-4. Build by running the make command:
+#. Build by running the make command:
 
-.. code-block:: console
+    .. code-block:: console
 
-  make
+      make
 
-5. Navigate to bin folder (e.g. trevosim/bin) and launch software by double clicking on file.
+#. Navigate to bin folder (e.g. trevosim/bin) and launch software by double clicking on file.
 
 
 Compiling v1.X, v2.X, v3.X using Qt Creator
 """""""""""""""""""""""""""""""""""""""""""
 
-1. Install Qt 5.X (v1.X, v2.X) or Qt 6.X (v3.X) on your system by running the installer from Qt: https://www.qt.io/download
-2. Download source code, launch Qt Creator, and open the CMakeLists.txt file. Configure build and follow standard debug/release procedure.
+#. Install Qt 5.X (v1.X, v2.X) or Qt 6.X (v3.X) on your system by running the installer from Qt: https://www.qt.io/download
+#. Download source code, launch Qt Creator, and open the CMakeLists.txt file. Configure build and follow standard debug/release procedure.
 
 MacOS 
 ^^^^^
@@ -201,23 +201,23 @@ For v1.X, 2.X, v3.X
 #. Xcode can be downloaded from the Apple Store or Apple's developer website (including older versions of Xcode): https://developer.apple.com/download/. We recommend always using the latest Xcode available from Apple that has been tested with the Qt version you are using.
 #. Install Qt 6.X and QT Creator on your system by running the open source development installer from Qt: https://www.qt.io/download-open-source. An alternative may be to install via homebrew: 
 
-.. code-block:: console
+    .. code-block:: console
 
-  $ brew install qt
+      $ brew install qt
 
-#. Download or clone using Git the TREvoSim source code from the GitHub repository: https://github.com/palaeoware/trevosim
-#. Run QT Creator and configure the build pipeline. QT Creator should automatically detect your Xcode installation and configure the build chain. However, if you have multiple versions installed - or if you get errors in the steps subsequent to this one, you might need to manually change QT creator to use the desired Xcode Toolkit. To do this, select projects in the left hand toolbar of Qt Creator (ctrl + 5), and then select the kit labelled with the version of Qt you installed, plus "for macos" under the 'Build and Run' section.
+#. Download or clone the TREvoSim source code using Git from the GitHub repository: https://github.com/palaeoware/trevosim
+#. Run QT Creator and configure the build pipeline. QT Creator should automatically detect your Xcode installation and configure the build chain. However, if you have multiple versions installed -- or if you get errors in the steps subsequent to this one -- you might need to manually change QT creator to use the desired Xcode Toolkit. To do this, select projects in the left hand toolbar of Qt Creator (ctrl + 5), and then select the kit labelled with the version of Qt you installed, plus "for macos" under the 'Build and Run' section.
 #. In QT Creator using the main menu 'File |rarr| Open File or Project…' navigating to and select the TREvoSim CMakeLists.txt file in the root of the source code folder. This will open the TREvoSim project within the workspace. 
 #. From QT Creator you can build debug and release version of TREvoSim. The easiest way is via the bottom left 'Build' button. Alternatively you can use the 'Build |rarr| Build All Projects…' from the main menu.
-#. Once you have built the release version of TREvoSim through QT Creator, and you if wish to make the binary useable outside of the QT Creator environment (either as a standalone distribution or to package in a .dmg), you will need to run the Qt MacOS Deployment tool. This tool automates the process of creating a deployable applicaion package that contains all QT-related dependencies to make TREvoSim run (e.g., QT libraries).
+#. Once you have built the release version of TREvoSim through QT Creator, and if you wish to make the binary useable outside of the QT Creator environment (either as a standalone distribution or to package in a .dmg), you will need to run the Qt MacOS Deployment tool. This tool automates the process of creating a deployable application package that contains all QT-related dependencies to make TREvoSim run (e.g., QT libraries).
 
-   * First step is to copy to a new folder (we called ours 'deploy' and will refer to this by name) the newly generated binaries (TREvoSim.app and TREvoSimTest.app) from your build folder. The build folder should be called 'build\\Desktop_Qt_6_6_2_for-macOS-Release' if using the QT defaults, where Qt_6_6_2 will change to match your current QT 6 version.
+   * First step is to copy the newly generated binaries (TREvoSim.app and TREvoSimTest.app) from your build folder to a new one (we called ours 'deploy' and will refer to this by name). The build folder should be called 'build\\Desktop_Qt_6_6_2_for-macOS-Release' if using the QT defaults, where Qt_6_6_2 will change to match your current QT 6 version.
    * From the terminal command line '''cd''' into the '{path to your QT installation}/{QT 6 version}/macos/bin/' folder containing the macdeployqt6 binary and run the following commands:
 	
-   .. code-block:: console
-	
-	  $ ./macdeployqt6 {full path to TREvoSim binary}/TREvoSim.app -verbose=2
-	
+      .. code-block:: console
+      
+        $ ./macdeployqt6 {full path to TREvoSim binary}/TREvoSim.app -verbose=2
+      
 
    * You can view the contents of the application package by right clicking the TREvoSim.app and selecting 'Show Package Contents'. The folder structure should now look like this:
 	
@@ -228,31 +228,31 @@ For v1.X, 2.X, v3.X
    
 #. [optional] You can now generate a .dmg package to aid distribution of the TREvoSim.app. There are two ways to do this:
    
-   1. Adding the -dmg flag to the macdeploy6 command as part of the previous step:
+   #. Adding the -dmg flag to the macdeploy6 command as part of the previous step:
 
-   .. code-block:: console
+      .. code-block:: console
 
-    $ ./macdeployqt6 {full path to TREvoSim binary}/TREvoSim.app -dmg -verbose=2
+        $ ./macdeployqt6 {full path to TREvoSim binary}/TREvoSim.app -dmg -verbose=2
 
-   2. Using a seperate .dmg packaging tool and the generate_dmg bash script: 
+   #. Using a separate .dmg packaging tool and the generate_dmg bash script: 
    
     * We recommend create-dmg (https://github.com/create-dmg/create-dmg), which can be installed via Homebrew using:
    
-    .. code-block:: console
+        .. code-block:: console
 
-      $ brew install create-dmg
+          $ brew install create-dmg
 
     * The .dmg installer package can then be generated by running the following commands:
 
-    .. code-block:: console
+        .. code-block:: console
 
-      $ cd {full path to TREvoSim repo}/build_utils/macos/
-      $ chmod 755 generate_dmg
-      $ ./generate_dmg
+          $ cd {full path to TREvoSim repo}/build_utils/macos/
+          $ chmod 755 generate_dmg
+          $ ./generate_dmg
 
     * The .dmg will be created in the 'deploy' folder and will be called 'TREvoSim_Installer.dmg'.
     * Note you may need to edit the variables in the generate_dmg bash script to match your folder structure.
-    * On opening the .dmg installer package you will be greated by the following drag n' drop installation window:
+    * On opening the .dmg installer package you will see the following drag n' drop installation window:
 	
    .. figure:: _static/installer_macdmg.png 
 
@@ -264,6 +264,7 @@ Development Testing
 TREvoSim |gt| = v3 come with a suite of development tests that verify the core simulator/generator code. These can be called via one of two methods during the devlopment phase:
 
 #. As a standalone program - for this we leverage the GoogleTest Mocking and Testing Framework (https://github.com/google/googletest) which is pulled in automatically by CMake and built alongside the TREvoSim main program - creating a separate standalone test program called TREvoSimTest. This program can be called from the command line on Mac/Linux or from the QT Creator environment on Windows.
+  
   * Note: the MacOS TREvoSimTest.app needs to be packaged using the macdeployqt6 program first if you have built from source (see the building for MacOS instructions above). To run the test from the terminal you need to use:
 
   .. code-block:: console
