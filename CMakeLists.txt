@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16...3.16)
+cmake_minimum_required(VERSION 3.16...3.22)
 
 set(TREVOSIM_VERSION 3.0.0)
 set(TREVOSIM_APP TREvoSim)
@@ -11,9 +11,11 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-# Set the macOS binary to both intel and arm
-set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64" CACHE STRING "" FORCE)
-set(CMAKE_OSX_DEPLOYMENT_TARGET "13.0" CACHE STRING "Minimum OS X deployment version")
+if (APPLE)
+    # Set the macOS binary to both intel and arm
+    set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64" CACHE STRING "" FORCE)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "13.0" CACHE STRING "Minimum OS X deployment version")
+endif()
 
 #TREvoSim
 project(${TREVOSIM_APP} VERSION ${TREVOSIM_VERSION} LANGUAGES CXX)
@@ -100,10 +102,17 @@ qt_add_executable(${TREVOSIM_APP}
 target_link_libraries(${TREVOSIM_APP} PRIVATE Qt6::Core Qt::Gui Qt::Widgets Qt6::Concurrent Qt::Core5Compat)
 
 # Set the target properites for the main TREvoSim executable
-set_target_properties(${TREVOSIM_APP} PROPERTIES
-    WIN32_EXECUTABLE ON
-    MACOSX_BUNDLE ON
-)
+if(WIN32)
+    set_target_properties(${TREVOSIM_APP} PROPERTIES
+        WIN32_EXECUTABLE ON
+    )
+endif()
+
+if(APPLE)
+    set_target_properties(${TREVOSIM_APP} PROPERTIES
+        MACOSX_BUNDLE ON
+    )
+endif()
 
 # Sets up the deployment install via cmake for the main TREvoSim executable
 install(TARGETS ${TREVOSIM_APP}
@@ -134,10 +143,17 @@ add_executable(${TREVOSIM_UNIT_TEST}
 
 target_link_libraries(${TREVOSIM_UNIT_TEST} PRIVATE GTest::gtest_main Qt6::Core Qt::Gui Qt::Widgets Qt6::Concurrent Qt::Core5Compat)
 
-set_target_properties(${TREVOSIM_UNIT_TEST} PROPERTIES
-    WIN32_EXECUTABLE ON
-    MACOSX_BUNDLE ON
-)
+if(WIN32)
+    set_target_properties(${TREVOSIM_UNIT_TEST} PROPERTIES
+        WIN32_EXECUTABLE ON
+    )
+endif()
+
+if(APPLE)
+    set_target_properties(${TREVOSIM_UNIT_TEST} PROPERTIES
+        MACOSX_BUNDLE ON
+    )
+endif()
 
 include(GoogleTest)
 gtest_add_tests(TARGET ${TREVOSIM_UNIT_TEST})
