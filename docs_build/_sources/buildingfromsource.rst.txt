@@ -264,11 +264,11 @@ TREvoSim |gt| = v3 come with a suite of development tests that verify the core s
 
 #. As a standalone program - for this we leverage the GoogleTest Mocking and Testing Framework (https://github.com/google/googletest) which is pulled in automatically by CMake and built alongside the TREvoSim main program - creating a separate standalone test program called TREvoSimTest. This program can be called from the command line on Mac/Linux or from the QT Creator environment on Windows.
   
-  * Note: the MacOS TREvoSimTest.app needs to be packaged using the macdeployqt6 program first if you have built from source (see the building for MacOS instructions above). To run the test from the terminal you need to use:
+    * Note: the MacOS TREvoSimTest.app needs to be packaged using the macdeployqt6 program first if you have built from source (see the building for MacOS instructions above). To run the test from the terminal you need to use:
 
-  .. code-block:: console
-  
-    $ ./TREvoSimTest.app/Contents/MacOS/TREvoSimTest
+      .. code-block:: console
+      
+        $ ./TREvoSimTest.app/Contents/MacOS/TREvoSimTest
 
 #. From the QT Creator application. Once the test program has been build (see point 1 above) you can run the test suite with the QT Creator by going to the 'Tools |rarr| Tests |rarr| Run All Tests' from the main menu. This will build the application if not already done so and display the results in the 'Test Result' tab which normally appears at the bottom of the workspace.
 
