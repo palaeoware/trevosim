@@ -30,6 +30,7 @@ testinternal::testinternal(MainWindow *theMainWindowCon)
     testList.insert(16, "Print tree");
     testList.insert(17, "Ecosystem engineers");
     testList.insert(18, "Playing field mixing");
+    testList.insert(19, "Match Peaks");
 }
 
 QString testinternal::testDescription(int testNumber)
@@ -590,12 +591,12 @@ bool testinternal::testSix(QString &outString)
     if (theMainWindow)
     {
         theMainWindow->addProgressBar(0, 100000);
-        theMainWindow->setStatus("Testing coin toss.\n");
+        theMainWindow->setStatus("Testing geometric distribution.\n");
     }
 
     bool testFlag = true;
     QTextStream out(&outString);
-    out << "Testing coin toss.\n\n";
+    out << "Testing geometric distribution (== coin toss in previous versions).\n\n";
 
     simulationVariables simSettings;
     simSettings.selectionCoinToss = 2.;
@@ -619,11 +620,11 @@ bool testinternal::testSix(QString &outString)
     QVector<int> hits2(pfSize, 0);
     QVector<int> hits3(pfSize, 0);
     QVector<int> hits4(pfSize, 0);
+    QVector<int> hits5(pfSize, 0);
 
     for (int i = 0; i < 100000; i++)
     {
-        if (theMainWindow)
-            theMainWindow->setProgressBar(i);
+        if (theMainWindow) theMainWindow->setProgressBar(i);
         hits0[x.coinToss(x.playingFields[0])]++;
         hits1[x.coinToss(x.playingFields[1])]++;
         hits2[x.coinToss(x.playingFields[2])]++;
@@ -632,14 +633,27 @@ bool testinternal::testSix(QString &outString)
 
     //Try also with a different probability
     simSettings.selectionCoinToss = 3.0;
-    for (int i = 0; i < 100000; i++)hits4[x.coinToss(x.playingFields[0])]++;
+    for (int i = 0; i < 100000; i++)
+    {
+        if (theMainWindow) theMainWindow->setProgressBar(i);
+        hits4[x.coinToss(x.playingFields[0])]++;
+    }
+
+    //And with no selection enabled, which should make these all equal
+    simSettings.noSelection = true;
+    for (int i = 0; i < 100000; i++)
+    {
+        if (theMainWindow) theMainWindow->setProgressBar(i);
+        hits5[x.coinToss(x.playingFields[0])]++;
+    }
 
     out << "<table><tr><th>Position</th><th>"
         "</th><th>Fittest at top - selection 2</th><th>"
         "</th><th>Fittest at top - selection 3</th><th>"
         "</th><th>Equal Fitness</th><th>"
         "</th><th>Alternating fitness</th><th>"
-        "</th><th>Three fitnesses</th></tr>";
+        "</th><th>Three fitnesses</th><th>"
+        "</th><th>No selection enabled</th></tr>";
 
     for (int i = 0; i < pfSize; i++)
     {
@@ -647,16 +661,23 @@ bool testinternal::testSix(QString &outString)
         out << "</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>" << hits4[i];
         out << "</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>" << hits1[i];
         out << "</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>" << hits2[i];
-        out << "</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>" << hits3[i] << "</tr>";
+        out << "</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>" << hits3[i];
+        out << "</td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>" << hits5[i] << "</tr>";
     }
-    out << "</table>\nRunning a bunch of tests comparing expected distribution to actual. Those towards bottom of playing field are based on small numbers, so maybe be printed below, but tests fail only when <em>n</em> is high enough.\n";
+    out << "</table>\nRunning a bunch of tests comparing expected distribution of selected organisms to actual distribution of selected organisms. "
+        "Doing this by dividing each item for each column on the list by the next item, and checking that divisor. I.e. if probability is 2, we should halve selected number every row, and the divisor should be 2."
+        "When these fall outside the expectations, they are printed in a list below. This does not necessarily mean the test has failed. Positions towards bottom of playing field are based on small numbers, "
+        "and so maybe be printed below, but tests fail only when the numbers involved are high enought to be significant.\n";
     for (int i = 0; i < pfSize - 1; i++)
     {
+        //Dividing by zero is bad
+        if (hits0[i + 1] == 0 || hits4[i + 1] == 0 || hits1[i + 1] == 0) continue;
+
         double divisor = static_cast<double>(hits0[i]) / static_cast<double>(hits0[i + 1]);
         if (divisor < 1.8 || divisor > 2.2)
         {
             //Only fail if this happens in the first five - with small counts at the end of the playing field there is more variability
-            if (i < 5)testFlag = false;
+            if (i < 5) testFlag = false;
             out << "Position: " << i << "; Test 1, divisor: " <<  divisor << "\n";
         }
 
@@ -664,7 +685,7 @@ bool testinternal::testSix(QString &outString)
         if (divisor < 1.3 || divisor > 2.7)
         {
             //Only fail if this happens in the first five - with small counts at the end of the playing field there is more variability
-            if (i < 5)testFlag = false;
+            if (i < 5) testFlag = false;
             out << "Position: " << i << "; Test 4, divisor: " <<  divisor << "\n";
         }
 
@@ -673,6 +694,14 @@ bool testinternal::testSix(QString &outString)
         {
             testFlag = false;
             out << "Test 2, divisor: " <<  divisor << "\n";
+        }
+
+
+        divisor = static_cast<double>(hits5[i]) / static_cast<double>(hits5[i + 1]);
+        if (divisor < 0.9 || divisor > 1.1)
+        {
+            testFlag = false;
+            out << "Test 6, divisor: " <<  divisor << "\n";
         }
     }
 
@@ -688,7 +717,7 @@ bool testinternal::testSix(QString &outString)
         out << "Test 3, divisor: " <<  divisor << "\n";
     }
 
-    out << "\nTested four playing fields, with decreasing fitness, equal fitness, and two or three values any failures to test printed above.\n";
+    out << "\nTested four playing fields, with decreasing fitness, equal fitness, and probabilities of selection of two and three, plus no selection mode. Any failures to test printed above, and a failed test where there are high enoiugh numbers for this to be problematic, will result in green text.\n";
     if (testFlag) out << "\nCoin toss tests passed.\n";
 
     if (theMainWindow)
@@ -2013,6 +2042,7 @@ bool testinternal::testEighteen(QString &outString)
     return testFlag;
 }
 
+//Match peaks
 bool testinternal::testNineteen(QString &outString)
 {
     bool testFlag = true;

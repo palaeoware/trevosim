@@ -333,7 +333,7 @@
 </li>
 <li><p>[optional] You can now generate a .dmg package to aid distribution of the TREvoSim.app. There are two ways to do this:</p>
 <ol class="arabic">
-<li><p>Adding the -dmg flag to the macdeploy6 command as part of the previous step:</p>
+<li><p>Adding the -dmg flag to the macdeployqt6 command as part of the previous step:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./macdeployqt6 <span class="o">{</span>full path to TREvoSim binary<span class="o">}</span>/TREvoSim.app -dmg -verbose<span class="o">=</span><span class="m">2</span>
 </pre></div>
 </div>
@@ -373,7 +373,7 @@
 </section>
 <section id="development-testing">
 <h2><span class="section-number">3.2. </span>Development Testing<a class="headerlink" href="#development-testing" title="Permalink to this headline">¶</a></h2>
-<p>TREvoSim &gt; = v3 come with a suite of development tests that verify the core simulator/generator code. These can be called via one of two methods during the devlopment phase:</p>
+<p>TREvoSim &gt; = v3 come with a suite of development tests that verify the core simulator/generator code. These can be called via one of two methods during the development phase:</p>
 <ol class="arabic">
 <li><p>As a standalone program - for this we leverage the GoogleTest Mocking and Testing Framework (<a class="reference external" href="https://github.com/google/googletest">https://github.com/google/googletest</a>) which is pulled in automatically by CMake and built alongside the TREvoSim main program - creating a separate standalone test program called TREvoSimTest. This program can be called from the command line on Mac/Linux or from the QT Creator environment on Windows.</p>
 <blockquote>
@@ -386,7 +386,7 @@
 </ul>
 </div></blockquote>
 </li>
-<li><p>From the QT Creator application. Once the test program has been build (see point 1 above) you can run the test suite with the QT Creator by going to the ‘Tools → Tests → Run All Tests’ from the main menu. This will build the application if not already done so and display the results in the ‘Test Result’ tab which normally appears at the bottom of the workspace.</p></li>
+<li><p>From the QT Creator application. Once the test program has been built (see point 1 above) you can run the test suite with the QT Creator by going to the ‘Tools → Tests → Run All Tests’ from the main menu. This will build the application if not already done so and display the results in the ‘Test Result’ tab which normally appears at the bottom of the workspace.</p></li>
 </ol>
 <p>Note: The tests that run are the same that can be called from the TREvoSim program via the ‘Tests’ button on the main tool bar.</p>
 </section>
