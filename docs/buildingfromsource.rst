@@ -227,7 +227,7 @@ For v1.X, 2.X, v3.X
    
 #. [optional] You can now generate a .dmg package to aid distribution of the TREvoSim.app. There are two ways to do this:
    
-   #. Adding the -dmg flag to the macdeploy6 command as part of the previous step:
+   #. Adding the -dmg flag to the macdeployqt6 command as part of the previous step:
 
       .. code-block:: console
 
@@ -260,7 +260,7 @@ For v1.X, 2.X, v3.X
 Development Testing
 -------------------
 
-TREvoSim |gt| = v3 come with a suite of development tests that verify the core simulator/generator code. These can be called via one of two methods during the devlopment phase:
+TREvoSim |gt| = v3 come with a suite of development tests that verify the core simulator/generator code. These can be called via one of two methods during the development phase:
 
 #. As a standalone program - for this we leverage the GoogleTest Mocking and Testing Framework (https://github.com/google/googletest) which is pulled in automatically by CMake and built alongside the TREvoSim main program - creating a separate standalone test program called TREvoSimTest. This program can be called from the command line on Mac/Linux or from the QT Creator environment on Windows.
   
