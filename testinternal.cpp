@@ -497,7 +497,7 @@ bool testinternal::testFive(QString &outString)
     double mean = static_cast<double>(cnt) / 10000;
     if (mean < 1.25 || mean > 1.31) testFlag = false;
     QString flagString = testFlag ? "true" : "false";
-    out << "Ran 10000 i9nterations on a 128 bit organism. At a rate of " << simSettings.organismMutationRate << " mutation per hundred characters per iteration this resulted in a mean of ";
+    out << "Ran 10000 iterations on a 128 bit organism. At a rate of " << simSettings.organismMutationRate << " mutation per hundred characters per iteration this resulted in a mean of ";
     out << mean << " mutations. TREvoSim expects this to be between 1.25 and 1.31 and returned " << flagString << "\n";
 
     simSettings.organismMutationRate = 2.;
@@ -1829,7 +1829,7 @@ bool testinternal::testEighteen(QString &outString)
     bool testFlag = true;
     QTextStream out(&outString);
 
-    out << "Check playing field mixing. The mixing mechanism relies on random numbers to provide a probability of mixing, and as such, on occasions, this test will fail due to the stochastic nature of the process. If this happens, you may want to repeat the test again and see if the warnings dissappear.\n\n";
+    out << "Check playing field mixing. The mixing mechanism relies on random numbers to provide a probability of mixing, and as such, on occasions, this test will fail due to the stochastic nature of the process. If this happens, you may want to repeat the test again and see if the warnings disappear.\n\n";
 
     simulationVariables simSettings;
     simSettings.runForIterations = 2;
@@ -1874,7 +1874,7 @@ bool testinternal::testEighteen(QString &outString)
 
     if (cnt < 75 || cnt > 85)
     {
-        out << "\n\nThis number seems off what we should expect, although since we're dealing with random numbers, there may be nothing untoward - try repating test\n\n";
+        out << "\n\nThis number seems off what we should expect, although since we're dealing with random numbers, there may be nothing untoward - try repeating test\n\n";
         testFlag = false;
     }
 
@@ -1936,7 +1936,7 @@ bool testinternal::testEighteen(QString &outString)
 
     if (cnt > 25 || cnt < 15)
     {
-        out << "\n\nThis number seems off what we should expect, although since we're dealing with random numbers, there may be nothing untoward - try repating test\n\n";
+        out << "\n\nThis number seems off what we should expect, although since we're dealing with random numbers, there may be nothing untoward - try repeating test\n\n";
         testFlag = false;
     }
 
@@ -1967,12 +1967,12 @@ bool testinternal::testEighteen(QString &outString)
         if (o->genome[0])
             cnt++;
 
-    out << "Now testing three playing fields. Playing field mixing was set to fifty, then repeated 100 times, and PF 0 and 3 were all zeros, PF1 was all ones. As such, we should have ~25 mixed individuals in PF0 & PF3 (though slightly fewer in PF0 as they have been overwritten by those from PF3). Playing field zero count of organisms that are all zero should be ~75-85. It is "
+    out << "Now testing three playing fields. Playing field mixing was set to fifty, then repeated 100 times, and PF 0 and 2 were all zeros, PF1 was all ones. As such, we should have ~25 mixed individuals in PF0 & PF2 (though slightly fewer in PF0 as they have been overwritten by those from PF2). Playing field zero count of organisms that are all zero should be ~75-85. It is "
         << cnt << "\n";
 
     if (cnt < 65 || cnt > 90)
     {
-        out << "\n\nThis number seems off what we should expect, although since we're dealing with random numbers, there may be nothing untoward - try repating test\n\n";
+        out << "\n\nThis number seems off what we should expect, although since we're dealing with random numbers, there may be nothing untoward - try repeating test\n\n";
         testFlag = false;
     }
 
@@ -1982,11 +1982,11 @@ bool testinternal::testEighteen(QString &outString)
         if (o->genome[0])
             cnt++;
 
-    out << "PF1 was originally 100 genomes, all ones. Some of these will have been overwritten from PF0 and PF3 - around 35 all zeros would be sensible. Count is " << cnt << "\n\n";
+    out << "PF1 was originally 100 genomes, all ones. Some of these will have been overwritten from PF0 and PF2 - around 35 all zeros would be sensible. Count is " << cnt << "\n\n";
 
     if (cnt > 45 || cnt < 25)
     {
-        out << "\n\nThis number seems off what we should expect, although since we're dealing with random numbers, there may be nothing untoward - try repating test\n\n";
+        out << "\n\nThis number seems off what we should expect, although since we're dealing with random numbers, there may be nothing untoward - try repeating test\n\n";
         testFlag = false;
     }
 
@@ -1995,11 +1995,11 @@ bool testinternal::testEighteen(QString &outString)
         if (o->genome[0])
             cnt++;
 
-    out << "PF3 is similar to PF1, and and thus there should be ~25 all ones. Count of all zeros is " << cnt << "\n\n";
+    out << "PF2 is similar to PF1, and and thus there should be ~25 all ones. Count of all zeros is " << cnt << "\n\n";
 
     if (cnt > 85 || cnt < 65)
     {
-        out << "\n\nThis number seems off what we should expect, although since we're dealing with random numbers, there may be nothing untoward - try repating test\n\n";
+        out << "\n\nThis number seems off what we should expect, although since we're dealing with random numbers, there may be nothing untoward - try repeating test\n\n";
         testFlag = false;
     }
 
