@@ -48,19 +48,18 @@ QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit).
    * First step is to copy to a new folder (we called ours 'deploy' and will refer to this by name) the newly generated binaries (TREvoSim.exe and TREvoSimTest.exe) from your build folder. The build folder should be called 'build\\Desktop_Qt_6_6_1_MSVC2019_64bit-Release' if using the QT defaults, where Qt_6_6_1 will change to match your current QT 6 version.
    * From the windows command line '''cd''' into the '{path to your QT installation}\\{QT 6 version}\\msvc2019_64\\bin\\' folder containing the windeployqt6.exe binary and run the following commands:
 	
-   .. code-block:: console
-	
-	 qtenv2.bat
-	 "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
+      .. code-block:: console
+      
+        qtenv2.bat
+        "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
 	 
    
-   where 'C:\\Program Files (x86)\\Microsoft Visual Studio' is your path to the installed VS2019.
+    (where 'C:\\Program Files (x86)\\Microsoft Visual Studio' is your path to the installed VS2019)
 	
-   .. code-block:: console
+        .. code-block:: console
+        
+          windeployqt6 {full path to TREvoSim binary}\TREvoSim.exe  --release
 	
-	 windeployqt6 {full path to TREvoSim binary}\TREvoSim.exe  --release
-	
-
    * Your deploy folder should now look like this:
 	
    .. figure:: _static/post_windeploy.png

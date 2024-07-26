@@ -140,18 +140,25 @@
 <li><p>In QT Creator using the main menu ‘File → Open File or Project…’ navigating to and select the TREvoSim CMakeLists.txt file in the root of the source code folder. This will open the TREvoSim project within the workspace.</p></li>
 <li><p>From QT Creator you can build debug and release version of TREvoSim. The easiest way is via the bottom left ‘Build’ button. Alternatively you can use the ‘Build → Build All Projects…’ from the main menu.</p></li>
 <li><p>Once you have built the release version of TREvoSim through QT Creator, and you if wish to make the binary useable outside of the QT Creator environment (either as a standalone distribution or for use with an installer), you will need to run the Qt Windows Deployment tool. This tool automates the process of creating a deployable folder that contains all QT-related dependencies to make TREvoSim run (e.g., .DLL libraries).</p>
-<ul class="simple">
+<ul>
 <li><p>First step is to copy to a new folder (we called ours ‘deploy’ and will refer to this by name) the newly generated binaries (TREvoSim.exe and TREvoSimTest.exe) from your build folder. The build folder should be called ‘build\Desktop_Qt_6_6_1_MSVC2019_64bit-Release’ if using the QT defaults, where Qt_6_6_1 will change to match your current QT 6 version.</p></li>
-<li><p>From the windows command line ‘’’cd’’’ into the ‘{path to your QT installation}\{QT 6 version}\msvc2019_64\bin\’ folder containing the windeployqt6.exe binary and run the following commands:</p></li>
-</ul>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">qtenv2.bat</span>
+<li><p>From the windows command line ‘’’cd’’’ into the ‘{path to your QT installation}\{QT 6 version}\msvc2019_64\bin\’ folder containing the windeployqt6.exe binary and run the following commands:</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">qtenv2.bat</span>
 <span class="go">&quot;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat&quot;</span>
 </pre></div>
 </div>
-<p>where ‘C:\Program Files (x86)\Microsoft Visual Studio’ is your path to the installed VS2019.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">windeployqt6 {full path to TREvoSim binary}\TREvoSim.exe  --release</span>
+</div></blockquote>
+</li>
+</ul>
+<blockquote>
+<div><p>(where ‘C:\Program Files (x86)\Microsoft Visual Studio’ is your path to the installed VS2019)</p>
+<blockquote>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">windeployqt6 {full path to TREvoSim binary}\TREvoSim.exe  --release</span>
 </pre></div>
 </div>
+</div></blockquote>
+</div></blockquote>
 <ul class="simple">
 <li><p>Your deploy folder should now look like this:</p></li>
 </ul>
@@ -353,7 +360,7 @@
 </li>
 <li><p>The .dmg will be created in the ‘deploy’ folder and will be called ‘TREvoSim_Installer.dmg’.</p></li>
 <li><p>Note you may need to edit the variables in the generate_dmg bash script to match your folder structure.</p></li>
-<li><p>On opening the .dmg installer package you will be created by the following drag n’ drop installation window:</p></li>
+<li><p>On opening the .dmg installer package you will see the following drag n’ drop installation window:</p></li>
 </ul>
 </div></blockquote>
 <figure class="align-default">
