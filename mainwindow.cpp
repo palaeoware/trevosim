@@ -193,7 +193,7 @@ MainWindow::MainWindow(QWidget *parent) :
     runs = 0;
 
     //Set replicates to the default of 16
-    countPeaksReplicates = 16;
+    countPeaksReplicatesGenomeSize = 16;
 
     //Loaded from command - assume false
     runFromCommand = false;
@@ -758,9 +758,9 @@ void MainWindow::countPeaks()
     //Create a new simulation object - sending it important settings.
     bool error = false;
 
-    int genomeSize = QInputDialog::getInt(this, "Fitness histogram...", "How many bits?", countPeaksReplicates, 1, 64, 1, &error);
+    int genomeSize = QInputDialog::getInt(this, "Fitness histogram...", "How many bits?", countPeaksReplicatesGenomeSize, 1, 64, 1, &error);
     if (!error) return;
-    if (genomeSize != countPeaksReplicates)countPeaksReplicates = genomeSize;
+    if (genomeSize != countPeaksReplicatesGenomeSize)countPeaksReplicatesGenomeSize = genomeSize;
 
     int repeats =  QInputDialog::getInt(this, "Fitness histogram...", "How many repeats?", 1, 1, 100000, 1, &error);
     if (!error) return;
@@ -790,7 +790,7 @@ void MainWindow::countPeaks()
 
     startRunGUI();
 
-    //RJG - resize grid otherwise the print function will make. No need to record original settings, as dealt with in main window
+    //RJG - resize grid otherwise the print function will crash the software.
     simSettings->genomeSize = genomeSize;
     //Also need to reset fitness size so count peaks works when doing match peaks (masks are initialised to fitness size)
     simSettings->fitnessSize = genomeSize;

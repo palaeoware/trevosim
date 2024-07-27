@@ -2048,6 +2048,23 @@ bool testinternal::testNineteen(QString &outString)
     bool testFlag = true;
     QTextStream out(&outString);
 
+
+    out << "Test match peaks.\n\n";
+
+    simulationVariables simSettings;
+    //First check behviour when it is not enabled
+    simSettings.matchFitnessPeaks = false;
+    simSettings.genomeSize = 20;
+    for (int i = 0; i < 1000; i++)
+    {
+        simulation x(0, &simSettings, &error, theMainWindow);
+    }
+
+    //if (error) return false;
+    //x.run();
+
+
+
     return testFlag;
 }
 

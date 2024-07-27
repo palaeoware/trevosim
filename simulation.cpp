@@ -1715,7 +1715,7 @@ int simulation::fitness(const Organism *org, const QVector<QVector<QVector<bool>
     int fitness = (runFitnessSize * maskNumber);
 
     //Environment defaults to -1 (used to allow this to be called throughout simulation without defining environment number).
-    //If this is the , check fitness for all environments
+    //If this is the case check fitness for all environments
     if (environment == -1)
         for (int h = 0; h < environmentNumber; h++)
         {
@@ -2324,8 +2324,8 @@ int simulation::countPeaks(int genomeSize, int repeat, int environment)
                 if (lookups[i] & toTest[x]) org.genome[i] = true;
                 else org.genome[i] = false;
             }
-        //Update GUI every now and then to show not crashed
 
+        //Update GUI every now and then to show not crashed
         if ((x % 9999) == 0)theMainWindow->printGenome(&org, 0);
         if ((x % 1000) == 0)
         {
@@ -2340,9 +2340,20 @@ int simulation::countPeaks(int genomeSize, int repeat, int environment)
         if (recordGenomes) genomes[org.fitness].append(x);
     }
 
-    //Output
-    printCountPeaks(genomeSize, totals, genomes, repeat);
-    return 0;
+    //Output - if called with a repeat, this came from the slot in main window
+    if (repeat != -1)
+    {
+        printCountPeaks(genomeSize, totals, genomes, repeat);
+        return 0;
+    }
+    else
+    {
+        for (int i = 0; i < totals.length(); i++)
+            if (totals[i] > 0) return i;
+
+        //return -1 in case of error
+        return -1;
+    }
 
 }
 
