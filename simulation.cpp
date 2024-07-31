@@ -2285,7 +2285,7 @@ int simulation::countPeaks(int genomeSize, int repeat, int environment)
     Organism org(genomeSize, false);
 
     bool recordGenomes = false;
-    if (genomeSize < 21) recordGenomes = true;
+    if (genomeSize < 21 && repeat > 0) recordGenomes = true;
 
     //Lookups for printing genomes
     quint64 lookups[64];
@@ -2306,7 +2306,7 @@ int simulation::countPeaks(int genomeSize, int repeat, int environment)
     for (quint64 x = 0; x < max; x++)
     {
         //If we do this every 1000, the GUI remains responsive to pause and cancel
-        if (x % 1000 == 0)
+        if (x % 1000 == 0 && theMainWindow != nullptr)
         {
             while (theMainWindow->pauseFlag == true && !theMainWindow->escapePressed) qApp->processEvents();
             if (theMainWindow->escapePressed) return -1;
@@ -2326,15 +2326,22 @@ int simulation::countPeaks(int genomeSize, int repeat, int environment)
             }
 
         //Update GUI every now and then to show not crashed
-        if ((x % 9999) == 0)theMainWindow->printGenome(&org, 0);
-        if ((x % 1000) == 0)
+        if ((x % 9999) == 0 && theMainWindow != nullptr)
+        {
+            theMainWindow->printGenome(&org, 0);
+            qApp->processEvents();
+        }
+        if ((x % 1000) == 0 && theMainWindow != nullptr && repeat >= 0)
         {
             double prog = (static_cast<double>(x) / static_cast<double>(max)) * pmax;
             theMainWindow->setProgressBar(static_cast<int>(prog));
         }
 
         //For now, let's just do this for the first playing field - we expect each playingfield to have the same properties in terms of peaks
-        org.fitness = fitness(&org, playingFields[0]->masks, genomeSize, simSettings->fitnessTarget, runMaskNumber);
+        //If repeat is not -1 we have called this from the main window, and we want to use all environments
+        if (repeat != -1) org.fitness = fitness(&org, playingFields[0]->masks, genomeSize, simSettings->fitnessTarget, runMaskNumber);
+        //Otherwise we need to specify which environment we want
+        else org.fitness = fitness(&org, playingFields[0]->masks, genomeSize, simSettings->fitnessTarget, runMaskNumber, environment);
 
         totals[org.fitness]++;
         if (recordGenomes) genomes[org.fitness].append(x);
@@ -2348,8 +2355,7 @@ int simulation::countPeaks(int genomeSize, int repeat, int environment)
     }
     else
     {
-        for (int i = 0; i < totals.length(); i++)
-            if (totals[i] > 0) return i;
+        for (int i = 0; i < totals.length(); i++) if (totals[i] > 0) return i;
 
         //return -1 in case of error
         return -1;

@@ -858,7 +858,7 @@ void MainWindow::doTests()
     //Create this here so we can use QMap list of tests to populate drop downs
     testinternal testObject(this);
 
-    int testCount = 19;
+    int testCount = 20;
     int testStart = 0;
 
     QStringList items;
@@ -872,7 +872,6 @@ void MainWindow::doTests()
     setStatus("Starting tests");
     QProgressDialog progress("Doing tests...", "Cancel", 0, testCount, this);
     progress.setWindowModality(Qt::WindowModal);
-
 
     if (ok && !item.isEmpty())
     {

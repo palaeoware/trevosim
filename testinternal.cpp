@@ -2048,22 +2048,92 @@ bool testinternal::testNineteen(QString &outString)
     bool testFlag = true;
     QTextStream out(&outString);
 
-
-    out << "Test match peaks.\n\n";
+    out << "Test match peaks - test will report best fitness organisms against multiple different environments. These should differ without match peaks on, and be the same with this setting on.\n\n";
 
     simulationVariables simSettings;
     //First check behviour when it is not enabled
     simSettings.matchFitnessPeaks = false;
-    simSettings.genomeSize = 20;
-    for (int i = 0; i < 1000; i++)
+    simSettings.genomeSize = 5;
+    simSettings.fitnessSize = simSettings.genomeSize;
+    simSettings.speciesSelectSize = simSettings.genomeSize;
+    //Resize grid to avoid crashes on writing to GUI
+
+
+    if (theMainWindow)
     {
-        simulation x(0, &simSettings, &error, theMainWindow);
+        theMainWindow->addProgressBar(0, 24);
+        theMainWindow->setStatus("Testing match peaks");
+        theMainWindow->resizeGrid(1, simSettings.genomeSize);
     }
 
-    //if (error) return false;
-    //x.run();
 
+    int count = 0;
+    QList <bool> identical;
+    for (int j = 3; j < 6; j++)
+    {
+        QList <int> bestFitnesses;
+        simSettings.environmentNumber = j;
+        simulation x(0, &simSettings, &error, theMainWindow);
+        if (error) return false;
+        out << "Number of environments is " << j << "\n";
+        //Send count peak for each environment
+        for (int k = 0; k < j; k++)
+        {
+            int minFitness = x.countPeaks(simSettings.genomeSize, -1, k);
+            if (!bestFitnesses.contains(minFitness ))bestFitnesses.append(minFitness);
+            out << "Testing environment " << k << ". Best fitness for this environment is " << minFitness << "\n";
+            count++;
+            if (theMainWindow) theMainWindow->setProgressBar(count);
+        }
 
+        if (bestFitnesses.count() > 1) identical.append(false);
+        else identical.append(true);
+    }
+
+    if (identical.contains(false))
+    {
+        out << "\nIn the above lists there should be different values of fitness in at least one repeat, and there are - this part of the test passes.\n\n";
+    }
+    else
+    {
+        testFlag = false;
+        out << "\n\nIn the above lists there should be different values of fitness in at least one repeat, but there appear to be none - fail.\n";
+    }
+
+    out << "\nMatch fitness peaks is now on.\n\n";
+    simSettings.matchFitnessPeaks = true;
+    identical.clear();
+
+    for (int j = 3; j < 6; j++)
+    {
+        QList <int> bestFitnesses;
+        simSettings.environmentNumber = j;
+        simulation x(0, &simSettings, &error, theMainWindow);
+        if (error) return false;
+        out << "Number of environments is " << j << "\n";
+        //Send count peak for each environment
+        for (int k = 0; k < j; k++)
+        {
+            int minFitness = x.countPeaks(simSettings.genomeSize, -1, k);
+            if (!bestFitnesses.contains(minFitness ))bestFitnesses.append(minFitness);
+            out << "Testing environment " << k << ". Best fitness for this environment is " << minFitness << "\n";
+            count++;
+            if (theMainWindow) theMainWindow->setProgressBar(count);
+        }
+
+        if (bestFitnesses.count() > 1) identical.append(false);
+        else identical.append(true);
+    }
+
+    if (identical.contains(false))
+    {
+        testFlag = false;
+        out << "\nIn the above lists there should be no different values of fitness in any given repeat, and there are - test failed.\n\n";
+    }
+    else
+    {
+        out << "\nIn the above lists there should be no different values of fitness across repeat, and there are none - this part of the test passes.\n\n";
+    }
 
     return testFlag;
 }
