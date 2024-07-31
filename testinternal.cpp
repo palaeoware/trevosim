@@ -864,8 +864,7 @@ bool testinternal::testEight(QString &outString)
         hits4[b.calculateOverwrite(b.playingFields[0], 0)]++;
         hits5[c.calculateOverwrite(c.playingFields[0], 4)]++;
     }
-    if (theMainWindow)
-        theMainWindow->hideProgressBar();
+    if (theMainWindow) theMainWindow->hideProgressBar();
 
     out << "<table><tr>"
         "<th>Position</th>"
@@ -2135,6 +2134,13 @@ bool testinternal::testNineteen(QString &outString)
         out << "\nIn the above lists there should be no different values of fitness across repeat, and there are none - this part of the test passes.\n\n";
     }
 
+    simulationVariables simSettingsReset;
+    if (theMainWindow)
+    {
+        theMainWindow->resizeGrid(simSettingsReset.runForTaxa, simSettingsReset.genomeSize);
+        theMainWindow->resetDisplays();
+        theMainWindow->hideProgressBar();
+    }
     return testFlag;
 }
 
