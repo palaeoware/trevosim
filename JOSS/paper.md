@@ -113,7 +113,7 @@ By default TREvoSim playing fields are independent data structures, and organism
 
 ### Stochastic layer
 
-Provides a layer of abstraction between an organism’s genome and the bits used for the fitness calculation. It achieves this using many-to-one mapping, the map being defined by the user. For example, the sequence of bits 0110 in a genome might be used to create a 1 bit in the genome calculation, whilst are 1100 may mao to 0. As such, any individual bit does not necessarily have an impact on the fitness of an organism as a whole, allowing e.g. neutral mutations and less strongly adaptationist dynamics.
+Provides a layer of abstraction between an organism’s genome and the bits used for the fitness calculation. It achieves this using many-to-one mapping (i.e. using a sequence of multiple bits to define the value of a single bit), the map being defined by the user. For example, the sequence of bits 0110 in a genome might map to a 1 bit in the genome calculation, whilst are 1100 may map to 0. As such, any individual bit does not necessarily have an impact on the fitness of an organism as a whole, allowing e.g. neutral mutations and less strongly adaptationist dynamics.
 
 ### Perturbations
 
