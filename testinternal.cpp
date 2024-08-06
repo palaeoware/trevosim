@@ -527,6 +527,7 @@ bool testinternal::testFive(QString &outString)
     simSettings.environmentNumber = 2;
     simSettings.playingfieldNumber = 2;
     simSettings.playingfieldMasksMode = MASKS_MODE_IDENTICAL_START;
+    simSettings.organismMutationRate = 2.;
     simulation y(0, &simSettings, &error, theMainWindow);
     if (error) return false;
 
@@ -564,7 +565,7 @@ bool testinternal::testFive(QString &outString)
     for (int i = 0; i < 12; i++)
     {
         dCnts[i] = (static_cast<double>(cnts[i]) / 10000.);
-        if (dCnts[i] < 1.25 || dCnts[i] > 1.31) testFlag = false;
+        if (dCnts[i] < 2 * 1.25 || dCnts[i] > 2 * 1.31) testFlag = false;
 
         if (i == 3) out << "Environment 2: ";
         if (i == 6) out << "Playing field 2:\nEnvironment 1: ";
@@ -577,7 +578,7 @@ bool testinternal::testFive(QString &outString)
 
     flagString = testFlag ? "true" : "false";
 
-    out << "TREvoSim expects all above to be between 1.25 and 1.31 and returned " << flagString << "\n";
+    out << "TREvoSim expects all above to be between 2.50 and 2.62 and returned " << flagString << "\n";
 
     if (testFlag) out << "\nMutation tests passed.\n";
 
