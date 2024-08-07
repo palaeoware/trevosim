@@ -1,20 +1,21 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>5. Window Layout &mdash; TREvoSim 3.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
+        <script src="_static/documentation_options.js?v=acc74ff5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -27,15 +28,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> TREvoSim
-            <img src="_static/TREvoSim.jpg" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            TREvoSim
+              <img src="_static/TREvoSim.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 3.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -73,8 +78,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><span class="section-number">5. </span>Window Layout</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">5. </span>Window Layout</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/windowlayout.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -85,13 +90,13 @@
            <div itemprop="articleBody">
              
   <section id="window-layout">
-<span id="windowlayout"></span><h1><span class="section-number">5. </span>Window Layout<a class="headerlink" href="#window-layout" title="Permalink to this headline">¶</a></h1>
+<span id="windowlayout"></span><h1><span class="section-number">5. </span>Window Layout<a class="headerlink" href="#window-layout" title="Link to this heading">¶</a></h1>
 <figure class="align-center">
 <img alt="_images/windowLayoutWithText.png" src="_images/windowLayoutWithText.png" />
 </figure>
 <p>The main window comprises a number of elements, outlined below.</p>
 <section id="toolbar">
-<h2><span class="section-number">5.1. </span>Toolbar<a class="headerlink" href="#toolbar" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">5.1. </span>Toolbar<a class="headerlink" href="#toolbar" title="Link to this heading">¶</a></h2>
 <p>The main toolbar appears with the pause and stop buttons greyed out (disabled) when the simulation is not running:</p>
 <figure class="align-default">
 <img alt="_images/maintoolbar1.png" src="_images/maintoolbar1.png" />
@@ -102,48 +107,48 @@
 </figure>
 <p>The buttons control the simulation, as well as launching dialogues, whilst the Save path text box defines the program output location.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Run</dt>
+<dt class="field-odd">Run<span class="colon">:</span></dt>
 <dd class="field-odd"><p>This button launches a simulation, and then runs it until the requested number of species has evolved (see <a class="reference internal" href="settings.html#settings"><span class="std std-ref">Settings - Organisms and simulation</span></a> ), the simulation is paused, or cancelled (escape key).</p>
 </dd>
-<dt class="field-even">Pause</dt>
+<dt class="field-even">Pause<span class="colon">:</span></dt>
 <dd class="field-even"><p>Pauses simulation, which can be resumed when requested by pressing pause again.</p>
 </dd>
-<dt class="field-odd">Reset</dt>
+<dt class="field-odd">Reset<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Resets the simulation by removing all digital organisms from the playing field and species list.</p>
 </dd>
-<dt class="field-even">Batch</dt>
+<dt class="field-even">Batch<span class="colon">:</span></dt>
 <dd class="field-even"><p>For repeated runs using the same settings, TREvoSim provides a batch mode. The number of runs is requested on launching batch mode, and output files are labelled accordingly. On launching a batch run, TREvoSim will complete the first run in serial, updating the GUI, allowing it to provide warnings at the end of the run (and provide the opportunity to cancel). After this, all remaining batches will be completed in parallel (note that this speeds up each simulation significantly: the duration of the first run is not a particularly good indicator of how long you should expect the batch to run for in total).</p>
 </dd>
-<dt class="field-odd">Settings</dt>
+<dt class="field-odd">Settings<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Launches <a class="reference internal" href="settings.html#settings"><span class="std std-ref">Settings - Organisms and simulation</span></a> dialogue.</p>
 </dd>
-<dt class="field-even">Output</dt>
+<dt class="field-even">Output<span class="colon">:</span></dt>
 <dd class="field-even"><p>Launches <a class="reference internal" href="loggingsim.html#loggingsim"><span class="std std-ref">Logging the Simulation</span></a> dialogue.</p>
 </dd>
-<dt class="field-odd">Tests</dt>
+<dt class="field-odd">Tests<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Runs the TREvoSim test suite, reporting test results in a new panel that appears on the right of the main window.</p>
 </dd>
-<dt class="field-even">Save path</dt>
+<dt class="field-even">Save path<span class="colon">:</span></dt>
 <dd class="field-even"><p>All files created by the program are written to a folder titled <em>TREvoSim_output</em>, created in this location.</p>
 </dd>
-<dt class="field-odd">Change</dt>
+<dt class="field-odd">Change<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Launches a file explorer to change the save path.</p>
 </dd>
-<dt class="field-even">About</dt>
+<dt class="field-even">About<span class="colon">:</span></dt>
 <dd class="field-even"><p>Opens a dialogue with information about TREvoSim, and links to the code and for bug reporting.</p>
 </dd>
 </dl>
 </section>
 <section id="species-list">
-<h2><span class="section-number">5.2. </span>Species list<a class="headerlink" href="#species-list" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">5.2. </span>Species list<a class="headerlink" href="#species-list" title="Link to this heading">¶</a></h2>
 <p>This panel updates as a run of the simulation progresses: it shows the binary string for the species in a simulation (up to the first 128 characters are displayed), once available. The panel starts as blank; once speciation occurs and any given species remains extant (i.e. there is a living representative in the playing field), the species is represented by a series of dashes. Once the species is extinct, and characters have been recorded (see algorithm description in Keating <em>et al.</em> 2019 for more details), these are printed to the panel.</p>
 </section>
 <section id="newick-string">
-<h2><span class="section-number">5.3. </span>Newick string<a class="headerlink" href="#newick-string" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">5.3. </span>Newick string<a class="headerlink" href="#newick-string" title="Link to this heading">¶</a></h2>
 <p>This text box updates with a Newick string showing the tree of the current simulation run, which updates as speciation events occur. This provides an immediate picture of, for example, the tree asymmetry within a run.</p>
 </section>
 <section id="status-bar">
-<h2><span class="section-number">5.4. </span>Status bar<a class="headerlink" href="#status-bar" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">5.4. </span>Status bar<a class="headerlink" href="#status-bar" title="Link to this heading">¶</a></h2>
 <p>The status bar is updated with messages during and after a run: for example, during a run it displays the iteration number, and afterwards it can provide messages about the data (e.g. number of uninformative characters, if these are not set to be stripped out, number of identical terminals). It also displays progress bars where one is required.</p>
 </section>
 </section>

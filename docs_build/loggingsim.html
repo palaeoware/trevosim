@@ -1,20 +1,21 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>8. Logging the Simulation &mdash; TREvoSim 3.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
+        <script src="_static/documentation_options.js?v=acc74ff5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -27,15 +28,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> TREvoSim
-            <img src="_static/TREvoSim.jpg" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            TREvoSim
+              <img src="_static/TREvoSim.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 3.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -78,8 +83,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><span class="section-number">8. </span>Logging the Simulation</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">8. </span>Logging the Simulation</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/loggingsim.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -90,11 +95,11 @@
            <div itemprop="articleBody">
              
   <section id="logging-the-simulation">
-<span id="loggingsim"></span><h1><span class="section-number">8. </span>Logging the Simulation<a class="headerlink" href="#logging-the-simulation" title="Permalink to this headline">¶</a></h1>
+<span id="loggingsim"></span><h1><span class="section-number">8. </span>Logging the Simulation<a class="headerlink" href="#logging-the-simulation" title="Link to this heading">¶</a></h1>
 <section id="logging-system">
-<h2><span class="section-number">8.1. </span>Logging system<a class="headerlink" href="#logging-system" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">8.1. </span>Logging system<a class="headerlink" href="#logging-system" title="Link to this heading">¶</a></h2>
 <section id="end-run-log">
-<h3><span class="section-number">8.1.1. </span>End run log<a class="headerlink" href="#end-run-log" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">8.1.1. </span>End run log<a class="headerlink" href="#end-run-log" title="Link to this heading">¶</a></h3>
 <p>TREvoSim has a versatile logging system which allows the user to define outputs in a range of formats required for phylogenetic inference packages, or e.g. R, provided these allow plain text inputs. Clicking on the output button of the toolbar will launch the output dialogue, which has two tabs. The first is a log that is output at the end of the run:</p>
 <figure class="align-center">
 <img alt="_images/output_01.png" src="_images/output_01.png" />
@@ -104,43 +109,43 @@
 <p>In addition to these two custom files, TREvoSim can output a tree for each run in a standard nexus format. The options at the bottom of the output tab allow you to define the basename for this file. The output includes the tree and translate block, as well as a comment with the settings of the run written to it.</p>
 </section>
 <section id="running-log">
-<h3><span class="section-number">8.1.2. </span>Running log<a class="headerlink" href="#running-log" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">8.1.2. </span>Running log<a class="headerlink" href="#running-log" title="Link to this heading">¶</a></h3>
 <p>The other tab is a running log which is output during a run:</p>
 <figure class="align-center">
 <img alt="_images/output_02.png" src="_images/output_02.png" />
 </figure>
 <p>This is of utility for studying processes as they occur during a run, as it is output on a regular basis as the simulation progresses. Any text entered into the Custom running log text box is output to a new file (appended with an iterator) at the requested frequency. This can be used to record anything in the state of the simulation required to study a process of interest. At the top of the dialogue are two options:</p>
 <dl class="field-list simple">
-<dt class="field-odd">Write running log</dt>
+<dt class="field-odd">Write running log<span class="colon">:</span></dt>
 <dd class="field-odd"><p>By default the running log is not created or written to when a simulation runs. In order to write the files this option needs to be enabled.</p>
 </dd>
-<dt class="field-even">Frequency</dt>
+<dt class="field-even">Frequency<span class="colon">:</span></dt>
 <dd class="field-even"><p>This dictates the frequency, in iterations, with which a new running log file is written.</p>
 </dd>
 </dl>
 <p>Below this is a free text box. This works the same way, and uses the same keywords (shown below) as the end run log, outputting data in the current state for the iteration at which the log is written – it is only possible to enter text into this box when the Write running log checkbox is ticked.</p>
 <p>There are then two further options at the base of the dialogue:</p>
 <dl class="field-list simple">
-<dt class="field-odd">Write full working log</dt>
+<dt class="field-odd">Write full working log<span class="colon">:</span></dt>
 <dd class="field-odd"><p>When this is checked, TREvoSim outputs a text file that it appends to as it runs. This file outlines every step of each iteration, such as the state of the playing field, the environment, and the processes the software is going through. This helps understand and fact check any given run, but for significant playing field sizes, taxon numbers, or character numbers, it creates a large text file (10s – 100s of MB).</p>
 </dd>
-<dt class="field-even">Write ecosystem engineers</dt>
+<dt class="field-even">Write ecosystem engineers<span class="colon">:</span></dt>
 <dd class="field-even"><p>There is a custom log for simulations in which ecosystem engineers are enabled (the nature of this functionality does not allow all required information to be easily output using the running log: this is primarily a convenience function).</p>
 </dd>
 </dl>
 </section>
 </section>
 <section id="keywords">
-<h2><span class="section-number">8.2. </span>Keywords<a class="headerlink" href="#keywords" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">8.2. </span>Keywords<a class="headerlink" href="#keywords" title="Link to this heading">¶</a></h2>
 <p>Keywords within two vertical bars ( e.g. ||Matrix|| ) are replaced as a file is written as follows:</p>
 <dl class="field-list simple">
-<dt class="field-odd">Character_Number</dt>
+<dt class="field-odd">Character_Number<span class="colon">:</span></dt>
 <dd class="field-odd"><p>This outputs the character number.</p>
 </dd>
-<dt class="field-even">Count</dt>
+<dt class="field-even">Count<span class="colon">:</span></dt>
 <dd class="field-even"><p>This is replaced with a counter for batch runs; starting from zero and incrementing by one. This is padded with leading zeroes to three figures</p>
 </dd>
-<dt class="field-odd">Ecosystem_Engineers</dt>
+<dt class="field-odd">Ecosystem_Engineers<span class="colon">:</span></dt>
 <dd class="field-odd"><p>This prints a list of species, and their ecosystem engineering status (i.e. whether any members of this species are ecosystem engineers). A minimal example is shown below.</p>
 </dd>
 </dl>
@@ -183,10 +188,10 @@
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Iteration</dt>
+<dt class="field-odd">Iteration<span class="colon">:</span></dt>
 <dd class="field-odd"><p>This outputs the current iteration number.</p>
 </dd>
-<dt class="field-even">Matrix</dt>
+<dt class="field-even">Matrix<span class="colon">:</span></dt>
 <dd class="field-even"><p>This is replaced with the matrix from the run. For example:</p>
 </dd>
 </dl>
@@ -199,7 +204,7 @@
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">MrBayes_Tree</dt>
+<dt class="field-odd">MrBayes_Tree<span class="colon">:</span></dt>
 <dd class="field-odd"><p>This writes a tree in standard Newick format, including branch lengths (these are based on iteration number throughout):</p>
 </dd>
 </dl>
@@ -208,7 +213,7 @@
 </div>
 <p><em>Note</em> The mechanism used for tree writing differs between TNT and MrBayes outputs – the tree topology is the same, but the taxon order differs.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Root</dt>
+<dt class="field-odd">Root<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Writes the genome of the organism used to seed the simulation, thereby allowing characters to be polarised correctly with respect to the root of the tree (see <a class="reference internal" href="algorithmconcepts.html#algorithmconcepts"><span class="std std-ref">Algorithm and Concepts</span></a>):</p>
 </dd>
 </dl>
@@ -216,7 +221,7 @@
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Settings</dt>
+<dt class="field-odd">Settings<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Writes the current TREvoSim settings to the file (this is provided as a useful way to record, with any output data, the state of the TREvoSim variables for any given run). Shown below for the defaults:</p>
 </dd>
 </dl>
@@ -224,7 +229,7 @@
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">TNT_Tree</dt>
+<dt class="field-odd">TNT_Tree<span class="colon">:</span></dt>
 <dd class="field-odd"><p>This writes a tree, if required, in TNT format (i.e. only brackets and terminal labels):</p>
 </dd>
 </dl>
@@ -233,7 +238,7 @@
 </div>
 <p><em>Note</em> The mechanism used for tree writing differs between TNT and MrBayes outputs – the tree topology is the same, but the taxon order differs.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Time</dt>
+<dt class="field-odd">Time<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Adds a timestamp:</p>
 </dd>
 </dl>
@@ -241,18 +246,18 @@
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Taxon_Number</dt>
+<dt class="field-odd">Taxon_Number<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Writes the number of species that have existed since the start of the simulation at the iteration it is called.</p>
 </dd>
-<dt class="field-even">Unresolvable</dt>
+<dt class="field-even">Unresolvable<span class="colon">:</span></dt>
 <dd class="field-even"><p>This prints a list of unresolvable taxa (or a notice that there are none if required).</p>
 </dd>
-<dt class="field-odd">Uninformative</dt>
+<dt class="field-odd">Uninformative<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Writes the number of uninformative characters.</p>
 </dd>
 </dl>
 <section id="keywords-example">
-<h3><span class="section-number">8.2.1. </span>Keywords example<a class="headerlink" href="#keywords-example" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">8.2.1. </span>Keywords example<a class="headerlink" href="#keywords-example" title="Link to this heading">¶</a></h3>
 <p>As an example, the following – entered as one of the custom files at the end of the run – would output a block of text that could be run as a macro in tnt:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mxram</span> <span class="mi">100</span><span class="p">;</span>
 <span class="n">NSTATES</span> <span class="n">nogaps</span><span class="p">;</span>

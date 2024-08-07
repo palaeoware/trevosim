@@ -58,7 +58,7 @@ After initialisation, a simulation can be run, either until the requested number
 
 #. Calculate fitness for organisms in playing field, and sort playing field by fitness, with the fittest organisms at the top of the list. If a number of organisms have the same fitness (e.g., at initialization), these are randomly ordered.
 
-#. An organism is picked to be duplicated via from a geometric distribution with p = 0.5 by default (i.e. there is a 50% chance of selecting the first organism in the list, then if that is not chosen, a 50% chance of selecting the second, and so on). If the simulation reaches the end of the playing field without selecting an organism, it starts from the beginning again. Alternatively, there is the option to select a random individual from the playing field, without linking this to fitness ('No selection' mode). 
+#. An organism is picked to be duplicated via a geometric distribution with p = 0.5 by default (i.e. there is a 50% chance of selecting the first organism in the list, then if that is not chosen, a 50% chance of selecting the second, and so on). If the simulation reaches the end of the playing field without selecting an organism, it starts from the beginning again. Alternatively, there is the option to select a random individual from the playing field, without linking this to fitness ('No selection' mode). 
 
 #. The organism selected for duplication has a user-defined chance of mutation (defined as mutations per hundred characters per iteration; default 5.0 mutations per iteration per 100 genome bits). The user can select whether deleterious mutations are accepted.
 

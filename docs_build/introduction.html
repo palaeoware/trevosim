@@ -1,20 +1,21 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>1. Introduction &mdash; TREvoSim 3.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
+        <script src="_static/documentation_options.js?v=acc74ff5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -27,15 +28,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> TREvoSim
-            <img src="_static/TREvoSim.jpg" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            TREvoSim
+              <img src="_static/TREvoSim.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 3.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -76,8 +81,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><span class="section-number">1. </span>Introduction</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1. </span>Introduction</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/introduction.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -88,37 +93,37 @@
            <div itemprop="articleBody">
              
   <section id="introduction">
-<h1><span class="section-number">1. </span>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">1. </span>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h1>
 <section id="overview">
-<h2><span class="section-number">1.1. </span>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.1. </span>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
 <p>TREvoSim is an individual-based evo-evolutionary model that lacks complex spatial structure (if you want space, check out sister package <a class="reference external" href="https://github.com/palaeoware/revosim">REvoSim</a>). It is abstracted, and particularly well-suited to simulating discrete binary (~phenomic) data for phylogenetic research, and the outcomes of other evolutionary and environmental processes in the absence of space. The papers on the page <a class="reference internal" href="index.html#index"><span class="std std-ref">Welcome to TREvoSim’s User Manual</span></a> provide useful information regarding the software, its approach, and its limitations.</p>
 <p>In brief, individuals comprise binary strings, referred to throughout this documentation as their genome, which can be output as a phylogenetic matrix at the end of the run (i.e. these form the character data in the simulation). Genomes are compared with one or several environments, also comprise a series of binary strings (masks). Fitness of the individuals is calculated based on the hamming (i.e. character) distance between their genome and the masks. For a full description of the fitness algorithm, see Garwood et al. (<a class="reference external" href="https://doi.org/10.1111/pala.12420">2019</a>) and Keating et al. (<a class="reference external" href="https://doi.org/10.1093/sysbio/syaa012">2020</a>), cited on the <a class="reference internal" href="index.html#index"><span class="std std-ref">Welcome to TREvoSim’s User Manual</span></a> page. Individuals are placed in a list structure called the playing field (of which there can be one, or many, with the same – or different – environments), and compete with other individuals within their own playing field. An individual’s fitness dictates its probability of duplication, which happens for one individual per playing field per iteration. On duplication there is a user-defined chance of a mutation being applied. TREvoSim employs a lineage-based species concept: a new species is defined based on genomic distance to either its parent species, or to that parent’s last daughter species to appear. As a simulation runs, a tree representing the evolutionary relationships between the species is recorded, and the character data for each species is recorded at species extinction. A phylogeny and character data can be output after a requested number of taxa has evolved, or after a set number of iterations.</p>
 </section>
 <section id="simulation-setup">
-<h2><span class="section-number">1.2. </span>Simulation setup<a class="headerlink" href="#simulation-setup" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.2. </span>Simulation setup<a class="headerlink" href="#simulation-setup" title="Link to this heading">¶</a></h2>
 <p>Variables can be defined by clicking on the Settings button in the toolbar. This creates a pop up window, which has two tabs:</p>
 <dl class="field-list simple">
-<dt class="field-odd">Organisms and simulation</dt>
+<dt class="field-odd">Organisms and simulation<span class="colon">:</span></dt>
 <dd class="field-odd"><p>This tab contains a series of settings that defines the parameters for the simulation setup, and properties of the organisms. See <a class="reference internal" href="settings.html#settings"><span class="std std-ref">Settings - Organisms and simulation</span></a>.</p>
 </dd>
-<dt class="field-even">Environment and extinction</dt>
+<dt class="field-even">Environment and extinction<span class="colon">:</span></dt>
 <dd class="field-even"><p>Variables defined within this tab control extrinsic factors that impact on the organisms. See <a class="reference internal" href="settings2.html#settings2"><span class="std std-ref">Settings - Environment, events and playing fields</span></a>.</p>
 </dd>
 </dl>
 <p>Variables are saved on software exit, and thus persist between sessions. If required at any point, it is possible to <a class="reference internal" href="filecommands.html#restore-default-settings"><span class="std std-ref">Restore default settings</span></a>.</p>
 </section>
 <section id="output-setup">
-<h2><span class="section-number">1.3. </span>Output setup<a class="headerlink" href="#output-setup" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.3. </span>Output setup<a class="headerlink" href="#output-setup" title="Link to this heading">¶</a></h2>
 <p>TREvoSim provides functionality for two types of logs. All logs are placed within a folder called TREvoSim_output in the save path defined in the toolbar. To change this click on change in the toolbar. The options associated with these can be accessed by clicking on the Output button in the toolbar, which creates a pop up window with the following tabs:</p>
 <dl class="field-list simple">
-<dt class="field-odd">End run log</dt>
+<dt class="field-odd">End run log<span class="colon">:</span></dt>
 <dd class="field-odd"><p>On this tab you can configure outputs at the end of a log, including:</p>
 <ul class="simple">
 <li><p>Two custom output files – the options allow  you to define file name, content (replacing keywords in ||double pipes|| with the requested information – see <a class="reference internal" href="loggingsim.html#loggingsim"><span class="std std-ref">Logging the Simulation</span></a>) and extension.</p></li>
 <li><p>A standard nex tree file.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Running log</dt>
+<dt class="field-even">Running log<span class="colon">:</span></dt>
 <dd class="field-even"><p>This tab allows a running log to be defined that can record the state of the simulation at user-requested frequencies (see <a class="reference internal" href="loggingsim.html#loggingsim"><span class="std std-ref">Logging the Simulation</span></a>). The tab includes options for:</p>
 <ul class="simple">
 <li><p>Header text</p></li>
@@ -131,19 +136,19 @@
 </dl>
 </section>
 <section id="quick-start">
-<h2><span class="section-number">1.4. </span>Quick start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.4. </span>Quick start<a class="headerlink" href="#quick-start" title="Link to this heading">¶</a></h2>
 <p>The TREvoSim defaults will allow you to create exemplar data in TREvoSim by hitting the Run button on the toolbar. This will output a nexus file with the final character matrix in it that can be loaded in e.g. R for analysis, placed in a folder called <em>TREvoSim_output</em>, the default location of which is your desktop. It will also output a nexus formatted tree file in this folder.</p>
 </section>
 <section id="defaults">
-<h2><span class="section-number">1.5. </span>Defaults<a class="headerlink" href="#defaults" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.5. </span>Defaults<a class="headerlink" href="#defaults" title="Link to this heading">¶</a></h2>
 <p>TREvoSim’s default simulation parameters are intended to be a good general place to start when thinking about phylogenetic questions. See <a class="reference internal" href="algorithmconcepts.html#default-settings"><span class="std std-ref">Default settings</span></a> for more information.</p>
 </section>
 <section id="software-behaviour">
-<h2><span class="section-number">1.6. </span>Software behaviour<a class="headerlink" href="#software-behaviour" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.6. </span>Software behaviour<a class="headerlink" href="#software-behaviour" title="Link to this heading">¶</a></h2>
 <p>Within each session, TREvoSim keeps a counter of the run number, which it increments when you press play (to run a simulation) or when you run a batch. Cancelling a batch part way through will result in this counter not being updated, and any runs written at the point of cancellation being subsequently overwritten. This counter is reset between sessions, and runs from subsequent instances will overwrite older ones if the output location remains unchanged. TREvoSim saves all other settings between  sessions – although these can be reset to default if required (see <a class="reference internal" href="filecommands.html#restore-default-settings"><span class="std std-ref">Restore default settings</span></a>).</p>
 </section>
 <section id="issues-and-support">
-<h2><span class="section-number">1.7. </span>Issues and support<a class="headerlink" href="#issues-and-support" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">1.7. </span>Issues and support<a class="headerlink" href="#issues-and-support" title="Link to this heading">¶</a></h2>
 <p>Should you wish to report issues with the software, request new features, or seek guidance on any aspect of TREvoSim, you can do so by  <a class="reference external" href="https://github.com/palaeoware/trevosim/issues">submitting an issue on the TREvoSim GitHub page</a>.</p>
 </section>
 </section>

@@ -129,7 +129,7 @@ This has been tested on Ubuntu 22.04 64-bit with QT v6.x using GCC (64-bit).
 
     .. code-block:: console
 
-      sudo apt-get install build-essential libgl1-mesa-dev
+      sudo apt-get install build-essential libgl1-mesa-dev cmake
       sudo apt install qt6-base-dev libqt6core5compat6-dev
 
 
@@ -140,10 +140,11 @@ This has been tested on Ubuntu 22.04 64-bit with QT v6.x using GCC (64-bit).
       git clone https://github.com/palaeoware/trevosim.git
       cd trevosim
 
-#. Within TREvoSim folder, run the following command to build the software:
+#. Within TREvoSim folder, run the following commands to build the software:
 
     .. code-block:: console
-
+      
+      cmake .
       cmake --build .
 
 #. Launch the software by double clicking on the TREvoSim binary that has been created in this folder.
