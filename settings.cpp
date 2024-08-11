@@ -298,13 +298,13 @@ void Settings::slotPlayingfieldNumberChanged()
     //We want to allow asymmetrical mixing with two playing fields, otherwise just have a set possibility
     if (ui->s_multiple->value() > 2)
     {
-        ui->label_15->setText("Probability of mixing");
+        ui->label_15->setText("Percent chance of mixing");
         ui->s_mixing_0_to_1->setEnabled(false);
         ui->label_21->setEnabled(false);
     }
     else if (ui->s_multiple->value() == 2)
     {
-        ui->label_15->setText("Probability of mixing - PF2 to PF1");
+        ui->label_15->setText("Percent chance of mixing - PF2 to PF1");
         if (ui->c_mixing->isChecked())
         {
             ui->s_mixing_0_to_1->setEnabled(true);
