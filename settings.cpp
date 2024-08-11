@@ -97,7 +97,7 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
 
     if (settings->ecosystemEngineersArePersistent)ui->r_persistent_EE->setChecked(true);
     else ui->r_once_EE->setChecked(true);
-    //Sort out GUI on load
+    //Sort out GUI on loadmixingProbabilityZeroToOne
     slotEngineersChanged();
     slotEngineersRadioClicked();
     slotPlayingfieldNumberChanged();
