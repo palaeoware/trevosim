@@ -489,7 +489,7 @@
        <item row="26" column="2">
         <widget class="QSpinBox" name="s_mixing_1_to_0">
          <property name="maximum">
-          <number>65535</number>
+          <number>100</number>
          </property>
         </widget>
        </item>
@@ -557,7 +557,7 @@
        <item row="27" column="2">
         <widget class="QSpinBox" name="s_mixing_0_to_1">
          <property name="maximum">
-          <number>65535</number>
+          <number>100</number>
          </property>
         </widget>
        </item>
