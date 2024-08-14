@@ -26,7 +26,7 @@ About::About(QWidget *parent, QString title) :
 
     ui->textLabel_2->setWordWrap(true);
     ui->textLabel_2->setText("This version of " + QString(PRODUCTNAME) + " was compiled on the date shown above. <br><br>"
-                             "It was coded by <b>Russell Garwood</b> (russell.garwood@gmail.com) and uses a GUI theme designed by <b>Alan R.T. Spencer</b> (alan.spencer@imperial.ac.uk)."
+                             "Software and core concepts developed by <b>Russell Garwood</b> (russell.garwood@gmail.com) with additional software development by <b>Alan R.T. Spencer</b> (alan.spencer@imperial.ac.uk)."
                              "<br><br>Input from <b>Mark Sutton</b> (m.sutton@imperial.ac.uk) has been integral to its development. Invaluable ideas and disucssion were provided by: Robert Sansom; Joe Keating; Chris Knight; Roger Benson; Thomas Halliday, and a great number of other people."
                              "<br><br>Reports are appreciated, and comments, suggestions, and feature requests are welcome.");
     ui->textLabel_2->setAlignment(Qt::AlignCenter);
