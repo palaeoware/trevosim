@@ -77,7 +77,7 @@ bibliography: paper.bib
 
 # Summary
 Simulations provide valuable insights into the patterns and processes of evolution, and the performance of analytical methods used to investigate empirical data
-[@Wright_Hillis_2014; @Barido-Sottani_Saupe_Smiley_Soul_Wright_Warnock_2020; @Dolson_Ofria_2021]. Here we present TREvoSim v3.0.0: an agent- or individual-based model written in C++, in which digital organisms evolve, creating phylogenetic character data and trees. Trees inferred from empirical data always carry uncertainty, but TREvoSim can create a known tree alongside associated character data, allowing -- for example -- assessment of phylogenetic inference methods [@Keating_Sansom_Sutton_Knight_Garwood_2020; @Mongiardino_Koch_Garwood_Parry_2021; @Mongiardino_Koch_Garwood_Parry_2023]. The v3.0.0 release adds a range of features to allow greater flexibility in simulating phylogenetic trees and character data (more logging options, finer control over character character and simulation parameters), and to facilitate the study of broader evolutionary topics (e.g. ecosystem engineering, adaptive landscapes, selection).  
+[@Wright_Hillis_2014; @Barido-Sottani_Saupe_Smiley_Soul_Wright_Warnock_2020; @Dolson_Ofria_2021]. Here we present TREvoSim v3.0.0: an agent- or individual-based model written in C++, in which digital organisms evolve, creating phylogenetic character data and trees. Trees inferred from empirical data always carry uncertainty, but TREvoSim can create a known tree alongside associated character data, allowing -- for example -- assessment of phylogenetic inference methods [@Keating_Sansom_Sutton_Knight_Garwood_2020; @Mongiardino_Koch_Garwood_Parry_2021; @Mongiardino_Koch_Garwood_Parry_2023]. The v3.0.0 release adds a range of features to allow greater flexibility in simulating phylogenetic trees and character data (more logging options, finer control over character character and simulation parameters), and to facilitate the study of broader evolutionary topics (e.g. ecosystem engineering, adaptive landscapes, selection).
 
 # Background 
 
@@ -105,11 +105,11 @@ When there are multiple environments for any given playing field, by default mas
 
 ### No selection
 
-Another new addition is a no selection mode — when this is enabled, organisms for replication are chosen from the playing field at random, rather than using fitness to determine replication probability. When this option is enabled, the simulation functions under drift. 
+Another new addition is a no selection mode — when this is enabled, organisms for replication are chosen from the playing field at random, rather than using fitness to determine replication probability. When this option is enabled, the simulation functions under drift, allowing study of e.g. neutral vs selective regimes. 
 
 ### Playing field mixing
 
-By default TREvoSim playing fields are independent data structures, and organisms in one playing field do not compete with those in others during a simulation. This new option allows configurable mixing of organisms between playing fields, which can be asymmetrical if desired. Playing field mixing  can facilitate the study of, for example, the dynamics of invasive species or biotic interchanges. 
+By default TREvoSim playing fields are independent data structures, and organisms in one playing field do not compete with those in others during a simulation. This new option allows configurable mixing of organisms between playing fields, which can be asymmetrical if desired. Playing field mixing can facilitate the study of, for example, the dynamics of invasive species or biotic interchanges. 
 
 ### Stochastic layer
 
@@ -123,7 +123,7 @@ This implements a limited period of increased rates of environmental change that
 
 ### Character limits
 
-New options allow finer control of TREvoSim functions that employ genome characters. Characters in TREvoSim are used in several portions of the algorithm -- they form the basis of calculating fitness of organisms, and are also employed in the identification of species. In previous versions of TREvoSim, all characters were used for both functions, through a user-defined total character number. From v3, a separate limit on the character count used for species selection and/or the fitness calculation can be applied (in the default settings, all are the same). When  either -- or both -- differ from the total character number, only a subset of characters (those from zero to the limit) are included in the defined operations, and others can evolve independent of these processes (i.e., in the absence of selective forces, akin to more neutral drift-like processes).
+New options allow finer control of TREvoSim functions that employ genome characters. Characters in TREvoSim are used in several portions of the algorithm -- they form the basis of calculating fitness of organisms, and are also employed in the identification of species. In previous versions of TREvoSim, all characters were used for both functions, through a user-defined total character number. From v3, a separate limit on the character count used for species selection and/or the fitness calculation can be applied (in the default settings, all are the same). When either -- or both -- differ from the total character number, only a subset of characters (those from zero to the limit) are included in the defined operations, and others can evolve independent of these processes (i.e., in the absence of selective forces, akin to more neutral drift-like processes).
 
 ### Default simulation parameters
 
