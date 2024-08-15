@@ -1,21 +1,20 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="./">
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>4. Algorithm and Concepts &mdash; TREvoSim 3.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/documentation_options.js?v=acc74ff5"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -28,19 +27,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-
-          
-          
-          <a href="index.html" class="icon icon-home">
-            TREvoSim
-              <img src="_static/TREvoSim.jpg" class="logo" alt="Logo"/>
+            <a href="index.html" class="icon icon-home"> TREvoSim
+            <img src="_static/TREvoSim.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 3.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -90,8 +85,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active"><span class="section-number">4. </span>Algorithm and Concepts</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><span class="section-number">4. </span>Algorithm and Concepts</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/algorithmconcepts.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -102,14 +97,14 @@
            <div itemprop="articleBody">
              
   <section id="algorithm-and-concepts">
-<span id="algorithmconcepts"></span><h1><span class="section-number">4. </span>Algorithm and Concepts<a class="headerlink" href="#algorithm-and-concepts" title="Link to this heading">¶</a></h1>
+<span id="algorithmconcepts"></span><h1><span class="section-number">4. </span>Algorithm and Concepts<a class="headerlink" href="#algorithm-and-concepts" title="Permalink to this headline">¶</a></h1>
 <section id="trevosim-algorithm-description">
-<h2><span class="section-number">4.1. </span>TREvoSim Algorithm Description<a class="headerlink" href="#trevosim-algorithm-description" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">4.1. </span>TREvoSim Algorithm Description<a class="headerlink" href="#trevosim-algorithm-description" title="Permalink to this headline">¶</a></h2>
 <p>TREvoSim has been developed across several publications, and the algorithm was first described in Keating et al. (<a class="reference external" href="https://doi.org/10.1093/sysbio/syaa012">2020</a>, v1.0.0), with modifications outlined in Mongiardino Koch et al (<a class="reference external" href="https://doi.org/10.1098/rspb.2021.0044">2021</a>, v2.0.0). The simulation approach also shares features with the spatially explicit eco-evolutionary simulation package REvoSim (Garwood et. al. <a class="reference external" href="https://doi.org/10.1111/pala.12420">2019</a>, Furness et. al. <a class="reference external" href="https://doi.org/10.21105/joss.05284">2023</a>). The latest version of the algorithm is described here to avoid having to build a picture by accessing multiple publications. Note, this is modified after those previous descriptions, and so employs the same wording in places.</p>
 <p>TREvoSim employs digital organisms in the form of binary strings of a user-defined length (e.g. 0010110011101010011011). The zeros and ones comprising the string are here referred to as the genome of the digital organism, and ultimately provide the binary characters that can be used at the end of a simulation for, for example, phylogenetic inference, and they are also used to assign fitness to organisms relative to an environment, as outlined below. When a simulation runs, organisms compete, replicate, and mutate. The simulation incorporates a species concept, and speciation is emergent in the simulation, allowing the software to output a phylogenetic tree showing species relationships during or at the end of a run.</p>
 <p>This overview employs figures from Garwood et al. (2024) – in all, user defined variables are shown in green font, and the values shown are the default. For clarity, the description eschews listing every potential modification to the algorithm that can be achieved through modifying the software settings, as this would obfuscate important functions in potentially unnecessary detail (although it does mention a number of key choices). Where a setting modifies the algorithm outlined below, this is described fully in the information included on the settings pages in this documentation. The implications of changing a setting are also described in these pages, wherever possible.</p>
 <section id="data-structures">
-<h3><span class="section-number">4.1.1. </span>Data structures<a class="headerlink" href="#data-structures" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">4.1.1. </span>Data structures<a class="headerlink" href="#data-structures" title="Permalink to this headline">¶</a></h3>
 <p>Organisms reside in a structure called the playing field – a list of organisms that, once a simulation is running, are sorted by fitness. The length of this list is user defined (this size is the limit on the number of organisms ‘alive’ at any given point during the simulation, and can include members of different species, as well as multiple organisms from the same species). All organisms within a single playing field compete with each other, and the default size of the playing field is 20 organisms. Associated with the playing field is one (by default), or several, environments. Environments in TREvoSim are a user-defined quantity of random numbers (= masks) that default to the same length as the organism genome. The default TREvoSim environment consists of 3 masks, of 128 characters. See below for a summary.</p>
 <figure class="align-center">
 <a class="reference internal image-reference" href="_images/data_structures.png"><img alt="_images/data_structures.png" src="_images/data_structures.png" style="width: 400px;" /></a>
@@ -118,7 +113,7 @@
 <p>If you wish to modify TREvoSim code, bear in mind that there are numerous other data structures present in the underlying code. You can find an overview of these at the start of mainwindow.cpp</p>
 </section>
 <section id="fitness-calculation">
-<h3><span class="section-number">4.1.2. </span>Fitness calculation<a class="headerlink" href="#fitness-calculation" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">4.1.2. </span>Fitness calculation<a class="headerlink" href="#fitness-calculation" title="Permalink to this headline">¶</a></h3>
 <p>Every iteration, the fitness of every organism in the playing field is calculated (using an approach first described in Garwood et al. 2019, and further detailed in Keating et al. 2020). To calculate fitness, TREvoSim uses an exclusive OR function (i.e. one that takes two inputs, outputs 1 where they differ, and 0 when they are the same) to calculate the <a class="reference external" href="https://en.wikipedia.org/wiki/Hamming_distance">Hamming distance</a> between the genome of the organism, and each mask in an environment in turn. For example, if there are three masks, the genome is compared to each in turn. The output of this operation has a one wherever inputs differ. The ones are summed across all output strings, so with three masks, by comparing every bit of the organism genome to the equivalent bit of each mask and summing the results, TREvoSim calculates a value between 0 and 3n. Fitness is then an integer calculated as the distance from a used-defined target value: by default that is zero, creating a sharp fitness peak in the environment (a small number of possible genome configurations can achieve maximal fitness), but setting this to e.g. 1.5n will allow a far wider range of genomic configurations to achieve maximal fitness. This approach is summarised in the figure below.</p>
 <figure class="align-center">
 <a class="reference internal image-reference" href="_images/fitness_calculation.png"><img alt="_images/fitness_calculation.png" src="_images/fitness_calculation.png" style="width: 400px;" /></a>
@@ -126,19 +121,19 @@
 <p>Where multiple environments exist, each organism within a playing field is compared to all environments associated with that playing field, and assigned the maximal fitness achieved across all comparisons. This fitness calculation is carried out independently for each playing field when there are multiple playing fields.</p>
 </section>
 <section id="trevosim-algorithm-summary">
-<h3><span class="section-number">4.1.3. </span>TREvoSim algorithm - Summary<a class="headerlink" href="#trevosim-algorithm-summary" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">4.1.3. </span>TREvoSim algorithm - Summary<a class="headerlink" href="#trevosim-algorithm-summary" title="Permalink to this headline">¶</a></h3>
 <p>The algorithm used for each TREvoSim iteration is described in full below. Key points are: members of the playing field compete, and their fitness is linked to reproductive success; and species within TREvoSim are defined based on Hamming distance (character distance) to past organisms within an evolving lineage. Key points are shown in the image below.</p>
 <figure class="align-center">
 <a class="reference internal image-reference" href="_images/algorithm.png"><img alt="_images/algorithm.png" src="_images/algorithm.png" style="width: 400px;" /></a>
 </figure>
 </section>
 <section id="trevosim-algorithm-initialisation">
-<h3><span class="section-number">4.1.4. </span>TREvoSim algorithm - Initialisation<a class="headerlink" href="#trevosim-algorithm-initialisation" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">4.1.4. </span>TREvoSim algorithm - Initialisation<a class="headerlink" href="#trevosim-algorithm-initialisation" title="Permalink to this headline">¶</a></h3>
 <p>To initialise the simulation, the software fills the playing field (or all, if there are several) with a clone of an individual designated as the first member of species zero. Initializing with a single organism is a necessary simplification to allow all organisms in the simulation to belong to the same phylogeny. By default, the chosen organism is close to a fitness peak for the starting masks (thus preventing the simulation being a single lineage adapting to one fitness peak; if multiple playing fields are present TREvoSim opts for the maximal possible fitness of starting individual that is the same across playing fields). Masks are initialised with random strings.</p>
 <p>A limited number of options are provided to give elements of user control to the initialisation: the initialising organism can be changed to a random individual if required, and fitness peaks across environments can be of equal height – see <a class="reference internal" href="settings2.html#settings2"><span class="std std-ref">Settings - Environment, events and playing fields</span></a>.</p>
 </section>
 <section id="trevosim-algorithm-iteration">
-<h3><span class="section-number">4.1.5. </span>TREvoSim algorithm - Iteration<a class="headerlink" href="#trevosim-algorithm-iteration" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">4.1.5. </span>TREvoSim algorithm - Iteration<a class="headerlink" href="#trevosim-algorithm-iteration" title="Permalink to this headline">¶</a></h3>
 <p>After initialisation, a simulation can be run, either until the requested number of species has evolved, or until a user defined iteration. The simulation iteration algorithm employs the following steps, which are applied every iteration to every playing field (if there are more than one) independently.</p>
 <ol class="arabic simple">
 <li><p>Calculate fitness for organisms in playing field, and sort playing field by fitness, with the fittest organisms at the top of the list. If a number of organisms have the same fitness (e.g., at initialization), these are randomly ordered.</p></li>
@@ -154,7 +149,7 @@
 <p>If stripping of uninformative characters is requested, the number of characters, and species difference, are increased at the start of a run and then informative characters are randomly subsampled at this stage to achieve the requested number of characters. A check for identical taxa is also conducted (the data are discarded and simulation repeated if the number of identical terminals is above a user-defined cut off). End of run logs are then written, and the simulation terminates.</p>
 </section>
 <section id="tree-and-speciation">
-<h3><span class="section-number">4.1.6. </span>Tree and speciation<a class="headerlink" href="#tree-and-speciation" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">4.1.6. </span>Tree and speciation<a class="headerlink" href="#tree-and-speciation" title="Permalink to this headline">¶</a></h3>
 <p>TREvoSim employs a lineage-based species concept, based on genomic distance. Under many settings, TREvoSim species are best thought of as a population with an element of genomic diversity, which might be considered as a pangenome. When an organism is duplicated, its current genomic configuration is compared to a reference genome. At first this is a copy of the species genome at origin (i.e. for the first speciation in any given lineage, once an individual is Hamming distance == species difference from its starting point, it is considered a new species). At any speciation within a lineage, the reference genome for comparison in the parent lineage is updated to the speciating genome. Hence, after the first speciation in any lineage, comparison is to the genome at last speciation: this prevents bursts of speciation from closely related organisms sharing a common parent, but still allows cladogenesis within a species.</p>
 <figure class="align-center">
 <img alt="_images/speciation_and_tree.png" src="_images/speciation_and_tree.png" />
@@ -163,14 +158,14 @@
 </section>
 </section>
 <section id="tree-rooting">
-<h2><span class="section-number">4.2. </span>Tree Rooting<a class="headerlink" href="#tree-rooting" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">4.2. </span>Tree Rooting<a class="headerlink" href="#tree-rooting" title="Permalink to this headline">¶</a></h2>
 <p>TREvoSim trees differ in some respects from how we typically think of empirical trees, and this is particularly true when it comes to rooting. If we consider the root to be the last common ancestor of everything in the tree (a relatively common definition, most often applied to a species), then this will be – in our case – an early individual within species zero, but not species zero itself. Due to the nature of the TREvoSim algorithm under many settings, species zero will remain in existence for a significant period of time after the existence of this individual (the simulation is initialised with a playing field full of clones of a species zero individual, and so this species will takes longer to go extinct than most others), allowing the population of species zero organisms to further diversify, and give birth to other species. As such, if we consider the root to be the oldest point in a tree, it will be the node splitting species zero (and typically its associated clade) from species one. Species zero may nest up-tree somewhere: as a species it has the oldest origin, but typically an extinction later than a number of other taxa in the tree, and it is a direct ancestor of a number of the species in a tree (the genome is written at extinction by default, and so its characters best represent its latest state). Given this, TREvoSim roots on the earliest node, rather than species zero- i.e. the root lies between species 1 and (assuming this species does not evolve into its own clade, which is often the case), the other taxa. Typically, this distinction (between the individual and the species) matters most where character polarisation is important, as opposed to the tree topology per se. Given this, there is the option to output character states at the root (i.e. the organism that is used to seed the simulation) in the logs (see <a class="reference internal" href="loggingsim.html#loggingsim"><span class="std std-ref">Logging the Simulation</span></a> ).</p>
 </section>
 <section id="default-settings">
-<h2><span class="section-number">4.3. </span>Default settings<a class="headerlink" href="#default-settings" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">4.3. </span>Default settings<a class="headerlink" href="#default-settings" title="Permalink to this headline">¶</a></h2>
 <p>TREvoSim’s default simulation parameters are chosen so as to represent a sensible place to start with phylogenetic questions in mind. One hundred outputs from runs made using the default parameters are included in the repository (folder /comparison_to_empirical_data/TREvoSim_output_defaults_2024/), in addition to twelve empirical, total evidence datasets (folder /comparison_to_empirical_data/Empirical_data/ ;  data source can be found in Mongiardino Koch et al. 2021, see <a class="reference internal" href="index.html#index"><span class="std std-ref">Welcome to TREvoSim’s User Manual</span></a>). Also in the folder /comparison_to_empirical_data/ is an R script that compares three aspects of the output data to the properties of the empirical trees/data, outlined below. This script can either be run within R by following the instructions to update the working directory within the R script, or on systems that can run a bash script, by providing the file run_rscript.sh with execute permissions and running it, which by default outputs comparison graphs (below) to /comparison_to_empirical_data/Graphs_out. The script can be modified to quantify other outputs as desired; if you would like to add further quantification to the script but are not able to do so, feel free to raise an issue (see <a class="reference internal" href="introduction.html#issues-and-support"><span class="std std-ref">Issues and support</span></a>).</p>
 <section id="homoplasy-extra-steps">
-<h3><span class="section-number">4.3.1. </span>Homoplasy - Extra steps<a class="headerlink" href="#homoplasy-extra-steps" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">4.3.1. </span>Homoplasy - Extra steps<a class="headerlink" href="#homoplasy-extra-steps" title="Permalink to this headline">¶</a></h3>
 <p>To quantify the homoplasy within data generated under default settings, the script graphs the average number of extra steps for each character for the empirical datasets (evaluated against the total evidence tree), and for the simulated data (evaluated against the true tree). This comparison is shown in the violin plot below:</p>
 <figure class="align-center">
 <img alt="_images/steps.png" src="_images/steps.png" />
@@ -178,7 +173,7 @@
 <p>The TREvoSim data (“simulated”; actually the results for all characters of the first 25 replicates provided with in the repository) is shown far right, in blue; all other datasets are labelled with taxonomic group, and represent the distribution of extra steps for all characters in the analysis. The dots show the mean for each dataset. The number of extra steps against the comparison tree of choice (total evidence for empirical, true tree for TREvoSim data), is comparable across datasets.</p>
 </section>
 <section id="tree-shape-asymmetry">
-<h3><span class="section-number">4.3.2. </span>Tree shape - Asymmetry<a class="headerlink" href="#tree-shape-asymmetry" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">4.3.2. </span>Tree shape - Asymmetry<a class="headerlink" href="#tree-shape-asymmetry" title="Permalink to this headline">¶</a></h3>
 <p>The tree asymmetry (= imbalance) and symmetry, is also calculated from the script. The box plots below show the symmetry for all TREvoSim trees (100 replicates) next to those for all empirical trees (twelve total evidence analyses) quantified through the J <sup>1</sup> index of (<a class="reference external" href="https://academic.oup.com/sysbio/article/71/5/1210/6567363">Lemant et al. (2022)</a>):</p>
 <figure class="align-center">
 <img alt="_images/tree_asymmetry.png" src="_images/tree_asymmetry.png" />
@@ -186,7 +181,7 @@
 <p>With other metrics, the mechanism normalisation appears to have an impact on the results, whereas this measure is intrinsically normalized. There is further discussion in this pull request on the  (<a class="reference external" href="https://github.com/palaeoware/trevosim/pull/53">TREvoSim github</a>). TREvoSim trees (“simulated”) are generally slightly less symmetrical than those in the empirical data, and the two have a broadly similar range. Thanks to Martin Smith for his contributions to this discussion and associated improvements to the analysis and scripts.</p>
 </section>
 <section id="tree-shape-treeness">
-<h3><span class="section-number">4.3.3. </span>Tree shape - Treeness<a class="headerlink" href="#tree-shape-treeness" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">4.3.3. </span>Tree shape - Treeness<a class="headerlink" href="#tree-shape-treeness" title="Permalink to this headline">¶</a></h3>
 <p>The script also provides a quantification of the normalised treeness (=stemminess) of a tree: the fraction of total tree length that is on internal branches of the tree. This comparison is shown in the box plots below, between 100 TREvoSim replicates and the 12 total evidence trees:</p>
 <figure class="align-center">
 <img alt="_images/treeness.png" src="_images/treeness.png" />
