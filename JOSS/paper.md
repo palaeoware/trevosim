@@ -139,7 +139,7 @@ Simulation-termination can now be configured to occur after either a user-define
 
 ### Codebase Tests
 
-TREvoSim v3.0.0 introduces a test suite covering all aspects of the simulation mechanics. These are included in the build pipeline, which will fail if any tests return a failure. 
+TREvoSim v3.0.0 introduces a test suite covering all aspects of the simulation mechanics. These can be accessed by the user, through the graphical user interface, and by developers through an integrated development environment such as Qt creator, as outlined in the documentation.
 
 # Statement of need
 
