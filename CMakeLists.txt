@@ -11,6 +11,10 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
+if(WIN32)
+set(BUILD_SHARED_LIBS ON)
+endif()
+
 if (APPLE)
     # Set the macOS binary to both intel and arm
     set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64" CACHE STRING "" FORCE)

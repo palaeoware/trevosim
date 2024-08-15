@@ -1,6 +1,26 @@
 #include "testsuite.h"
 #include "testinternal.h"
 
+#ifdef _WIN32
+#include <Windows.h>
+#endif
+
+int main(int argc, char *argv[])
+{
+    #ifdef _WIN32
+        if (AttachConsole(ATTACH_PARENT_PROCESS)) {
+            freopen("CON", "w", stdout);
+            freopen("CON", "w", stderr);
+        }
+        std::cout << std::endl;
+    #endif
+
+    ::testing::InitGoogleTest(&argc, argv);
+    int ret = RUN_ALL_TESTS();
+
+    return ret;
+}
+
 testsuite::testsuite()
 {
 }
