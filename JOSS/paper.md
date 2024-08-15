@@ -117,7 +117,7 @@ Provides a layer of abstraction between an organism’s genome and the bits used
 
 ### Perturbations
 
-This implements a limited period of increased rates of environmental change that occurs halfway through a run (when half the requested species have evolved, or at half the requested iteration number). This is intended for study of scenarios where evolutionary dynamics are driven by variations in the rate of environmental change[@Condamine_Rolland_Morlon_2013]. There is an option to also increase mixing between playing fields during a perturbation. 
+This implements a limited period of increased rates of environmental change that occurs halfway through a run (when half the requested species have evolved, or at half the requested iteration number). This is intended for study of scenarios where evolutionary dynamics are driven by variations in the rate of environmental change[@Condamine_Rolland_Morlon_2013]. There is an option to also increase mixing between playing fields during a perturbation. This system can provide insights into the impact of disturbance and rapid environmental change, for example, on evolution in a non-spatially explicit setting. 
 
 ## Software modifications 
 
