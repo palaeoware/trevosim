@@ -53,6 +53,35 @@ Quick start
 
 The TREvoSim defaults will allow you to create exemplar data in TREvoSim by hitting the Run button on the toolbar. This will output a nexus file with the final character matrix in it that can be loaded in e.g. R for analysis, placed in a folder called *TREvoSim_output*, the default location of which is your desktop. It will also output a nexus formatted tree file in this folder. 
 
+
+Experimental design
+-------------------
+
+TREvoSim is designed to offer the user flexibility, but at the same time, this requires experiments to incorporate a wide range of decisions regarding the simulation variables, which will need to reflect the question at hand. In some cases the impact of modifying one variable can be derived from first principles (for example, the larger the playing field, and thus population of digital organisms, the longer species are likely to survive before going extinct, and the longer tips are likely to be on the resulting tree). In other instances, an easier approach is to get a feel of the impact that modifying each variable has on the measures of interest (e.g. tree symmetry, homoplasy) by iteratively changing one variable at a time and studying the outputs. Given the significant parameter space of the simulation, we provide an example here in which TREvoSim has been used to study the impact of including fossils on phylogenetic inference -- full details can be found in the paper of Mongiardino Koch et al. (`2021 <https://doi.org/10.1098/rspb.2021.0044>`_). Simulation parameters were selected by comparing generated outputs (once subsampled as outlined below) with empirical total evidence datasets, and comparing a number of different metrics. This was achieved using an R script provided in the `supplementary information for that paper <https://doi.org/10.5061/dryad.4xgxd2585>`_ (see also, below: a modified, simpler version of that script is included in the source code of TREvoSim). Through iterative modification of the parameter settings, we were able to ensure that the outputs of TREvoSim were within the range of our empirical datasets for the metrics in question. Ultimately, our chosen parameters included:
+
+* A genome of size 500 (i.e. 500 characters in the phylogenetic matrix), allowing at least 300 parsimony-informative characters for our study after taxon subsampling and missing data imputation.
+* Simulations that ran to 999 terminals allowing us to subsequently subsample these (reasoning outlined below). 
+* Multiple playing fields to facilitate an early rapid radiation in our trees (one clade per playing field; ancient short internodes are often challenging to resolve for phylogenetic inference), and number of extant terminals at the end of a simulation. 
+* Random overwrite when returning a duplicated organism to a playing field, providing a wider variance in terminal branch lengths. 
+* To achieve the desired measures of tree symmetry and branch length we employed a fitness target of 0 and selection coin toss of 2, plus 5 playing fields of size 40, each with 5 non-identical environments of 3 masks, and a species difference of 8: all of these settings contribute towards the topology of the tree that evolves during a simulation.
+* Species difference also impacts on the homoplasy of the underlying character data, which informed the choice of this parameter value. 
+* An unresolvable cut off of 2, precluding identical terminals
+
+Subsequent data manipulation, conducted in R, included the following:
+
+* We removed trees with zero length branches (`see the supplementary methods for details of why these exist, and why we chose to remove them <https://royalsocietypublishing.org/doi/suppl/10.1098/rspb.2021.0044>`_)
+* The remaining trees had a mean of ~150 extant terminals, and we removed fossils from these at random until only 300 terminals remained, to reflect the loss of biodiversity in the fossil record through the process of fossilisation
+* At this point we compared simulations to twelve empirical datasets -- full discussion of our comparison is available in the `supplementary methods <https://royalsocietypublishing.org/doi/suppl/10.1098/rspb.2021.0044>`_. 
+* We then subsampled these again for our analyses to create our independent variables -- we varied the proportion of fossils in our datasets to assess the impact this had, and also imputed different levels of missing data. 
+* Through this process, we ultimately created 11,250 datasets for our experiments, which we subjected to phylogenetic inference, before comparing the inferred trees to the true tree topology for our results and discussion. 
+
+Note that this is a summary, and further discussion of all points is available in that paper, as well as areas in which our data demonstrably differs to empirical datasets (such as the distribution of missing data). 
+
+Data analysis
+-------------
+
+The scripts linked from the section above contain a full work flow from TREvoSim outputs to the publication figures, and can be used as an example of how to load, manipulate and analyse TREvoSim datasets in R. They are, however, also quite complex given the nature of the paper. A potentially gentler learning curve for achieving this same goal may be found in the R script included in the source code, in the folder comparison_to_empirical_data. This was used to quantify and compare TREvoSim outputs to total evidence datasets, but without the data manipulation included in the above workflow to allow the impact of including fossils to be investigated. Because the repository also includes TREvoSim datasets, it will run from the repository  without modification (although if launched within e.g. RStudio, you will need to set the working directory, as per the comments in the script). The script if fully commented throughout. 
+
 Defaults
 --------
 
