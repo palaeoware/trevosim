@@ -162,7 +162,7 @@ endif()
 
 if(APPLE)
     set_target_properties(${TREVOSIM_UNIT_TEST} PROPERTIES
-        MACOSX_BUNDLE ON
+        MACOSX_BUNDLE OFF
     )
 endif()
 
