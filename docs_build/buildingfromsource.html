@@ -171,7 +171,10 @@
 <img alt="_images/post_windeploy.png" src="_images/post_windeploy.png" />
 </figure>
 <ul class="simple">
-<li><p>You can now test if this has worked successfully by attempting to run the TREvoSim binary in the deploy folder. It should run without any missing libraries warnings.</p></li>
+<li><p>You can now test if this has worked successfully by attempting to run the TREvoSim.exe binary in the deploy folder. It should run without any missing libraries warnings.</p></li>
+<li><p>Next run the same windeployqt6 comand but for your TREvoSimTest.exe program.</p></li>
+<li><p>For the GoogleTest framework to run under TREvoSimTest.exe you need to copy the gtest.dll and gtest_main.dll from the ./bin folder (under your build folder) to the deploy folder.</p></li>
+<li><p>You can now test if this has worked successfully by attempting to run the TREvoSimTest.exe binary in the deploy folder. It should run without any missing libraries warnings.</p></li>
 <li><p>For more information on how this works see: <a class="reference external" href="https://doc.qt.io/qt-6/windows-deployment.html">https://doc.qt.io/qt-6/windows-deployment.html</a></p></li>
 </ul>
 </li>
@@ -381,11 +384,11 @@
 <h2><span class="section-number">3.2. </span>Development Testing<a class="headerlink" href="#development-testing" title="Link to this heading">¶</a></h2>
 <p>TREvoSim &gt; = v3 come with a suite of development tests that verify the core simulator/generator code. These can be called via one of two methods during the development phase:</p>
 <ol class="arabic">
-<li><p>As a standalone program - for this we leverage the GoogleTest Mocking and Testing Framework (<a class="reference external" href="https://github.com/google/googletest">https://github.com/google/googletest</a>) which is pulled in automatically by CMake and built alongside the TREvoSim main program - creating a separate standalone test program called TREvoSimTest. This program can be called from the command line on Mac/Linux or from the QT Creator environment on Windows.</p>
+<li><p>As a standalone program - for this we leverage the GoogleTest Mocking and Testing Framework (<a class="reference external" href="https://github.com/google/googletest">https://github.com/google/googletest</a>) which is pulled in automatically by CMake and built alongside the TREvoSim main program - creating a separate standalone test program called TREvoSimTest. This program can be called from the command line on Mac/Linux/Windows.</p>
 <blockquote>
 <div><ul>
-<li><p>Note: the MacOS TREvoSimTest.app needs to be packaged using the macdeployqt6 program first if you have built from source (see the building for MacOS instructions above). To run the test from the terminal you need to use:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./TREvoSimTest.app/Contents/MacOS/TREvoSimTest
+<li><p>Note: we recommend that the MacOS TREvoSimTest program is added to the TREvoSim.app package if you have built from source (see the building for MacOS instructions above). This simply requires you to copy the TREvoSimTest program to the TREvoSim.app/Contents/MacOS folder before running any .dmg creator. To run the test from the terminal you then can use:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./TREvoSim.app/Contents/MacOS/TREvoSimTest
 </pre></div>
 </div>
 </li>
