@@ -1,26 +1,29 @@
 #include "testsuite.h"
 #include "testinternal.h"
 
-#ifdef _WIN32
-#include <Windows.h>
-#endif
-
+// This is the main function called by the TREvoSimTest application
 int main(int argc, char *argv[])
 {
-    #ifdef _WIN32
-        if (AttachConsole(ATTACH_PARENT_PROCESS)) {
-            freopen("CON", "w", stdout);
-            freopen("CON", "w", stderr);
-        }
-        std::cout << std::endl;
-    #endif
-
     ::testing::InitGoogleTest(&argc, argv);
-    int ret = RUN_ALL_TESTS();
+    int rtr = RUN_ALL_TESTS();
 
-    return ret;
+    qInfo() << "Testing complete. Press any key to exit...";
+
+    // Qt Solution for waiting for a key input
+    QTextStream in(stdin);
+    forever
+    {
+        QString line = in.readLine();
+        if (!line.isNull())
+        {
+            break;
+        }
+    }
+
+    return rtr;
 }
 
+// Class testsuite
 testsuite::testsuite()
 {
 }

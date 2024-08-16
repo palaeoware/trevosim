@@ -25,7 +25,12 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationVersion(version);
 
     // Start GUI version...
-    if (argc == 1) {
+    if (argc < 2) {
+        #if defined( _WIN32 )
+            // hide console window
+            ::ShowWindow( ::GetConsoleWindow(), SW_HIDE );
+        #endif
+
         QPixmap splashPixmap(":/palaeoware_logo_square.png");
         QSplashScreen *splash = new QSplashScreen(splashPixmap, Qt::WindowStaysOnTopHint);
         splash->setAttribute(Qt::WA_DeleteOnClose, true);
@@ -34,20 +39,17 @@ int main(int argc, char *argv[])
         QApplication::processEvents();
         QTimer::singleShot(5000, splash, SLOT(close()));
 
-        MainWindow w;
-        w.show();
-        return a.exec();
+        MainWindow *w = new MainWindow;
+        w->show();
+
+        int e =  a.exec();
+
+        delete w; //needed to execute deconstructor
+        exit(e); //needed to exit the hidden console
+        return e;
     }
     // Start from a console...
     else {
-        #ifdef _WIN32
-        if (AttachConsole(ATTACH_PARENT_PROCESS)) {
-            freopen("CON", "w", stdout);
-            freopen("CON", "w", stderr);
-            std::cout << std::endl;
-        }
-        #endif
-
         //Sort out command line option
         QCommandLineParser *parser = new QCommandLineParser();
         parser->setApplicationDescription("REvoSim is an individual-based evolutionary model. You are using the command line option. See documentation or Garwood et al. (2019) Palaeontology for description of software.");
@@ -62,19 +64,23 @@ int main(int argc, char *argv[])
 
         parser->process(a);
 
+        MainWindow *w = new MainWindow;
+
         if (parser->isSet(opt_o))
         {
             QString fileFromCommandLine = QString();
             fileFromCommandLine = parser->value(opt_o);
-            qInfo() << "Program launched from command line, and will try to open file " << fileFromCommandLine << ".";
+            qInfo() << QString("Program launched from command line, and will try to open file %1.").arg(fileFromCommandLine);
 
             if (!fileFromCommandLine.isNull()) {
-                MainWindow w;
-                w.runFromCommandLine(fileFromCommandLine);
-                w.show();
+                w->runFromCommandLine(fileFromCommandLine);
             }
         }
 
-        return a.exec();
+        int e =  a.exec();
+
+        delete w; //needed to execute deconstructor
+        exit(e); //needed to exit the hidden console
+        return e;
     }
 }
