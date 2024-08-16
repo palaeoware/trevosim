@@ -69,13 +69,13 @@ TREvoSim is designed to offer the user flexibility, but at the same time, this r
 
 Subsequent data manipulation, conducted in R, included the following:
 
-* We removed trees with zero length branches (`see the supplementary methods for details of why these exist, and why we chose to remove them <https://royalsocietypublishing.org/doi/suppl/10.1098/rspb.2021.0044>`_)
-* The remaining trees had a mean of ~150 extant terminals, and we removed fossils from these at random until only 300 terminals remained, to reflect the loss of biodiversity in the fossil record through the process of fossilisation
+* We removed trees with zero length branches (`see the supplementary methods for details of why these exist, and why we chose to remove them <https://royalsocietypublishing.org/doi/suppl/10.1098/rspb.2021.0044>`_).
+* The remaining trees had a mean of ~150 extant terminals, and we removed fossils from these at random until only 300 terminals remained, to reflect the loss of biodiversity in the fossil record through the process of fossilisation.
 * At this point we compared simulations to twelve empirical datasets -- full discussion of our comparison is available in the `supplementary methods <https://royalsocietypublishing.org/doi/suppl/10.1098/rspb.2021.0044>`_. 
 * We then subsampled these again for our analyses to create our independent variables -- we varied the proportion of fossils in our datasets to assess the impact this had, and also imputed different levels of missing data. 
 * Through this process, we ultimately created 11,250 datasets for our experiments, which we subjected to phylogenetic inference, before comparing the inferred trees to the true tree topology for our results and discussion. 
 
-Note that this is a summary, and further discussion of all points is available in that paper, as well as areas in which our data demonstrably differs to empirical datasets (such as the distribution of missing data). 
+Note that this is a summary, and further discussion of all points is available in that paper, as well as areas in which our data demonstrably differ to empirical datasets (such as the distribution of missing data). 
 
 Data analysis
 -------------
