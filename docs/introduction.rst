@@ -65,7 +65,7 @@ TREvoSim is designed to offer the user flexibility, but at the same time, this r
 * Random overwrite when returning a duplicated organism to a playing field, providing a wider variance in terminal branch lengths. 
 * To achieve the desired measures of tree symmetry and branch length we employed a fitness target of 0 and selection coin toss of 2, plus 5 playing fields of size 40, each with 5 non-identical environments of 3 masks, and a species difference of 8: all of these settings contribute towards the topology of the tree that evolves during a simulation.
 * Species difference also impacts on the homoplasy of the underlying character data, which informed the choice of this parameter value. 
-* An unresolvable cut off of 2, precluding identical terminals
+* An unresolvable cut off of 2, precluding identical terminals.
 
 Subsequent data manipulation, conducted in R, included the following:
 
