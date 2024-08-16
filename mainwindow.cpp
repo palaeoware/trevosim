@@ -9,7 +9,6 @@
 #include "output.h"
 #include "about.h"
 
-//#include <algorithm>
 #include <QProgressDialog>
 #include <QShortcut>
 #include <QStandardPaths>

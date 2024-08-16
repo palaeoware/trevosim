@@ -38,3 +38,5 @@
 .DS_Store
 build/*
 /deploy
+/build_utils/windows/inno_setup/bin/*
+/build_utils/windows/inno_setup/build/*

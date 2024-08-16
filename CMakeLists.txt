@@ -12,7 +12,8 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
 if(WIN32)
-set(BUILD_SHARED_LIBS ON)
+    #Included here to build the .dlls for GoogleTest under Windows
+    set(BUILD_SHARED_LIBS ON)
 endif()
 
 if (APPLE)
@@ -105,13 +106,16 @@ qt_add_executable(${TREVOSIM_APP}
 # Links the required QT libs to the main TREvoSim executable
 target_link_libraries(${TREVOSIM_APP} PRIVATE Qt6::Core Qt::Gui Qt::Widgets Qt6::Concurrent Qt::Core5Compat)
 
-# Set the target properites for the main TREvoSim executable
+# Set the target properites for the main TREvoSim executable under Windows
 if(WIN32)
+    # This is set to OFF to force a console first build of the application.
+    # Alternative is a GUI only build when set to ON.
     set_target_properties(${TREVOSIM_APP} PROPERTIES
-        WIN32_EXECUTABLE ON
+        WIN32_EXECUTABLE OFF
     )
 endif()
 
+# Set the target properites for the main TREvoSim executable under MacOS
 if(APPLE)
     set_target_properties(${TREVOSIM_APP} PROPERTIES
         MACOSX_BUNDLE ON
@@ -147,15 +151,18 @@ add_executable(${TREVOSIM_UNIT_TEST}
 
 target_link_libraries(${TREVOSIM_UNIT_TEST} PRIVATE GTest::gtest_main Qt6::Core Qt::Gui Qt::Widgets Qt6::Concurrent Qt::Core5Compat)
 
+# Set the target properites for the main TREvoSim executable under Windows
 if(WIN32)
+    # This is set to OFF to force a console first build of the application.
+    # Alternative is a GUI only build when set to ON.
     set_target_properties(${TREVOSIM_UNIT_TEST} PROPERTIES
-        WIN32_EXECUTABLE ON
+        WIN32_EXECUTABLE OFF
     )
 endif()
 
 if(APPLE)
     set_target_properties(${TREVOSIM_UNIT_TEST} PROPERTIES
-        MACOSX_BUNDLE ON
+        MACOSX_BUNDLE OFF
     )
 endif()
 
