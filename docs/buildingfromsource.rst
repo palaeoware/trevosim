@@ -64,7 +64,10 @@ QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit).
 	
    .. figure:: _static/post_windeploy.png
 	
-   * You can now test if this has worked successfully by attempting to run the TREvoSim binary in the deploy folder. It should run without any missing libraries warnings.
+   * You can now test if this has worked successfully by attempting to run the TREvoSim.exe binary in the deploy folder. It should run without any missing libraries warnings.
+   * Next run the same windeployqt6 comand but for your TREvoSimTest.exe program.
+   * For the GoogleTest framework to run under TREvoSimTest.exe you need to copy the gtest.dll and gtest_main.dll from the ./bin folder (under your build folder) to the deploy folder.
+   * You can now test if this has worked successfully by attempting to run the TREvoSimTest.exe binary in the deploy folder. It should run without any missing libraries warnings.
    * For more information on how this works see: https://doc.qt.io/qt-6/windows-deployment.html
   
 #. [Optional] To package the application as Windows portable binary release simply compress the deploy folder as a .ZIP archive and rename the new file to TREvoSim_v3.X.X.zip.
@@ -263,13 +266,13 @@ Development Testing
 
 TREvoSim |gt| = v3 come with a suite of development tests that verify the core simulator/generator code. These can be called via one of two methods during the development phase:
 
-#. As a standalone program - for this we leverage the GoogleTest Mocking and Testing Framework (https://github.com/google/googletest) which is pulled in automatically by CMake and built alongside the TREvoSim main program - creating a separate standalone test program called TREvoSimTest. This program can be called from the command line on Mac/Linux or from the QT Creator environment on Windows.
+#. As a standalone program - for this we leverage the GoogleTest Mocking and Testing Framework (https://github.com/google/googletest) which is pulled in automatically by CMake and built alongside the TREvoSim main program - creating a separate standalone test program called TREvoSimTest. This program can be called from the command line on Mac/Linux/Windows.
   
-    * Note: the MacOS TREvoSimTest.app needs to be packaged using the macdeployqt6 program first if you have built from source (see the building for MacOS instructions above). To run the test from the terminal you need to use:
+    * Note: we recommend that the MacOS TREvoSimTest program is added to the TREvoSim.app package if you have built from source (see the building for MacOS instructions above). This simply requires you to copy the TREvoSimTest program to the TREvoSim.app/Contents/MacOS folder before running any .dmg creator. To run the test from the terminal you then can use:
 
       .. code-block:: console
       
-        $ ./TREvoSimTest.app/Contents/MacOS/TREvoSimTest
+        $ ./TREvoSim.app/Contents/MacOS/TREvoSimTest
 
 #. From the QT Creator application. Once the test program has been built (see point 1 above) you can run the test suite with the QT Creator by going to the 'Tools |rarr| Tests |rarr| Run All Tests' from the main menu. This will build the application if not already done so and display the results in the 'Test Result' tab which normally appears at the bottom of the workspace.
 
