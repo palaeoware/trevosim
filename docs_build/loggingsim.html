@@ -50,7 +50,7 @@
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="requirementsinstallation.html">2. Requirements and Installation from Binaries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="buildingfromsource.html">3. Compiling from Source and Development Testing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="algorithmconcepts.html">4. Algorithm and Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithmconcepts.html">4. Algorithm, Concepts, and Experimental Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="windowlayout.html">5. Window Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="settings.html">6. Settings - Organisms and simulation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="settings2.html">7. Settings - Environment, events and playing fields</a></li>
@@ -101,36 +101,42 @@
 <section id="end-run-log">
 <h3><span class="section-number">8.1.1. </span>End run log<a class="headerlink" href="#end-run-log" title="Link to this heading">¶</a></h3>
 <p>TREvoSim has a versatile logging system which allows the user to define outputs in a range of formats required for phylogenetic inference packages, or e.g. R, provided these allow plain text inputs. Clicking on the output button of the toolbar will launch the output dialogue, which has two tabs. The first is a log that is output at the end of the run:</p>
-<figure class="align-center">
-<img alt="_images/output_01.png" src="_images/output_01.png" />
+<figure class="align-center" id="id1">
+<img alt="The output settings page for the end run log in TREvoSim" src="_images/output_01.png" />
+<figcaption>
+<p><span class="caption-text">The TREvoSim End Run Log settings</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
 </figure>
 <p>A typical use case for this is when you would like to use the outputs of a finished simulation to do downstream analyses for e.g. phylogenetic methods. This tab provides options for two custom log files, which are placed, after a run, within the <em>TREvoSim_output</em> folder created on the save path. Basename defines the start of the filename, and if you so wish, this can include forward slashes before the start of the file name to denote a path, that TREvoSim will create for you. TREvoSim then adds a number to the start of the filename you have suggested, and this number iterates with subsequent runs. The file extension is also defined in this dialogue in a separate text box.</p>
 <p>The two text boxes allow custom file content to be written: text from these is written as provided to the file – for example with run instructions or program commands – and any of a series of keywords defined below included within two vertical bar ( | ) symbols are replaced as a file is written. The default outputs are shown in the figure above – they create a vanilla nexus file which allows you to, for example, load the character matrix into R, and a TNT file which conducts a parsimony search on TREvoSim data before outputting the most parsimonious trees.</p>
 <p>In addition to these two custom files, TREvoSim can output a tree for each run in a standard nexus format. The options at the bottom of the output tab allow you to define the basename for this file. The output includes the tree and translate block, as well as a comment with the settings of the run written to it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See also <a class="reference internal" href="algorithmconcepts.html#data-analysis"><span class="std std-ref">Data analysis</span></a> for pointers on how to analyse TREvoSim outputs.</p>
+</div>
 </section>
 <section id="running-log">
 <h3><span class="section-number">8.1.2. </span>Running log<a class="headerlink" href="#running-log" title="Link to this heading">¶</a></h3>
 <p>The other tab is a running log which is output during a run:</p>
-<figure class="align-center">
-<img alt="_images/output_02.png" src="_images/output_02.png" />
+<figure class="align-center" id="id2">
+<img alt="The output settings page for the running log in TREvoSim" src="_images/output_02.png" />
+<figcaption>
+<p><span class="caption-text">The TREvoSim Running Log settings</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
+</figcaption>
 </figure>
 <p>This is of utility for studying processes as they occur during a run, as it is output on a regular basis as the simulation progresses. Any text entered into the Custom running log text box is output to a new file (appended with an iterator) at the requested frequency. This can be used to record anything in the state of the simulation required to study a process of interest. At the top of the dialogue are two options:</p>
-<dl class="field-list simple">
-<dt class="field-odd">Write running log<span class="colon">:</span></dt>
-<dd class="field-odd"><p>By default the running log is not created or written to when a simulation runs. In order to write the files this option needs to be enabled.</p>
+<dl class="simple">
+<dt>Write running log</dt><dd><p>By default the running log is not created or written to when a simulation runs. In order to write the files this option needs to be enabled.</p>
 </dd>
-<dt class="field-even">Frequency<span class="colon">:</span></dt>
-<dd class="field-even"><p>This dictates the frequency, in iterations, with which a new running log file is written.</p>
+<dt>Frequency</dt><dd><p>This dictates the frequency, in iterations, with which a new running log file is written.</p>
 </dd>
 </dl>
 <p>Below this is a free text box. This works the same way, and uses the same keywords (shown below) as the end run log, outputting data in the current state for the iteration at which the log is written – it is only possible to enter text into this box when the Write running log checkbox is ticked.</p>
 <p>There are then two further options at the base of the dialogue:</p>
-<dl class="field-list simple">
-<dt class="field-odd">Write full working log<span class="colon">:</span></dt>
-<dd class="field-odd"><p>When this is checked, TREvoSim outputs a text file that it appends to as it runs. This file outlines every step of each iteration, such as the state of the playing field, the environment, and the processes the software is going through. This helps understand and fact check any given run, but for significant playing field sizes, taxon numbers, or character numbers, it creates a large text file (10s – 100s of MB).</p>
+<dl class="simple">
+<dt>Write full working log</dt><dd><p>When this is checked, TREvoSim outputs a text file that it appends to as it runs. This file outlines every step of each iteration, such as the state of the playing field, the environment, and the processes the software is going through. This helps understand and fact check any given run, but for significant playing field sizes, taxon numbers, or character numbers, it creates a large text file (10s – 100s of MB).</p>
 </dd>
-<dt class="field-even">Write ecosystem engineers<span class="colon">:</span></dt>
-<dd class="field-even"><p>There is a custom log for simulations in which ecosystem engineers are enabled (the nature of this functionality does not allow all required information to be easily output using the running log: this is primarily a convenience function).</p>
+<dt>Write ecosystem engineers</dt><dd><p>There is a custom log for simulations in which ecosystem engineers are enabled (the nature of this functionality does not allow all required information to be easily output using the running log: this is primarily a convenience function).</p>
 </dd>
 </dl>
 </section>
@@ -138,24 +144,19 @@
 <section id="keywords">
 <h2><span class="section-number">8.2. </span>Keywords<a class="headerlink" href="#keywords" title="Link to this heading">¶</a></h2>
 <p>Keywords within two vertical bars ( e.g. ||Matrix|| ) are replaced as a file is written as follows:</p>
-<dl class="field-list simple">
-<dt class="field-odd">Character_Number<span class="colon">:</span></dt>
-<dd class="field-odd"><p>This outputs the character number.</p>
+<dl>
+<dt>Character_Number</dt><dd><p>This outputs the character number.</p>
 </dd>
-<dt class="field-even">Count<span class="colon">:</span></dt>
-<dd class="field-even"><p>This is replaced with a counter for batch runs; starting from zero and incrementing by one. This is padded with leading zeroes to three figures</p>
+<dt>Count</dt><dd><p>This is replaced with a counter for batch runs; starting from zero and incrementing by one. This is padded with leading zeroes to three figures.</p>
 </dd>
-<dt class="field-odd">Ecosystem_Engineers<span class="colon">:</span></dt>
-<dd class="field-odd"><p>This prints a list of species, and their ecosystem engineering status (i.e. whether any members of this species are ecosystem engineers). A minimal example is shown below.</p>
-</dd>
-</dl>
+<dt>Ecosystem_Engineers</dt><dd><p>This prints a list of species, and their ecosystem engineering status (i.e. whether any members of this species are ecosystem engineers). A minimal example is shown below.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Applying</span> <span class="n">ecosystem</span> <span class="n">engineers</span> <span class="k">for</span> <span class="mi">1</span> <span class="n">time</span> <span class="n">on</span> <span class="n">iteration</span> <span class="mi">10</span>
 <span class="n">Masks</span> <span class="n">before</span> <span class="n">ecosystem</span> <span class="n">engineers</span> <span class="p">:</span>
 <span class="n">Playingfield</span> <span class="mi">0</span>
 <span class="n">Environment</span> <span class="mi">0</span>
-<span class="n">Mask</span> <span class="n">number</span> <span class="mi">0</span> <span class="p">:</span>       <span class="mi">0001101111</span>
-<span class="n">Mask</span> <span class="n">number</span> <span class="mi">1</span> <span class="p">:</span>       <span class="mi">0111110101</span>
-<span class="n">Mask</span> <span class="n">number</span> <span class="mi">2</span> <span class="p">:</span>       <span class="mi">1111001000</span>
+<span class="n">Mask</span> <span class="n">number</span> <span class="mi">0</span> <span class="p">:</span>     <span class="mi">0001101111</span>
+<span class="n">Mask</span> <span class="n">number</span> <span class="mi">1</span> <span class="p">:</span>     <span class="mi">0111110101</span>
+<span class="n">Mask</span> <span class="n">number</span> <span class="mi">2</span> <span class="p">:</span>     <span class="mi">1111001000</span>
 
 
 <span class="n">Playing</span> <span class="n">field</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
@@ -172,9 +173,9 @@
 <span class="n">Masks</span> <span class="n">after</span> <span class="n">ecosystem</span> <span class="n">engineers</span><span class="p">:</span>
 <span class="n">Playingfield</span> <span class="mi">0</span>
 <span class="n">Environment</span> <span class="mi">0</span>
-<span class="n">Mask</span> <span class="n">number</span> <span class="mi">0</span> <span class="p">:</span>       <span class="mi">0001101111</span>
-<span class="n">Mask</span> <span class="n">number</span> <span class="mi">1</span> <span class="p">:</span>       <span class="mi">0111110101</span>
-<span class="n">Mask</span> <span class="n">number</span> <span class="mi">2</span> <span class="p">:</span>       <span class="mi">0111111101</span>
+<span class="n">Mask</span> <span class="n">number</span> <span class="mi">0</span> <span class="p">:</span>     <span class="mi">0001101111</span>
+<span class="n">Mask</span> <span class="n">number</span> <span class="mi">1</span> <span class="p">:</span>     <span class="mi">0111110101</span>
+<span class="n">Mask</span> <span class="n">number</span> <span class="mi">2</span> <span class="p">:</span>     <span class="mi">0111111101</span>
 
 
 <span class="n">Playing</span> <span class="n">field</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="n">after</span> <span class="n">ecosystem</span> <span class="n">engineers</span><span class="p">:</span>
@@ -187,73 +188,57 @@
 <span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0111110101</span>
 </pre></div>
 </div>
-<dl class="field-list simple">
-<dt class="field-odd">Iteration<span class="colon">:</span></dt>
-<dd class="field-odd"><p>This outputs the current iteration number.</p>
 </dd>
-<dt class="field-even">Matrix<span class="colon">:</span></dt>
-<dd class="field-even"><p>This is replaced with the matrix from the run. For example:</p>
+<dt>Iteration</dt><dd><p>This outputs the current iteration number.</p>
 </dd>
-</dl>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Species_00</span>    <span class="mi">0111011110</span>
-<span class="n">Species_01</span>    <span class="mi">0101011011</span>
-<span class="n">Species_02</span>    <span class="mi">0001011100</span>
-<span class="n">Species_03</span>    <span class="mi">0110111111</span>
-<span class="n">Species_04</span>    <span class="mi">1110101110</span>
-<span class="n">Species_05</span>    <span class="mi">1111111010</span>
+<dt>Matrix</dt><dd><p>This is replaced with the matrix from the run. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Species_00</span>  <span class="mi">0111011110</span>
+<span class="n">Species_01</span>  <span class="mi">0101011011</span>
+<span class="n">Species_02</span>  <span class="mi">0001011100</span>
+<span class="n">Species_03</span>  <span class="mi">0110111111</span>
+<span class="n">Species_04</span>  <span class="mi">1110101110</span>
+<span class="n">Species_05</span>  <span class="mi">1111111010</span>
 </pre></div>
 </div>
-<dl class="field-list simple">
-<dt class="field-odd">MrBayes_Tree<span class="colon">:</span></dt>
-<dd class="field-odd"><p>This writes a tree in standard Newick format, including branch lengths (these are based on iteration number throughout):</p>
 </dd>
-</dl>
+<dt>MrBayes_Tree</dt><dd><p>This writes a tree in standard Newick format, including branch lengths (these are based on iteration number throughout):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">Species_01</span><span class="p">:</span><span class="mi">2</span><span class="p">,(</span><span class="n">Species_02</span><span class="p">:</span><span class="mi">2</span><span class="p">,(</span><span class="n">Species_03</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="n">Species_00</span><span class="p">:</span><span class="mi">19</span><span class="p">):</span><span class="mi">5</span><span class="p">):</span><span class="mi">1</span><span class="p">):</span><span class="mi">13</span>
 </pre></div>
 </div>
-<p><em>Note</em> The mechanism used for tree writing differs between TNT and MrBayes outputs – the tree topology is the same, but the taxon order differs.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Root<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Writes the genome of the organism used to seed the simulation, thereby allowing characters to be polarised correctly with respect to the root of the tree (see <a class="reference internal" href="algorithmconcepts.html#algorithmconcepts"><span class="std std-ref">Algorithm and Concepts</span></a>):</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The mechanism used for tree writing differs between TNT and MrBayes outputs – the tree topology is the same, but the taxon order differs.</p>
+</div>
 </dd>
-</dl>
+<dt>Root</dt><dd><p>Writes the genome of the organism used to seed the simulation, thereby allowing characters to be polarised correctly with respect to the root of the tree (see <a class="reference internal" href="algorithmconcepts.html#algorithmconcepts"><span class="std std-ref">Algorithm, Concepts, and Experimental Design</span></a>):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">01000100000010010000011100001111</span>
 </pre></div>
 </div>
-<dl class="field-list simple">
-<dt class="field-odd">Settings<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Writes the current TREvoSim settings to the file (this is provided as a useful way to record, with any output data, the state of the TREvoSim variables for any given run). Shown below for the defaults:</p>
 </dd>
-</dl>
+<dt>Settings</dt><dd><p>Writes the current TREvoSim settings to the file (this is provided as a useful way to record, with any output data, the state of the TREvoSim variables for any given run). Shown below for the defaults:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">variables</span> <span class="p">:</span> <span class="n">genomeSize</span> <span class="mi">128</span> <span class="n">speciesSelectSize</span> <span class="mi">128</span> <span class="n">fitnessSize</span> <span class="mi">128</span> <span class="n">runForTaxa</span> <span class="mi">64</span> <span class="n">runForIterations</span> <span class="mi">1000</span> <span class="n">playingfieldSize</span> <span class="mi">20</span> <span class="n">speciesDifference</span> <span class="mi">4</span> <span class="n">environmentMutationRate</span> <span class="mi">1</span> <span class="n">organismMutationRate</span> <span class="mi">5</span> <span class="n">unresolvableCutoff</span> <span class="mi">5</span> <span class="n">environmentNumber</span> <span class="mi">1</span> <span class="n">maskNumber</span> <span class="mi">3</span> <span class="n">runMode</span> <span class="mi">1</span> <span class="n">stripUninformative</span> <span class="mi">0</span> <span class="n">writeTree</span> <span class="mi">1</span> <span class="n">writeRunningLog</span> <span class="mi">0</span> <span class="n">writeFileOne</span> <span class="mi">1</span> <span class="n">writeFileTwo</span> <span class="mi">1</span> <span class="n">writeEE</span> <span class="mi">0</span> <span class="n">noSelection</span> <span class="mi">0</span> <span class="n">randomSeed</span> <span class="mi">0</span> <span class="n">sansomianSpeciation</span> <span class="mi">1</span> <span class="n">discardDeleterious</span> <span class="mi">0</span> <span class="n">fitnessTarget</span> <span class="mi">0</span> <span class="n">playingfieldNumber</span> <span class="mi">1</span> <span class="n">mixing</span> <span class="mi">0</span> <span class="n">mixingProbabilityZeroToOne</span> <span class="mi">0</span> <span class="n">mixingProbabilityOneToZero</span> <span class="mi">0</span> <span class="n">playingfieldMasksMode</span> <span class="mi">0</span> <span class="n">selection</span> <span class="mi">10</span> <span class="n">randomOverwrite</span> <span class="mi">0</span> <span class="n">ecosystemEngineers</span> <span class="mi">0</span> <span class="n">ecosystemEngineersArePersistent</span> <span class="mi">0</span> <span class="n">ecosystemEngineeringFrequency</span> <span class="mi">10</span> <span class="n">ecosystemEngineersAddMask</span> <span class="mi">0</span> <span class="n">runningLogFrequency</span> <span class="mi">50</span> <span class="n">replicates</span> <span class="mi">25</span> <span class="n">expandingPlayingfield0</span> <span class="n">stochasticLayer</span> <span class="mi">0</span> <span class="n">stochasticDepth</span> <span class="mi">1</span> <span class="n">matchFitnessPeaks</span> <span class="mi">0</span> <span class="n">stochasticMap</span> <span class="mi">0000000000000000</span>
 </pre></div>
 </div>
-<dl class="field-list simple">
-<dt class="field-odd">TNT_Tree<span class="colon">:</span></dt>
-<dd class="field-odd"><p>This writes a tree, if required, in TNT format (i.e. only brackets and terminal labels):</p>
 </dd>
-</dl>
+<dt>TNT_Tree</dt><dd><p>This writes a tree, if required, in TNT format (i.e. only brackets and terminal labels):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(((</span><span class="mi">00</span> <span class="mi">03</span><span class="p">)</span> <span class="mi">02</span><span class="p">)</span> <span class="mi">01</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><em>Note</em> The mechanism used for tree writing differs between TNT and MrBayes outputs – the tree topology is the same, but the taxon order differs.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Time<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Adds a timestamp:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The mechanism used for tree writing differs between TNT and MrBayes outputs – the tree topology is the same, but the taxon order differs.</p>
+</div>
 </dd>
-</dl>
+<dt>Time</dt><dd><p>Adds a timestamp:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Written</span> <span class="n">on</span> <span class="n">Fri</span> <span class="n">Jun</span> <span class="mi">28</span> <span class="mi">07</span><span class="p">:</span><span class="mi">09</span><span class="p">:</span><span class="mi">14</span> <span class="mi">2024</span>
 </pre></div>
 </div>
-<dl class="field-list simple">
-<dt class="field-odd">Taxon_Number<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Writes the number of species that have existed since the start of the simulation at the iteration it is called.</p>
 </dd>
-<dt class="field-even">Unresolvable<span class="colon">:</span></dt>
-<dd class="field-even"><p>This prints a list of unresolvable taxa (or a notice that there are none if required).</p>
+<dt>Taxon_Number</dt><dd><p>Writes the number of species that have existed since the start of the simulation at the iteration it is called.</p>
 </dd>
-<dt class="field-odd">Uninformative<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Writes the number of uninformative characters.</p>
+<dt>Unresolvable</dt><dd><p>This prints a list of unresolvable taxa (or a notice that there are none if required).</p>
+</dd>
+<dt>Uninformative</dt><dd><p>Writes the number of uninformative characters.</p>
 </dd>
 </dl>
 <section id="keywords-example">

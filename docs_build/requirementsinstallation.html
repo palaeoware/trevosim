@@ -60,7 +60,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="buildingfromsource.html">3. Compiling from Source and Development Testing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="algorithmconcepts.html">4. Algorithm and Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithmconcepts.html">4. Algorithm, Concepts, and Experimental Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="windowlayout.html">5. Window Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="settings.html">6. Settings - Organisms and simulation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="settings2.html">7. Settings - Environment, events and playing fields</a></li>
@@ -97,7 +97,7 @@
 <h1><span class="section-number">2. </span>Requirements and Installation from Binaries<a class="headerlink" href="#requirements-and-installation-from-binaries" title="Link to this heading">¶</a></h1>
 <section id="requirements">
 <h2><span class="section-number">2.1. </span>Requirements<a class="headerlink" href="#requirements" title="Link to this heading">¶</a></h2>
-<p>TREvoSim has no minimum requirements as such, and will run on most standard systems (Windows/Linux/Mac); however, it has not been tested on versions of Windows older than Windows 10, versions of Ubuntu older than 18.04 (v1,2) or 22.04 (v3), and below macOS High Sierra. Performance will benefit from high processor speed and increased number of processor cores, with large amounts ( &gt; 4GB) of available RAM recommended for large simulations. Graphics card performance is not relevant as GPUs are not currently used in the program’s calculation pipeline. A fast hard drive (e.g. SSD) is recommend when intensive logging is enabled; as slow I/O response time can affect the iteration cycle speed.</p>
+<p>TREvoSim has no minimum requirements as such, and will run on most standard systems (Windows/Linux/Mac); however, it has not been tested on versions of Windows older than Windows 10, versions of Ubuntu older than 18.04 (v1,2) or 22.04 (v3), and below macOS High Sierra. Performance will benefit from high processor speed and increased number of processor cores (when running replicates, which is parallelised), with large amounts ( &gt; 4GB) of available RAM recommended for large simulations. Graphics card performance is not relevant as GPUs are not currently used in the program’s calculation pipeline. A fast hard drive (e.g. SSD) is recommend when intensive logging is enabled; as slow I/O response time can affect the iteration cycle speed.</p>
 </section>
 <section id="installation-from-binaries">
 <h2><span class="section-number">2.2. </span>Installation from Binaries<a class="headerlink" href="#installation-from-binaries" title="Link to this heading">¶</a></h2>
@@ -124,7 +124,10 @@
 <h3><span class="section-number">2.2.3. </span>MacOS - Binaries<a class="headerlink" href="#macos-binaries" title="Link to this heading">¶</a></h3>
 <p>For TREvoSim v1.X and v2.X we provide a .ZIP archive containing the TREvoSim program that can be downloaded from the TREvoSim GitHub repository.</p>
 <p>For TREvoSim v3.X we provide a .DMG image to install the software. Download and double click on the .dmg and follow the on screen instructions. You may be required to the approve the software in security and privacy settings before it will launch.</p>
-<p>Note: this binary was build and tested on an Apple M1 processor as such users on other chipsets might need to compile and build their own TREvoSim binaries.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This binary was build and tested on an Apple M1 processor, and it is known to work with an M3 chip, but we have not been able to conduct extensive testing on other Apple processors.</p>
+</div>
 </section>
 <section id="ubuntu-64-bit-linux">
 <h3><span class="section-number">2.2.4. </span>Ubuntu 64-bit / Linux<a class="headerlink" href="#ubuntu-64-bit-linux" title="Link to this heading">¶</a></h3>

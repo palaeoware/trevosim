@@ -49,7 +49,7 @@
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="requirementsinstallation.html">2. Requirements and Installation from Binaries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="buildingfromsource.html">3. Compiling from Source and Development Testing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="algorithmconcepts.html">4. Algorithm and Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithmconcepts.html">4. Algorithm, Concepts, and Experimental Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="windowlayout.html">5. Window Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="settings.html">6. Settings - Organisms and simulation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="settings2.html">7. Settings - Environment, events and playing fields</a></li>
@@ -85,11 +85,13 @@
   <span class="target" id="software-tests"></span><section id="tests">
 <h1><span class="section-number">10. </span>Tests<a class="headerlink" href="#tests" title="Link to this heading">¶</a></h1>
 <p>TREvoSim has tests covering every function used in the simulation process. If you are a user, and would like to see the outputs of the tests, then this is possible by hitting the Test button on the toolbar menu, or Tests in the command menu. When this is selected, the main window is first split into two, and the software runs its test suite. The output of the results is then displayed on the panel on the right, shown below.</p>
-<figure class="align-default">
-<img alt="_images/windowLayout_test.png" src="_images/windowLayout_test.png" />
+<figure class="align-center" id="id1">
+<img alt="The TREvoSim graphical user interface in test mode" src="_images/windowLayout_test.png" />
+<figcaption>
+<p><span class="caption-text">TREvoSim in test mode</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
 </figure>
-<p>If you are working on the TREvoSim code, and wish to check all tests are passing, you can do this by: running them in the software as outlined above; by running the binary TREvoSimTest – created during a build – from the console (double clicking is also possible on Windows); or using the option within QtCreator (Tools → Tests → Run all tests…; note is may be necessary to increase the test timeout settings in QtCreator’s options if using this approach). The output in the test log describes each test, and also the expected output. The system then makes sure the output meets these expectations. Failed tests will be highlighted in green.</p>
-<p>These are provided so it is possible for the user to check TREvoSim is running as expected and described in the publications introducing the model: if there is an element of the TREvoSim functionality that is of particular importance to your science, the tests help provide insight into the mode of operation of that part of the simulation, and the coders’ expectations for how it works. More broadly, if you are interested in how the model runs, beyond looking at the source code, you can alternatively/additionally output a working log to check the internal workings of the software - see <a class="reference internal" href="loggingsim.html#loggingsim"><span class="std std-ref">Logging the Simulation</span></a>.</p>
+<p>The output text in the test log describes each test, and also the expected output. The system then makes sure the output meets these expectations. Failed tests will be highlighted in green, and explain why they have failed. A small number of the tests are, by necessity, stochastic and will occasionally fail. In this case, a sensible first step is to repeat that test to see if this happens a second time. This functionality is provided so it is possible for the user to check TREvoSim is running as expected and described in the publications introducing the model: if there is an element of the TREvoSim functionality that is of particular importance to your science, the tests help provide insight into the mode of operation of that part of the simulation, and the coders’ expectations for how it works. More broadly, if you are interested in how the model runs, beyond looking at the source code, you can alternatively/additionally output a working log to check the internal workings of the software - see <a class="reference internal" href="loggingsim.html#running-log"><span class="std std-ref">Running log</span></a> option <em>Write full working log</em>.</p>
 </section>
 
 

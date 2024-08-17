@@ -1,16 +1,16 @@
 .. _algorithmconcepts:
 
-Algorithm and Concepts
-=======================
+Algorithm, Concepts, and Experimental Design
+============================================
 
 TREvoSim Algorithm Description
 ------------------------------
 
-TREvoSim has been developed across several publications, and the algorithm was first described in Keating et al. (`2020 <https://doi.org/10.1093/sysbio/syaa012>`_, v1.0.0), with modifications outlined in Mongiardino Koch et al (`2021 <https://doi.org/10.1098/rspb.2021.0044>`_, v2.0.0). The simulation approach also shares features with the spatially explicit eco-evolutionary simulation package REvoSim (Garwood et. al. `2019 <https://doi.org/10.1111/pala.12420>`_, Furness et. al. `2023 <https://doi.org/10.21105/joss.05284>`_). The latest version of the algorithm is described here to avoid having to build a picture by accessing multiple publications. Note, this is modified after those previous descriptions, and so employs the same wording in places.
+TREvoSim has been developed across several publications, and the algorithm was first described in Keating et al. (`2020 <https://doi.org/10.1093/sysbio/syaa012>`_, v1.0.0), with modifications outlined in Mongiardino Koch et al. (`2021 <https://doi.org/10.1098/rspb.2021.0044>`_, v2.0.0). The simulation approach also shares features with the spatially explicit eco-evolutionary simulation package REvoSim (`Garwood et. al. 2019 <https://doi.org/10.1111/pala.12420>`_, `Furness et. al. 2023 <https://doi.org/10.21105/joss.05284>`_). The latest version of the algorithm is described here to avoid having to build a picture by accessing multiple publications. Note: this is modified after those previous descriptions, and so employs the same wording in places.
 
 TREvoSim employs digital organisms in the form of binary strings of a user-defined length (e.g. 0010110011101010011011). The zeros and ones comprising the string are here referred to as the genome of the digital organism, and ultimately provide the binary characters that can be used at the end of a simulation for, for example, phylogenetic inference, and they are also used to assign fitness to organisms relative to an environment, as outlined below. When a simulation runs, organisms compete, replicate, and mutate. The simulation incorporates a species concept, and speciation is emergent in the simulation, allowing the software to output a phylogenetic tree showing species relationships during or at the end of a run. 
 
-This overview employs figures from Garwood et al. (2024) -- in all, user defined variables are shown in green font, and the values shown are the default. For clarity, the description eschews listing every potential modification to the algorithm that can be achieved through modifying the software settings, as this would obfuscate important functions in potentially unnecessary detail (although it does mention a number of key choices). Where a setting modifies the algorithm outlined below, this is described fully in the information included on the settings pages in this documentation. The implications of changing a setting are also described in these pages, wherever possible.
+This overview employs figures from Garwood et al. (2024) -- in all, user defined variables are shown in green font, and the values shown are the default. For clarity, the description eschews listing every potential modification to the algorithm that can be achieved through modifying the software settings, as this would obfuscate important functions in potentially unnecessary detail (although it does mention a number of key choices). Where a setting modifies the algorithm outlined below, this is described fully in the information included on the settings pages in this documentation. The implications of changing a setting are also described in those pages, wherever possible.
 
 Data structures
 ^^^^^^^^^^^^^^^
@@ -20,6 +20,9 @@ Organisms reside in a structure called the playing field -- a list of organisms 
 .. figure:: _static/data_structures.png
     :width: 400
     :align: center
+    :alt: Data structures in TREvoSim
+    
+    The data structures used in TREvoSim
 
 If so desired, simulations can employ more than one playing field, which can have the same, or different, environment(s). 
 
@@ -28,11 +31,14 @@ If you wish to modify TREvoSim code, bear in mind that there are numerous other 
 Fitness calculation 
 ^^^^^^^^^^^^^^^^^^^
 
-Every iteration, the fitness of every organism in the playing field is calculated (using an approach first described in Garwood et al. 2019, and further detailed in Keating et al. 2020). To calculate fitness, TREvoSim uses an exclusive OR function (i.e. one that takes two inputs, outputs 1 where they differ, and 0 when they are the same) to calculate the `Hamming distance  <https://en.wikipedia.org/wiki/Hamming_distance>`_ between the genome of the organism, and each mask in an environment in turn. For example, if there are three masks, the genome is compared to each in turn. The output of this operation has a one wherever inputs differ. The ones are summed across all output strings, so with three masks, by comparing every bit of the organism genome to the equivalent bit of each mask and summing the results, TREvoSim calculates a value between 0 and 3n. Fitness is then an integer calculated as the distance from a used-defined target value: by default that is zero, creating a sharp fitness peak in the environment (a small number of possible genome configurations can achieve maximal fitness), but setting this to e.g. 1.5n will allow a far wider range of genomic configurations to achieve maximal fitness. This approach is summarised in the figure below.
+Every iteration, the fitness of every organism in the playing field is calculated (using an approach first described in Garwood et al. (`2019 <https://doi.org/10.1111/pala.12420>`_), and further detailed in Keating et al. (`2020 <https://doi.org/10.1093/sysbio/syaa012>`_)). To calculate fitness, TREvoSim uses an exclusive OR function (i.e. one that takes two inputs, outputs 1 where they differ, and 0 when they are the same) to calculate the `Hamming distance <https://en.wikipedia.org/wiki/Hamming_distance>`_ between the genome of the organism, and each mask in an environment in turn. For example, if there are three masks, the genome is compared to each in turn. The output of this operation has a one wherever inputs differ. The ones are summed across all output strings, so with three masks, by comparing every bit of the organism genome to the equivalent bit of each mask and summing the results, TREvoSim calculates a value between 0 and 3n. Fitness is then an integer calculated as the distance from a used-defined target value: by default that is zero, creating a sharp fitness peak in the environment (a small number of possible genome configurations can achieve maximal fitness), but setting this to e.g. 1.5n will allow a far wider range of genomic configurations to achieve maximal fitness. This approach is summarised in the figure below.
 
 .. figure:: _static/fitness_calculation.png
     :width: 400
     :align: center
+    :alt: The fitness calculation used in TREvoSim, described in the text
+
+    The TREvoSim fitness calculation
 
 Where multiple environments exist, each organism within a playing field is compared to all environments associated with that playing field, and assigned the maximal fitness achieved across all comparisons. This fitness calculation is carried out independently for each playing field when there are multiple playing fields.
 
@@ -43,6 +49,9 @@ The algorithm used for each TREvoSim iteration is described in full below. Key p
 .. figure:: _static/algorithm.png
     :width: 400
     :align: center
+    :alt: A summary of the TREvoSim algorithm, described in the text below
+
+    TREvoSim algorithm summary
 
 TREvoSim algorithm - Initialisation 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -126,3 +135,31 @@ The script also provides a quantification of the normalised treeness (=stemmines
     :align: center
 
 TREvoSim ("simulated") trees have a similar median, and spread, of normalised treeness values to that found in empirical data. 
+
+Experimental design
+-------------------
+
+TREvoSim is designed to offer the user flexibility, but at the same time, this requires experiments to incorporate a wide range of decisions regarding the simulation variables, which will need to reflect the question at hand. In some cases the impact of modifying one variable can be derived from first principles (for example, the larger the playing field, and thus population of digital organisms, the longer species are likely to survive before going extinct, and the longer tips are likely to be on the resulting tree). In other instances, an easier approach is to get a feel of the impact that modifying each variable has on the measures of interest (e.g. tree symmetry, homoplasy) by iteratively changing one variable at a time and studying the outputs. Given the significant parameter space of the simulation, we provide an example here in which TREvoSim has been used to study the impact of including fossils on phylogenetic inference -- full details can be found in the paper of Mongiardino Koch et al. (`2021 <https://doi.org/10.1098/rspb.2021.0044>`_). Simulation parameters were selected by comparing generated outputs (once subsampled as outlined below) with empirical total evidence datasets, and comparing a number of different metrics. This was achieved using an R script provided in the `supplementary information for that paper <https://doi.org/10.5061/dryad.4xgxd2585>`_ (see also, below: a modified, simpler version of that script is included in the source code of TREvoSim). Through iterative modification of the parameter settings, we were able to ensure that the outputs of TREvoSim were within the range of our empirical datasets for the metrics in question. Ultimately, our chosen parameters included:
+
+* A genome of size 500 (i.e. 500 characters in the phylogenetic matrix), allowing at least 300 parsimony-informative characters for our study after taxon subsampling and missing data imputation.
+* Simulations that ran to 999 terminals allowing us to subsequently subsample these (reasoning outlined below). 
+* Multiple playing fields to facilitate an early rapid radiation in our trees (one clade per playing field; ancient short internodes are often challenging to resolve for phylogenetic inference), and number of extant terminals at the end of a simulation. 
+* Random overwrite when returning a duplicated organism to a playing field, providing a wider variance in terminal branch lengths. 
+* To achieve the desired measures of tree symmetry and branch length we employed a fitness target of 0 and selection coin toss of 2, plus 5 playing fields of size 40, each with 5 non-identical environments of 3 masks, and a species difference of 8: all of these settings contribute towards the topology of the tree that evolves during a simulation.
+* Species difference also impacts on the homoplasy of the underlying character data, which informed the choice of this parameter value. 
+* An unresolvable cut off of 2, precluding identical terminals.
+
+Subsequent data manipulation, conducted in R, included the following:
+
+* We removed trees with zero length branches (`see the supplementary methods of that paper for details of why these exist, and why we chose to remove them <https://royalsocietypublishing.org/doi/suppl/10.1098/rspb.2021.0044>`_).
+* The remaining trees had a mean of ~150 extant terminals, and we removed fossils from these at random until only 300 terminals remained, to reflect the loss of biodiversity in the fossil record through the process of fossilisation.
+* At this point we compared simulations to twelve empirical datasets -- full discussion of our comparison is available in the `supplementary methods of the paper <https://royalsocietypublishing.org/doi/suppl/10.1098/rspb.2021.0044>`_. 
+* We then subsampled these again for our analyses to create our independent variables -- we varied the proportion of fossils in our datasets to assess the impact this had, and also imputed different levels of missing data. 
+* Through this process, we ultimately created 11,250 datasets for our experiments, which we subjected to phylogenetic inference, before comparing the inferred trees to the true tree topology for our results and discussion. 
+
+Note that this is a summary, and further discussion of all points is available in that paper, as well as areas in which our data demonstrably differ to empirical datasets (such as the distribution of missing data). 
+
+Data analysis
+-------------
+
+The scripts linked from the section above contain a full work flow from TREvoSim outputs to the publication figures, and can be used as an example of how to load, manipulate and analyse TREvoSim datasets in R. They are, however, also quite complex given the nature of the paper. A potentially gentler learning curve for achieving this same goal may be found in the R script included in the source code, in the folder comparison_to_empirical_data. This was used to quantify and compare TREvoSim outputs to total evidence datasets, but without the data manipulation included in the above workflow to allow the impact of including fossils to be investigated. Because the repository also includes TREvoSim datasets, it will run from the repository  without modification (although if launched within e.g. RStudio, you will need to set the working directory, as per the comments in the script). The script if fully commented throughout. 

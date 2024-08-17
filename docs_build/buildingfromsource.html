@@ -19,7 +19,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="4. Algorithm and Concepts" href="algorithmconcepts.html" />
+    <link rel="next" title="4. Algorithm, Concepts, and Experimental Design" href="algorithmconcepts.html" />
     <link rel="prev" title="2. Requirements and Installation from Binaries" href="requirementsinstallation.html" /> 
 </head>
 
@@ -71,7 +71,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#development-testing">3.2. Development Testing</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="algorithmconcepts.html">4. Algorithm and Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithmconcepts.html">4. Algorithm, Concepts, and Experimental Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="windowlayout.html">5. Window Layout</a></li>
 <li class="toctree-l1"><a class="reference internal" href="settings.html">6. Settings - Organisms and simulation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="settings2.html">7. Settings - Environment, events and playing fields</a></li>
@@ -108,8 +108,8 @@
 <h1><span class="section-number">3. </span>Compiling from Source and Development Testing<a class="headerlink" href="#compiling-from-source-and-development-testing" title="Link to this heading">¶</a></h1>
 <section id="compiling-from-source">
 <h2><span class="section-number">3.1. </span>Compiling from Source<a class="headerlink" href="#compiling-from-source" title="Link to this heading">¶</a></h2>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>Unless you would like to modify the software you <em>do not</em> need to build it – you can install or run it using the binaries provided with releases. See <a class="reference internal" href="requirementsinstallation.html#requirements-and-installation-from-binaries"><span class="std std-ref">Requirements and Installation from Binaries</span></a> for further information.</p>
 </div>
 <section id="windows-10">
@@ -117,10 +117,6 @@
 <section id="compiling-v3-x">
 <h4><span class="section-number">3.1.1.1. </span>Compiling v3.X<a class="headerlink" href="#compiling-v3-x" title="Link to this heading">¶</a></h4>
 <p>QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit).</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Note Visual Studio 2022 should also work but has not yet been tested with TREvoSim.</p>
-</div>
 <ol class="arabic">
 <li><p>Install Microsoft Visual Studio 2019 (VS2019). See <a class="reference external" href="https://visualstudio.microsoft.com/vs/older-downloads/">https://visualstudio.microsoft.com/vs/older-downloads/</a>.</p></li>
 <li><p>Install Qt 6.X and QT Creator on your system by running the open source development installer from Qt: <a class="reference external" href="https://www.qt.io/download-open-source">https://www.qt.io/download-open-source</a></p>
@@ -201,6 +197,10 @@
 </ul>
 </li>
 </ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note Visual Studio 2022 should also work but has not yet been tested with TREvoSim.</p>
+</div>
 </section>
 <section id="compiling-v1-x-2-x">
 <h4><span class="section-number">3.1.1.2. </span>Compiling v1.X, 2.X<a class="headerlink" href="#compiling-v1-x-2-x" title="Link to this heading">¶</a></h4>
@@ -258,7 +258,7 @@
 </div>
 </div></blockquote>
 </li>
-<li><p>Launch the software by double clicking on the TREvoSim binary that has been created in this folder.</p></li>
+<li><p>Launch the software by double clicking on the TREvoSim binary that has been created in this folder, or run the binary from the command line.</p></li>
 </ol>
 </section>
 <section id="compiling-v1-x-v2-x-using-command-line">
@@ -388,7 +388,7 @@
 <h2><span class="section-number">3.2. </span>Development Testing<a class="headerlink" href="#development-testing" title="Link to this heading">¶</a></h2>
 <p>TREvoSim &gt; = v3 come with a suite of development tests that verify the core simulator/generator code. These can be called via one of two methods during the development phase:</p>
 <ol class="arabic">
-<li><p>As a standalone program - for this we leverage the GoogleTest Mocking and Testing Framework (<a class="reference external" href="https://github.com/google/googletest">https://github.com/google/googletest</a>) which is pulled in automatically by CMake and built alongside the TREvoSim main program - creating a separate standalone test program called TREvoSimTest. This program can be called from the command line on Mac/Linux/Windows.</p>
+<li><p>As a standalone program - for this we leverage the GoogleTest Mocking and Testing Framework (<a class="reference external" href="https://github.com/google/googletest">https://github.com/google/googletest</a>) which is pulled in automatically by CMake and built alongside the TREvoSim main program - creating a separate standalone test program called TREvoSimTest. This program can be called from the command line on Mac/Linux/Windows, or run by double clicking in Windows.</p>
 <blockquote>
 <div><ul>
 <li><p>Note: we recommend that the MacOS TREvoSimTest program is added to the TREvoSim.app package if you have built from source (see the building for MacOS instructions above). This simply requires you to copy the TREvoSimTest program to the TREvoSim.app/Contents/MacOS folder before running any .dmg creator. To run the test from the terminal you then can use:</p>
@@ -399,9 +399,13 @@
 </ul>
 </div></blockquote>
 </li>
-<li><p>From the QT Creator application. Once the test program has been built (see point 1 above) you can run the test suite with the QT Creator by going to the ‘Tools → Tests → Run All Tests’ from the main menu. This will build the application if not already done so and display the results in the ‘Test Result’ tab which normally appears at the bottom of the workspace.</p></li>
+<li><p>From the QT Creator application. Once the test program has been built (see point 1 above) you can run the test suite with the QT Creator by going to the ‘Tools → Tests → Run All Tests’ from the main menu. This will build the application if not already done so and display the results in the ‘Test Result’ tab which normally appears at the bottom of the workspace. It may be necessary to increase the test timeout settings in QtCreator’s options if using this approach and the tests time out.</p></li>
 </ol>
-<p>Note: The tests that run are the same that can be called from the TREvoSim program via the ‘Tests’ button on the main tool bar.</p>
+<p>In either of the above approach, the output will report the outcome of each test, and highlight if any have failed. For a more detailed message as to why a test is failing, you can run the software tests from the GUI (see below).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The tests that run are the same that can be called from the TREvoSim program via the ‘Tests’ button on the main tool bar. See also <a class="reference internal" href="software_tests.html#tests"><span class="std std-ref">Tests</span></a>.</p>
+</div>
 </section>
 </section>
 
@@ -410,7 +414,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="requirementsinstallation.html" class="btn btn-neutral float-left" title="2. Requirements and Installation from Binaries" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="algorithmconcepts.html" class="btn btn-neutral float-right" title="4. Algorithm and Concepts" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="algorithmconcepts.html" class="btn btn-neutral float-right" title="4. Algorithm, Concepts, and Experimental Design" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

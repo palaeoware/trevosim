@@ -7,7 +7,7 @@ Requirements and Installation from Binaries
 Requirements
 ------------
 
-TREvoSim has no minimum requirements as such, and will run on most standard systems (Windows/Linux/Mac); however, it has not been tested on versions of Windows older than Windows 10, versions of Ubuntu older than 18.04 (v1,2) or 22.04 (v3), and below macOS High Sierra. Performance will benefit from high processor speed and increased number of processor cores, with large amounts ( |gt| 4GB) of available RAM recommended for large simulations. Graphics card performance is not relevant as GPUs are not currently used in the program's calculation pipeline. A fast hard drive (e.g. SSD) is recommend when intensive logging is enabled; as slow I/O response time can affect the iteration cycle speed.
+TREvoSim has no minimum requirements as such, and will run on most standard systems (Windows/Linux/Mac); however, it has not been tested on versions of Windows older than Windows 10, versions of Ubuntu older than 18.04 (v1,2) or 22.04 (v3), and below macOS High Sierra. Performance will benefit from high processor speed and increased number of processor cores (when running replicates, which is parallelised), with large amounts ( |gt| 4GB) of available RAM recommended for large simulations. Graphics card performance is not relevant as GPUs are not currently used in the program's calculation pipeline. A fast hard drive (e.g. SSD) is recommend when intensive logging is enabled; as slow I/O response time can affect the iteration cycle speed.
 
 Installation from Binaries
 --------------------------
@@ -37,7 +37,7 @@ For TREvoSim v1.X and v2.X we provide a .ZIP archive containing the TREvoSim pro
 
 For TREvoSim v3.X we provide a .DMG image to install the software. Download and double click on the .dmg and follow the on screen instructions. You may be required to the approve the software in security and privacy settings before it will launch.
 
-Note: this binary was build and tested on an Apple M1 processor as such users on other chipsets might need to compile and build their own TREvoSim binaries.
+.. note:: This binary was build and tested on an Apple M1 processor, and it is known to work with an M3 chip, but we have not been able to conduct extensive testing on other Apple processors.
 
 Ubuntu 64-bit / Linux
 ^^^^^^^^^^^^^^^^^^^^^
