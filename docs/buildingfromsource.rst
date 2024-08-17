@@ -267,7 +267,7 @@ Development Testing
 
 TREvoSim |gt| = v3 come with a suite of development tests that verify the core simulator/generator code. These can be called via one of two methods during the development phase:
 
-#. As a standalone program - for this we leverage the GoogleTest Mocking and Testing Framework (https://github.com/google/googletest) which is pulled in automatically by CMake and built alongside the TREvoSim main program - creating a separate standalone test program called TREvoSimTest. This program can be called from the command line on Mac/Linux/Windows.
+#. As a standalone program - for this we leverage the GoogleTest Mocking and Testing Framework (https://github.com/google/googletest) which is pulled in automatically by CMake and built alongside the TREvoSim main program - creating a separate standalone test program called TREvoSimTest. This program can be called from the command line on Mac/Linux/Windows, or run by double clicking in Windows.
   
     * Note: we recommend that the MacOS TREvoSimTest program is added to the TREvoSim.app package if you have built from source (see the building for MacOS instructions above). This simply requires you to copy the TREvoSimTest program to the TREvoSim.app/Contents/MacOS folder before running any .dmg creator. To run the test from the terminal you then can use:
 
@@ -275,7 +275,9 @@ TREvoSim |gt| = v3 come with a suite of development tests that verify the core s
       
         $ ./TREvoSim.app/Contents/MacOS/TREvoSimTest
 
-#. From the QT Creator application. Once the test program has been built (see point 1 above) you can run the test suite with the QT Creator by going to the 'Tools |rarr| Tests |rarr| Run All Tests' from the main menu. This will build the application if not already done so and display the results in the 'Test Result' tab which normally appears at the bottom of the workspace.
+#. From the QT Creator application. Once the test program has been built (see point 1 above) you can run the test suite with the QT Creator by going to the 'Tools |rarr| Tests |rarr| Run All Tests' from the main menu. This will build the application if not already done so and display the results in the 'Test Result' tab which normally appears at the bottom of the workspace. It may be necessary to increase the test timeout settings in QtCreator's options if using this approach and the tests time out. 
+
+In either of the above approach, the output will report the outcome of each test, and highlight if any have failed. For a more detailed message as to why a test is failing, you can run the software tests from the GUI (see below). 
 
 .. note::
-  The tests that run are the same that can be called from the TREvoSim program via the 'Tests' button on the main tool bar.
+  The tests that run are the same that can be called from the TREvoSim program via the 'Tests' button on the main tool bar. See also :ref:`Tests`.
