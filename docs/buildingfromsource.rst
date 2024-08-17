@@ -7,6 +7,8 @@ Compiling from Source and Development Testing
 Compiling from Source
 ---------------------
 
+.. warning:: Unless you would like to modify the software you *do not* need to build it -- you can install or run it using the binaries provided with releases. See :ref:`Requirements and Installation from Binaries` for further information.
+
 Windows 10
 ^^^^^^^^^^
 

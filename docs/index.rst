@@ -13,7 +13,7 @@ TREvoSim is an individual-based evolutionary model, focussing on the simulation 
 
 TREvoSim has been released with the intention that it can be used as a multi-purpose platform for the study of many evolutionary phenomena, but in particular, it acts as one of a limited number of methods for simulating character data and tree topology at the same time, and is one of very few individual-based simulations capable of doing so. As with REvoSim, this package is complementary to the many other approaches of studying evolution on a range of different timescales, and will be continually developed by the core team to expand its capabilities.
 
-A sensible place to start learning more is the :ref:`introduction`, and further details are included in the papers listed below. 
+.. note:: A sensible place to start learning more is the :ref:`introduction`, and further details are included in the papers listed below. 
 
 e: `palaeoware@gmail.com <mailto:palaeoware@gmail.com>`_
 
