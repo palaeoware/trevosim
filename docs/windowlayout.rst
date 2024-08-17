@@ -5,6 +5,9 @@ Window Layout
 
 .. figure:: _static/windowLayoutWithText.png
     :align: center
+    :alt: A screenshot of the TREvoSim main window
+
+    TREvoSim's main window
 
 The main window comprises a number of elements, outlined below.
 
@@ -13,10 +16,12 @@ Toolbar
 The main toolbar appears with the pause and stop buttons greyed out (disabled) when the simulation is not running:
 
 .. figure:: _static/maintoolbar1.png
+    :alt: The main toolbar of TREvoSim when a simulation is not running 
 
 And when it is running, these are enabled, and all other buttons are disabled:
 
 .. figure:: _static/maintoolbar2.png
+    :alt: The main toolbar of TREvoSim when a simulation is running 
 
 The buttons control the simulation, as well as launching dialogues, whilst the Save path text box defines the program output location.
 
@@ -34,7 +39,7 @@ The buttons control the simulation, as well as launching dialogues, whilst the S
 Species list
 ------------
 
-This panel updates as a run of the simulation progresses: it shows the binary string for the species in a simulation (up to the first 128 characters are displayed), once available. The panel starts as blank; once speciation occurs and any given species remains extant (i.e. there is a living representative in the playing field), the species is represented by a series of dashes. Once the species is extinct, and characters have been recorded (see algorithm description in Keating *et al.* 2019 for more details), these are printed to the panel.
+This panel updates as a run of the simulation progresses: it shows the binary string for the species in a simulation (up to the first 128 characters are displayed), once available. The panel starts as blank; once speciation occurs and any given species remains extant (i.e. there is a living representative in the playing field), the species is represented by a series of dashes. Once the species is extinct, and characters have been recorded (see :ref:`algorithmconcepts` for more details), these are printed to the panel.
 
 Newick string
 -------------
