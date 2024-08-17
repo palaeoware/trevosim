@@ -6,11 +6,11 @@ Algorithm, Concepts, and Experimental Design
 TREvoSim Algorithm Description
 ------------------------------
 
-TREvoSim has been developed across several publications, and the algorithm was first described in Keating et al. (`2020 <https://doi.org/10.1093/sysbio/syaa012>`_, v1.0.0), with modifications outlined in Mongiardino Koch et al (`2021 <https://doi.org/10.1098/rspb.2021.0044>`_, v2.0.0). The simulation approach also shares features with the spatially explicit eco-evolutionary simulation package REvoSim (Garwood et. al. `2019 <https://doi.org/10.1111/pala.12420>`_, Furness et. al. `2023 <https://doi.org/10.21105/joss.05284>`_). The latest version of the algorithm is described here to avoid having to build a picture by accessing multiple publications. Note, this is modified after those previous descriptions, and so employs the same wording in places.
+TREvoSim has been developed across several publications, and the algorithm was first described in Keating et al. (`2020 <https://doi.org/10.1093/sysbio/syaa012>`_, v1.0.0), with modifications outlined in Mongiardino Koch et al. (`2021 <https://doi.org/10.1098/rspb.2021.0044>`_, v2.0.0). The simulation approach also shares features with the spatially explicit eco-evolutionary simulation package REvoSim (`Garwood et. al. 2019 <https://doi.org/10.1111/pala.12420>`_, `Furness et. al. 2023 <https://doi.org/10.21105/joss.05284>`_). The latest version of the algorithm is described here to avoid having to build a picture by accessing multiple publications. Note: this is modified after those previous descriptions, and so employs the same wording in places.
 
 TREvoSim employs digital organisms in the form of binary strings of a user-defined length (e.g. 0010110011101010011011). The zeros and ones comprising the string are here referred to as the genome of the digital organism, and ultimately provide the binary characters that can be used at the end of a simulation for, for example, phylogenetic inference, and they are also used to assign fitness to organisms relative to an environment, as outlined below. When a simulation runs, organisms compete, replicate, and mutate. The simulation incorporates a species concept, and speciation is emergent in the simulation, allowing the software to output a phylogenetic tree showing species relationships during or at the end of a run. 
 
-This overview employs figures from Garwood et al. (2024) -- in all, user defined variables are shown in green font, and the values shown are the default. For clarity, the description eschews listing every potential modification to the algorithm that can be achieved through modifying the software settings, as this would obfuscate important functions in potentially unnecessary detail (although it does mention a number of key choices). Where a setting modifies the algorithm outlined below, this is described fully in the information included on the settings pages in this documentation. The implications of changing a setting are also described in these pages, wherever possible.
+This overview employs figures from Garwood et al. (2024) -- in all, user defined variables are shown in green font, and the values shown are the default. For clarity, the description eschews listing every potential modification to the algorithm that can be achieved through modifying the software settings, as this would obfuscate important functions in potentially unnecessary detail (although it does mention a number of key choices). Where a setting modifies the algorithm outlined below, this is described fully in the information included on the settings pages in this documentation. The implications of changing a setting are also described in those pages, wherever possible.
 
 Data structures
 ^^^^^^^^^^^^^^^
@@ -20,6 +20,9 @@ Organisms reside in a structure called the playing field -- a list of organisms 
 .. figure:: _static/data_structures.png
     :width: 400
     :align: center
+    :alt: Data structures in TREvoSim
+    
+    The data structures used in TREvoSim
 
 If so desired, simulations can employ more than one playing field, which can have the same, or different, environment(s). 
 
@@ -28,11 +31,14 @@ If you wish to modify TREvoSim code, bear in mind that there are numerous other 
 Fitness calculation 
 ^^^^^^^^^^^^^^^^^^^
 
-Every iteration, the fitness of every organism in the playing field is calculated (using an approach first described in Garwood et al. (`2019 <https://doi.org/10.1111/pala.12420>`_), and further detailed in Keating et al. (`2020 <https://doi.org/10.1093/sysbio/syaa012>`_). To calculate fitness, TREvoSim uses an exclusive OR function (i.e. one that takes two inputs, outputs 1 where they differ, and 0 when they are the same) to calculate the `Hamming distance <https://en.wikipedia.org/wiki/Hamming_distance>`_ between the genome of the organism, and each mask in an environment in turn. For example, if there are three masks, the genome is compared to each in turn. The output of this operation has a one wherever inputs differ. The ones are summed across all output strings, so with three masks, by comparing every bit of the organism genome to the equivalent bit of each mask and summing the results, TREvoSim calculates a value between 0 and 3n. Fitness is then an integer calculated as the distance from a used-defined target value: by default that is zero, creating a sharp fitness peak in the environment (a small number of possible genome configurations can achieve maximal fitness), but setting this to e.g. 1.5n will allow a far wider range of genomic configurations to achieve maximal fitness. This approach is summarised in the figure below.
+Every iteration, the fitness of every organism in the playing field is calculated (using an approach first described in Garwood et al. (`2019 <https://doi.org/10.1111/pala.12420>`_), and further detailed in Keating et al. (`2020 <https://doi.org/10.1093/sysbio/syaa012>`_)). To calculate fitness, TREvoSim uses an exclusive OR function (i.e. one that takes two inputs, outputs 1 where they differ, and 0 when they are the same) to calculate the `Hamming distance <https://en.wikipedia.org/wiki/Hamming_distance>`_ between the genome of the organism, and each mask in an environment in turn. For example, if there are three masks, the genome is compared to each in turn. The output of this operation has a one wherever inputs differ. The ones are summed across all output strings, so with three masks, by comparing every bit of the organism genome to the equivalent bit of each mask and summing the results, TREvoSim calculates a value between 0 and 3n. Fitness is then an integer calculated as the distance from a used-defined target value: by default that is zero, creating a sharp fitness peak in the environment (a small number of possible genome configurations can achieve maximal fitness), but setting this to e.g. 1.5n will allow a far wider range of genomic configurations to achieve maximal fitness. This approach is summarised in the figure below.
 
 .. figure:: _static/fitness_calculation.png
     :width: 400
     :align: center
+    :alt: The fitness calculation used in TREvoSim, described in the text
+
+    The TREvoSim fitness calculation
 
 Where multiple environments exist, each organism within a playing field is compared to all environments associated with that playing field, and assigned the maximal fitness achieved across all comparisons. This fitness calculation is carried out independently for each playing field when there are multiple playing fields.
 
@@ -43,6 +49,9 @@ The algorithm used for each TREvoSim iteration is described in full below. Key p
 .. figure:: _static/algorithm.png
     :width: 400
     :align: center
+    :alt: A summary of the TREvoSim algorithm, described in the text below
+
+    TREvoSim algorithm summary
 
 TREvoSim algorithm - Initialisation 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

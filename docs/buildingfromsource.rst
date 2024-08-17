@@ -7,7 +7,7 @@ Compiling from Source and Development Testing
 Compiling from Source
 ---------------------
 
-.. warning:: Unless you would like to modify the software you *do not* need to build it -- you can install or run it using the binaries provided with releases. See :ref:`Requirements and Installation from Binaries` for further information.
+.. note:: Unless you would like to modify the software you *do not* need to build it -- you can install or run it using the binaries provided with releases. See :ref:`Requirements and Installation from Binaries` for further information.
 
 Windows 10
 ^^^^^^^^^^
@@ -16,10 +16,6 @@ Compiling v3.X
 """"""""""""""
 
 QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit).
-
-.. note::
-  Note Visual Studio 2022 should also work but has not yet been tested with TREvoSim.
-
 
 #. Install Microsoft Visual Studio 2019 (VS2019). See https://visualstudio.microsoft.com/vs/older-downloads/. 
 #. Install Qt 6.X and QT Creator on your system by running the open source development installer from Qt: https://www.qt.io/download-open-source
@@ -87,6 +83,9 @@ QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit).
    * You can now Compile the installer in Inno Setup. Press the small blue arrow pointing down on the tool bar, or from the main menu 'Build |rarr| Compile'. Inno Setup will then compile, compress, and create the a install binary in a folder called ./build. Note the template file is set to run the installation post creations - this may be canceled if you do not want to install straight away.
    * You can now distribute the TREvoSimInstaller_v3.0.0_win_x64.exe under the ./build folder that was created. Note the name of the installation binary is controlled by the .ISS file and can be changed there.
 
+.. note::
+  Note Visual Studio 2022 should also work but has not yet been tested with TREvoSim.
+
 
 Compiling v1.X, 2.X 
 """""""""""""""""""
@@ -152,7 +151,7 @@ This has been tested on Ubuntu 22.04 64-bit with QT v6.x using GCC (64-bit).
       cmake .
       cmake --build .
 
-#. Launch the software by double clicking on the TREvoSim binary that has been created in this folder.
+#. Launch the software by double clicking on the TREvoSim binary that has been created in this folder, or run the binary from the command line.
 
 
 Compiling v1.X & v2.X using command line
@@ -278,4 +277,5 @@ TREvoSim |gt| = v3 come with a suite of development tests that verify the core s
 
 #. From the QT Creator application. Once the test program has been built (see point 1 above) you can run the test suite with the QT Creator by going to the 'Tools |rarr| Tests |rarr| Run All Tests' from the main menu. This will build the application if not already done so and display the results in the 'Test Result' tab which normally appears at the bottom of the workspace.
 
-Note: The tests that run are the same that can be called from the TREvoSim program via the 'Tests' button on the main tool bar.
+.. note::
+  The tests that run are the same that can be called from the TREvoSim program via the 'Tests' button on the main tool bar.
