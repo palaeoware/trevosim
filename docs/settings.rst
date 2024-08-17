@@ -42,7 +42,7 @@ Species difference
 Unresolvable cut off
     With low character numbers, especially when TREvoSim is set to strip out uninformative characters, terminals can have the same character string within a matrix, and thus be unresolvable. This setting defines upper limit for identical terminals. If there are more unresolvable taxa than this number in a single run, output files are not written and a warning is provided. If batch mode is underway, the current run is discarded and started again.
 Fitness target
-    This is the target value for the count of 1s in the fitness calculation. See  :ref:`algorithmconcepts` for details of the fitness algorithm. At low and high values (max being mask number multiplied by character number) fewer genomes will have peak fitness, at half max value, a larger number of peak fitness organisms exist. This can be quantified using the :ref:`Fitness histogram` menu command.
+    This is the target value for the count of 1s in the fitness calculation. See :ref:`algorithmconcepts` for details of the fitness algorithm. At low and high values (max being mask number multiplied by character number) fewer genomes will have peak fitness, at half max value, a larger number of peak fitness organisms exist. This can be quantified using the :ref:`Fitness histogram` menu command.
 No selection
     If this option is enabled, fitnesses are not calculated for digital organisms in the playing field, and instead every iteration and random individual is selected for replication.
 Sansomian speciation
