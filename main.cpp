@@ -62,6 +62,11 @@ int main(int argc, char *argv[])
                                  QCoreApplication::translate("main", "Path to file (string)"));
         parser->addOption(opt_o);
 
+        QCommandLineOption opt_b(QStringList() << "b" << "batch",
+                                 QCoreApplication::translate("main", "Run in batch mode."),
+                                 QCoreApplication::translate("main", "An integer representing the required number of replicates"));
+        parser->addOption(opt_b);
+
         parser->process(a);
 
         MainWindow *w = new MainWindow;
