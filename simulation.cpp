@@ -655,7 +655,7 @@ bool simulation::run()
     outValues["Count"] = doPadding(runs, 3);
     outValues["Root"] = printGenomeString(&bestOrganism);
 
-    if (simSettings->writeFileOne)
+    if (simSettings->writeFileOne && simSettings->test==0)
         if (!writeFile(simSettings->logFileNameBase01, simSettings->logFileExtension01, simSettings->logFileString01, outValues, speciesList))
         {
             warning("Error!", "Error opening output file 1 to write to.");
@@ -663,7 +663,7 @@ bool simulation::run()
             return false;
         }
 
-    if (simSettings->writeFileTwo)
+    if (simSettings->writeFileTwo && simSettings->test==0)
         if (!writeFile(simSettings->logFileNameBase02, simSettings->logFileExtension02, simSettings->logFileString02, outValues, speciesList))
         {
             warning("Error!", "Error opening output file 2 to write to.");
@@ -677,7 +677,7 @@ bool simulation::run()
     fileNameString03.append(simSettings->logFileExtension03);
     fileNameString03.prepend(savePathDirectory.absolutePath() + QDir::separator());
 
-    if (simSettings->writeTree)
+    if (simSettings->writeTree  && simSettings->test==0)
     {
         //File 03 is tree file in .nex format - without zero padding
         QFile file03(fileNameString03);
