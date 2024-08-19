@@ -39,7 +39,7 @@ ______
 
 All TREvoSim code is released under the GNU General Public License. See LICENSE.md files in the programme directory.
 
-All TREvoSim code is copyright 2024 by Russell J. Garwood and Alan R.T. Spencer.
+All TREvoSim code is copyright 2024 by Russell J. Garwood and Alan R.T. Spencer. Please see  Please read the [Repository Contribution](https://github.com/palaeoware/repoconventions) document for further information on copyright. 
 
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but **without any warranty**.
 ______
@@ -48,12 +48,12 @@ ______
 
 TREvoSim can be installed and installed/run from the binary releases on our [GitHub](https://github.com/palaeoware): see the page [releases](https://github.com/palaeoware/trevosim/releases) for the latest release. Installation instructions can be found in the documentation (linked below).
 
-If you wish to modify the software, and thus compile TREvoSim on your system this requires the [Qt library](https://www.qt.io). The software has been tested with Qt versions 5.6-5.15 (v1,2), and 6.2-6.5 (v3). Versions 1 and 2 should be compatible with all Qt versions greater than 5.3, v3 wil compile with Qt versions >6.0. TREvoSim has been tested on Windows, Mac OS and Ubuntu Linux, but will in theory work on any Qt-capable system. Build guides are provided in the documentation.
+If you wish to modify the software, and thus compile TREvoSim on your system this requires the [Qt library](https://www.qt.io). The software has been tested with Qt versions 5.6-5.15 (v1,2), and 6.2-6.5 (v3). Versions 1 and 2 should be compatible with all Qt 5 versions greater than 5.3, v3 will compile with Qt versions >6.0. TREvoSim has been tested on Windows, Mac OS and Ubuntu Linux, but will in theory work on any Qt-capable system. Build guides are provided in the documentation.
 _____
 
 ## 3. Documentation
 
-Descriptions of the algorithms used in this package are included in the reference above. Full documentation is available on [readthedocs](https://trevosim.readthedocs.io/en/latest/).
+Full descriptions of the algorithms used in this package, and all simulation variables, as well as guidance on experimental design and data analysis are includedin the documentation on [readthedocs](https://trevosim.readthedocs.io/en/latest/).
 
 _____
 
