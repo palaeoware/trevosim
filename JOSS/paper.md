@@ -167,7 +167,7 @@ TREvoSim v3.0.0 source code and binaries are freely available from [Zenodo](http
 
 # Acknowledgements 
 
-RJG and RSS were supported by the NERC award NE/T000813/1 and development began during the BBSRC grant BB/N015827/1 awarded to RSS and RJG. RJG is supported by the Alexander von Humboldt Foundation; RJG and LAP by Leverhulme Trust Research Project Grant (RPG-2023-234); FSD by NERC fellowship NE/W00786X/1; and LAP by NERC fellowship NE/W007878/1. We are grateful to the reviewers of this contribution, Martin R. Smith and Alison T. Cribb, for suggestions that significantly improved the quality of this publication and the TREvoSim documentation, and to Martin R. Smith for additional auditing of our code. 
+RJG and RSS were supported by the NERC award NE/T000813/1 and development began during the BBSRC grant BB/N015827/1 awarded to RSS and RJG. RJG is supported by the Alexander von Humboldt Foundation; RJG, LAP, and RSS by Leverhulme Trust Research Project Grant (RPG-2023-234); FSD by NERC fellowship NE/W00786X/1; and LAP by NERC fellowship NE/W007878/1. We are grateful to the reviewers of this contribution, Martin R. Smith and Alison T. Cribb, for suggestions that significantly improved the quality of this publication and the TREvoSim documentation, and to Martin R. Smith for additional auditing of our code. 
 
 
 # References
