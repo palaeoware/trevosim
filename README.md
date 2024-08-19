@@ -39,7 +39,7 @@ ______
 
 All TREvoSim code is released under the GNU General Public License. See LICENSE.md files in the programme directory.
 
-All TREvoSim code is copyright 2024 by Russell J. Garwood and Alan R.T. Spencer. Please see  Please read the [Repository Contribution](https://github.com/palaeoware/repoconventions) document for further information on copyright. 
+All TREvoSim code is copyright 2024 by Russell J. Garwood and Alan R.T. Spencer. Please see the [Repository Contribution](https://github.com/palaeoware/repoconventions) document for further information on copyright. 
 
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but **without any warranty**.
 ______
