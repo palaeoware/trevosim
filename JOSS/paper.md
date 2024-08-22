@@ -68,7 +68,7 @@ affiliations:
    index: 8
  - name: Department of Earth Sciences, University of Oxford, Oxford, OX1 3AN, UK
    index: 9
- - name: Erasmus Mundus Joint Master Degree PANGEA, Lille University, France
+ - name: Erasmus Mundus Joint Master Degree PANGEA, Université de Lille, France
    index: 10
 date: 24 March 2024
 bibliography: paper.bib
