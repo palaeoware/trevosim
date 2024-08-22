@@ -163,7 +163,7 @@ RJG developed and coded TREvoSim, with support on testing and releasing from ART
 
 # Availability 
 
-TREvoSim v3.0.0 source code and binaries are freely available from [Zenodo](https://doi.org/10.5281/zenodo.10866261) and [GitHub](https://github.com/palaeoware/trevosim). Newer releases of the TREvoSim software will be available on GitHub. Full documentation is available from [ReadTheDocs](https://trevosim.readthedocs.io/en/latest/).
+TREvoSim v3.0.0 source code and binaries are freely available from [Zenodo](https://doi.org/10.5281/zenodo.13358420) and [GitHub](https://github.com/palaeoware/trevosim/releases/tag/v3.0.0). Newer releases of the TREvoSim software will be available on GitHub. Full documentation is available from [ReadTheDocs](https://trevosim.readthedocs.io/en/latest/).
 
 # Acknowledgements 
 
