@@ -214,41 +214,79 @@ void MainWindow::setStatus(QString message)
     ui->statusBar->showMessage(message);
 }
 
-void MainWindow::runFromCommandLine(QString fileFromCommandLine)
+void MainWindow::runFromCommandLine(QHash<QString, QString> parsedOptions)
 {
     runFromCommand = true;
+    qInfo().noquote() << QString("Program launched from command line");
 
-    //Check if this works - it is easier to do this using the settings load command than the open and load commands herein
-    QFile settingsFile(fileFromCommandLine);
-    if (!settingsFile.open(QIODevice::ReadOnly) || !simSettings->loadSettings(&settingsFile))
+    if (parsedOptions.contains("fileFromCommandLine"))
     {
-        qInfo().noquote() << "Couldn't load settings from file. Please check the path and try again. " + QString(PRODUCTNAME) + " will now quit.";
-        exit(0);
+        QString fileFromCommandLine = parsedOptions.value("fileFromCommandLine");
+        qInfo().noquote() << QString("Will try to open file %1.").arg(fileFromCommandLine);
+
+        //Check if this works - it is easier to do this using the settings load command than the open and load commands herein
+        QFile settingsFile(fileFromCommandLine);
+        if (!settingsFile.open(QIODevice::ReadOnly) || !simSettings->loadSettings(&settingsFile))
+        {
+            qInfo().noquote() << "Couldn't load settings from file. Please check the path and try again. " + QString(PRODUCTNAME) + " will now quit.";
+            exit(0);
+        }
+        //Open deals with resizing the displays for us to avoid crashes, so call it despite having loaded the settings
+        else
+        {
+            settingsFile.close();
+            open(fileFromCommandLine);
+        }
+
+        qInfo() << "File loaded, settings now as follows:";
+        qInfo() << simSettings->printSettings();
     }
-    //Open deals with resizing the displays for us to avoid crashes, so call it despite having loaded the settings
+    //If we have no file, let's load defaults rather than whatever was last used in a run, as this makes more sense
     else
     {
-        settingsFile.close();
-        open(fileFromCommandLine);
+        defaultSettings();
+        qInfo() << "No file was specified, so TREvoSim will run with the default settings, which are as follows:";
+        qInfo() << simSettings->printSettings();
     }
+    //Note that this doesn't persist as from command line there is no save on exit
 
-    qInfo() << "File loaded - starting simulation.";
-    //First sort GUI
-    startRunGUI();
-
-    bool error = false;
-    //Create a new simulation object - sending it important settings.
-    simulation theSimulation(runs, simSettings, &error, this);
-    //Then set it running - send pointer to main window for GUI and access functions, and run number
-    if (error)
+    int batchReplicates = 0;
+    if (parsedOptions.contains("batchReplicates"))
     {
-        qInfo() << "Failed to initialise simulation. " + QString(PRODUCTNAME) + " will now quit.";
-        exit(0);
+        batchReplicates = parsedOptions.value("batchReplicates").toInt();
     }
-    else error = theSimulation.run();
 
-    if (!error) qInfo().noquote() << QString(PRODUCTNAME) + " has encountered an error. If the nature of this error is not obvious, please file an issue or contact the coders.";
-    else qInfo().noquote() << QString(PRODUCTNAME) + " has finished its run, and will now quit.";
+    if (batchReplicates == 0)
+    {
+
+        qInfo() << "TREvoSim is now going to run your simulation: success or error messages will be printed below.";
+        //First sort GUI
+        startRunGUI();
+
+        bool error = false;
+        //Create a new simulation object - sending it important settings.
+        simulation theSimulation(runs, simSettings, &error, this);
+        //Then set it running - send pointer to main window for GUI and access functions, and run number
+        if (error)
+        {
+            qInfo() << "Failed to initialise simulation. " + QString(PRODUCTNAME) + " will now quit.";
+            exit(0);
+        }
+        else error = theSimulation.run();
+
+        if (!error) qInfo().noquote() << QString(PRODUCTNAME) + " has encountered an error. If the nature of this error is not obvious, please file an issue or contact the coders.";
+        else qInfo().noquote() << QString(PRODUCTNAME) + " has finished its run, and will now quit.";
+    }
+    else
+    {
+        qInfo().noquote() << QString(PRODUCTNAME) +  " will now run your simulation. The following information may be useful:";
+        qInfo() << "-- The first replicate will be shown on the GUI.";
+        qInfo() << "-- If there is an error, a pop up will ask you how you would like to continue";
+        qInfo() << "-- If you select to cancel runs, the program will exit, otherwise you can continue, but the software may run your simulation forevermore.";
+        qInfo().noquote() << "-- If there is no error after the first replicate, " + QString(PRODUCTNAME) + " will then run all subsequent replicates in prarllel.";
+        runForTriggered(batchReplicates);
+        qInfo().noquote() << QString(PRODUCTNAME) + " has finished its replicates, and will now quit.";
+    }
 
     exit(0);
 }
@@ -316,6 +354,8 @@ void MainWindow::load()
 void MainWindow::open(QString fileName)
 {
     if (fileName.isNull())settingsFileString = QFileDialog::getOpenFileName(this, tr("Open File"));
+    else settingsFileString = fileName;
+
     if (settingsFileString.length() < 3)
     {
         if (!runFromCommand)QMessageBox::warning(this, "Erk", "There seems to have been an error - no filename.");
@@ -429,20 +469,25 @@ void MainWindow::resetTriggered()
     }
 }
 
-void MainWindow::runForTriggered()
+//When called from the run for button slot, runBatchFor defaults to zero.
+void MainWindow::runForTriggered(int runBatchFor)
 {
     /******** Batch mode - multiple runs *****/
-    int runBatchFor = -1;
-    //Use custom dialogue to allow word wrap
-    batchDialog bDialogue(this, &runBatchFor, simSettings->replicates);
-    //Does not modify runBatchFor unless box is accepted
-    bDialogue.exec();
-    //Return if dialogue cancelled
-    if (runBatchFor == -1) return;
-    else simSettings->replicates = runBatchFor;
+    //As noed above, if called from slot, runBatchFor is zero, and we need to ask user for input (c.f. running from command line)
+    //Elsewhere we can just use the flag runFromCommand, but here it makes sense to use this since the command line needs to send this the required number of runs
+    if (runBatchFor < 1)
+    {
+        //Use custom dialogue to allow word wrap
+        batchDialog bDialogue(this, &runBatchFor, simSettings->replicates);
+        //Does not modify runBatchFor unless box is accepted
+        bDialogue.exec();
+        //Return if dialogue cancelled
+        if (runBatchFor == -1) return;
+        else simSettings->replicates = runBatchFor;
+    }
 
     QString label = "It looks like the strip uninformative factor for these settings is unexpected - i.e. it is less than one. Would you like to recalculate it for these settings?<br /><br />";
-    if ((simSettings->stripUninformative) && (simSettings->stripUninformativeFactor < 1.))
+    if ((simSettings->stripUninformative) && (simSettings->stripUninformativeFactor < 1.) && !runFromCommand)
         if (QMessageBox::question(this, "Hmmm", label, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes)
             recalculateStripUniformativeFactor();
 
@@ -470,6 +515,7 @@ void MainWindow::runForTriggered()
         {
             batchRunning = false;
             resetTriggered();
+            if (runFromCommand) exit(0);
             return;
         }
     }
@@ -602,7 +648,6 @@ void MainWindow::printGenome(const Organism *org, int row)
 
 void MainWindow::recalculateStripUniformativeFactor()
 {
-    qDebug() << "recalculateStripUniformativeFactor";
     bool tempStripUninformative = simSettings->stripUninformative;
     simSettings->stripUninformative = true;
     simSettings->stripUninformativeFactor = 1.0;
@@ -776,7 +821,6 @@ void MainWindow::countPeaks()
         // If the filename contains target string - put it in the hitlist
         if (file.fileName().contains("TREvoSim_fitness_histogram", Qt::CaseInsensitive))
         {
-            qDebug() << file.filesystemAbsoluteFilePath();
             found = true;
             break;
         }

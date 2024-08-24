@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     {
         //Sort out command line option
         QCommandLineParser *parser = new QCommandLineParser();
-        parser->setApplicationDescription("REvoSim is an individual-based evolutionary model. You are using the command line option. See documentation or Garwood et al. (2019) Palaeontology for description of software.");
+        parser->setApplicationDescription("TREvoSim is an individual-based evolutionary model. You are using the command line option. See documentation and associated publications for description of software.");
         parser->addHelpOption();
         parser->addVersionOption();
         parser->setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
@@ -73,22 +73,20 @@ int main(int argc, char *argv[])
 
         MainWindow *w = new MainWindow;
 
-        if (!parser->isSet(opt_o) && parser->isSet(opt_b))
+        QHash<QString, QString> parsedOptions;
+        if (parser->isSet(opt_b))
         {
-            qInfo() << "You appear to have set batch mode running, but node loaded a file. TREvoSim will run these replicates with the default settings.";
+            if (parser->isSet(opt_b)) parsedOptions.insert("batchReplicates", parser->value(opt_b));
         }
 
         if (parser->isSet(opt_o))
         {
             QString fileFromCommandLine = QString();
             fileFromCommandLine = parser->value(opt_o);
-            qInfo() << QString("Program launched from command line, and will try to open file %1.").arg(fileFromCommandLine);
-
-            if (!fileFromCommandLine.isNull())
-            {
-                w->runFromCommandLine(fileFromCommandLine);
-            }
+            if (!fileFromCommandLine.isNull()) parsedOptions.insert("fileFromCommandLine", parser->value(opt_o));
         }
+
+        w->runFromCommandLine(parsedOptions);
 
         int e =  a.exec();
 

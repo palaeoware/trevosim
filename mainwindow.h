@@ -42,7 +42,7 @@ public:
     //Access functions for updating GUI from simulation object
     void recalculateStripUniformativeFactor();
     void setStatus(QString message);
-    void runFromCommandLine(QString fileFromCommandLine);
+    void runFromCommandLine(QHash<QString, QString> parsedOptions);
     void setPath(QString newPath);
     void addProgressBar(int min, int max);
     void setProgressBar(int value);
@@ -83,7 +83,7 @@ private slots:
     void startTriggered();
     void pauseTriggered();
     void resetTriggered();
-    void runForTriggered();
+    void runForTriggered(int runBatchFor);
     void changePathTriggered();
     void pathTextChanged(QString newPath);
     void settingsTriggered();
