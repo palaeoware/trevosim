@@ -19,6 +19,12 @@
 #define RUN_MODE_TAXON 1
 #define RUN_MODE_ITERATION 2
 
+//Speciation mode
+#define SPECIES_MODE_ORIGIN 0
+#define SPECIES_MODE_LAST_SPECIATION 1
+#define SPECIES_MODE_ORIGIN_AND_LAST 2
+#define SPECIES_MODE_MAYR 3
+
 //Forward declaration to avoid circular dependencies in printGenome declaration
 class Organism;
 

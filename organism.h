@@ -1,7 +1,6 @@
 #ifndef ORGANISM_H
 #define ORGANISM_H
 
-#include <QVector>
 #include <QList>
 
 class Organism
