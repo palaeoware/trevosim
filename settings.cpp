@@ -1,4 +1,5 @@
 #include "settings.h"
+#include "qdialogbuttonbox.h"
 #include "ui_settings.h"
 #include "mainwindow.h"
 #include "version.h"
@@ -38,6 +39,9 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
     QObject::connect(ui->button_group_once_pers, &QButtonGroup::buttonClicked, this, &Settings::slotEngineersRadioClicked);
     QObject::connect(ui->docs_pushButton_01, &QPushButton::clicked, this, &Settings::docs1);
     QObject::connect(ui->docs_pushButton_02, &QPushButton::clicked, this, &Settings::docs2);
+    QObject::connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &Settings::accept);
+    QObject::connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &Settings::reject);
+
 
     ui->s_genome_size->setValue(settings->genomeSize);
     ui->s_select_size->setValue(settings->speciesSelectSize);
@@ -53,7 +57,7 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
     ui->s_EE_frequency->setValue(settings->ecosystemEngineeringFrequency);
 
     ui->c_strip_uninformative->setChecked(settings->stripUninformative);
-    ui->c_genome_on_extinction->setChecked(settings->genomeOnExtinction);
+    ui->c_sansomian->setChecked(settings->genomeOnExtinction);
     ui->c_beneficial_mut->setChecked(settings->discardDeleterious);
     ui->c_extinction->setChecked(settings->environmentalPerturbation);
     ui->c_mixing_perturbation->setChecked(settings->mixingPerturbation);
@@ -132,7 +136,8 @@ void Settings::on_buttonBox_accepted()
     settings->ecosystemEngineeringFrequency = ui->s_EE_frequency->value();
 
     settings->stripUninformative = ui->c_strip_uninformative->isChecked();
-    settings->genomeOnExtinction = ui->c_genome_on_extinction->isChecked();
+    qDebug() << ui->c_sansomian->isChecked();
+    settings->genomeOnExtinction = ui->c_sansomian->isChecked();
     settings->discardDeleterious = ui->c_beneficial_mut->isChecked();
     settings->environmentalPerturbation = ui->c_extinction->isChecked();
     settings->mixing = ui->c_mixing->isChecked();
@@ -205,10 +210,10 @@ void Settings::on_buttonBox_accepted()
         }
 
         // Add standard buttons
-        QDialogButtonBox buttonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, &stochasticDialog);
-        stochasticForm.addRow(&buttonBox);
-        QObject::connect(&buttonBox, &QDialogButtonBox::accepted, &stochasticDialog, &Settings::accept);
-        QObject::connect(&buttonBox, &QDialogButtonBox::rejected, &stochasticDialog, &Settings::reject);
+        QDialogButtonBox buttonBoxStochastic(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, &stochasticDialog);
+        stochasticForm.addRow(&buttonBoxStochastic);
+        QObject::connect(&buttonBoxStochastic, &QDialogButtonBox::accepted, &stochasticDialog, &Settings::accept);
+        QObject::connect(&buttonBoxStochastic, &QDialogButtonBox::rejected, &stochasticDialog, &Settings::reject);
 
         stochasticForm.setFormAlignment(Qt::AlignCenter);
         stochasticForm.setAlignment(Qt::AlignCenter);
