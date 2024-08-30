@@ -392,7 +392,7 @@ bool simulation::run()
 
         for (auto s : std::as_const(extinct))
         {
-            speciesExtinction(speciesList[s[0]], playingFields[s[1]]->playingField[s[2]], (iterations + 1), simSettings->sansomianSpeciation, simSettings->stochasticLayer);
+            speciesExtinction(speciesList[s[0]], playingFields[s[1]]->playingField[s[2]], (iterations + 1), simSettings->genomeOnExtinction, simSettings->stochasticLayer);
             if (simSettings->workingLog) workLogTextStream << "\nFor write genome at extinction, replacing species list species " << speciesList[s[0]]->speciesID <<
                                                                " that is entry " << s[0] << " with genome of playing field " << s[1] << " " << s[2] << "\n\n";
         }
@@ -534,7 +534,7 @@ bool simulation::run()
     if (simSettings->workingLog) workLogTextStream << "\n\nMasks at end of run:\n" << printMasks(playingFields) << "\n";
 
 
-    /************* Mop up writing genome for any organisms still alive under Sansomian speciation and for extinction/branch lengths *************/
+    /************* Mop up writing genome for any organisms still alive under genomeOnExtinction and for extinction/branch lengths *************/
     //QVector list for each species ID
     QVector <int> alive;
 
@@ -560,7 +560,7 @@ bool simulation::run()
                 int species = o->speciesID;
 
                 alive.append(species);
-                if (simSettings->sansomianSpeciation)
+                if (simSettings->genomeOnExtinction)
                 {
                     for (int k = 0; k < runGenomeSize; k++)speciesList[species]->genome[k] = o->genome[k];
                 }
@@ -655,7 +655,7 @@ bool simulation::run()
     outValues["Count"] = doPadding(runs, 3);
     outValues["Root"] = printGenomeString(&bestOrganism);
 
-    if (simSettings->writeFileOne && simSettings->test==0)
+    if (simSettings->writeFileOne && simSettings->test == 0)
         if (!writeFile(simSettings->logFileNameBase01, simSettings->logFileExtension01, simSettings->logFileString01, outValues, speciesList))
         {
             warning("Error!", "Error opening output file 1 to write to.");
@@ -663,7 +663,7 @@ bool simulation::run()
             return false;
         }
 
-    if (simSettings->writeFileTwo && simSettings->test==0)
+    if (simSettings->writeFileTwo && simSettings->test == 0)
         if (!writeFile(simSettings->logFileNameBase02, simSettings->logFileExtension02, simSettings->logFileString02, outValues, speciesList))
         {
             warning("Error!", "Error opening output file 2 to write to.");
@@ -677,7 +677,7 @@ bool simulation::run()
     fileNameString03.append(simSettings->logFileExtension03);
     fileNameString03.prepend(savePathDirectory.absolutePath() + QDir::separator());
 
-    if (simSettings->writeTree  && simSettings->test==0)
+    if (simSettings->writeTree  && simSettings->test == 0)
     {
         //File 03 is tree file in .nex format - without zero padding
         QFile file03(fileNameString03);
@@ -1303,7 +1303,7 @@ void simulation::applyPlayingfieldMixing(QVector<Organism *> &speciesList)
             int sourceForOverwrite = QRandomGenerator::global()->bounded(playingFields[1]->playingField.count());
             //Assuming overwriting is quicker than doing extinction check for whole playing field to find out if species will be made extinct, especially if latter large.
             //If it's about to go extinct here, then it'll actually be this iteration, not+1 as assumed above
-            speciesExtinction(speciesList[playingFields[0]->playingField[selectOverwrite]->speciesID], playingFields[0]->playingField[selectOverwrite], iterations, simSettings->sansomianSpeciation,
+            speciesExtinction(speciesList[playingFields[0]->playingField[selectOverwrite]->speciesID], playingFields[0]->playingField[selectOverwrite], iterations, simSettings->genomeOnExtinction,
                               simSettings->stochasticLayer);
             *playingFields[0]->playingField[selectOverwrite] = *playingFields[1]->playingField[sourceForOverwrite];
             if (simSettings->workingLog)workLogTextStream << "\nReplacing entry " << selectOverwrite << " in playing field 0 with entry " << sourceForOverwrite << " from playing field 1.";
@@ -1314,7 +1314,7 @@ void simulation::applyPlayingfieldMixing(QVector<Organism *> &speciesList)
             int selectOverwrite =  QRandomGenerator::global()->bounded(playingFields[1]->playingField.count());
             int sourceForOverwrite = QRandomGenerator::global()->bounded(playingFields[0]->playingField.count());
 
-            speciesExtinction(speciesList[playingFields[1]->playingField[selectOverwrite]->speciesID], playingFields[1]->playingField[selectOverwrite], iterations, simSettings->sansomianSpeciation,
+            speciesExtinction(speciesList[playingFields[1]->playingField[selectOverwrite]->speciesID], playingFields[1]->playingField[selectOverwrite], iterations, simSettings->genomeOnExtinction,
                               simSettings->stochasticLayer);
             *playingFields[1]->playingField[selectOverwrite] = *playingFields[0]->playingField[sourceForOverwrite];
             if (simSettings->workingLog)workLogTextStream << "\nReplacing entry " << selectOverwrite << " in playing field 1 with entry " << sourceForOverwrite << " from playing field 0.";
@@ -1339,7 +1339,7 @@ void simulation::applyPlayingfieldMixing(QVector<Organism *> &speciesList)
                 int sourceForOverwrite = QRandomGenerator::global()->bounded(playingFields[i]->playingField.count());
                 //Check for extinction
                 if (!simSettings->test) speciesExtinction(speciesList[playingFields[selectPlayingfield]->playingField[selectOverwrite]->speciesID], playingFields[selectPlayingfield]->playingField[selectOverwrite],
-                                                              iterations, simSettings->sansomianSpeciation, simSettings->stochasticLayer);
+                                                              iterations, simSettings->genomeOnExtinction, simSettings->stochasticLayer);
 
                 //OVerwerite selected with current organism
                 *playingFields[selectPlayingfield]->playingField[selectOverwrite] = *playingFields[i]->playingField[sourceForOverwrite];
@@ -2251,7 +2251,7 @@ void simulation::writeGUI(QVector<Organism *> &speciesList)
     for (int i = 0; i < speciesList.count(); i++)
     {
         if (simSettings->runMode != RUN_MODE_TAXON) theMainWindow->showRow(i);
-        if (simSettings->sansomianSpeciation && !extinctList[i]) theMainWindow->printBlank(i);
+        if (simSettings->genomeOnExtinction && !extinctList[i]) theMainWindow->printBlank(i);
         else theMainWindow->printGenome(speciesList[i], i);
     }
 

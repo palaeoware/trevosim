@@ -53,7 +53,7 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
     ui->s_EE_frequency->setValue(settings->ecosystemEngineeringFrequency);
 
     ui->c_strip_uninformative->setChecked(settings->stripUninformative);
-    ui->c_sansomian->setChecked(settings->sansomianSpeciation);
+    ui->c_genome_on_extinction->setChecked(settings->genomeOnExtinction);
     ui->c_beneficial_mut->setChecked(settings->discardDeleterious);
     ui->c_extinction->setChecked(settings->environmentalPerturbation);
     ui->c_mixing_perturbation->setChecked(settings->mixingPerturbation);
@@ -132,7 +132,7 @@ void Settings::on_buttonBox_accepted()
     settings->ecosystemEngineeringFrequency = ui->s_EE_frequency->value();
 
     settings->stripUninformative = ui->c_strip_uninformative->isChecked();
-    settings->sansomianSpeciation = ui->c_sansomian->isChecked();
+    settings->genomeOnExtinction = ui->c_genome_on_extinction->isChecked();
     settings->discardDeleterious = ui->c_beneficial_mut->isChecked();
     settings->environmentalPerturbation = ui->c_extinction->isChecked();
     settings->mixing = ui->c_mixing->isChecked();

@@ -41,7 +41,7 @@ public:
     bool environmentalPerturbation;
     bool mixing;
     bool mixingPerturbation;
-    bool sansomianSpeciation;
+    bool genomeOnExtinction;
     bool stripUninformative;
     bool workingLog;
     bool writeTree;

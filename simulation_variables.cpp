@@ -43,7 +43,7 @@ simulationVariables::simulationVariables()
 
     //Bools
     stripUninformative = false;
-    sansomianSpeciation = true;
+    genomeOnExtinction = true;
     discardDeleterious = false;
     workingLog = false;
     environmentalPerturbation = false;
@@ -110,7 +110,7 @@ QString simulationVariables::printSettings() const
                        << " writeEE " << writeEE
                        << " noSelection " << noSelection
                        << " randomSeed " << randomSeed
-                       << " sansomianSpeciation " << sansomianSpeciation
+                       << " genomeOnExtinction " << genomeOnExtinction
                        << " discardDeleterious " << discardDeleterious
                        << " fitnessTarget " << fitnessTarget
                        << " playingfieldNumber " << playingfieldNumber
@@ -185,7 +185,7 @@ bool simulationVariables::loadSettings(QFile *settingsFile)
             if (settingsFileIn.name().toString() == "writeTree")writeTree = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "noSelection")noSelection = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "randomSeed")randomSeed = settingsFileIn.readElementText().toInt();
-            if (settingsFileIn.name().toString() == "sansomianSpeciation")sansomianSpeciation = settingsFileIn.readElementText().toInt();
+            if (settingsFileIn.name().toString() == "genomeOnExtinction")genomeOnExtinction = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "discardDeleterious")discardDeleterious = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "environmentalPerturbation")environmentalPerturbation = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "mixing")mixing = settingsFileIn.readElementText().toInt();
@@ -356,8 +356,8 @@ void simulationVariables::saveSettings(QFile *settingsFile)
     settingsFileOut.writeCharacters(QString("%1").arg(randomSeed));
     settingsFileOut.writeEndElement();
 
-    settingsFileOut.writeStartElement("sansomianSpeciation");
-    settingsFileOut.writeCharacters(QString("%1").arg(sansomianSpeciation));
+    settingsFileOut.writeStartElement("genomeOnExtinction");
+    settingsFileOut.writeCharacters(QString("%1").arg(genomeOnExtinction));
     settingsFileOut.writeEndElement();
 
     settingsFileOut.writeStartElement("discardDeleterious");

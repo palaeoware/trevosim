@@ -1473,7 +1473,7 @@ bool testinternal::testThirteen(QString &outString)
 
     QHash<QString, QVector <int> > extinct = x.checkForExtinct(speciesList);
 
-    for (auto s : std::as_const(extinct)) x.speciesExtinction(speciesList[s[0]], x.playingFields[s[1]]->playingField[s[2]], (x.iterations + 1), simSettings.sansomianSpeciation,
+    for (auto s : std::as_const(extinct)) x.speciesExtinction(speciesList[s[0]], x.playingFields[s[1]]->playingField[s[2]], (x.iterations + 1), simSettings.genomeOnExtinction,
                                                                   simSettings.stochasticLayer,
                                                                   true);
 
@@ -1491,7 +1491,7 @@ bool testinternal::testThirteen(QString &outString)
     extinct = x.checkForExtinct(speciesList);
 
     for (auto s : std::as_const(extinct)) out << "Species is extinct: " << s[0] << "\n";
-    for (auto s : std::as_const(extinct)) x.speciesExtinction(speciesList[s[0]], x.playingFields[s[1]]->playingField[s[2]], (x.iterations + 1), simSettings.sansomianSpeciation,
+    for (auto s : std::as_const(extinct)) x.speciesExtinction(speciesList[s[0]], x.playingFields[s[1]]->playingField[s[2]], (x.iterations + 1), simSettings.genomeOnExtinction,
                                                                   simSettings.stochasticLayer,
                                                                   true);
 
@@ -1516,13 +1516,13 @@ bool testinternal::testThirteen(QString &outString)
             out << "\n";
         }
 
-    out << "Now check non-Sansomian\n";
+    out << "Now check record genome on speciation\n";
     x.iterations = 68;
     x.playingFields[0]->playingField[11]->speciesID = 4;
     x.playingFields[1]->playingField[6]->speciesID = 1;
     extinct = x.checkForExtinct(speciesList);
     for (auto s : std::as_const(extinct)) out << "Species is extinct: " << s[0] << "\n";
-    for (auto s : std::as_const(extinct)) x.speciesExtinction(speciesList[s[0]], x.playingFields[s[1]]->playingField[s[2]], (x.iterations + 1), simSettings.sansomianSpeciation,
+    for (auto s : std::as_const(extinct)) x.speciesExtinction(speciesList[s[0]], x.playingFields[s[1]]->playingField[s[2]], (x.iterations + 1), simSettings.genomeOnExtinction,
                                                                   simSettings.stochasticLayer,
                                                                   true);
 
@@ -1539,7 +1539,7 @@ bool testinternal::testThirteen(QString &outString)
             if (count == 50)
             {
                 testFlag = false;
-                out << "Sansomian in species extinction not working.\n\n";
+                out << "eRcording genome on species extinction not working.\n\n";
             }
             out << "\n";
         }
