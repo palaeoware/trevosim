@@ -1,21 +1,20 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="./">
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>6. Settings - Organisms and simulation &mdash; TREvoSim 3.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/documentation_options.js?v=acc74ff5"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -28,19 +27,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-
-          
-          
-          <a href="index.html" class="icon icon-home">
-            TREvoSim
-              <img src="_static/TREvoSim.jpg" class="logo" alt="Logo"/>
+            <a href="index.html" class="icon icon-home"> TREvoSim
+            <img src="_static/TREvoSim.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 3.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -76,8 +71,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active"><span class="section-number">6. </span>Settings - Organisms and simulation</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><span class="section-number">6. </span>Settings - Organisms and simulation</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/settings.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -88,16 +83,16 @@
            <div itemprop="articleBody">
              
   <section id="settings-organisms-and-simulation">
-<span id="settings"></span><h1><span class="section-number">6. </span>Settings - Organisms and simulation<a class="headerlink" href="#settings-organisms-and-simulation" title="Link to this heading">¶</a></h1>
+<span id="settings"></span><h1><span class="section-number">6. </span>Settings - Organisms and simulation<a class="headerlink" href="#settings-organisms-and-simulation" title="Permalink to this headline">¶</a></h1>
 <p>Clicking on the settings button of the toolbar will launch a settings dialogue which has two tabs - one with settings for the organisms in the simulation, and one controlling the environment for the simulation.</p>
 <figure class="align-center" id="id2">
 <a class="reference internal image-reference" href="_images/settings_01.png"><img alt="A screenshot of the TREvoSim settings panel for Organisms and simulation" src="_images/settings_01.png" style="width: 550px;" /></a>
 <figcaption>
-<p><span class="caption-text">The TREvoSim Organisms and Simulations settings panel</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
+<p><span class="caption-text">The TREvoSim Organisms and Simulations settings panel</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
 </figcaption>
 </figure>
 <section id="organisms">
-<h2><span class="section-number">6.1. </span>Organisms<a class="headerlink" href="#organisms" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">6.1. </span>Organisms<a class="headerlink" href="#organisms" title="Permalink to this headline">¶</a></h2>
 <dl class="simple">
 <dt>Number of characters/genome size</dt><dd><p>This defines the number of bits in character string for each organism, and ultimately the character number of the matrix output by the software.</p>
 </dd>
@@ -114,7 +109,7 @@
 </dl>
 </section>
 <section id="simulations">
-<h2><span class="section-number">6.2. </span>Simulations<a class="headerlink" href="#simulations" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">6.2. </span>Simulations<a class="headerlink" href="#simulations" title="Permalink to this headline">¶</a></h2>
 <dl class="simple">
 <dt>Run mode radio</dt><dd><p>This has two options, run for iteration number or run to taxon number, which switches between the two options below.</p>
 </dd>
@@ -130,7 +125,7 @@
 </dd>
 <dt>No selection</dt><dd><p>If this option is enabled, fitnesses are not calculated for digital organisms in the playing field, and instead every iteration and random individual is selected for replication.</p>
 </dd>
-<dt>Sansomian speciation</dt><dd><p>This option dictates when the character string of a species is recorded: at speciation, or at extinction. Sansomian speciation (named because it was Dr Rob Sansom’s idea, rather than being a wider concept), the default, is to record the genome/characters of a species when that species goes extinct. This is useful, in particular with respect to species zero – that used to seed the simulation. Because this tends to survive for longer than other species (see discussion in <a class="reference internal" href="algorithmconcepts.html#tree-rooting"><span class="std std-ref">Tree Rooting</span></a>), the genome at the start of a species lifespan could differ significantly from that at its extinction. Recording the genome of the last individual of the species ensures in such long-surviving species that the recorded characters are closest that of its sister species (and also the last common ancestor of these two species). When the option is not selected, genome is recorded at speciation.</p>
+<dt>Record genomes on extinction</dt><dd><p>This option controls when the character string of a species is recorded, which can occur either at the point of speciation, or at extinction. When this option is checked, which it is by default, the genome/characters of a species are written when that species goes extinct. This is useful, in particular, with respect to species zero – that used to seed the simulation. Because this tends to survive for longer than other species (see discussion in <a class="reference internal" href="algorithmconcepts.html#tree-rooting"><span class="std std-ref">Tree Rooting</span></a>), the genome at the start of a species lifespan could differ significantly from that at its extinction. Recording the genome of the last individual of the species ensures in such long-surviving species that the recorded characters are closest that of its sister species (and also the last common ancestor of these two species). When the option is not selected, genome is recorded at the birth of each species.</p>
 </dd>
 <dt>Discard deleterious mutations</dt><dd><p>Optionally, TREvoSim can accept only mutations which are neutral, or improve the fitness of an organism.</p>
 </dd>
