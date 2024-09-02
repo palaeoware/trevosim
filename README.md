@@ -53,7 +53,7 @@ _____
 
 ## 3. Documentation
 
-Full descriptions of the algorithms used in this package, and all simulation variables, as well as guidance on experimental design and data analysis are includedin the documentation on [readthedocs](https://trevosim.readthedocs.io/en/latest/).
+Full descriptions of the algorithms used in this package, and all simulation variables, as well as guidance on experimental design and data analysis are included in the documentation on [readthedocs](https://trevosim.readthedocs.io/en/latest/).
 
 _____
 
