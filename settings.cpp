@@ -101,6 +101,7 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
 
     if (settings->ecosystemEngineersArePersistent)ui->r_persistent_EE->setChecked(true);
     else ui->r_once_EE->setChecked(true);
+
     //Sort out GUI on loadmixingProbabilityZeroToOne
     slotEngineersChanged();
     slotEngineersRadioClicked();
@@ -116,6 +117,13 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
     else ui->c_mixing->setChecked(false);
 
     ui->s_multiple->setValue(settings->playingfieldNumber);
+
+    //Populate speciation mode combo box
+    QHash<int, QString> comboOptions;
+    comboOptions.insert(SPECIES_MODE_ORIGIN, "Species origin");
+    comboOptions.insert(SPECIES_MODE_LAST_SPECIATION, "Last speciation");
+    comboOptions.insert(SPECIES_MODE_ORIGIN_AND_LAST, "Origin and all speciations");
+    comboOptions.insert(SPECIES_MODE_MAYR, "Mayr");
 }
 
 

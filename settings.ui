@@ -24,14 +24,21 @@
        <string>Organisms and simulation</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="24" column="0" colspan="3">
+       <item row="0" column="0" colspan="3">
+        <widget class="QLabel" name="docs_label_01">
+         <property name="text">
+          <string>Textlabel</string>
+         </property>
+        </widget>
+       </item>
+       <item row="25" column="0" colspan="3">
         <widget class="QCheckBox" name="c_noSelection">
          <property name="text">
           <string>No selection</string>
          </property>
         </widget>
        </item>
-       <item row="27" column="0">
+       <item row="28" column="0">
         <widget class="QCheckBox" name="c_strip_uninformative">
          <property name="text">
           <string>Strip uninformative characters via subsampling</string>
@@ -103,7 +110,7 @@
          </property>
         </widget>
        </item>
-       <item row="25" column="0" colspan="3">
+       <item row="26" column="0" colspan="3">
         <widget class="QCheckBox" name="c_sansomian">
          <property name="text">
           <string>Record genomes on extinction</string>
@@ -155,21 +162,21 @@
          </property>
         </widget>
        </item>
-       <item row="28" column="0">
+       <item row="29" column="0">
         <widget class="QCheckBox" name="c_randomSeed">
          <property name="text">
           <string>Random starting individual</string>
          </property>
         </widget>
        </item>
-       <item row="22" column="2">
+       <item row="23" column="2">
         <widget class="QSpinBox" name="s_unresolvable_c">
          <property name="minimum">
           <number>2</number>
          </property>
         </widget>
        </item>
-       <item row="22" column="0">
+       <item row="23" column="0">
         <widget class="QLabel" name="label_11">
          <property name="text">
           <string>Unresolvable cutoff</string>
@@ -193,7 +200,7 @@
          </property>
         </widget>
        </item>
-       <item row="26" column="0" colspan="3">
+       <item row="27" column="0" colspan="3">
         <widget class="QCheckBox" name="c_beneficial_mut">
          <property name="text">
           <string>Discard deleterious mutations</string>
@@ -214,14 +221,14 @@
          </property>
         </widget>
        </item>
-       <item row="23" column="0">
+       <item row="24" column="0">
         <widget class="QLabel" name="label_5">
          <property name="text">
           <string>Fitness target</string>
          </property>
         </widget>
        </item>
-       <item row="23" column="2">
+       <item row="24" column="2">
         <widget class="QSpinBox" name="s_fitness_target"/>
        </item>
        <item row="13" column="2">
@@ -312,12 +319,15 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="0" colspan="3">
-        <widget class="QLabel" name="docs_label_01">
+       <item row="22" column="0">
+        <widget class="QLabel" name="label_9">
          <property name="text">
-          <string>Textlabel</string>
+          <string>Speciation mode</string>
          </property>
         </widget>
+       </item>
+       <item row="22" column="2">
+        <widget class="QComboBox" name="combo_speciation"/>
        </item>
       </layout>
      </widget>
