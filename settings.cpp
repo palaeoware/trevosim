@@ -119,11 +119,14 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
     ui->s_multiple->setValue(settings->playingfieldNumber);
 
     //Populate speciation mode combo box
-    QHash<int, QString> comboOptions;
+    QStringList comboOptions;
     comboOptions.insert(SPECIES_MODE_ORIGIN, "Species origin");
     comboOptions.insert(SPECIES_MODE_LAST_SPECIATION, "Last speciation");
     comboOptions.insert(SPECIES_MODE_ORIGIN_AND_LAST, "Origin and all speciations");
     comboOptions.insert(SPECIES_MODE_MAYR, "Mayr");
+
+    ui->combo_speciation->addItems(comboOptions);
+    ui->combo_speciation->setCurrentIndex(simSettings->speciationMode);
 }
 
 

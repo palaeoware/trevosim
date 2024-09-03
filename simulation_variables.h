@@ -31,6 +31,7 @@ public:
     int stochasticMap[16];
     int test;
     int runMode;
+    int speciationMode;
     int runForIterations;
     int ecosystemEngineeringFrequency;
     int runningLogFrequency;
