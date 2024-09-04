@@ -110,7 +110,7 @@ private:
     int genomeDifference(const Organism *organismOne, const Organism *organismTwo);
     QHash<QString, QVector<int> > checkForExtinct(const QVector <Organism *> &speciesList);
     void speciesExtinction(Organism *speciesListOrganism, const Organism *playingFieldOrganism, int extinctIteration, bool samsonian, bool stochastic, bool test = false);
-    int differenceToParent(const Organism *organismOne, int runSelectSize);
+    int checkForSpeciation(const Organism *organismOne, int runSelectSize);
 };
 
 #endif // SIMULATION_H

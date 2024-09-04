@@ -324,7 +324,7 @@ bool simulation::run()
             }
 
             //Reminder, in initialise prog genome is set equal to genome
-            int diff = differenceToParent(&progeny, runSelectSize);
+            int diff = checkForSpeciation(&progeny, runSelectSize);
 
             /************* New species *************/
             //Assymetry of tree changes with level of difference below, plus balance between rate of mutation of environment and Organism
@@ -1749,7 +1749,7 @@ int simulation::genomeDifference(const Organism *organismOne, const Organism *or
     return diff;
 }
 
-int simulation::differenceToParent(const Organism *organismOne, int runSelectSize)
+int simulation::checkForSpeciation(const Organism *organismOne, int runSelectSize)
 {
     int diff = 0;
     //Loop to select size to allow decoupling of species definition from genome size.
