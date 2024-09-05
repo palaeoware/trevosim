@@ -1574,7 +1574,7 @@ bool testinternal::testFourteen(QString &outString)
     simulation x(0, &simSettings, &error, theMainWindow);
     if (error) return false;
 
-    int diff = x.differenceToParent(&org, 50);
+    int diff = x.checkForSpeciation(&org, 50);
 
     out << "Set genome to false, parent to true, select size 50. Should be 50, returns " << diff << ".\n";
     if (diff != 50)
@@ -1582,7 +1582,7 @@ bool testinternal::testFourteen(QString &outString)
         testFlag = false;
     }
 
-    diff = x.differenceToParent(&org, 25);
+    diff = x.checkForSpeciation(&org, 25);
 
     out << "Set genome to false, parent to true, select size 25. Should be 25, returns " << diff << ".\n";
     if (diff != 25)
@@ -1591,7 +1591,7 @@ bool testinternal::testFourteen(QString &outString)
     }
 
     for (auto &p : org.parentGenome) p = false;
-    diff = x.differenceToParent(&org, 50);
+    diff = x.checkForSpeciation(&org, 50);
 
     out << "Set genome to false, parent to false, select size 50. Should be 0, returns " << diff << ".\n";
     if (diff != 0)
@@ -1599,7 +1599,7 @@ bool testinternal::testFourteen(QString &outString)
         testFlag = false;
     }
 
-    diff = x.differenceToParent(&org, 25);
+    diff = x.checkForSpeciation(&org, 25);
 
     out << "Set genome to false, parent to false, select size 25. Should be 0, returns " << diff << ".\n";
     if (diff != 0)
