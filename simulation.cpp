@@ -324,11 +324,11 @@ bool simulation::run()
             }
 
             //Reminder, in initialise prog genome is set equal to genome
-            int diff = checkForSpeciation(&progeny, runSelectSize);
+            bool isNewSpecies = checkForSpeciation(&progeny, runSelectSize, runSpeciesDifference, simSettings->speciationMode);
 
             /************* New species *************/
             //Assymetry of tree changes with level of difference below, plus balance between rate of mutation of environment and Organism
-            if (diff >= runSpeciesDifference)
+            if (isNewSpecies)
             {
                 if (simSettings->workingLog) workLogTextStream << "New species has appeared this iteration - species " << progeny.speciesID << " gives birth to " << speciesCount + 1
                                                                    << " at iteration " << iterations << "\n\n";
@@ -489,7 +489,7 @@ bool simulation::run()
                 QList <int> uninformativeNonCoding;
 
                 //Test for informative
-                testForUninformative(speciesList, uninformativeCoding, uninformativeNonCoding);
+                checkForUninformative(speciesList, uninformativeCoding, uninformativeNonCoding);
                 int uninformativeNumber = uninformativeCoding.length() + uninformativeNonCoding.length();
                 logTextOut.replace("||Uninformative||", QString::number(uninformativeNumber), Qt::CaseInsensitive);
             }
@@ -589,7 +589,7 @@ bool simulation::run()
     QList <int> uninformativeNonCoding;
 
     //Test for informative characters - this is a seperate operation to actually stripping them
-    testForUninformative(speciesList, uninformativeCoding, uninformativeNonCoding);
+    checkForUninformative(speciesList, uninformativeCoding, uninformativeNonCoding);
 
     int uninformativeNumber = uninformativeCoding.length() + uninformativeNonCoding.length();
     informativeCharacters = runGenomeSize - uninformativeNumber;
@@ -608,7 +608,7 @@ bool simulation::run()
     if (simSettings->stripUninformative)
     {
         //Check whether we have enough coding and non coding characters
-        bool requiredCharacterNumber = testForCharacterNumber(uninformativeCoding, uninformativeNonCoding);
+        bool requiredCharacterNumber = checkForCharacterNumber(uninformativeCoding, uninformativeNonCoding);
         if (!requiredCharacterNumber && !simSettings->test)
         {
             if (theMainWindow != nullptr)
@@ -1455,7 +1455,7 @@ void simulation::applyEcosystemEngineering(QVector <Organism *> &speciesList, bo
     }
 }
 
-void simulation::testForUninformative(QVector <Organism *> &speciesList, QList <int> &uninformativeCoding, QList <int> &uninformativeNonCoding)
+void simulation::checkForUninformative(QVector <Organism *> &speciesList, QList <int> &uninformativeCoding, QList <int> &uninformativeNonCoding)
 {
     for (int i = 0; i < runFitnessSize; i++)
     {
@@ -1472,7 +1472,7 @@ void simulation::testForUninformative(QVector <Organism *> &speciesList, QList <
         }
 }
 
-bool simulation::testForCharacterNumber(QList <int> &uninformativeCoding, QList <int> &uninformativeNonCoding)
+bool simulation::checkForCharacterNumber(QList <int> &uninformativeCoding, QList <int> &uninformativeNonCoding)
 {
     //Deal with informative v.s. uninformative characters
     int requiredNonCodingCharacterNumber = simSettings->genomeSize - simSettings->fitnessSize;
@@ -1749,13 +1749,16 @@ int simulation::genomeDifference(const Organism *organismOne, const Organism *or
     return diff;
 }
 
-int simulation::checkForSpeciation(const Organism *organismOne, int runSelectSize)
+bool simulation::checkForSpeciation(const Organism *organismOne, int runSelectSize, int runSpeciesDifference, int speciationMode)
 {
     int diff = 0;
     //Loop to select size to allow decoupling of species definition from genome size.
     for (int j = 0; j < runSelectSize; j++)
         if (organismOne->genome[j] != organismOne->parentGenome[j])diff++;
-    return diff;
+
+
+    if (diff >= runSpeciesDifference) return true;
+    else return false;
 }
 
 int simulation::returninformativeCharacters()

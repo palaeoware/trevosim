@@ -1134,7 +1134,7 @@ bool testinternal::testTen(QString &outString)
     QList <int> uninformativeNonCoding;
 
     //Test for informative
-    x.testForUninformative(speciesList, uninformativeCoding, uninformativeNonCoding);
+    x.checkForUninformative(speciesList, uninformativeCoding, uninformativeNonCoding);
     x.stripUninformativeCharacters(speciesList, uninformativeCoding, uninformativeNonCoding);
     out << "\nThere should be 17 informative characters.\n";
     if (speciesList[0]->genome.length() != 17) testFlag = false;
@@ -1183,7 +1183,7 @@ bool testinternal::testTen(QString &outString)
 
         uninformativeCoding.clear();
         uninformativeNonCoding.clear();
-        x.testForUninformative(speciesList2, uninformativeCoding, uninformativeNonCoding);
+        x.checkForUninformative(speciesList2, uninformativeCoding, uninformativeNonCoding);
 
         out << "Uninformative characters created: " << uninformativeCount << " Uninformative characters counted " << (uninformativeCoding.length() + uninformativeNonCoding.length()) << "\n";
         if (uninformativeCount != (uninformativeCoding.length() + uninformativeNonCoding.length()))
@@ -1240,8 +1240,8 @@ bool testinternal::testTen(QString &outString)
 
     uninformativeCoding.clear();
     uninformativeNonCoding.clear();
-    y.testForUninformative(speciesList3, uninformativeCoding, uninformativeNonCoding);
-    bool continueToStrip = y.testForCharacterNumber(uninformativeCoding, uninformativeNonCoding);
+    y.checkForUninformative(speciesList3, uninformativeCoding, uninformativeNonCoding);
+    bool continueToStrip = y.checkForCharacterNumber(uninformativeCoding, uninformativeNonCoding);
 
     if (continueToStrip)
     {
@@ -1269,8 +1269,8 @@ bool testinternal::testTen(QString &outString)
 
     uninformativeCoding.clear();
     uninformativeNonCoding.clear();
-    y.testForUninformative(speciesList3, uninformativeCoding, uninformativeNonCoding);
-    continueToStrip = y.testForCharacterNumber(uninformativeCoding, uninformativeNonCoding);
+    y.checkForUninformative(speciesList3, uninformativeCoding, uninformativeNonCoding);
+    continueToStrip = y.checkForCharacterNumber(uninformativeCoding, uninformativeNonCoding);
 
     if (continueToStrip)
     {
@@ -1298,8 +1298,8 @@ bool testinternal::testTen(QString &outString)
 
     uninformativeCoding.clear();
     uninformativeNonCoding.clear();
-    y.testForUninformative(speciesList3, uninformativeCoding, uninformativeNonCoding);
-    continueToStrip = y.testForCharacterNumber(uninformativeCoding, uninformativeNonCoding);
+    y.checkForUninformative(speciesList3, uninformativeCoding, uninformativeNonCoding);
+    continueToStrip = y.checkForCharacterNumber(uninformativeCoding, uninformativeNonCoding);
 
     if (continueToStrip)
     {
@@ -1328,8 +1328,8 @@ bool testinternal::testTen(QString &outString)
 
     uninformativeCoding.clear();
     uninformativeNonCoding.clear();
-    y.testForUninformative(speciesList3, uninformativeCoding, uninformativeNonCoding);
-    continueToStrip = y.testForCharacterNumber(uninformativeCoding, uninformativeNonCoding);
+    y.checkForUninformative(speciesList3, uninformativeCoding, uninformativeNonCoding);
+    continueToStrip = y.checkForCharacterNumber(uninformativeCoding, uninformativeNonCoding);
     if (continueToStrip) y.stripUninformativeCharacters(speciesList3, uninformativeCoding, uninformativeNonCoding);
 
     if (!continueToStrip || speciesList3[0]->genome.size() != 50)
