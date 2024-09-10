@@ -15,7 +15,7 @@ public:
     //resize from method if needed
 
     QList <bool> genome;
-    QList <bool> parentGenome;
+    QList <QList <bool> > parentGenome;
     QList <bool> stochasticGenome;
 
     // ID of species and progenator
