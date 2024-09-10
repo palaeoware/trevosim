@@ -7,10 +7,11 @@ Organism::Organism(int genomeSize, bool stochastic)
     stochasticLayer = stochastic;
 
     // Initialise everything to false/-1 to make it obvious if it has not been changed.
+    parentGenome.append(QList <bool>());
     for (int i = 0; i < genomeSize; i++)
     {
         genome.append(false);
-        parentGenome.append(false);
+        parentGenome[0].append(false);
     }
 
     if (stochasticLayer)
@@ -33,12 +34,12 @@ void Organism::initialise(int genomeSize)
         if (QRandomGenerator::global()->generate() > (QRandomGenerator::max() / 2))
         {
             genome[i] = true;
-            parentGenome[i] = true;
+            parentGenome[0][i] = true;
         }
         else
         {
             genome[i] = false;
-            parentGenome[i] = false;
+            parentGenome[0][i] = false;
         }
     }
 
@@ -63,7 +64,7 @@ void Organism::initialise(int genomeSize, const int *stochasticMap)
         else stochasticGenome[i] = false;
     this->mapFromStochastic(stochasticMap);
 
-    for (int i = 0; i < genomeSize; i++) parentGenome[i] = genome[i];
+    for (int i = 0; i < genomeSize; i++) parentGenome[0][i] = genome[i];
 
     //This is true for first organism. Which is pretty much only time I initialise one currently.
     speciesID = 0;
