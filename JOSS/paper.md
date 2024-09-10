@@ -105,7 +105,7 @@ When there are multiple environments for any given playing field, by default mas
 
 ### No selection
 
-Another new addition is a no selection mode -- when this is enabled (disabled by default), organisms for replication are chosen from the playing field at random, rather than using fitness to determine replication probability. When this option is enabled, the simulation functions under drift, allowing study of e.g. neutral vs selective regimes. 
+Another new addition is a no selection mode -- when this is enabled (disabled by default), organisms for replication are chosen from the playing field at random, rather than using fitness to determine replication probability. When this option is enabled, the simulation functions under drift, allowing study of e.g. neutral vs. selective regimes. 
 
 ### Playing field mixing
 
