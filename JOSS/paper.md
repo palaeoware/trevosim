@@ -50,23 +50,23 @@ authors:
     affiliation: 10
 
 affiliations:
- - name: Department of Earth and Environmental Sciences, University of Manchester, Manchester, M13 9PL, UK
+ - name: Department of Earth and Environmental Sciences, University of Manchester, Manchester, M13 9PL, United Kingdom
    index: 1
- - name: Natural History Museum, London, SW7 5BD, UK
+ - name: Natural History Museum, London, SW7 5BD, United Kingdom
    index: 2
- - name: Department of Earth Science and Engineering, Imperial College, London, SW7 2AZ, UK
+ - name: Department of Earth Science and Engineering, Imperial College, London, SW7 2AZ, United Kingdom
    index: 3
- - name: School of Biological Sciences, University of Reading, Reading, UK
+ - name: School of Biological Sciences, University of Reading, Reading, United Kingdom
    index: 4
- - name: Oxford University Museum of Natural History, University of Oxford, Oxford, OX1 3PW, UK
+ - name: Oxford University Museum of Natural History, University of Oxford, Oxford, OX1 3PW, United Kingdom
    index: 5
- - name: School of Geography, Earth and Environmental Sciences, University of Birmingham, Birmingham B15 2TT, UK
+ - name: School of Geography, Earth and Environmental Sciences, University of Birmingham, Birmingham B15 2TT, United Kingdom
    index: 6
- - name: School of Earth Sciences, University of Bristol, Life Sciences Building, Tyndall Avenue, Bristol, BS8 1TQ, UK
+ - name: School of Earth Sciences, University of Bristol, Life Sciences Building, Tyndall Avenue, Bristol, BS8 1TQ, United Kingdom
    index: 7
- - name: Scripps Institution of Oceanography, UC San Diego, La Jolla, CA 92122, USA
+ - name: Scripps Institution of Oceanography, UC San Diego, La Jolla, CA 92122, United States of America
    index: 8
- - name: Department of Earth Sciences, University of Oxford, Oxford, OX1 3AN, UK
+ - name: Department of Earth Sciences, University of Oxford, Oxford, OX1 3AN, United Kingdom
    index: 9
  - name: Erasmus Mundus Joint Master Degree PANGEA, Lille University, France
    index: 10
