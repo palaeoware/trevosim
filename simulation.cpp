@@ -1005,7 +1005,8 @@ void simulation::mutateOrganism(Organism &progeny, const playingFieldStructure *
 void simulation::newSpecies(Organism &progeny, Organism &parent, playingFieldStructure *pf)
 {
 
-    if (progeny.speciesID != parent.speciesID) warning("Eesh", "Speciation error. Please contact RJG in the hope he can sort this out.");
+    if ((progeny.speciesID != parent.speciesID) || (runGenomeSize != progeny.genome.size()))
+        warning("Eesh", "Speciation error. Please contact RJG in the hope he can sort this out.");
 
     //Iterate species count
     speciesCount++;
@@ -1016,11 +1017,13 @@ void simulation::newSpecies(Organism &progeny, Organism &parent, playingFieldStr
     //Record parent ID
     int parentSpecies = parent.speciesID;
 
-    //Reset timer on all of this species to avoid clustering of speciation events as multiple individuals hit n mutations
+    //Add this species to list of children species for all members of this species currently alive in the simulation
     //Do this independently for each playing field (i.e. only in this playing field this time) - this obviously has implications if after mixing the species are very different in different playing fields - many more speciations, lower diversity in any given PF.
+    //To do - revisit this decision //
+    QList <bool> newSpeciesGenome;
+    for (auto b : std::as_const(progeny.genome))newSpeciesGenome.append(b);
     for (auto o : std::as_const(pf->playingField))
-        if (o->speciesID == parentSpecies)
-            for (int j = 0; j < runGenomeSize; j++)o->parentGenome[j] = progeny.genome[j];
+        if (o->speciesID == parentSpecies) o->parentGenome.append(newSpeciesGenome);
 
     parent.cladogenesis = iterations;
 
@@ -1033,7 +1036,7 @@ void simulation::newSpecies(Organism &progeny, Organism &parent, playingFieldStr
     progeny.born = iterations;
 
     //Genome → progenator genome
-    for (int j = 0; j < runGenomeSize; j++)progeny.parentGenome[j] = progeny.genome[j];
+    for (int j = 0; j < runGenomeSize; j++)progeny.parentGenome[0][j] = progeny.genome[j];
 
     //Pass on eccosystem engineer status
     progeny.ecosystemEngineer = parent.ecosystemEngineer;
@@ -1784,8 +1787,15 @@ QString simulation::printPlayingField(const QVector <playingFieldStructure *> &p
         {
             out << "\nPlayingfield pos: " << cnt << " \nSpecies ID: " << o->speciesID << "\nGenome:\t";
             for (auto i : std::as_const(o->genome)) i ? out << 1 : out << 0 ;
-            out << "\nParent genome:\t";
-            for (auto i : std::as_const(o->parentGenome)) i ? out << 1 : out << 0 ;
+            out << "\nParent genomes:\n";
+            int count = 0;
+            for (auto g : std::as_const(o->parentGenome))
+            {
+                out << "Genome " << count++ << "\t";
+                for (auto i : std::as_const(g))
+                    i ? out << 1 : out << 0 ;
+                out << "\n";
+            }
 
             out << "\nFitness:\t" << o->fitness;
             out << "\nEcosystem engineer:\t" << o->ecosystemEngineer;
