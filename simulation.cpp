@@ -1754,14 +1754,27 @@ int simulation::genomeDifference(const Organism *organismOne, const Organism *or
 
 bool simulation::checkForSpeciation(const Organism *organismOne, int runSelectSize, int runSpeciesDifference, int speciationMode)
 {
-    int diff = 0;
+    int difference = 0;
     //Loop to select size to allow decoupling of species definition from genome size.
-    for (int j = 0; j < runSelectSize; j++)
-        if (organismOne->genome[j] != organismOne->parentGenome[j])diff++;
 
+//Speciation mode
+#define SPECIES_MODE_ORIGIN 0
+#define SPECIES_MODE_LAST_SPECIATION 1
+#define SPECIES_MODE_ORIGIN_AND_LAST 2
+#define SPECIES_MODE_MAYR 3
+    int count = organismOne->parentGenome.count();
+    if (simSettings->speciationMode == SPECIES_MODE_ORIGIN)
+        for (int j = 0; j < runSelectSize; j++)
+            if (organismOne->genome[j] != organismOne->parentGenome[0][j])
+                difference++;
+            else if (simSettings->speciationMode == SPECIES_MODE_LAST_SPECIATION)
 
-    if (diff >= runSpeciesDifference) return true;
-    else return false;
+                //Just use function above?
+
+                if (difference >= runSpeciesDifference)
+                    return true;
+                else
+                    return false;
 }
 
 int simulation::returninformativeCharacters()
