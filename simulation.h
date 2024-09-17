@@ -107,7 +107,7 @@ private:
 
     //Simulation calculations
     int fitness(const Organism *org, const QVector<QVector<QVector<bool> > > &masks, int runFitnessSize, int runFitnessTarget, int runMaskNumber, int environment = -1);
-    int genomeDifference(const Organism *organismOne, const Organism *organismTwo);
+    int genomeDifference(const Organism *organismOne, const Organism *organismTwo, const int selectSize = -1);
     QHash<QString, QVector<int> > checkForExtinct(const QVector <Organism *> &speciesList);
     void speciesExtinction(Organism *speciesListOrganism, const Organism *playingFieldOrganism, int extinctIteration, bool samsonian, bool stochastic, bool test = false);
     bool checkForSpeciation(const Organism *organismOne, int runSelectSize, int runSpeciesDifference, int speciationMode);

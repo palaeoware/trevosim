@@ -1744,37 +1744,52 @@ int simulation::fitness(const Organism *org, const QVector<QVector<QVector<bool>
     return fitness;
 }
 
-int simulation::genomeDifference(const Organism *organismOne, const Organism *organismTwo)
+//Selectsize defaults to -1
+int simulation::genomeDifference(const Organism *organismOne, const Organism *organismTwo, const int selectSize)
 {
     int diff = 0;
-    for (int j = 0; j < organismOne->genome.length(); j++)
-        if (organismOne->genome[j] != organismTwo->genome[j])diff++;
+    if (selectSize == -1)
+    {
+        for (int j = 0; j < organismOne->genome.length(); j++)
+            if (organismOne->genome[j] != organismTwo->genome[j])diff++;
+    }
+    else
+    {
+        for (int j = 0; j < selectSize; j++)
+            if (organismOne->genome[j] != organismTwo->genome[j])diff++;
+    }
     return diff;
 }
 
 bool simulation::checkForSpeciation(const Organism *organismOne, int runSelectSize, int runSpeciesDifference, int speciationMode)
 {
     int difference = 0;
-    //Loop to select size to allow decoupling of species definition from genome size.
 
-//Speciation mode
-#define SPECIES_MODE_ORIGIN 0
-#define SPECIES_MODE_LAST_SPECIATION 1
-#define SPECIES_MODE_ORIGIN_AND_LAST 2
-#define SPECIES_MODE_MAYR 3
-    int count = organismOne->parentGenome.count();
+    //Speciation mode
+    //SPECIES_MODE_ORIGIN 0
+    //SPECIES_MODE_LAST_SPECIATION 1
+    //SPECIES_MODE_ORIGIN_AND_LAST 2
+    //SPECIES_MODE_MAYR 3
+
+    int gnomeCount = organismOne->parentGenome.count();
     if (simSettings->speciationMode == SPECIES_MODE_ORIGIN)
+    {
+        //Loop to select size to allow decoupling of species definition from genome size: hence also can't just use the count difference function above
         for (int j = 0; j < runSelectSize; j++)
             if (organismOne->genome[j] != organismOne->parentGenome[0][j])
                 difference++;
-            else if (simSettings->speciationMode == SPECIES_MODE_LAST_SPECIATION)
+    }
+    else if (simSettings->speciationMode == SPECIES_MODE_LAST_SPECIATION)
+    {
 
-                //Just use function above?
+    }
 
-                if (difference >= runSpeciesDifference)
-                    return true;
-                else
-                    return false;
+    //Just use function above?
+
+    if (difference >= runSpeciesDifference)
+        return true;
+    else
+        return false;
 }
 
 int simulation::returninformativeCharacters()
