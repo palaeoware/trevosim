@@ -1771,17 +1771,19 @@ bool simulation::checkForSpeciation(const Organism *organismOne, int runSelectSi
     //SPECIES_MODE_ORIGIN_AND_LAST 2
     //SPECIES_MODE_MAYR 3
 
-    int gnomeCount = organismOne->parentGenome.count();
+    int genomeCount = organismOne->parentGenome.count();
     if (simSettings->speciationMode == SPECIES_MODE_ORIGIN)
     {
-        //Loop to select size to allow decoupling of species definition from genome size: hence also can't just use the count difference function above
+        //Loop to select size to allow decoupling of species definition from genome size: also can't just use the count difference function above as this operates on organisms, not their genomes.
         for (int j = 0; j < runSelectSize; j++)
             if (organismOne->genome[j] != organismOne->parentGenome[0][j])
                 difference++;
     }
     else if (simSettings->speciationMode == SPECIES_MODE_LAST_SPECIATION)
     {
-
+        for (int j = 0; j < runSelectSize; j++)
+            if (organismOne->genome[j] != organismOne->parentGenome[genomeCount-1][j])
+                difference++;
     }
 
     //Just use function above?
