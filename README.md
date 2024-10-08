@@ -24,7 +24,7 @@ Mongiardino Koch, N., Garwood, R.J. and Parry, L.A. 2023. Inaccurate fossil plac
 
 Garwood, R.J., Spencer, A.R.T., Callender-Crowe, L.M., Dunn, F.S., Halliday, T.J., Keating, J.N., Koch, N.M., Parry, L.A., Sansom, R.S., Smith, T.J. and Sutton, M.D. 2024. TREvoSim v3: An individual based simulation for generating trees and character data. Journal of Open Source Software, 9(101):6722. [DOI: 10.21105/joss.06722](https://doi.org/10.21105/joss.06722) (describes TREvoSim v3.0.0)
 
-Smith, T.J., Parry, L.A., Dunn, F.S. and Garwood, R.J. 2024. Exploring the macroevolutionary impact of ecosystem engineers using an individual‐based eco‐evolutionary simulation. Palaeontology, 67(5): e12701. [DOI: 10.1111/pala.12701](https://doi.org/10.1111/pala.12701)
+Smith, T.J., Parry, L.A., Dunn, F.S. and Garwood, R.J. 2024. Exploring the macroevolutionary impact of ecosystem engineers using an individual‐based eco‐evolutionary simulation. Palaeontology, 67(5): e12701. [DOI: 10.1111/pala.12701](https://doi.org/10.1111/pala.12701) (utilises TREvoSim v3.0.0) 
 
 _____
 
