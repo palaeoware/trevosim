@@ -20,7 +20,11 @@ Keating, J.N., Sansom, R.S., Sutton, M.D., Knight, C.G., and Garwood, R.J. 2020.
 
 Mongiardino Koch, N., Garwood, R.J. and Parry, L.A. 2021. Fossils improve phylogenetic analyses of morphological characters. Proceedings of the Royal Society B: 288(1950):20210044. [DOI: 10.1098/rspb.2021.0044](https://doi.org/10.1098/rspb.2021.0044) (describes, and utilises, TREvoSim v2.0.0)
 
-Mongiardino Koch, N., Garwood, R.J. and Parry, L.A. 2022. Inaccurate fossil placement does not compromise tip-dated divergence times. bioRxiv. [DOI: 10.1101/2022.08.25.505200](https://doi.org/10.1101/2022.08.25.505200) (utilises TREvoSim v2.0.0) 
+Mongiardino Koch, N., Garwood, R.J. and Parry, L.A. 2023. Inaccurate fossil placement does not compromise tip‐dated divergence times. Palaeontology, 66(6): e12680.  [DOI: 10.1111/pala.12680](https://doi.org/10.1111/pala.12680) (utilises TREvoSim v2.0.0) 
+
+Garwood, R.J., Spencer, A.R.T., Callender-Crowe, L.M., Dunn, F.S., Halliday, T.J., Keating, J.N., Koch, N.M., Parry, L.A., Sansom, R.S., Smith, T.J. and Sutton, M.D. 2024. TREvoSim v3: An individual based simulation for generating trees and character data. Journal of Open Source Software, 9(101):6722. [DOI: 10.21105/joss.06722](https://doi.org/10.21105/joss.06722) (describes TREvoSim v3.0.0)
+
+Smith, T.J., Parry, L.A., Dunn, F.S. and Garwood, R.J. 2024. Exploring the macroevolutionary impact of ecosystem engineers using an individual‐based eco‐evolutionary simulation. Palaeontology, 67(5): e12701. [DOI: 10.1111/pala.12701](https://doi.org/10.1111/pala.12701)
 
 _____
 
