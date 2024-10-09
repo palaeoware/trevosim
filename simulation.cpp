@@ -1798,6 +1798,8 @@ bool simulation::checkForSpeciation(const Organism *organismOne, int runSelectSi
         }
     }
 
+    qDebug() << difference;
+
     if (difference >= runSpeciesDifference)
         return true;
     else
