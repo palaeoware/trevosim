@@ -1782,11 +1782,21 @@ bool simulation::checkForSpeciation(const Organism *organismOne, int runSelectSi
     else if (simSettings->speciationMode == SPECIES_MODE_LAST_SPECIATION)
     {
         for (int j = 0; j < runSelectSize; j++)
-            if (organismOne->genome[j] != organismOne->parentGenome[genomeCount-1][j])
+            if (organismOne->genome[j] != organismOne->parentGenome[genomeCount - 1][j])
                 difference++;
     }
-
-    //Just use function above?
+    else if (simSettings->speciationMode == SPECIES_MODE_ORIGIN_AND_LAST)
+    {
+        difference = runSelectSize;
+        for (int i = 0; i < genomeCount; i++)
+        {
+            int tempDiff = 0;
+            for (int j = 0; j < runSelectSize; j++)
+                if (organismOne->genome[j] != organismOne->parentGenome[genomeCount - 1][j])
+                    tempDiff++;
+            if (tempDiff < difference) difference = tempDiff;
+        }
+    }
 
     if (difference >= runSpeciesDifference)
         return true;
