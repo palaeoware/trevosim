@@ -1,6 +1,8 @@
 # TREvoSim
 ## [Tr]ee [Evo]lutionary [Sim]ulator Program
 
+TREvoSim is an individual-based evolutionary model. It simulates evolutionary trees and associated character data through a model that incorporates a fitness algorithm and replication that incorporates mutation.
+
 Code by:
  - Russell J. Garwood (russell.garwood@gmail.com).
 
