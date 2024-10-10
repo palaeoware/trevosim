@@ -1,0 +1,70 @@
+{
+    "@context": "https://w3id.org/codemeta/3.0",
+    "type": "SoftwareSourceCode",
+    "applicationCategory": "Evolutionary simulation",
+    "author": [
+        {
+            "id": "https://orcid.org/0000-0002-2803-9471",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "Department of Earth and Environmental Sciences, University of Manchester, Manchester, M13 9PL, United Kingdom; Natural History Museum, London, SW7 5BD, United Kingdom"
+            },
+            "email": "russell.garwood@gmail.com",
+            "familyName": "Garwood",
+            "givenName": "Russell J."
+        },
+        {
+            "type": "Role",
+            "schema:author": "https://orcid.org/0000-0002-2803-9471",
+            "roleName": "Developer",
+            "startDate": "2017-01-01"
+        },
+        {
+            "id": "https://orcid.org/0000-0001-6590-405X",
+            "type": "Person",
+            "affiliation": {
+                "type": "Organization",
+                "name": "Department of Earth Science and Engineering, Imperial College, London, SW7 2AZ, United Kingdom; Natural History Museum, London, SW7 5BD, United Kingdom"
+            },
+            "familyName": "Spencer",
+            "givenName": "Alan R.T. "
+        },
+        {
+            "type": "Role",
+            "schema:author": "https://orcid.org/0000-0001-6590-405X",
+            "roleName": "Developer",
+            "startDate": "2019-07-01"
+        }
+    ],
+    "codeRepository": "git+https://github.com/palaeoware/trevosim",
+    "dateModified": "2024-08-22",
+    "datePublished": "2021-01-21",
+    "description": "TREvoSim is an individual-based evolutionary simulation. It creates evolutionary trees and associated character data using a model that with a fitness algorithm and replication that incorporates mutation.",
+    "downloadUrl": "https://github.com/palaeoware/trevosim/releases/tag/v3.0.0",
+    "identifier": "10.5281/zenodo.13358420",
+    "keywords": [
+        "Phylogenetics",
+        "evolution",
+        "modelling"
+    ],
+    "license": "https://spdx.org/licenses/GPL-3.0",
+    "name": "TREvoSim",
+    "operatingSystem": [
+        "Windows",
+        "MacOS",
+        "Linux"
+    ],
+    "programmingLanguage": "C++",
+    "releaseNotes": "The changes in v3.0.0 are described and discussed fully in the associated paper. In brief, these include:\n\n-- New character options\n-- New default simulation parameters\n-- Ecosystem engineering functionality\n-- An expanding playing field mode\n-- New logging capabilities\n-- The option to match fitness peaks across environments\n-- A no selection mode\n-- Mixing of organisms between playing fields\n-- Perturbations (periods of accelerated environmental change)\n-- The ability to run the simulation for a user-defined number of iterations, as opposed to for set number of species\n-- Abstraction of the fitness algorithm from the genome via many-to-one mapping (stochastic layer)\n-- A test suite integrated into the software build",
+    "review": {
+        "type": "Review",
+        "reviewAspect": "TREvoSim v3: An individual based simulation for generating trees and character data",
+        "reviewBody": "Paper accompanying release of v3.0.0"
+    },
+    "version": "3.0.0",
+    "developmentStatus": "active",
+    "funding": " BBSRC - BB/N015827/1, NERC - NE/T000813/1, Leverhulme Trust -  RPG-2023-234, the Alexander von Humboldt Foundation",
+    "issueTracker": "https://github.com/palaeoware/trevosim/issues",
+    "referencePublication": "https://doi.org/10.21105/joss.06722"
+}
