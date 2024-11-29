@@ -181,6 +181,8 @@ void Settings::on_buttonBox_accepted()
     if (ui->r_once_EE->isChecked())settings->ecosystemEngineersArePersistent = false;
     else settings->ecosystemEngineersArePersistent = true;
 
+    settings->speciationMode = ui->combo_speciation->currentIndex();
+
     if (ui->c_stochastic->isChecked())
     {
         QDialog stochasticDialog(this);
