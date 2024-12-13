@@ -1,6 +1,8 @@
 # TREvoSim
 ## [Tr]ee [Evo]lutionary [Sim]ulator Program
 
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.06722/status.svg)](https://doi.org/10.21105/joss.06722) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13358420.svg)](https://doi.org/10.5281/zenodo.13358420)
+
 TREvoSim is an individual-based evolutionary simulation. It creates evolutionary trees and associated character data using a model that with a fitness algorithm and replication that incorporates mutation.
 
 Code by:
