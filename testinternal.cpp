@@ -1619,7 +1619,7 @@ bool testinternal::testFourteen(QString &outString)
 
     //Next we need to do tests when we have more than one parental genome
     org.parentGenomes.append(QList <bool>());
-    for (auto &p : org.parentGenomes[1]) p = false;
+    for (int i = 0; i < 50; i++)org.parentGenomes[1].append(false);
 
     //At the moment, parent genome has four trues - everything should still be below species differemce no new species
     for (int i = 0; i < 3; i++)
