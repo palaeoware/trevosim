@@ -25,7 +25,7 @@ testinternal::testinternal(MainWindow *theMainWindowCon)
     testList.insert(11, "Unresolvable taxa");
     testList.insert(12, "Memory use");
     testList.insert(13, "Extinction");
-    testList.insert(14, "Difference to parent");
+    testList.insert(14, "New species ID");
     testList.insert(15, "Print matrix");
     testList.insert(16, "Print tree");
     testList.insert(17, "Ecosystem engineers");
@@ -732,7 +732,7 @@ bool testinternal::testSeven(QString &outString)
     bool testFlag = true;
     QTextStream out(&outString);
 
-    out << "Testing new species - new species created at iteration 66 with a genome of all 1's.\n\n";
+    out << "Testing the creation of a new species - new species created at iteration 66 with a genome of all 1's.\n\n";
     /*
         simulationVariables simSettings;
         simSettings.genomeSize = 50;
@@ -1557,56 +1557,116 @@ bool testinternal::testThirteen(QString &outString)
     return testFlag;
 }
 
-//Check count difference to parent
+//Check ID of new species
 bool testinternal::testFourteen(QString &outString)
 {
     bool testFlag = true;
     QTextStream out(&outString);
 
-    out << "Testing difference to parent.\n\n";
-    /*
-        //Initialised to false
-        Organism org(50, false);
-        for (auto &p : org.parentGenome) p = true;
+    out << "Testing the function that identifies if a new species has arised (the function that applies a speciation itself is tested elsehwere).\n\n";
 
-        simulationVariables simSettings;
-        simSettings.test = 14;
-        simulation x(0, &simSettings, &error, theMainWindow);
-        if (error) return false;
+    //Set up a simulation for our test
+    simulationVariables simSettings;
+    simulation x(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
 
-        int diff = x.checkForSpeciation(&org, 50);
+    //First, let's try with just one parent
+    //Organism of genome size 50, initialised to false, no stochastic layer
+    Organism org(50, false);
+    for (auto &p : org.parentGenomes[0]) p = false;
+    //Test with species difference of five, so five true to take over this value - we should ID a new species
+    for (int i = 0; i < 5; i++)
+    {
+        org.parentGenomes[0][i] = true;
+    }
 
-        out << "Set genome to false, parent to true, select size 50. Should be 50, returns " << diff << ".\n";
-        if (diff != 50)
+    out << "Testing all species modes with a single ancestor (i.e. the parent) genome.\n";
+
+    bool newSpecies = false;
+    //Cycle through species modes
+    for (int i = 0; i < 3; i++)
+    {
+
+        newSpecies = x.checkForSpeciation(&org, 50, 5, i);
+        if (!newSpecies)
         {
             testFlag = false;
+            out << "Fail at all species modes test " << i << "\n";
         }
+    }
 
-        diff = x.checkForSpeciation(&org, 25);
+    //Turn one bit false to take us below species difference
+    org.parentGenomes[0][4] = false;
 
-        out << "Set genome to false, parent to true, select size 25. Should be 25, returns " << diff << ".\n";
-        if (diff != 25)
+    //Cycle through species modes
+    for (int i = 0; i < 3; i++)
+    {
+        newSpecies = x.checkForSpeciation(&org, 50, 5, i);
+        if (newSpecies)
         {
             testFlag = false;
+            out << "Fail at all species modes test " << i << "\n";
         }
+    }
+    if (testFlag) out << "\n All species mode tests with single ancestor passed \n\n";
 
-        for (auto &p : org.parentGenome) p = false;
-        diff = x.checkForSpeciation(&org, 50);
+    //Speciation modes are defined as follows
+    //SPECIES_MODE_ORIGIN 0
+    //SPECIES_MODE_LAST_SPECIATION 1
+    //SPECIES_MODE_ALL 2
+    //SPECIES_MODE_MAYR 3 - not currently implemented
+    //checkForSpeciation(const Organism *organismOne, int runSelectSize, int runSpeciesDifference, int speciationMode)
 
-        out << "Set genome to false, parent to false, select size 50. Should be 0, returns " << diff << ".\n";
-        if (diff != 0)
-        {
-            testFlag = false;
-        }
 
-        diff = x.checkForSpeciation(&org, 25);
+    org.parentGenomes.append(QList <bool>());
+    for (auto &p : org.parentGenomes[1]) p = false;
 
-        out << "Set genome to false, parent to false, select size 25. Should be 0, returns " << diff << ".\n";
-        if (diff != 0)
-        {
-            testFlag = false;
-        }
-    */
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ORIGIN);
+    if (!newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test 1\n";
+    }
+
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_LAST_SPECIATION);
+    if (!newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test 2\n";
+    }
+
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ALL);
+    if (!newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test 3\n";
+    }
+
+    //Turn one bit false to take us below species difference
+    org.parentGenomes[0][4] = false;
+
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ORIGIN);
+    if (newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test 4\n";
+    }
+
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_LAST_SPECIATION);
+    if (newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test 5\n";
+    }
+
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ALL);
+    if (newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test 6\n";
+    }
+    if (testFlag) out << "\n All species mode tests with single ancestor passed \n\n";
+
 
     return testFlag;
 }
@@ -2149,6 +2209,8 @@ bool testinternal::testTwenty(QString &outString)
 {
     bool testFlag = true;
     QTextStream out(&outString);
+
+    //testcopyofgenomehere - and also == operator! Anything else in organism?
 
     return testFlag;
 }

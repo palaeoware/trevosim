@@ -1002,49 +1002,6 @@ void simulation::mutateOrganism(Organism &progeny, const playingFieldStructure *
     }
 }
 
-void simulation::newSpecies(Organism &progeny, Organism &parent, playingFieldStructure *pf)
-{
-
-    if ((progeny.speciesID != parent.speciesID) || (runGenomeSize != progeny.genome.size()))
-        warning("Eesh", "Speciation error. Please contact RJG in the hope he can sort this out.");
-
-    //Iterate species count
-    speciesCount++;
-
-    //Update cladogenesis counter for each - use this to work out terminal branch lengths later.
-    progeny.cladogenesis = iterations;
-
-    //Record parent ID
-    int parentSpecies = parent.speciesID;
-
-    //Add this species to list of children species for all members of this species currently alive in the simulation
-    //Do this independently for each playing field (i.e. only in this playing field this time) - this obviously has implications if after mixing the species are very different in different playing fields - many more speciations, lower diversity in any given PF.
-    //To do - revisit this decision //
-    QList <bool> newSpeciesGenome;
-    for (auto b : std::as_const(progeny.genome))newSpeciesGenome.append(b);
-    for (auto o : std::as_const(pf->playingField))
-        if (o->speciesID == parentSpecies) o->parentGenome.append(newSpeciesGenome);
-
-    parent.cladogenesis = iterations;
-
-    //Update parent, which will be sister group to new one in tree.
-    progeny.parentSpeciesID = parent.speciesID;
-    //Reset last child as no children yet
-
-    //Update species ID, born interation
-    progeny.speciesID = speciesCount;
-    progeny.born = iterations;
-
-    //Genome → progenator genome
-    for (int j = 0; j < runGenomeSize; j++)progeny.parentGenome[0][j] = progeny.genome[j];
-
-    //Pass on eccosystem engineer status
-    progeny.ecosystemEngineer = parent.ecosystemEngineer;
-
-    //Keep a track of extinction for printing
-    extinctList.append(false);
-}
-
 void simulation::updateTNTstring(QString &TNTstring, int progParentSpeciesID, int progSpeciesID)
 {
     QString progenySpeciesID;
@@ -1392,6 +1349,7 @@ void simulation::applyEcosystemEngineering(QVector <Organism *> &speciesList, bo
             for (int i = 0; i < p->playingField.count(); i++)
             {
                 if (p->playingField[i]->ecosystemEngineer) continue;
+                //Check for identical individuals - including both coding and non coding regions of genome; if identical, these are also EE
                 if (genomeDifference(playingFields[selectEngineerPlayingfield]->playingField[selectEngineerPosition], p->playingField[i]) == 0) p->playingField[i]->ecosystemEngineer = true;
             }
         }
@@ -1744,7 +1702,7 @@ int simulation::fitness(const Organism *org, const QVector<QVector<QVector<bool>
     return fitness;
 }
 
-//Selectsize defaults to -1
+//Selectsize defaults to -1; currently only used to check for identical organisms in EE algorithm
 int simulation::genomeDifference(const Organism *organismOne, const Organism *organismTwo, const int selectSize)
 {
     int diff = 0;
@@ -1765,45 +1723,88 @@ bool simulation::checkForSpeciation(const Organism *organismOne, int runSelectSi
 {
     int difference = 0;
 
-    //Speciation mode
+    //Speciation modes are defined as follows
     //SPECIES_MODE_ORIGIN 0
     //SPECIES_MODE_LAST_SPECIATION 1
-    //SPECIES_MODE_ORIGIN_AND_LAST 2
-    //SPECIES_MODE_MAYR 3
+    //SPECIES_MODE_ALL 2
+    //SPECIES_MODE_MAYR 3 - not currently implemented
 
-    int genomeCount = organismOne->parentGenome.count();
+    int genomeCount = organismOne->parentGenomes.count();
     if (simSettings->speciationMode == SPECIES_MODE_ORIGIN)
     {
         //Loop to select size to allow decoupling of species definition from genome size: also can't just use the count difference function above as this operates on organisms, not their genomes.
         for (int j = 0; j < runSelectSize; j++)
-            if (organismOne->genome[j] != organismOne->parentGenome[0][j])
+            if (organismOne->genome[j] != organismOne->parentGenomes[0][j])
                 difference++;
     }
     else if (simSettings->speciationMode == SPECIES_MODE_LAST_SPECIATION)
     {
         for (int j = 0; j < runSelectSize; j++)
-            if (organismOne->genome[j] != organismOne->parentGenome[genomeCount - 1][j])
+            if (organismOne->genome[j] != organismOne->parentGenomes[genomeCount - 1][j])
                 difference++;
     }
-    else if (simSettings->speciationMode == SPECIES_MODE_ORIGIN_AND_LAST)
+    else if (simSettings->speciationMode == SPECIES_MODE_ALL)
     {
         difference = runSelectSize;
         for (int i = 0; i < genomeCount; i++)
         {
             int tempDiff = 0;
             for (int j = 0; j < runSelectSize; j++)
-                if (organismOne->genome[j] != organismOne->parentGenome[genomeCount - 1][j])
+                if (organismOne->genome[j] != organismOne->parentGenomes[genomeCount - 1][j])
                     tempDiff++;
             if (tempDiff < difference) difference = tempDiff;
         }
     }
 
-    qDebug() << difference;
 
     if (difference >= runSpeciesDifference)
         return true;
     else
         return false;
+}
+
+
+void simulation::newSpecies(Organism &progeny, Organism &parent, playingFieldStructure *pf)
+{
+
+    if ((progeny.speciesID != parent.speciesID) || (runGenomeSize != progeny.genome.size()))
+        warning("Eesh", "Speciation error. Please contact RJG in the hope he can sort this out.");
+
+    //Iterate species count
+    speciesCount++;
+
+    //Update cladogenesis counter for each - use this to work out terminal branch lengths later.
+    progeny.cladogenesis = iterations;
+
+    //Record parent ID
+    int parentSpecies = parent.speciesID;
+
+    //Add this species to list of children species for all members of this species currently alive in the simulation
+    //Do this independently for each playing field (i.e. only in this playing field this time) - this obviously has implications if after mixing the species are very different in different playing fields - many more speciations, lower diversity in any given PF.
+    //To do - revisit this decision //
+    QList <bool> newSpeciesGenome;
+    for (auto b : std::as_const(progeny.genome))newSpeciesGenome.append(b);
+    for (auto o : std::as_const(pf->playingField))
+        if (o->speciesID == parentSpecies) o->parentGenomes.append(newSpeciesGenome);
+
+    parent.cladogenesis = iterations;
+
+    //Update parent, which will be sister group to new one in tree.
+    progeny.parentSpeciesID = parent.speciesID;
+    //Reset last child as no children yet
+
+    //Update species ID, born interation
+    progeny.speciesID = speciesCount;
+    progeny.born = iterations;
+
+    //Genome → parent genome
+    for (int j = 0; j < runGenomeSize; j++)progeny.parentGenomes[0][j] = progeny.genome[j];
+
+    //Pass on eccosystem engineer status
+    progeny.ecosystemEngineer = parent.ecosystemEngineer;
+
+    //Keep a track of extinction for printing
+    extinctList.append(false);
 }
 
 int simulation::returninformativeCharacters()
@@ -1831,7 +1832,7 @@ QString simulation::printPlayingField(const QVector <playingFieldStructure *> &p
             for (auto i : std::as_const(o->genome)) i ? out << 1 : out << 0 ;
             out << "\nParent genomes:\n";
             int count = 0;
-            for (auto g : std::as_const(o->parentGenome))
+            for (auto g : std::as_const(o->parentGenomes))
             {
                 out << "Genome " << count++ << "\t";
                 for (auto i : std::as_const(g))

@@ -122,7 +122,7 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
     QStringList comboOptions;
     comboOptions.insert(SPECIES_MODE_ORIGIN, "Species origin");
     comboOptions.insert(SPECIES_MODE_LAST_SPECIATION, "Last speciation");
-    comboOptions.insert(SPECIES_MODE_ORIGIN_AND_LAST, "Origin and all speciations");
+    comboOptions.insert(SPECIES_MODE_ALL, "Origin and all speciations");
     comboOptions.insert(SPECIES_MODE_MAYR, "Mayr");
 
     ui->combo_speciation->addItems(comboOptions);
@@ -147,7 +147,6 @@ void Settings::on_buttonBox_accepted()
     settings->ecosystemEngineeringFrequency = ui->s_EE_frequency->value();
 
     settings->stripUninformative = ui->c_strip_uninformative->isChecked();
-    qDebug() << ui->c_sansomian->isChecked();
     settings->genomeOnExtinction = ui->c_sansomian->isChecked();
     settings->discardDeleterious = ui->c_beneficial_mut->isChecked();
     settings->environmentalPerturbation = ui->c_extinction->isChecked();

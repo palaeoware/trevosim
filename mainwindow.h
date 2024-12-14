@@ -22,7 +22,7 @@
 //Speciation mode
 #define SPECIES_MODE_ORIGIN 0
 #define SPECIES_MODE_LAST_SPECIATION 1
-#define SPECIES_MODE_ORIGIN_AND_LAST 2
+#define SPECIES_MODE_ALL 2
 #define SPECIES_MODE_MAYR 3
 
 //Forward declaration to avoid circular dependencies in printGenome declaration
