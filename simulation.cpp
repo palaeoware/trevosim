@@ -1730,32 +1730,32 @@ bool simulation::checkForSpeciation(const Organism *organismOne, int runSelectSi
     //SPECIES_MODE_MAYR 3 - not currently implemented
 
     int genomeCount = organismOne->parentGenomes.count();
-    if (simSettings->speciationMode == SPECIES_MODE_ORIGIN)
+    if (speciationMode == SPECIES_MODE_ORIGIN)
     {
         //Loop to select size to allow decoupling of species definition from genome size: also can't just use the count difference function above as this operates on organisms, not their genomes.
         for (int j = 0; j < runSelectSize; j++)
             if (organismOne->genome[j] != organismOne->parentGenomes[0][j])
                 difference++;
     }
-    else if (simSettings->speciationMode == SPECIES_MODE_LAST_SPECIATION)
+    else if (speciationMode == SPECIES_MODE_LAST_SPECIATION)
     {
         for (int j = 0; j < runSelectSize; j++)
             if (organismOne->genome[j] != organismOne->parentGenomes[genomeCount - 1][j])
                 difference++;
     }
-    else if (simSettings->speciationMode == SPECIES_MODE_ALL)
+    else if (speciationMode == SPECIES_MODE_ALL)
     {
-        difference = runSelectSize;
+        //We need to record the maximum level of difference, as the biggest is going to be closest to species difference
+        difference = 0;
         for (int i = 0; i < genomeCount; i++)
         {
             int tempDiff = 0;
             for (int j = 0; j < runSelectSize; j++)
-                if (organismOne->genome[j] != organismOne->parentGenomes[genomeCount - 1][j])
+                if (organismOne->genome[j] != organismOne->parentGenomes[i][j])
                     tempDiff++;
-            if (tempDiff < difference) difference = tempDiff;
+            if (tempDiff > difference) difference = tempDiff;
         }
     }
-
 
     if (difference >= runSpeciesDifference)
         return true;
