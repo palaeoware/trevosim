@@ -10,15 +10,13 @@ public:
     //Explicit default copy constructor to avoid compile warnings
     Organism(const Organism &) = default;
 
-    //Genome of species and progenator
-    //Do as bools in order to make genome size easily scaleable - speed not much of an issue here
-    //resize from method if needed
+    //Genome of species and ancestors
+    //Do as vectors in order to make genome size easily scaleable - speed not much of an issue here
+    QList <bool> genome; //Organisms genome
+    QList <QList <bool> > parentGenomes;//Gnome of any parents, and also any other speciation from within this lineage
+    QList <bool> stochasticGenome;//Used for many to one mapping of a genome
 
-    QList <bool> genome;
-    QList <bool> parentGenome;
-    QList <bool> stochasticGenome;
-
-    // ID of species and progenator
+    // ID of species and parent
     int speciesID;
     int parentSpeciesID;
 

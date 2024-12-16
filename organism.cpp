@@ -7,10 +7,11 @@ Organism::Organism(int genomeSize, bool stochastic)
     stochasticLayer = stochastic;
 
     // Initialise everything to false/-1 to make it obvious if it has not been changed.
+    parentGenomes.append(QList <bool>());
     for (int i = 0; i < genomeSize; i++)
     {
         genome.append(false);
-        parentGenome.append(false);
+        parentGenomes[0].append(false);
     }
 
     if (stochasticLayer)
@@ -27,22 +28,22 @@ Organism::Organism(int genomeSize, bool stochastic)
 
 void Organism::initialise(int genomeSize)
 {
-    // Initialise genome, assume this is first organism, and prog genome same as genome
+    // Initialise genome; this is the first organism; parent genome is initialised as identical to starting point (genome will evolve away from this)
     for (int i = 0; i < genomeSize; i++)
     {
         if (QRandomGenerator::global()->generate() > (QRandomGenerator::max() / 2))
         {
             genome[i] = true;
-            parentGenome[i] = true;
+            parentGenomes[0][i] = true;
         }
         else
         {
             genome[i] = false;
-            parentGenome[i] = false;
+            parentGenomes[0][i] = false;
         }
     }
 
-    //This is true for first organism. Which is pretty much only time I initialise one currently.
+    //This is true for first organism, which is the only time one is initialised - otherwise they are just copied.
     speciesID = 0;
     parentSpeciesID = 0;
 
@@ -63,7 +64,7 @@ void Organism::initialise(int genomeSize, const int *stochasticMap)
         else stochasticGenome[i] = false;
     this->mapFromStochastic(stochasticMap);
 
-    for (int i = 0; i < genomeSize; i++) parentGenome[i] = genome[i];
+    for (int i = 0; i < genomeSize; i++) parentGenomes[0][i] = genome[i];
 
     //This is true for first organism. Which is pretty much only time I initialise one currently.
     speciesID = 0;
@@ -83,7 +84,7 @@ void Organism::operator = (const Organism &O)
 {
     // Copy all attributes
     genome = O.genome;
-    parentGenome = O.parentGenome;
+    parentGenomes = O.parentGenomes;
     if (stochasticLayer) stochasticGenome = O.stochasticGenome;
     speciesID = O.speciesID;
     parentSpeciesID = O.parentSpeciesID;
@@ -97,7 +98,7 @@ void Organism::operator = (const Organism &O)
 bool Organism::operator == (const Organism &O)
 {
     if (genome != O.genome) return false;
-    if (parentGenome != O.parentGenome) return false;
+    if (parentGenomes != O.parentGenomes) return false;
     if (stochasticLayer && (stochasticGenome != O.stochasticGenome)) return false;
     if (speciesID != O.speciesID) return false;
     if (parentSpeciesID != O.parentSpeciesID) return false;

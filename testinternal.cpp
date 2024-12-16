@@ -25,7 +25,7 @@ testinternal::testinternal(MainWindow *theMainWindowCon)
     testList.insert(11, "Unresolvable taxa");
     testList.insert(12, "Memory use");
     testList.insert(13, "Extinction");
-    testList.insert(14, "Difference to parent");
+    testList.insert(14, "New species ID");
     testList.insert(15, "Print matrix");
     testList.insert(16, "Print tree");
     testList.insert(17, "Ecosystem engineers");
@@ -732,7 +732,7 @@ bool testinternal::testSeven(QString &outString)
     bool testFlag = true;
     QTextStream out(&outString);
 
-    out << "Testing new species - new species created at iteration 66 with a genome of all 1's.\n\n";
+    out << "Testing the creation of a new species - new species created at iteration 66 with a genome of all 1's.\n\n";
 
     simulationVariables simSettings;
     simSettings.genomeSize = 50;
@@ -759,7 +759,7 @@ bool testinternal::testSeven(QString &outString)
 
     Organism parentSpecies(50, false);
     for (auto &i : parentSpecies.genome)i = true;
-    for (auto &i : parentSpecies.parentGenome)i = true;
+    for (auto &i : parentSpecies.parentGenomes[0])i = true;
     parentSpecies.speciesID = 10;
     parentSpecies.parentSpeciesID = 9;
     parentSpecies.born = 15;
@@ -783,17 +783,21 @@ bool testinternal::testSeven(QString &outString)
     out << "Parent cladogenesis at iteration " << parentSpecies.cladogenesis << " (should be 66).\n";
     if (newSpecies.parentSpeciesID != 10)testFlag = false;
     out << "New species parent species ID " << newSpecies.parentSpeciesID << " (should be 10).\n";
-    for (auto i : std::as_const(newSpecies.parentGenome)) if (i != 1)testFlag = false;
+    for (auto i : std::as_const(newSpecies.parentGenomes[0])) if (i != 1)testFlag = false;
     out << "New species parent genome: ";
-    for (auto i : std::as_const(newSpecies.parentGenome)) i ? out << "1" : out << "0";
+    for (auto i : std::as_const(newSpecies.parentGenomes[0])) i ? out << "1" : out << "0";
     out << " (should be all 1s).\n";
     for (auto i : std::as_const(newSpecies.genome)) if (i != 1)testFlag = false;
     out << "New species genome: ";
     for (auto i : std::as_const(newSpecies.genome)) i ? out << "1" : out << "0";
     out << " (should be all 1s).\n";
-    for (auto i : std::as_const(x.playingFields[0]->playingField[8]->parentGenome)) if (i != 1)testFlag = false;
+    for (auto i : std::as_const(x.playingFields[0]->playingField[8]->parentGenomes[0])) if (i != 0)testFlag = false;
     out << "Species 10 parent genome in playing field is now: ";
-    for (auto i :  std::as_const(x.playingFields[0]->playingField[8]->parentGenome)) i ? out << "1" : out << "0";
+    for (auto i :  std::as_const(x.playingFields[0]->playingField[8]->parentGenomes[0])) i ? out << "1" : out << "0";
+    out << " (should be all 0s).\n";
+    for (auto i : std::as_const(x.playingFields[0]->playingField[8]->parentGenomes[1])) if (i != 1)testFlag = false;
+    out << "Species 10 last speciation genome in playing field is now:";
+    for (auto i :  std::as_const(x.playingFields[0]->playingField[8]->parentGenomes[1])) i ? out << "1" : out << "0";
     out << " (should be all 1s).\n";
 
     if (testFlag) out << "\nNew species tests passed.\n";
@@ -1134,7 +1138,7 @@ bool testinternal::testTen(QString &outString)
     QList <int> uninformativeNonCoding;
 
     //Test for informative
-    x.testForUninformative(speciesList, uninformativeCoding, uninformativeNonCoding);
+    x.checkForUninformative(speciesList, uninformativeCoding, uninformativeNonCoding);
     x.stripUninformativeCharacters(speciesList, uninformativeCoding, uninformativeNonCoding);
     out << "\nThere should be 17 informative characters.\n";
     if (speciesList[0]->genome.length() != 17) testFlag = false;
@@ -1183,7 +1187,7 @@ bool testinternal::testTen(QString &outString)
 
         uninformativeCoding.clear();
         uninformativeNonCoding.clear();
-        x.testForUninformative(speciesList2, uninformativeCoding, uninformativeNonCoding);
+        x.checkForUninformative(speciesList2, uninformativeCoding, uninformativeNonCoding);
 
         out << "Uninformative characters created: " << uninformativeCount << " Uninformative characters counted " << (uninformativeCoding.length() + uninformativeNonCoding.length()) << "\n";
         if (uninformativeCount != (uninformativeCoding.length() + uninformativeNonCoding.length()))
@@ -1240,8 +1244,8 @@ bool testinternal::testTen(QString &outString)
 
     uninformativeCoding.clear();
     uninformativeNonCoding.clear();
-    y.testForUninformative(speciesList3, uninformativeCoding, uninformativeNonCoding);
-    bool continueToStrip = y.testForCharacterNumber(uninformativeCoding, uninformativeNonCoding);
+    y.checkForUninformative(speciesList3, uninformativeCoding, uninformativeNonCoding);
+    bool continueToStrip = y.checkForCharacterNumber(uninformativeCoding, uninformativeNonCoding);
 
     if (continueToStrip)
     {
@@ -1269,8 +1273,8 @@ bool testinternal::testTen(QString &outString)
 
     uninformativeCoding.clear();
     uninformativeNonCoding.clear();
-    y.testForUninformative(speciesList3, uninformativeCoding, uninformativeNonCoding);
-    continueToStrip = y.testForCharacterNumber(uninformativeCoding, uninformativeNonCoding);
+    y.checkForUninformative(speciesList3, uninformativeCoding, uninformativeNonCoding);
+    continueToStrip = y.checkForCharacterNumber(uninformativeCoding, uninformativeNonCoding);
 
     if (continueToStrip)
     {
@@ -1298,8 +1302,8 @@ bool testinternal::testTen(QString &outString)
 
     uninformativeCoding.clear();
     uninformativeNonCoding.clear();
-    y.testForUninformative(speciesList3, uninformativeCoding, uninformativeNonCoding);
-    continueToStrip = y.testForCharacterNumber(uninformativeCoding, uninformativeNonCoding);
+    y.checkForUninformative(speciesList3, uninformativeCoding, uninformativeNonCoding);
+    continueToStrip = y.checkForCharacterNumber(uninformativeCoding, uninformativeNonCoding);
 
     if (continueToStrip)
     {
@@ -1328,8 +1332,8 @@ bool testinternal::testTen(QString &outString)
 
     uninformativeCoding.clear();
     uninformativeNonCoding.clear();
-    y.testForUninformative(speciesList3, uninformativeCoding, uninformativeNonCoding);
-    continueToStrip = y.testForCharacterNumber(uninformativeCoding, uninformativeNonCoding);
+    y.checkForUninformative(speciesList3, uninformativeCoding, uninformativeNonCoding);
+    continueToStrip = y.checkForCharacterNumber(uninformativeCoding, uninformativeNonCoding);
     if (continueToStrip) y.stripUninformativeCharacters(speciesList3, uninformativeCoding, uninformativeNonCoding);
 
     if (!continueToStrip || speciesList3[0]->genome.size() != 50)
@@ -1557,55 +1561,312 @@ bool testinternal::testThirteen(QString &outString)
     return testFlag;
 }
 
-//Check count difference to parent
+//Check ID of new species
 bool testinternal::testFourteen(QString &outString)
 {
     bool testFlag = true;
     QTextStream out(&outString);
 
-    out << "Testing difference to parent.\n\n";
+    out << "Testing the function that identifies if a new species has arised (the function that applies a speciation itself is tested elsehwere).\n\n";
 
-    //Initialised to false
-    Organism org(50, false);
-    for (auto &p : org.parentGenome) p = true;
-
+    //Set up a simulation for our test
     simulationVariables simSettings;
-    simSettings.test = 14;
     simulation x(0, &simSettings, &error, theMainWindow);
     if (error) return false;
 
-    int diff = x.checkForSpeciation(&org, 50);
-
-    out << "Set genome to false, parent to true, select size 50. Should be 50, returns " << diff << ".\n";
-    if (diff != 50)
+    //First, let's try with just one parent
+    //Organism of genome size 50, initialised to false, no stochastic layer
+    Organism org(50, false);
+    for (auto &p : org.parentGenomes[0]) p = false;
+    //Test with species difference of five, so five true to take over this value - we should ID a new species
+    for (int i = 0; i < 5; i++)
     {
-        testFlag = false;
+        org.parentGenomes[0][i] = true;
     }
 
-    diff = x.checkForSpeciation(&org, 25);
+    out << "Testing all species modes with a single ancestor (i.e. the parent) genome.\n\n";
 
-    out << "Set genome to false, parent to true, select size 25. Should be 25, returns " << diff << ".\n";
-    if (diff != 25)
+    bool newSpecies = false;
+    //Cycle through species modes
+    for (int i = 0; i < 3; i++)
     {
-        testFlag = false;
+
+        newSpecies = x.checkForSpeciation(&org, 50, 5, i);
+        if (!newSpecies)
+        {
+            testFlag = false;
+            out << "Fail at all species modes test A" << i << "\n";
+        }
     }
 
-    for (auto &p : org.parentGenome) p = false;
-    diff = x.checkForSpeciation(&org, 50);
+    //Turn one bit false to take us below species difference
+    org.parentGenomes[0][4] = false;
 
-    out << "Set genome to false, parent to false, select size 50. Should be 0, returns " << diff << ".\n";
-    if (diff != 0)
+    //Cycle through species modes
+    for (int i = 0; i < 3; i++)
     {
-        testFlag = false;
+        newSpecies = x.checkForSpeciation(&org, 50, 5, i);
+        if (newSpecies)
+        {
+            testFlag = false;
+            out << "Fail at all species modes test B" << i << "\n";
+        }
+    }
+    if (testFlag) out << "All species mode tests with single ancestor passed.\n\n";
+
+    //Next we need to do tests when we have more than one ancestral genome
+    org.parentGenomes.append(QList <bool>());
+    for (int i = 0; i < 50; i++)org.parentGenomes[1].append(false);
+
+    //At the moment, parent genome has four trues - everything should still be below species differemce no new species
+    for (int i = 0; i < 3; i++)
+    {
+        newSpecies = x.checkForSpeciation(&org, 50, 5, i);
+        if (newSpecies)
+        {
+            testFlag = false;
+            out << "Fail at all species modes test C" << i << "\n";
+        }
     }
 
-    diff = x.checkForSpeciation(&org, 25);
+    //Turn one bit true to take us above species difference
+    org.parentGenomes[0][4] = true;
 
-    out << "Set genome to false, parent to false, select size 25. Should be 0, returns " << diff << ".\n";
-    if (diff != 0)
+    // This should now be a new species
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ORIGIN);
+    if (!newSpecies)
     {
         testFlag = false;
+        out << "Fail at all species modes test D1\n";
     }
+
+    //Should not be new species if we are comparing to last
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_LAST_SPECIATION);
+    if (newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test D2\n";
+    }
+
+    //Should be new species as this includes first
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ALL);
+    if (!newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test D3\n";
+    }
+
+    //Turn one bit false to take us below species difference
+    org.parentGenomes[0][4] = false;
+    //Turn five to true in last (now second) speciation
+    for (int i = 0; i < 5; i++)
+    {
+        org.parentGenomes[1][i] = true;
+    }
+
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ORIGIN);
+    if (newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test E1\n";
+    }
+
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_LAST_SPECIATION);
+    if (!newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test E2\n";
+    }
+
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ALL);
+    if (!newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test E3\n";
+    }
+
+    if (testFlag) out << "All species mode tests with two ancestors passed.\n\n";
+
+    //Finally, we need to do tests when we have more than two ancestral genome
+    org.parentGenomes.append(QList <bool>());
+    for (int i = 0; i < 50; i++)org.parentGenomes[2].append(false);
+    //Set all others to fales too
+    for (auto &p : org.parentGenomes[0]) p = false;
+    for (auto &p : org.parentGenomes[1]) p = false;
+
+    //No new species expected
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ORIGIN);
+    if (newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test F1\n";
+    }
+
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_LAST_SPECIATION);
+    if (newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test F2\n";
+    }
+
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ALL);
+    if (newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test F3\n";
+    }
+
+    //Test with original five away
+    for (int i = 0; i < 5; i++)
+    {
+        org.parentGenomes[0][i] = true;
+    }
+
+    //Should be new species
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ORIGIN);
+    if (!newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test F1\n";
+    }
+
+    //Should not
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_LAST_SPECIATION);
+    if (newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test F2\n";
+    }
+
+    //Should be
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ALL);
+    if (!newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test F3\n";
+    }
+
+    //Test with middle as new species, reset original
+    for (auto &p : org.parentGenomes[0]) p = false;
+    for (int i = 0; i < 5; i++)
+    {
+        org.parentGenomes[1][i] = true;
+    }
+
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ORIGIN);
+    if (newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test G1\n";
+    }
+
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_LAST_SPECIATION);
+    if (newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test G2\n";
+    }
+
+    //Should be new species
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ALL);
+    if (!newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test G3\n";
+    }
+
+    //Test with last five on, reset middle
+    for (auto &p : org.parentGenomes[1]) p = false;
+    for (int i = 0; i < 5; i++)
+    {
+        org.parentGenomes[2][i] = true;
+    }
+
+    //Shouldn't be new species
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ORIGIN);
+    if (newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test H1\n";
+    }
+
+    //Should
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_LAST_SPECIATION);
+    if (!newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test H2\n";
+    }
+
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ALL);
+    if (!newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test H3\n";
+    }
+
+    //Test with last and middle
+    for (int i = 0; i < 5; i++)
+    {
+        org.parentGenomes[1][i] = true;
+    }
+
+    //Shouldn't be new species
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ORIGIN);
+    if (newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test I1\n";
+    }
+
+    //Should
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_LAST_SPECIATION);
+    if (!newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test I2\n";
+    }
+
+    //Should
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ALL);
+    if (!newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test I3\n";
+    }
+
+    //Test with first and middle, not last
+    for (auto &p : org.parentGenomes[2]) p = false;
+    for (int i = 0; i < 5; i++)
+    {
+        org.parentGenomes[0][i] = true;
+    }
+
+    //Should be new species
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ORIGIN);
+    if (!newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test J1\n";
+    }
+
+    //Shouldn't
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_LAST_SPECIATION);
+    if (newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test J2\n";
+    }
+
+    //Should
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ALL);
+    if (!newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test J3\n";
+    }
+
+    if (testFlag) out << "All species mode tests with more than two ancestors passed.\n\n";
 
     return testFlag;
 }
@@ -2148,6 +2409,8 @@ bool testinternal::testTwenty(QString &outString)
 {
     bool testFlag = true;
     QTextStream out(&outString);
+
+    //testcopyofgenomehere - and also == operator! Anything else in organism?
 
     return testFlag;
 }

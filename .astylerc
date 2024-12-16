@@ -1,3 +1,6 @@
+# RJG - Palaeoware code style through astyle
+# RJG - to enable the beautifier in QT creator, go to Help > About Plugins > C++ > Beautifier, then Tools > Options > Beautifier
+
 --style=allman
 --indent=spaces=4
 --align-pointer=name
