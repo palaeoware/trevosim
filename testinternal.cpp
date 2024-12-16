@@ -791,12 +791,14 @@ bool testinternal::testSeven(QString &outString)
     out << "New species genome: ";
     for (auto i : std::as_const(newSpecies.genome)) i ? out << "1" : out << "0";
     out << " (should be all 1s).\n";
-    for (auto i : std::as_const(x.playingFields[0]->playingField[8]->parentGenomes[0])) if (i != 1)testFlag = false;
+    for (auto i : std::as_const(x.playingFields[0]->playingField[8]->parentGenomes[0])) if (i != 0)testFlag = false;
     out << "Species 10 parent genome in playing field is now: ";
     for (auto i :  std::as_const(x.playingFields[0]->playingField[8]->parentGenomes[0])) i ? out << "1" : out << "0";
-    out << " (should be all 1s).\n";
-    out << "Now look at appended genome.";
+    out << " (should be all 0s).\n";
+    for (auto i : std::as_const(x.playingFields[0]->playingField[8]->parentGenomes[1])) if (i != 1)testFlag = false;
+    out << "Species 10 last speciation genome in playing field is now:";
     for (auto i :  std::as_const(x.playingFields[0]->playingField[8]->parentGenomes[1])) i ? out << "1" : out << "0";
+    out << " (should be all 1s).\n";
 
     if (testFlag) out << "\nNew species tests passed.\n";
 
