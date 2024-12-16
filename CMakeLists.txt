@@ -11,6 +11,8 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
+set(CMAKE_BUILD_PARALLEL_LEVEL 8)
+
 if(WIN32)
     #Included here to build the .dlls for GoogleTest under Windows
     set(BUILD_SHARED_LIBS ON)
