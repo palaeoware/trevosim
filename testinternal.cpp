@@ -733,71 +733,73 @@ bool testinternal::testSeven(QString &outString)
     QTextStream out(&outString);
 
     out << "Testing the creation of a new species - new species created at iteration 66 with a genome of all 1's.\n\n";
-    /*
-        simulationVariables simSettings;
-        simSettings.genomeSize = 50;
-        simSettings.fitnessSize = 50;
-        simSettings.speciesSelectSize = 50;
-        simSettings.test = 7;
 
-        simulation x(0, &simSettings, &error, theMainWindow);
+    simulationVariables simSettings;
+    simSettings.genomeSize = 50;
+    simSettings.fitnessSize = 50;
+    simSettings.speciesSelectSize = 50;
+    simSettings.test = 7;
 
-        if (error)
-        {
-            out << "Error initialising test simulation";
-            return false;
-        }
-        //This should update the counters on new species
-        x.iterations = 66;
-        x.speciesCount = 14;
+    simulation x(0, &simSettings, &error, theMainWindow);
 
-        //This will have initialised values - i.e. zero for everything except the genome, which will be 50% 1's
-        Organism newSpecies(50, false);
-        newSpecies.initialise(50);
-        newSpecies.speciesID = 10;
-        for (auto &i : newSpecies.genome) i = true;
+    if (error)
+    {
+        out << "Error initialising test simulation";
+        return false;
+    }
+    //This should update the counters on new species
+    x.iterations = 66;
+    x.speciesCount = 14;
 
-        Organism parentSpecies(50, false);
-        for (auto &i : parentSpecies.genome)i = true;
-        for (auto &i : parentSpecies.parentGenome)i = true;
-        parentSpecies.speciesID = 10;
-        parentSpecies.parentSpeciesID = 9;
-        parentSpecies.born = 15;
-        parentSpecies.extinct = 20;
-        parentSpecies.cladogenesis = 25;
-        parentSpecies.fitness = 5;
-        x.playingFields[0]->playingField[8]->speciesID = 10;
+    //This will have initialised values - i.e. zero for everything except the genome, which will be 50% 1's
+    Organism newSpecies(50, false);
+    newSpecies.initialise(50);
+    newSpecies.speciesID = 10;
+    for (auto &i : newSpecies.genome) i = true;
 
-        x.newSpecies(newSpecies, parentSpecies, x.playingFields[0]);
+    Organism parentSpecies(50, false);
+    for (auto &i : parentSpecies.genome)i = true;
+    for (auto &i : parentSpecies.parentGenomes[0])i = true;
+    parentSpecies.speciesID = 10;
+    parentSpecies.parentSpeciesID = 9;
+    parentSpecies.born = 15;
+    parentSpecies.extinct = 20;
+    parentSpecies.cladogenesis = 25;
+    parentSpecies.fitness = 5;
+    x.playingFields[0]->playingField[8]->speciesID = 10;
 
-        //Ok, so first, newspecies should be born iteration 66
-        if (newSpecies.born != 66)testFlag = false;
-        out << "New species born at iteration " << newSpecies.born << " (should be 66).\n";
-        if (x.speciesCount != 15)testFlag = false;
-        out << "Species number " << x.speciesCount << " (should be 15).\n";
-        if (newSpecies.speciesID != 15)testFlag = false;
-        out << "New species is " << newSpecies.speciesID << " (should be 15).\n";
-        if (newSpecies.cladogenesis != 66)testFlag = false;
-        out << "New species cladogenesis at iteration " << newSpecies.cladogenesis << " (should be 66).\n";
-        if (parentSpecies.cladogenesis != 66)testFlag = false;
-        out << "Parent cladogenesis at iteration " << parentSpecies.cladogenesis << " (should be 66).\n";
-        if (newSpecies.parentSpeciesID != 10)testFlag = false;
-        out << "New species parent species ID " << newSpecies.parentSpeciesID << " (should be 10).\n";
-        for (auto i : std::as_const(newSpecies.parentGenome)) if (i != 1)testFlag = false;
-        out << "New species parent genome: ";
-        for (auto i : std::as_const(newSpecies.parentGenome)) i ? out << "1" : out << "0";
-        out << " (should be all 1s).\n";
-        for (auto i : std::as_const(newSpecies.genome)) if (i != 1)testFlag = false;
-        out << "New species genome: ";
-        for (auto i : std::as_const(newSpecies.genome)) i ? out << "1" : out << "0";
-        out << " (should be all 1s).\n";
-        for (auto i : std::as_const(x.playingFields[0]->playingField[8]->parentGenome)) if (i != 1)testFlag = false;
-        out << "Species 10 parent genome in playing field is now: ";
-        for (auto i :  std::as_const(x.playingFields[0]->playingField[8]->parentGenome)) i ? out << "1" : out << "0";
-        out << " (should be all 1s).\n";
+    x.newSpecies(newSpecies, parentSpecies, x.playingFields[0]);
 
-        if (testFlag) out << "\nNew species tests passed.\n";
-    */
+    //Ok, so first, newspecies should be born iteration 66
+    if (newSpecies.born != 66)testFlag = false;
+    out << "New species born at iteration " << newSpecies.born << " (should be 66).\n";
+    if (x.speciesCount != 15)testFlag = false;
+    out << "Species number " << x.speciesCount << " (should be 15).\n";
+    if (newSpecies.speciesID != 15)testFlag = false;
+    out << "New species is " << newSpecies.speciesID << " (should be 15).\n";
+    if (newSpecies.cladogenesis != 66)testFlag = false;
+    out << "New species cladogenesis at iteration " << newSpecies.cladogenesis << " (should be 66).\n";
+    if (parentSpecies.cladogenesis != 66)testFlag = false;
+    out << "Parent cladogenesis at iteration " << parentSpecies.cladogenesis << " (should be 66).\n";
+    if (newSpecies.parentSpeciesID != 10)testFlag = false;
+    out << "New species parent species ID " << newSpecies.parentSpeciesID << " (should be 10).\n";
+    for (auto i : std::as_const(newSpecies.parentGenomes[0])) if (i != 1)testFlag = false;
+    out << "New species parent genome: ";
+    for (auto i : std::as_const(newSpecies.parentGenomes[0])) i ? out << "1" : out << "0";
+    out << " (should be all 1s).\n";
+    for (auto i : std::as_const(newSpecies.genome)) if (i != 1)testFlag = false;
+    out << "New species genome: ";
+    for (auto i : std::as_const(newSpecies.genome)) i ? out << "1" : out << "0";
+    out << " (should be all 1s).\n";
+    for (auto i : std::as_const(x.playingFields[0]->playingField[8]->parentGenomes[0])) if (i != 1)testFlag = false;
+    out << "Species 10 parent genome in playing field is now: ";
+    for (auto i :  std::as_const(x.playingFields[0]->playingField[8]->parentGenomes[0])) i ? out << "1" : out << "0";
+    out << " (should be all 1s).\n";
+    out << "Now look at appended genome.";
+    for (auto i :  std::as_const(x.playingFields[0]->playingField[8]->parentGenomes[1])) i ? out << "1" : out << "0";
+
+    if (testFlag) out << "\nNew species tests passed.\n";
+
     return testFlag;
 }
 
@@ -1742,7 +1744,7 @@ bool testinternal::testFourteen(QString &outString)
         out << "Fail at all species modes test F3\n";
     }
 
-    //Test with middle five away, reset original
+    //Test with middle as new species, reset original
     for (auto &p : org.parentGenomes[0]) p = false;
     for (int i = 0; i < 5; i++)
     {
@@ -1801,7 +1803,7 @@ bool testinternal::testFourteen(QString &outString)
         out << "Fail at all species modes test H3\n";
     }
 
-    //Test with last and middle five
+    //Test with last and middle
     for (int i = 0; i < 5; i++)
     {
         org.parentGenomes[1][i] = true;
