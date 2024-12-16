@@ -123,7 +123,8 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
     comboOptions.insert(SPECIES_MODE_ORIGIN, "Species origin");
     comboOptions.insert(SPECIES_MODE_LAST_SPECIATION, "Last speciation");
     comboOptions.insert(SPECIES_MODE_ALL, "Origin and all speciations");
-    comboOptions.insert(SPECIES_MODE_MAYR, "Mayr");
+    //Not yet implemented
+    //comboOptions.insert(SPECIES_MODE_MAYR, "Mayr");
 
     ui->combo_speciation->addItems(comboOptions);
     ui->combo_speciation->setCurrentIndex(simSettings->speciationMode);
