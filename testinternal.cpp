@@ -1580,7 +1580,7 @@ bool testinternal::testFourteen(QString &outString)
         org.parentGenomes[0][i] = true;
     }
 
-    out << "Testing all species modes with a single ancestor (i.e. the parent) genome.\n";
+    out << "Testing all species modes with a single ancestor (i.e. the parent) genome.\n\n";
 
     bool newSpecies = false;
     //Cycle through species modes
@@ -1608,16 +1608,9 @@ bool testinternal::testFourteen(QString &outString)
             out << "Fail at all species modes test B" << i << "\n";
         }
     }
-    if (testFlag) out << "\n All species mode tests with single ancestor passed \n\n";
+    if (testFlag) out << "All species mode tests with single ancestor passed.\n\n";
 
-    //Speciation modes are defined as follows
-    //SPECIES_MODE_ORIGIN 0
-    //SPECIES_MODE_LAST_SPECIATION 1
-    //SPECIES_MODE_ALL 2
-    //SPECIES_MODE_MAYR 3 - not currently implemented
-    //checkForSpeciation(const Organism *organismOne, int runSelectSize, int runSpeciesDifference, int speciationMode)
-
-    //Next we need to do tests when we have more than one parental genome
+    //Next we need to do tests when we have more than one ancestral genome
     org.parentGenomes.append(QList <bool>());
     for (int i = 0; i < 50; i++)org.parentGenomes[1].append(false);
 
@@ -1661,7 +1654,7 @@ bool testinternal::testFourteen(QString &outString)
 
     //Turn one bit false to take us below species difference
     org.parentGenomes[0][4] = false;
-    //Turn five to true in last speciation
+    //Turn five to true in last (now second) speciation
     for (int i = 0; i < 5; i++)
     {
         org.parentGenomes[1][i] = true;
@@ -1688,7 +1681,188 @@ bool testinternal::testFourteen(QString &outString)
         out << "Fail at all species modes test E3\n";
     }
 
-    if (testFlag) out << "\n All species mode tests with multiple ancestors passed \n\n";
+    if (testFlag) out << "All species mode tests with two ancestors passed.\n\n";
+
+    //Finally, we need to do tests when we have more than two ancestral genome
+    org.parentGenomes.append(QList <bool>());
+    for (int i = 0; i < 50; i++)org.parentGenomes[2].append(false);
+    //Set all others to fales too
+    for (auto &p : org.parentGenomes[0]) p = false;
+    for (auto &p : org.parentGenomes[1]) p = false;
+
+    //No new species expected
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ORIGIN);
+    if (newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test F1\n";
+    }
+
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_LAST_SPECIATION);
+    if (newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test F2\n";
+    }
+
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ALL);
+    if (newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test F3\n";
+    }
+
+    //Test with original five away
+    for (int i = 0; i < 5; i++)
+    {
+        org.parentGenomes[0][i] = true;
+    }
+
+    //Should be new species
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ORIGIN);
+    if (!newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test F1\n";
+    }
+
+    //Should not
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_LAST_SPECIATION);
+    if (newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test F2\n";
+    }
+
+    //Should be
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ALL);
+    if (!newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test F3\n";
+    }
+
+    //Test with middle five away, reset original
+    for (auto &p : org.parentGenomes[0]) p = false;
+    for (int i = 0; i < 5; i++)
+    {
+        org.parentGenomes[1][i] = true;
+    }
+
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ORIGIN);
+    if (newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test G1\n";
+    }
+
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_LAST_SPECIATION);
+    if (newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test G2\n";
+    }
+
+    //Should be new species
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ALL);
+    if (!newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test G3\n";
+    }
+
+    //Test with last five on, reset middle
+    for (auto &p : org.parentGenomes[1]) p = false;
+    for (int i = 0; i < 5; i++)
+    {
+        org.parentGenomes[2][i] = true;
+    }
+
+    //Shouldn't be new species
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ORIGIN);
+    if (newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test H1\n";
+    }
+
+    //Should
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_LAST_SPECIATION);
+    if (!newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test H2\n";
+    }
+
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ALL);
+    if (!newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test H3\n";
+    }
+
+    //Test with last and middle five
+    for (int i = 0; i < 5; i++)
+    {
+        org.parentGenomes[1][i] = true;
+    }
+
+    //Shouldn't be new species
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ORIGIN);
+    if (newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test I1\n";
+    }
+
+    //Should
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_LAST_SPECIATION);
+    if (!newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test I2\n";
+    }
+
+    //Should
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ALL);
+    if (!newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test I3\n";
+    }
+
+    //Test with first and middle, not last
+    for (auto &p : org.parentGenomes[2]) p = false;
+    for (int i = 0; i < 5; i++)
+    {
+        org.parentGenomes[0][i] = true;
+    }
+
+    //Should be new species
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ORIGIN);
+    if (!newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test J1\n";
+    }
+
+    //Shouldn't
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_LAST_SPECIATION);
+    if (newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test J2\n";
+    }
+
+    //Should
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ALL);
+    if (!newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test J3\n";
+    }
+
+    if (testFlag) out << "All species mode tests with more than two ancestors passed.\n\n";
 
     return testFlag;
 }
