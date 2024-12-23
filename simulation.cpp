@@ -1002,6 +1002,40 @@ void simulation::mutateOrganism(Organism &progeny, const playingFieldStructure *
     }
 }
 
+
+
+void simulation::mutateEnvironment()
+{
+
+    if (!simSettings->matchFitnessPeaks);
+    //Calculate mutation # as previously, and using same variables for ease - this is the number of mutations total for each mask
+    double numberEnvironmentMutationsDouble = (static_cast<double>(runFitnessSize) / 100.) * simSettings->environmentMutationRate;
+    double numberEnvironmentMutationsIntegral = static_cast<int>(numberEnvironmentMutationsDouble);
+
+    //Sort out the probabilities of extra mutation given remainder
+    double numberEnvironmentMutationsFractional = modf(numberEnvironmentMutationsDouble, &numberEnvironmentMutationsIntegral);
+    int numberEnvironmentMutationsInteger = (static_cast<int>(numberEnvironmentMutationsIntegral));
+    //Due to rounding the above always results in fewer mutations than would be expected - the -150 below equates to an average of 1 mutation per 100 base pairs
+    if (static_cast<double>(QRandomGenerator::global()->generate()) < (numberEnvironmentMutationsFractional * static_cast<double>(maxRand - 150))) numberEnvironmentMutationsInteger++;
+
+    //Mutate irrespective of playing field mode settings if there are multiple ones
+    for (auto pf : std::as_const(playingFields))
+        for (int k = 0; k < numberEnvironmentMutationsInteger; k++)
+            for (int j = 0; j < simSettings->environmentNumber; j++)
+                for (int i = 0; i < runMaskNumber; i++)
+                {
+                    //Scale random number to genome size
+                    int mutationPosition = QRandomGenerator::global()->bounded(runFitnessSize);
+                    pf->masks[j][i][mutationPosition] = !pf->masks[j][i][mutationPosition];
+                }
+
+    //Copy between PFs if they are set to be identical
+    if ( simSettings->playingfieldNumber > 1 && simSettings->playingfieldMasksMode == MASKS_MODE_IDENTICAL)
+        for (int p = 1; p < simSettings->playingfieldNumber; p++)
+            playingFields[p]->masks = playingFields[0]->masks;
+}
+
+
 void simulation::updateTNTstring(QString &TNTstring, int progParentSpeciesID, int progSpeciesID)
 {
     QString progenySpeciesID;
@@ -1081,35 +1115,6 @@ int simulation::calculateOverwrite(const playingFieldStructure *pf, const int sp
         }
     }
     return overwrite;
-}
-
-void simulation::mutateEnvironment()
-{
-    //Calculate mutation # as previously, and using same variables for ease - this is the number of mutations total for each mask
-    double numberEnvironmentMutationsDouble = (static_cast<double>(runFitnessSize) / 100.) * simSettings->environmentMutationRate;
-    double numberEnvironmentMutationsIntegral = static_cast<int>(numberEnvironmentMutationsDouble);
-
-    //Sort out the probabilities of extra mutation given remainder
-    double numberEnvironmentMutationsFractional = modf(numberEnvironmentMutationsDouble, &numberEnvironmentMutationsIntegral);
-    int numberEnvironmentMutationsInteger = (static_cast<int>(numberEnvironmentMutationsIntegral));
-    //Due to rounding the above always results in fewer mutations than would be expected - the -150 below equates to an average of 1 mutation per 100 base pairs
-    if (static_cast<double>(QRandomGenerator::global()->generate()) < (numberEnvironmentMutationsFractional * static_cast<double>(maxRand - 150))) numberEnvironmentMutationsInteger++;
-
-    //Mutate irrespective of playing field mode settings if there are multiple ones
-    for (auto pf : std::as_const(playingFields))
-        for (int k = 0; k < numberEnvironmentMutationsInteger; k++)
-            for (int j = 0; j < simSettings->environmentNumber; j++)
-                for (int i = 0; i < runMaskNumber; i++)
-                {
-                    //Scale random number to genome size
-                    int mutationPosition = QRandomGenerator::global()->bounded(runFitnessSize);
-                    pf->masks[j][i][mutationPosition] = !pf->masks[j][i][mutationPosition];
-                }
-
-    //Copy between PFs if they are set to be identical
-    if ( simSettings->playingfieldNumber > 1 && simSettings->playingfieldMasksMode == MASKS_MODE_IDENTICAL)
-        for (int p = 1; p < simSettings->playingfieldNumber; p++)
-            playingFields[p]->masks = playingFields[0]->masks;
 }
 
 void simulation::applyPerturbation()
