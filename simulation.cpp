@@ -1007,16 +1007,18 @@ void simulation::mutateOrganism(Organism &progeny, const playingFieldStructure *
 void simulation::mutateEnvironment()
 {
 
-    if (!simSettings->matchFitnessPeaks);
     //Calculate mutation # as previously, and using same variables for ease - this is the number of mutations total for each mask
     double numberEnvironmentMutationsDouble = (static_cast<double>(runFitnessSize) / 100.) * simSettings->environmentMutationRate;
-    double numberEnvironmentMutationsIntegral = static_cast<int>(numberEnvironmentMutationsDouble);
+    //This will be used to store the integral part of the above sum - it needs to be a double as this is what is passed to the modf function
+    double numberEnvironmentMutationsIntegral = numberEnvironmentMutationsDouble;
 
     //Sort out the probabilities of extra mutation given remainder
     double numberEnvironmentMutationsFractional = modf(numberEnvironmentMutationsDouble, &numberEnvironmentMutationsIntegral);
     int numberEnvironmentMutationsInteger = (static_cast<int>(numberEnvironmentMutationsIntegral));
     //Due to rounding the above always results in fewer mutations than would be expected - the -150 below equates to an average of 1 mutation per 100 base pairs
     if (static_cast<double>(QRandomGenerator::global()->generate()) < (numberEnvironmentMutationsFractional * static_cast<double>(maxRand - 150))) numberEnvironmentMutationsInteger++;
+
+    //if (!simSettings->matchFitnessPeaks) need to halve the number of mutations
 
     //Mutate irrespective of playing field mode settings if there are multiple ones
     for (auto pf : std::as_const(playingFields))
