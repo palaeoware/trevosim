@@ -486,8 +486,7 @@ bool testinternal::testFive(QString &outString)
 
     for (int j = 0; j < 10000; j++)
     {
-        if (theMainWindow)
-            theMainWindow->setProgressBar(j);
+        if (theMainWindow) theMainWindow->setProgressBar(j);
         org1.initialise(simSettings.genomeSize);
         Organism org2(org1);
         x.mutateOrganism(org1, x.playingFields[0]);
@@ -508,8 +507,7 @@ bool testinternal::testFive(QString &outString)
 
     for (int j = 0; j < 10000; j++)
     {
-        if (theMainWindow)
-            theMainWindow->setProgressBar(j);
+        if (theMainWindow) theMainWindow->setProgressBar(j);
         org3.initialise(simSettings.genomeSize);
         Organism org4(org3);
         x.mutateOrganism(org3, x.playingFields[0]);
@@ -534,13 +532,11 @@ bool testinternal::testFive(QString &outString)
     QVector <QVector <QVector <bool> > > masks2;
     int cnts[12] = {0};
 
-    if (theMainWindow)
-        theMainWindow->setStatus("Doing environment mutation tests");
+    if (theMainWindow) theMainWindow->setStatus("Doing environment mutation tests");
 
     for (int i = 0; i < 10000; i++)
     {
-        if (theMainWindow)
-            theMainWindow->setProgressBar(i);
+        if (theMainWindow) theMainWindow->setProgressBar(i);
         masks = y.playingFields[0]->masks;
         masks2 =  y.playingFields[1]->masks;
         y.mutateEnvironment();
@@ -555,12 +551,77 @@ bool testinternal::testFive(QString &outString)
         }
     }
 
-    if (theMainWindow)
-        theMainWindow->hideProgressBar();
-
     out << "Now testing environment mutation across two playing fields (mode independent), and two environments for each. Same test for each as above. \nPlaying field 1:\nEnvironment 1:\t";
 
     double dCnts[12] = {0.};
+    for (int i = 0; i < 12; i++)
+    {
+        dCnts[i] = (static_cast<double>(cnts[i]) / 10000.);
+        if (dCnts[i] < 1.25 || dCnts[i] > 1.31) testFlag = false;
+
+        if (i == 3) out << "Environment 2: ";
+        if (i == 6) out << "Playing field 2:\nEnvironment 1: ";
+        if (i == 9) out << "Environment 2: ";
+
+        out << dCnts[i] << "\t";
+
+        if ((i + 1) % 3 == 0) out << "\n";
+    }
+
+    flagString = testFlag ? "true" : "false";
+
+    out << "TREvoSim expects all above to be between 1.25 and 1.31 and returned " << flagString << "\n";
+
+    if (theMainWindow) theMainWindow->setStatus("Doing environment mutation tests with matching peaks");
+
+    for (int i = 0; i < 10000; i++)
+    {
+        if (theMainWindow) theMainWindow->setProgressBar(i);
+        masks = y.playingFields[0]->masks;
+        masks2 =  y.playingFields[1]->masks;
+        y.mutateEnvironment();
+
+        for (int k = 0; k < masks[0][0].length(); k++)
+        {
+            for (int j = 0; j < 3; j++) if (y.playingFields[0]->masks[0][j][k] != masks[0][j][k])cnts[j]++;
+            for (int j = 0; j < 3; j++) if (y.playingFields[0]->masks[1][j][k] != masks[1][j][k])cnts[j + 3]++;
+            for (int j = 0; j < 3; j++) if (y.playingFields[1]->masks[0][j][k] != masks2[0][j][k])cnts[j + 6]++;
+            for (int j = 0; j < 3; j++) if (y.playingFields[1]->masks[1][j][k] != masks2[1][j][k])cnts[j + 9]++;
+
+        }
+    }
+
+    if (theMainWindow) theMainWindow->hideProgressBar();
+
+    //Repeat this test with matching peaks, which should equate to the same number, but only do two mutations at once, resulting in the same number of ones
+    simSettings.matchFitnessPeaks = true;
+    simulation z(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
+
+    out << "Now testing environment mutation across two playing fields (mode independent), and two environments for each, with matching peaks turned on. Same test for each as above. \nPlaying field 1:\nEnvironment 1:\t";
+
+    //Reset counts
+    for (auto &i : cnts) i = 0;
+    if (theMainWindow) theMainWindow->setStatus("Doing environment mutation tests with matching peaks.");
+
+    for (int i = 0; i < 10000; i++)
+    {
+        if (theMainWindow) theMainWindow->setProgressBar(i);
+        masks = z.playingFields[0]->masks;
+        masks2 = z.playingFields[1]->masks;
+        z.mutateEnvironment();
+
+        for (int k = 0; k < masks[0][0].length(); k++)
+        {
+            for (int j = 0; j < 3; j++) if (z.playingFields[0]->masks[0][j][k] != masks[0][j][k])cnts[j]++;
+            for (int j = 0; j < 3; j++) if (z.playingFields[0]->masks[1][j][k] != masks[1][j][k])cnts[j + 3]++;
+            for (int j = 0; j < 3; j++) if (z.playingFields[1]->masks[0][j][k] != masks2[0][j][k])cnts[j + 6]++;
+            for (int j = 0; j < 3; j++) if (z.playingFields[1]->masks[1][j][k] != masks2[1][j][k])cnts[j + 9]++;
+        }
+    }
+
+    if (theMainWindow) theMainWindow->hideProgressBar();
+
     for (int i = 0; i < 12; i++)
     {
         dCnts[i] = (static_cast<double>(cnts[i]) / 10000.);
