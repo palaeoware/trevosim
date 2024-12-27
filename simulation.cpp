@@ -1030,9 +1030,32 @@ void simulation::mutateEnvironment()
             for (int j = 0; j < simSettings->environmentNumber; j++)
                 for (int i = 0; i < runMaskNumber; i++)
                 {
-                    //Scale random number to genome size
-                    int mutationPosition = QRandomGenerator::global()->bounded(runFitnessSize);
-                    pf->masks[j][i][mutationPosition] = !pf->masks[j][i][mutationPosition];
+                    if (simSettings->matchFitnessPeaks)
+                    {
+                        //Scale random number to genome size - in this instance I need to swap two ones
+                        //I think in most settings this stochastic approach is likely to be faster than mapping zeros and ones and swapping that way
+                        int mutationPosition1 = QRandomGenerator::global()->bounded(runFitnessSize);
+                        int mutationPosition2 = QRandomGenerator::global()->bounded(runFitnessSize);
+                        int cnt = 0;
+                        while (pf->masks[j][i][mutationPosition2] == pf->masks[j][i][mutationPosition1])
+                        {
+                            mutationPosition2 = QRandomGenerator::global()->bounded(runFitnessSize);
+                            cnt++;
+                            if (cnt == 1000)
+                            {
+                                warning("Oops", "There has been an error at mutating the environment with matching peaks. Could the masks be all zeros or all ones? Returning with no mutations made.");
+                                return;
+                            }
+                        }
+                        pf->masks[j][i][mutationPosition1] = !pf->masks[j][i][mutationPosition1];
+                        pf->masks[j][i][mutationPosition2] = !pf->masks[j][i][mutationPosition2];
+                    }
+                    else
+                    {
+                        //Scale random number to genome size
+                        int mutationPosition = QRandomGenerator::global()->bounded(runFitnessSize);
+                        pf->masks[j][i][mutationPosition] = !pf->masks[j][i][mutationPosition];
+                    }
                 }
 
     //Copy between PFs if they are set to be identical
