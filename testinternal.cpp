@@ -574,6 +574,10 @@ bool testinternal::testFive(QString &outString)
 
     if (theMainWindow) theMainWindow->setStatus("Doing environment mutation tests with matching peaks");
 
+    //Count the number of ones - this may change if we do not match peaks
+    int maxDiff = 0;
+    int minDiff = 0;
+
     for (int i = 0; i < 10000; i++)
     {
         if (theMainWindow) theMainWindow->setProgressBar(i);
@@ -583,12 +587,19 @@ bool testinternal::testFive(QString &outString)
 
         for (int k = 0; k < masks[0][0].length(); k++)
         {
+            //Count the differences - i.e. the number of mutations
             for (int j = 0; j < 3; j++) if (y.playingFields[0]->masks[0][j][k] != masks[0][j][k])cnts[j]++;
             for (int j = 0; j < 3; j++) if (y.playingFields[0]->masks[1][j][k] != masks[1][j][k])cnts[j + 3]++;
             for (int j = 0; j < 3; j++) if (y.playingFields[1]->masks[0][j][k] != masks2[0][j][k])cnts[j + 6]++;
             for (int j = 0; j < 3; j++) if (y.playingFields[1]->masks[1][j][k] != masks2[1][j][k])cnts[j + 9]++;
-
         }
+
+        int count0 = 0;
+        //Now count the ones
+        for (auto p : std::as_const(y.playingFields))
+            for (auto &e : p->masks)
+                for (auto &m : e)
+                    for (auto b : m) if (b) count0++;
     }
 
     if (theMainWindow) theMainWindow->hideProgressBar();
