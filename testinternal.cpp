@@ -521,6 +521,8 @@ bool testinternal::testFive(QString &outString)
     out << "Ran 10000 iterations on a 128 bit organism. At a rate of " << simSettings.organismMutationRate << " mutations per hundred characters per iteration this resulted in a mean of ";
     out << mean << " mutations. TREvoSim expects this to be between 2.5 and 2.62 and returned " << flagString << "\n";
 
+    if (theMainWindow) theMainWindow->setStatus("Doing environment mutation tests without mathcing peaks.");
+    out << "Now testing environment mutation across two playing fields (mode independent), and two environments for each. Same test for each as above. \nPlaying field 1:\nEnvironment 1:\t";
 
     simSettings.environmentNumber = 2;
     simSettings.playingfieldNumber = 2;
@@ -532,8 +534,8 @@ bool testinternal::testFive(QString &outString)
     QVector <QVector <QVector <bool> > > masks2;
     int cnts[12] = {0};
 
-    if (theMainWindow) theMainWindow->setStatus("Doing environment mutation tests");
-
+    //Count the number of ones - this may change if we do not match peaks
+    int maxDiff = 0;
     for (int i = 0; i < 10000; i++)
     {
         if (theMainWindow) theMainWindow->setProgressBar(i);
@@ -541,17 +543,33 @@ bool testinternal::testFive(QString &outString)
         masks2 =  y.playingFields[1]->masks;
         y.mutateEnvironment();
 
+        //Count the differences - i.e. the number of mutations
         for (int k = 0; k < masks[0][0].length(); k++)
         {
             for (int j = 0; j < 3; j++) if (y.playingFields[0]->masks[0][j][k] != masks[0][j][k])cnts[j]++;
             for (int j = 0; j < 3; j++) if (y.playingFields[0]->masks[1][j][k] != masks[1][j][k])cnts[j + 3]++;
             for (int j = 0; j < 3; j++) if (y.playingFields[1]->masks[0][j][k] != masks2[0][j][k])cnts[j + 6]++;
             for (int j = 0; j < 3; j++) if (y.playingFields[1]->masks[1][j][k] != masks2[1][j][k])cnts[j + 9]++;
-
         }
-    }
 
-    out << "Now testing environment mutation across two playing fields (mode independent), and two environments for each. Same test for each as above. \nPlaying field 1:\nEnvironment 1:\t";
+        //Now count the ones
+        int count0 = 0;
+        for (auto p : std::as_const(y.playingFields))
+            for (auto &e : p->masks)
+                for (auto &m : e)
+                    for (auto b : m) if (b) count0++;
+
+        int count1 = 0;
+        for (auto &e : masks)
+            for (auto &m : e)
+                for (auto b : m) if (b) count1++;
+        for (auto &e : masks2)
+            for (auto &m : e)
+                for (auto b : m) if (b) count1++;
+
+        int difference = abs(count0 - count1);
+        if (difference > maxDiff)maxDiff = difference;
+    }
 
     double dCnts[12] = {0.};
     for (int i = 0; i < 12; i++)
@@ -572,37 +590,13 @@ bool testinternal::testFive(QString &outString)
 
     out << "TREvoSim expects all above to be between 1.25 and 1.31 and returned " << flagString << "\n";
 
-    if (theMainWindow) theMainWindow->setStatus("Doing environment mutation tests with matching peaks");
 
-    //Count the number of ones - this may change if we do not match peaks
-    int maxDiff = 0;
-    int minDiff = 0;
-
-    for (int i = 0; i < 10000; i++)
+    if (maxDiff == 0)
     {
-        if (theMainWindow) theMainWindow->setProgressBar(i);
-        masks = y.playingFields[0]->masks;
-        masks2 =  y.playingFields[1]->masks;
-        y.mutateEnvironment();
-
-        for (int k = 0; k < masks[0][0].length(); k++)
-        {
-            //Count the differences - i.e. the number of mutations
-            for (int j = 0; j < 3; j++) if (y.playingFields[0]->masks[0][j][k] != masks[0][j][k])cnts[j]++;
-            for (int j = 0; j < 3; j++) if (y.playingFields[0]->masks[1][j][k] != masks[1][j][k])cnts[j + 3]++;
-            for (int j = 0; j < 3; j++) if (y.playingFields[1]->masks[0][j][k] != masks2[0][j][k])cnts[j + 6]++;
-            for (int j = 0; j < 3; j++) if (y.playingFields[1]->masks[1][j][k] != masks2[1][j][k])cnts[j + 9]++;
-        }
-
-        int count0 = 0;
-        //Now count the ones
-        for (auto p : std::as_const(y.playingFields))
-            for (auto &e : p->masks)
-                for (auto &m : e)
-                    for (auto b : m) if (b) count0++;
+        testFlag = false;
+        out << "Fail at ones count with matching peaks off";
     }
 
-    if (theMainWindow) theMainWindow->hideProgressBar();
 
     //Repeat this test with matching peaks, which should equate to the same number, but only do two mutations at once, resulting in the same number of ones
     simSettings.matchFitnessPeaks = true;
@@ -613,6 +607,8 @@ bool testinternal::testFive(QString &outString)
 
     //Reset counts
     for (auto &i : cnts) i = 0;
+    maxDiff = 0;
+
     if (theMainWindow) theMainWindow->setStatus("Doing environment mutation tests with matching peaks.");
 
     for (int i = 0; i < 10000; i++)
@@ -622,6 +618,7 @@ bool testinternal::testFive(QString &outString)
         masks2 = z.playingFields[1]->masks;
         z.mutateEnvironment();
 
+        //Calculate rates
         for (int k = 0; k < masks[0][0].length(); k++)
         {
             for (int j = 0; j < 3; j++) if (z.playingFields[0]->masks[0][j][k] != masks[0][j][k])cnts[j]++;
@@ -629,6 +626,24 @@ bool testinternal::testFive(QString &outString)
             for (int j = 0; j < 3; j++) if (z.playingFields[1]->masks[0][j][k] != masks2[0][j][k])cnts[j + 6]++;
             for (int j = 0; j < 3; j++) if (z.playingFields[1]->masks[1][j][k] != masks2[1][j][k])cnts[j + 9]++;
         }
+
+        //Now count the ones
+        int count0 = 0;
+        for (auto p : std::as_const(z.playingFields))
+            for (auto &e : p->masks)
+                for (auto &m : e)
+                    for (auto b : m) if (b) count0++;
+
+        int count1 = 0;
+        for (auto &e : masks)
+            for (auto &m : e)
+                for (auto b : m) if (b) count1++;
+        for (auto &e : masks2)
+            for (auto &m : e)
+                for (auto b : m) if (b) count1++;
+
+        int difference = abs(count0 - count1);
+        if (difference > maxDiff)maxDiff = difference;
     }
 
     if (theMainWindow) theMainWindow->hideProgressBar();
@@ -650,6 +665,18 @@ bool testinternal::testFive(QString &outString)
     flagString = testFlag ? "true" : "false";
 
     out << "TREvoSim expects all above to be between 1.25 and 1.31 and returned " << flagString << "\n";
+
+    //Here the one count should be the same
+    if (maxDiff != 0)
+    {
+        testFlag = false;
+        out << "Fail at ones count with matching peaks on";
+    }
+    else
+    {
+        out << "TREvoSim has also counted the number of ones before and after mutation process - these should be identical when matching peaks is enabled, and this is the case.";
+    }
+
 
     if (testFlag) out << "\nMutation tests passed.\n";
 
