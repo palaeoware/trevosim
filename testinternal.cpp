@@ -2425,7 +2425,7 @@ bool testinternal::testNineteen(QString &outString)
 
     if (theMainWindow)
     {
-        theMainWindow->addProgressBar(0, 24);
+        theMainWindow->addProgressBar(0, 27);
         theMainWindow->setStatus("Testing match peaks");
         theMainWindow->resizeGrid(1, simSettings.genomeSize);
     }
@@ -2474,13 +2474,24 @@ bool testinternal::testNineteen(QString &outString)
         simSettings.environmentNumber = j;
         simulation x(0, &simSettings, &error, theMainWindow);
         if (error) return false;
-        out << "Number of environments is " << j << "\n";
+        out << "\nNumber of environments is " << j << "\n";
         //Send count peak for each environment
         for (int k = 0; k < j; k++)
         {
             int minFitness = x.countPeaks(simSettings.genomeSize, -1, k);
-            if (!bestFitnesses.contains(minFitness ))bestFitnesses.append(minFitness);
+            if (!bestFitnesses.contains(minFitness))bestFitnesses.append(minFitness);
             out << "Testing environment " << k << ". Best fitness for this environment is " << minFitness << "\n";
+            count++;
+            if (theMainWindow) theMainWindow->setProgressBar(count);
+        }
+        out << "Now mutating environment, and repeating the above: all peaks should still match!\n";
+        x.mutateEnvironment();
+
+        for (int k = 0; k < j; k++)
+        {
+            int minFitness = x.countPeaks(simSettings.genomeSize, -1, k);
+            if (!bestFitnesses.contains(minFitness))bestFitnesses.append(minFitness);
+            out << "Testing mutated environment " << k << ". Best fitness for this environment is " << minFitness << "\n";
             count++;
             if (theMainWindow) theMainWindow->setProgressBar(count);
         }
@@ -2498,6 +2509,7 @@ bool testinternal::testNineteen(QString &outString)
     {
         out << "\nIn the above lists there should be no different values of fitness across repeat, and there are none - this part of the test passes.\n\n";
     }
+
 
     simulationVariables simSettingsReset;
     if (theMainWindow)
