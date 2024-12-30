@@ -469,9 +469,12 @@ bool testinternal::testFive(QString &outString)
     QTextStream out(&outString);
     out << "Testing mutation rates.\n\n";
 
+    //How many times do we want to run these tests?
+    int replicates = 10000;
+
     if (theMainWindow)
     {
-        theMainWindow->addProgressBar(0, 10000);
+        theMainWindow->addProgressBar(0, replicates);
         theMainWindow->setStatus("Doing organism mutation tests");
     }
 
@@ -484,7 +487,7 @@ bool testinternal::testFive(QString &outString)
     Organism org1(simSettings.genomeSize, false);
     int cnt = 0;
 
-    for (int j = 0; j < 10000; j++)
+    for (int j = 0; j < replicates; j++)
     {
         if (theMainWindow) theMainWindow->setProgressBar(j);
         org1.initialise(simSettings.genomeSize);
@@ -494,7 +497,7 @@ bool testinternal::testFive(QString &outString)
         for (int i = 0; i < org1.genome.length(); i++)if (org1.genome[i] != org2.genome[i]) cnt++;
     }
 
-    double mean = static_cast<double>(cnt) / 10000;
+    double mean = static_cast<double>(cnt) / static_cast<double>(replicates);
     if (mean < 1.25 || mean > 1.31) testFlag = false;
     QString flagString = testFlag ? "true" : "false";
     out << "Ran 10000 iterations on a 128 bit organism. At a rate of " << simSettings.organismMutationRate << " mutation per hundred characters per iteration this resulted in a mean of ";
@@ -505,7 +508,7 @@ bool testinternal::testFive(QString &outString)
     Organism org3(simSettings.genomeSize, false);
     cnt = 0;
 
-    for (int j = 0; j < 10000; j++)
+    for (int j = 0; j < replicates; j++)
     {
         if (theMainWindow) theMainWindow->setProgressBar(j);
         org3.initialise(simSettings.genomeSize);
@@ -515,11 +518,12 @@ bool testinternal::testFive(QString &outString)
         for (int i = 0; i < org3.genome.length(); i++) if (org3.genome[i] != org4.genome[i]) cnt++;
     }
 
-    mean = static_cast<double>(cnt) / 10000;
+    mean = static_cast<double>(cnt) / static_cast<double>(replicates);
     if (mean < 2.5 || mean > 2.62) testFlag = false;
     flagString = testFlag ? "true" : "false";
     out << "Ran 10000 iterations on a 128 bit organism. At a rate of " << simSettings.organismMutationRate << " mutations per hundred characters per iteration this resulted in a mean of ";
-    out << mean << " mutations. TREvoSim expects this to be between 2.5 and 2.62 and returned " << flagString << "\n";
+    out << mean << " mutations. TREvoSim expects this to be between 2.5 and 2.62 and returned " << flagString;
+    out << " (Note that due to the possibility of multiple hits on a single site, we will expect this to be marginally smaller than the expected mean).\n";
 
     if (theMainWindow) theMainWindow->setStatus("Doing environment mutation tests without mathcing peaks.");
     out << "Now testing environment mutation across two playing fields (mode independent), and two environments for each. Same test for each as above. \nPlaying field 1:\nEnvironment 1:\t";
@@ -536,7 +540,7 @@ bool testinternal::testFive(QString &outString)
 
     //Count the number of ones - this may change if we do not match peaks
     int maxDiff = 0;
-    for (int i = 0; i < 10000; i++)
+    for (int i = 0; i < replicates; i++)
     {
         if (theMainWindow) theMainWindow->setProgressBar(i);
         masks = y.playingFields[0]->masks;
@@ -574,7 +578,7 @@ bool testinternal::testFive(QString &outString)
     double dCnts[12] = {0.};
     for (int i = 0; i < 12; i++)
     {
-        dCnts[i] = (static_cast<double>(cnts[i]) / 10000.);
+        dCnts[i] = (static_cast<double>(cnts[i]) / static_cast<double>(replicates));
         if (dCnts[i] < 1.25 || dCnts[i] > 1.31) testFlag = false;
 
         if (i == 3) out << "Environment 2: ";
@@ -590,7 +594,6 @@ bool testinternal::testFive(QString &outString)
 
     out << "TREvoSim expects all above to be between 1.25 and 1.31 and returned " << flagString << "\n";
 
-
     if (maxDiff == 0)
     {
         testFlag = false;
@@ -600,10 +603,12 @@ bool testinternal::testFive(QString &outString)
 
     //Repeat this test with matching peaks, which should equate to the same number, but only do two mutations at once, resulting in the same number of ones
     simSettings.matchFitnessPeaks = true;
+    //Double the mutation rate as this provides more chance for mutations (given the halved value above)
+    simSettings.environmentMutationRate = 2.;
     simulation z(0, &simSettings, &error, theMainWindow);
     if (error) return false;
 
-    out << "Now testing environment mutation across two playing fields (mode independent), and two environments for each, with matching peaks turned on. Same test for each as above. \nPlaying field 1:\nEnvironment 1:\t";
+    out << "Now testing environment mutation across two playing fields (mode independent), and two environments for each, with double the mutation rate, and matching peaks turned on. Same test for each as above. \nPlaying field 1:\nEnvironment 1:\t";
 
     //Reset counts
     for (auto &i : cnts) i = 0;
@@ -611,7 +616,7 @@ bool testinternal::testFive(QString &outString)
 
     if (theMainWindow) theMainWindow->setStatus("Doing environment mutation tests with matching peaks.");
 
-    for (int i = 0; i < 10000; i++)
+    for (int i = 0; i < replicates; i++)
     {
         if (theMainWindow) theMainWindow->setProgressBar(i);
         masks = z.playingFields[0]->masks;
@@ -650,8 +655,8 @@ bool testinternal::testFive(QString &outString)
 
     for (int i = 0; i < 12; i++)
     {
-        dCnts[i] = (static_cast<double>(cnts[i]) / 10000.);
-        if (dCnts[i] < 1.25 || dCnts[i] > 1.31) testFlag = false;
+        dCnts[i] = (static_cast<double>(cnts[i]) / static_cast<double>(replicates));
+        if (dCnts[i] < (1.25 * 2) || dCnts[i] > (1.31 * 2)) testFlag = false;
 
         if (i == 3) out << "Environment 2: ";
         if (i == 6) out << "Playing field 2:\nEnvironment 1: ";
@@ -664,7 +669,7 @@ bool testinternal::testFive(QString &outString)
 
     flagString = testFlag ? "true" : "false";
 
-    out << "TREvoSim expects all above to be between 1.25 and 1.31 and returned " << flagString << "\n";
+    out << "TREvoSim expects all above to be between 2.5 and 2.62 and returned " << flagString << "\n";
 
     //Here the one count should be the same
     if (maxDiff != 0)

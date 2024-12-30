@@ -1019,10 +1019,8 @@ void simulation::mutateEnvironment()
     double numberEnvironmentMutationsFractional = modf(numberEnvironmentMutationsDouble, &numberEnvironmentMutationsIntegral);
     int numberEnvironmentMutationsInteger = (static_cast<int>(numberEnvironmentMutationsIntegral));
 
-    //Due to rounding the above always results in fewer mutations than would be expected - the -150 below equates to an average of 1 mutation per 100 base pairs
-    if (static_cast<double>(QRandomGenerator::global()->generate()) < (numberEnvironmentMutationsFractional * static_cast<double>(maxRand - 150))) numberEnvironmentMutationsInteger++;
-
-    // HERE - we need to flip a zero and a one if there is matching peaks on
+    //note that due to saturation / multiple hits on one site, the number of recoreded mutations in e.g. our tests may sneak in under the expected value
+    if (static_cast<double>(QRandomGenerator::global()->generate()) < (numberEnvironmentMutationsFractional * static_cast<double>(maxRand))) numberEnvironmentMutationsInteger++;
 
     //Mutate irrespective of playing field mode settings if there are multiple ones
     for (auto pf : std::as_const(playingFields))
@@ -1030,6 +1028,7 @@ void simulation::mutateEnvironment()
             for (int j = 0; j < simSettings->environmentNumber; j++)
                 for (int i = 0; i < runMaskNumber; i++)
                 {
+                    //Treat matching peaks and non matching peaks separarely
                     if (simSettings->matchFitnessPeaks)
                     {
                         //Scale random number to genome size - in this instance I need to swap two ones
@@ -1050,6 +1049,7 @@ void simulation::mutateEnvironment()
                         pf->masks[j][i][mutationPosition1] = !pf->masks[j][i][mutationPosition1];
                         pf->masks[j][i][mutationPosition2] = !pf->masks[j][i][mutationPosition2];
                     }
+                    //If not doing maching peaks, just flip one bit
                     else
                     {
                         //Scale random number to genome size
