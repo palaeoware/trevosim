@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
     // Start GUI version...
     if (argc < 2)
     {
+
 #if defined( _WIN32 )
         // hide console window
         ::ShowWindow( ::GetConsoleWindow(), SW_HIDE );

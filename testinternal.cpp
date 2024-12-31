@@ -2526,7 +2526,48 @@ bool testinternal::testTwenty(QString &outString)
     bool testFlag = true;
     QTextStream out(&outString);
 
-    //testcopyofgenomehere - and also == operator! Anything else in organism?
+    int genomeSize = 50;
+
+    Organism newOrganism(genomeSize, true);
+    for (auto &b : newOrganism.genome)
+        if (QRandomGenerator::global()->bounded(1) == 1) b = true;
+        else b = false;
+
+    for (int i = 0; i < 2; i++)
+    {
+        QList <bool> exampleGenome(genomeSize);
+        for (auto &b : exampleGenome)
+            if (QRandomGenerator::global()->bounded(1) == 1) b = true;
+            else b = false;
+        newOrganism.parentGenomes.append(exampleGenome);
+    }
+
+    for (auto &b : newOrganism.stochasticGenome)
+        if (QRandomGenerator::global()->bounded(1) == 1) b = true;
+        else b = false;
+
+
+
+
+    /*
+
+    // Copy all attributes
+    genome = O.genome;
+    parentGenomes = O.parentGenomes;
+    if (stochasticLayer) stochasticGenome = O.stochasticGenome;
+    speciesID = O.speciesID;
+    parentSpeciesID = O.parentSpeciesID;
+    fitness = O.fitness;
+    born = O.born;
+    extinct = O.extinct;
+    cladogenesis = O.cladogenesis;
+    ecosystemEngineer = O.ecosystemEngineer;
+
+    */
+
+    //testcopyofgenome here - and also == operator! Anything else in organism?
 
     return testFlag;
 }
+
+//When adding more tests, be sure to include these in testsuite.cpp

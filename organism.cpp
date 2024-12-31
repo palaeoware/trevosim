@@ -85,6 +85,7 @@ void Organism::operator = (const Organism &O)
     // Copy all attributes
     genome = O.genome;
     parentGenomes = O.parentGenomes;
+    stochasticLayer = O.stochasticLayer;
     if (stochasticLayer) stochasticGenome = O.stochasticGenome;
     speciesID = O.speciesID;
     parentSpeciesID = O.parentSpeciesID;

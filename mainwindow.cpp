@@ -244,6 +244,12 @@ void MainWindow::runFromCommandLine(QHash<QString, QString> parsedOptions)
     //If we have no file, let's load defaults rather than whatever was last used in a run, as this makes more sense
     else
     {
+        //But let's save our current settings first so the command line doesn't change the GUI behaviour of allowing these to persist
+//        QDir settingsPath;
+        //      settingsPath.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation));
+        //    settingsFileString = (QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + "/" + QString(PRODUCTNAME) + "_settings.xml");
+        //  save();
+
         defaultSettings();
         qInfo() << "No file was specified, so TREvoSim will run with the default settings, which are as follows:";
         qInfo() << simSettings->printSettings();
