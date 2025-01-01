@@ -2546,9 +2546,13 @@ bool testinternal::testTwenty(QString &outString)
         if (QRandomGenerator::global()->bounded(1) == 1) b = true;
         else b = false;
 
-
-
-
+    newOrganism.speciesID = QRandomGenerator::global()->bounded(256);
+    newOrganism.parentSpeciesID = QRandomGenerator::global()->bounded(256);
+    newOrganism.fitness = QRandomGenerator::global()->bounded(256);
+    newOrganism.born = QRandomGenerator::global()->bounded(256);
+    newOrganism.extinct = QRandomGenerator::global()->bounded(256);
+    newOrganism.cladogenesis = QRandomGenerator::global()->bounded(256);
+    newOrganism.ecosystemEngineer = true;
     /*
 
     // Copy all attributes

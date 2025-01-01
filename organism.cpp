@@ -94,6 +94,7 @@ void Organism::operator = (const Organism &O)
     extinct = O.extinct;
     cladogenesis = O.cladogenesis;
     ecosystemEngineer = O.ecosystemEngineer;
+    children = O.children;
 }
 
 bool Organism::operator == (const Organism &O)
