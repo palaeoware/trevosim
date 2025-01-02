@@ -1023,17 +1023,45 @@ void simulation::mutateEnvironment()
     if (static_cast<double>(QRandomGenerator::global()->generate()) < (numberEnvironmentMutationsFractional * static_cast<double>(maxRand))) numberEnvironmentMutationsInteger++;
 
     //Mutate irrespective of playing field mode settings if there are multiple ones
-    for (auto pf : std::as_const(playingFields))
+    for (auto pf : std::as_const(playingFields)) // Treat playing fields separately
         for (int k = 0; k < numberEnvironmentMutationsInteger; k++)
-            for (int j = 0; j < simSettings->environmentNumber; j++)
+            for (int j = 0; j < simSettings->environmentNumber; j++) //Treat environments separately
+                //If not matching peaks, we need to do this for n masks and treat each eindependently to provide the rate given in the docs, which is per basepair
+                //If we are matching peaks, even though we are considering mutations across masks within each environment, we still need to do this n times to provide the same rate
                 for (int i = 0; i < runMaskNumber; i++)
                 {
-                    //Treat matching peaks and non matching peaks separarely
+                    //Treat matching peaks and non matching peaks separarely - i here is just number of repeats
                     if (simSettings->matchFitnessPeaks)
                     {
+                        //If we are matching peaks, it's best to think of bit positions as columns. We want to shuffle around columns in the 'x' direction to achieve two bit changes (hence the half rate above - it is impossible to do this without swapping two bits)
+                        //The way this is organised, we want to do this within each environment
+                        //reminder: masks[environment #][mask #][bit #]
+
+                        //First create a count of the number of ones, column-wise
+                        int oneCount[runFitnessSize];
+                        for (int l = 0; l < runFitnessSize; l++)
+                        {
+                            int count = 0;
+                            for (int m = 0; m < runMaskNumber; m++)
+                            {
+                                if (pf->masks[j][m][l]) count++;
+                            }
+                            oneCount[l] = count;
+                        }
+
+                        QList <int> pairOne;
+                        QList <int> pairTwo;
+                        for (int l = 0; l < runFitnessSize; l++)
+                            for (int m = l + 1; m < runFitnessSize; m++)
+                                if (abs(oneCount[l] - oneCount[m]) == 1)
+                                {
+                                    pairOne.append(l);
+                                    pairTwo.append(m);
+                                }
+
                         //Scale random number to genome size - in this instance I need to swap two ones
                         //I think in most settings this stochastic approach is likely to be faster than mapping zeros and ones and swapping that way
-                        int mutationPosition1 = QRandomGenerator::global()->bounded(runFitnessSize);
+                        /*int mutationPosition1 = QRandomGenerator::global()->bounded(runFitnessSize);
                         int mutationPosition2 = QRandomGenerator::global()->bounded(runFitnessSize);
                         int cnt = 0;
                         while (pf->masks[j][i][mutationPosition2] == pf->masks[j][i][mutationPosition1])
@@ -1048,8 +1076,9 @@ void simulation::mutateEnvironment()
                         }
                         pf->masks[j][i][mutationPosition1] = !pf->masks[j][i][mutationPosition1];
                         pf->masks[j][i][mutationPosition2] = !pf->masks[j][i][mutationPosition2];
+                        */
                     }
-                    //If not doing maching peaks, just flip one bit
+                    //If not doing maching peaks, just flip one bit, and i is our environment and mask number
                     else
                     {
                         //Scale random number to genome size
