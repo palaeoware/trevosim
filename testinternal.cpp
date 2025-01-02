@@ -2418,7 +2418,7 @@ bool testinternal::testNineteen(QString &outString)
     simulationVariables simSettings;
     //First check behviour when it is not enabled
     simSettings.matchFitnessPeaks = false;
-    simSettings.genomeSize = 5;
+    simSettings.genomeSize = 8;
     simSettings.fitnessSize = simSettings.genomeSize;
     simSettings.speciesSelectSize = simSettings.genomeSize;
     //Resize grid to avoid crashes on writing to GUI
@@ -2468,38 +2468,50 @@ bool testinternal::testNineteen(QString &outString)
     out << "\nMatch fitness peaks is now on.\n\n";
     simSettings.matchFitnessPeaks = true;
     identical.clear();
-
-    for (int j = 3; j < 6; j++)
-    {
-        QList <int> bestFitnesses;
-        simSettings.environmentNumber = j;
-        simulation x(0, &simSettings, &error, theMainWindow);
-        if (error) return false;
-        out << "\nNumber of environments is " << j << "\n";
-        //Send count peak for each environment
-        for (int k = 0; k < j; k++)
+    for (int x = 0; x < 50; x++)
+        for (int j = 3; j < 6; j++)
         {
-            int minFitness = x.countPeaks(simSettings.genomeSize, -1, k);
-            if (!bestFitnesses.contains(minFitness))bestFitnesses.append(minFitness);
-            out << "Testing environment " << k << ". Best fitness for this environment is " << minFitness << "\n";
-            count++;
-            if (theMainWindow) theMainWindow->setProgressBar(count);
-        }
-        out << "Now mutating environment, and repeating the above: all peaks should still match!\n";
-        x.mutateEnvironment();
+            QString errorString;
+            QTextStream outError(&errorString);
 
-        for (int k = 0; k < j; k++)
-        {
-            int minFitness = x.countPeaks(simSettings.genomeSize, -1, k);
-            if (!bestFitnesses.contains(minFitness))bestFitnesses.append(minFitness);
-            out << "Testing mutated environment " << k << ". Best fitness for this environment is " << minFitness << "\n";
-            count++;
-            if (theMainWindow) theMainWindow->setProgressBar(count);
-        }
+            QList <int> bestFitnesses;
+            simSettings.environmentNumber = j;
+            simulation x(0, &simSettings, &error, theMainWindow);
+            if (error) return false;
+            out << "\nNumber of environments is " << j << "\n";
+            //Send count peak for each environment
+            for (int k = 0; k < j; k++)
+            {
+                int minFitness = x.countPeaks(simSettings.genomeSize, -1, k);
+                if (!bestFitnesses.contains(minFitness))bestFitnesses.append(minFitness);
+                out << "Testing environment " << k << ". Best fitness for this environment is " << minFitness << "\n";
+                count++;
+                if (theMainWindow) theMainWindow->setProgressBar(count);
+            }
+            out << "Now mutating environment, and repeating the above: all peaks should still match!\n";
+            outError << x.printMasks(x.playingFields);
+            x.mutateEnvironment();
 
-        if (bestFitnesses.count() > 1) identical.append(false);
-        else identical.append(true);
-    }
+            for (int k = 0; k < j; k++)
+            {
+                int minFitness = x.countPeaks(simSettings.genomeSize, -1, k);
+                if (!bestFitnesses.contains(minFitness))bestFitnesses.append(minFitness);
+                out << "Testing mutated environment " << k << ". Best fitness for this environment is " << minFitness << "\n";
+                count++;
+                if (theMainWindow) theMainWindow->setProgressBar(count);
+            }
+
+            if (bestFitnesses.count() > 1)
+            {
+                identical.append(false);
+                out << "Test failed at j " << j << "";
+                out << "Before mutation, masks were: \n\n";
+                out << errorString;
+                out << "Now they are: ";
+                out << x.printMasks(x.playingFields);
+            }
+            else identical.append(true);
+        }
 
     if (identical.contains(false))
     {
@@ -2510,7 +2522,6 @@ bool testinternal::testNineteen(QString &outString)
     {
         out << "\nIn the above lists there should be no different values of fitness across repeat, and there are none - this part of the test passes.\n\n";
     }
-
 
     simulationVariables simSettingsReset;
     if (theMainWindow)
