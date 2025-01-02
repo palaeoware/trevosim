@@ -30,7 +30,7 @@ public:
 
     //Need to record this for terminal branch lengths - for any terminal, branch length is iterations, minus the point of last cladogenesis.
     int cladogenesis;
-    //To write tree recursively
+    //To write tree recursively - this is only used in the species list organisms, not in those in the playing fields
     QList<int> children;
 
     void operator = (const Organism &O);

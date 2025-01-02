@@ -31,6 +31,7 @@ testinternal::testinternal(MainWindow *theMainWindowCon)
     testList.insert(17, "Ecosystem engineers");
     testList.insert(18, "Playing field mixing");
     testList.insert(19, "Match Peaks");
+    testList.insert(20, "Organism operators");
 }
 
 QString testinternal::testDescription(int testNumber)
@@ -2072,13 +2073,13 @@ bool testinternal::testSixteen(QString &outString)
     if (error) return false;
     QString tree(x.printNewickWithBranchLengths(0, speciesList, true));
     tree.replace("S_0", "Species_");
-    out << "Tree from R:\n((Species_1:8,((Species_6:10,Species_4:7):9,(((Species_8:7,Species_5:10):6,Species_7:8):7,Species_3:6):2):6):10,Species_2:9);\nPrinted using function:\n" <<
+    out << "Tree from R:\n((Species_01:8,((Species_06:10,Species_04:7):9,(((Species_08:7,Species_05:10):6,Species_07:8):7,Species_03:6):2):6):10,Species_02:9);\nPrinted using function:\n" <<
         tree << ";\n";
 
     out << "\nTo check these are idential, paste the following into R (tree2 is printed using function):\n\n";
 
     out << "library(ape);\n";
-    out << "tree&lt;-read.tree(text = \"((Species_1:8,((Species_6:10,Species_4:7):9,(((Species_8:7,Species_5:10):6,Species_7:8):7,Species_3:6):2):6):10,Species_2:9);\")\n";
+    out << "tree&lt;-read.tree(text = \"((Species_01:8,((Species_06:10,Species_04:7):9,(((Species_08:7,Species_05:10):6,Species_07:8):7,Species_03:6):2):6):10,Species_02:9);\")\n";
     out << "tree2&lt;-read.tree(text = \"" << tree << ";\");\n";
     out << "plot(tree);\n";
     out << "edgelabels(tree$edge.length, bg = \"black\", col = \"white\", font = 2);\n";
@@ -2526,6 +2527,8 @@ bool testinternal::testTwenty(QString &outString)
     bool testFlag = true;
     QTextStream out(&outString);
 
+    out << "Testing organism operators - creatng new organism of genome size 50.\n";
+
     int genomeSize = 50;
 
     Organism newOrganism(genomeSize, true);
@@ -2553,23 +2556,34 @@ bool testinternal::testTwenty(QString &outString)
     newOrganism.extinct = QRandomGenerator::global()->bounded(256);
     newOrganism.cladogenesis = QRandomGenerator::global()->bounded(256);
     newOrganism.ecosystemEngineer = true;
-    /*
 
-    // Copy all attributes
-    genome = O.genome;
-    parentGenomes = O.parentGenomes;
-    if (stochasticLayer) stochasticGenome = O.stochasticGenome;
-    speciesID = O.speciesID;
-    parentSpeciesID = O.parentSpeciesID;
-    fitness = O.fitness;
-    born = O.born;
-    extinct = O.extinct;
-    cladogenesis = O.cladogenesis;
-    ecosystemEngineer = O.ecosystemEngineer;
+    Organism newOrganism2(genomeSize, true);
 
-    */
-
-    //testcopyofgenome here - and also == operator! Anything else in organism?
+    if (newOrganism == newOrganism2)
+    {
+        testFlag = false;
+        out << "Fail at equality operator - 1.";
+    }
+    else
+    {
+        out << "Have tested equality operator on different organisms, and this report false as expected.\n";
+    }
+    newOrganism2 = newOrganism;
+    if (!(newOrganism == newOrganism2))
+    {
+        testFlag = false;
+        out << "Fail at equality operator - 2.";
+    }
+    else
+    {
+        out << "Have tested equality operator on the same organisms, and this report true as expected.\n";
+    }
+    newOrganism.speciesID++;
+    if (newOrganism == newOrganism2)
+    {
+        testFlag = false;
+        out << "Fail at equality operator - 3.";
+    }
 
     return testFlag;
 }
