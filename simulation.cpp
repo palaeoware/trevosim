@@ -1049,6 +1049,7 @@ void simulation::mutateEnvironment()
                             oneCount[l] = count;
                         }
 
+                        //Create lists of those columns separated by one bit
                         QList <int> pairOne;
                         QList <int> pairTwo;
                         for (int l = 0; l < runFitnessSize; l++)
@@ -1058,6 +1059,23 @@ void simulation::mutateEnvironment()
                                     pairOne.append(l);
                                     pairTwo.append(m);
                                 }
+                        //Add warning if there are no columns to swap: with any decent size genome, I don't expect this to happen all that much
+                        if (pairOne.length() == 0)
+                        {
+                            warning("Oops", "There has been an error at mutating the environment with matching peaks. Returning with no mutations made.");
+                            return;
+                        }
+
+                        //Otherwise swap one pair of columns
+                        int chosenPair = QRandomGenerator::global()->bounded(pairOne.length());
+                        int swap1 = pairOne[chosenPair];
+                        int swap2 = pairTwo[chosenPair];
+                        for (int m = 0; m < runMaskNumber; m++)
+                        {
+                            bool storeBit = pf->masks[j][m][swap1];
+                            pf->masks[j][m][swap1] = pf->masks[j][m][swap2];
+                            pf->masks[j][m][swap2] = storeBit;
+                        }
 
                         //Scale random number to genome size - in this instance I need to swap two ones
                         //I think in most settings this stochastic approach is likely to be faster than mapping zeros and ones and swapping that way
