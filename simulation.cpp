@@ -1006,8 +1006,14 @@ void simulation::mutateOrganism(Organism &progeny, const playingFieldStructure *
 
 void simulation::mutateEnvironment()
 {
-    //If we are matching peaks, we want the mutation rate to be halved because we will need to switch a zero to a one and one to a zero or vice versa.
+    //Set our mutation rate
     double localMutationRate = simSettings->environmentMutationRate;
+
+    //Create lists of those columns separated by one bit which will be used if we are matching peaks
+    QList <int> pairOne;
+    QList <int> pairTwo;
+
+    //If we are matching peaks, we want the mutation rate to be halved because we will need to switch a zero to a one and one to a zero or vice versa.
     if (simSettings->matchFitnessPeaks) localMutationRate /= 2;
 
     //Calculate mutation # as previously, and using same variables for ease - this is the number of mutations total for each mask
@@ -1024,8 +1030,41 @@ void simulation::mutateEnvironment()
 
     //Mutate irrespective of playing field mode settings if there are multiple ones
     for (auto pf : std::as_const(playingFields)) // Treat playing fields separately
-        for (int k = 0; k < numberEnvironmentMutationsInteger; k++)
+        for (int k = 0; k < numberEnvironmentMutationsInteger; k++) //How many mutations?
             for (int j = 0; j < simSettings->environmentNumber; j++) //Treat environments separately
+            {
+                //If we are matching peaks, it's best to think of bit positions as columns. We want to shuffle around columns in the 'x' direction to achieve two bit changes (hence the half rate above - it is impossible to do this without swapping two bits)
+                //The way this is organised, we want to do this within each environment
+                //reminder: masks[environment #][mask #][bit #]
+                if (simSettings->matchFitnessPeaks)
+                {
+                    //First create a count of the number of ones, column-wise
+                    int oneCount[runFitnessSize];
+                    for (int l = 0; l < runFitnessSize; l++)
+                    {
+                        int count = 0;
+                        for (int m = 0; m < runMaskNumber; m++)
+                        {
+                            if (pf->masks[j][m][l]) count++;
+                        }
+                        oneCount[l] = count;
+                    }
+
+                    //Then do a pair wise comparison of all columns to select those that are one bit apart
+                    for (int l = 0; l < runFitnessSize; l++)
+                        for (int m = l + 1; m < runFitnessSize; m++)
+                            if (abs(oneCount[l] - oneCount[m]) == 1)
+                            {
+                                pairOne.append(l);
+                                pairTwo.append(m);
+                            }
+                    //Add warning if there are no columns to swap: with any decent size genome, I don't expect this to happen all that much
+                    if (pairOne.length() == 0)
+                    {
+                        warning("Oops", "There has been an error at mutating the environment with matching peaks. Returning with no mutations made.");
+                        return;
+                    }
+                }
                 //If not matching peaks, we need to do this for n masks and treat each eindependently to provide the rate given in the docs, which is per basepair
                 //If we are matching peaks, even though we are considering mutations across masks within each environment, we still need to do this n times to provide the same rate
                 for (int i = 0; i < runMaskNumber; i++)
@@ -1033,40 +1072,7 @@ void simulation::mutateEnvironment()
                     //Treat matching peaks and non matching peaks separarely - i here is just number of repeats
                     if (simSettings->matchFitnessPeaks)
                     {
-                        //If we are matching peaks, it's best to think of bit positions as columns. We want to shuffle around columns in the 'x' direction to achieve two bit changes (hence the half rate above - it is impossible to do this without swapping two bits)
-                        //The way this is organised, we want to do this within each environment
-                        //reminder: masks[environment #][mask #][bit #]
-
-                        //First create a count of the number of ones, column-wise
-                        int oneCount[runFitnessSize];
-                        for (int l = 0; l < runFitnessSize; l++)
-                        {
-                            int count = 0;
-                            for (int m = 0; m < runMaskNumber; m++)
-                            {
-                                if (pf->masks[j][m][l]) count++;
-                            }
-                            oneCount[l] = count;
-                        }
-
-                        //Create lists of those columns separated by one bit
-                        QList <int> pairOne;
-                        QList <int> pairTwo;
-                        for (int l = 0; l < runFitnessSize; l++)
-                            for (int m = l + 1; m < runFitnessSize; m++)
-                                if (abs(oneCount[l] - oneCount[m]) == 1)
-                                {
-                                    pairOne.append(l);
-                                    pairTwo.append(m);
-                                }
-                        //Add warning if there are no columns to swap: with any decent size genome, I don't expect this to happen all that much
-                        if (pairOne.length() == 0)
-                        {
-                            warning("Oops", "There has been an error at mutating the environment with matching peaks. Returning with no mutations made.");
-                            return;
-                        }
-
-                        //Otherwise swap one pair of columns
+                        //Swap one pair of columns
                         int chosenPair = QRandomGenerator::global()->bounded(pairOne.length());
                         int swap1 = pairOne[chosenPair];
                         int swap2 = pairTwo[chosenPair];
@@ -1076,25 +1082,6 @@ void simulation::mutateEnvironment()
                             pf->masks[j][m][swap1] = pf->masks[j][m][swap2];
                             pf->masks[j][m][swap2] = storeBit;
                         }
-
-                        //Scale random number to genome size - in this instance I need to swap two ones
-                        //I think in most settings this stochastic approach is likely to be faster than mapping zeros and ones and swapping that way
-                        /*int mutationPosition1 = QRandomGenerator::global()->bounded(runFitnessSize);
-                        int mutationPosition2 = QRandomGenerator::global()->bounded(runFitnessSize);
-                        int cnt = 0;
-                        while (pf->masks[j][i][mutationPosition2] == pf->masks[j][i][mutationPosition1])
-                        {
-                            mutationPosition2 = QRandomGenerator::global()->bounded(runFitnessSize);
-                            cnt++;
-                            if (cnt == 1000)
-                            {
-                                warning("Oops", "There has been an error at mutating the environment with matching peaks. Could the masks be all zeros or all ones? Returning with no mutations made.");
-                                return;
-                            }
-                        }
-                        pf->masks[j][i][mutationPosition1] = !pf->masks[j][i][mutationPosition1];
-                        pf->masks[j][i][mutationPosition2] = !pf->masks[j][i][mutationPosition2];
-                        */
                     }
                     //If not doing maching peaks, just flip one bit, and i is our environment and mask number
                     else
@@ -1104,6 +1091,7 @@ void simulation::mutateEnvironment()
                         pf->masks[j][i][mutationPosition] = !pf->masks[j][i][mutationPosition];
                     }
                 }
+            }
 
     //Copy between PFs if they are set to be identical
     if ( simSettings->playingfieldNumber > 1 && simSettings->playingfieldMasksMode == MASKS_MODE_IDENTICAL)

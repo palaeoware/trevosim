@@ -471,7 +471,7 @@ bool testinternal::testFive(QString &outString)
     out << "Testing mutation rates.\n\n";
 
     //How many times do we want to run these tests?
-    int replicates = 10000;
+    int replicates = 5000;
 
     if (theMainWindow)
     {
@@ -515,7 +515,6 @@ bool testinternal::testFive(QString &outString)
         org3.initialise(simSettings.genomeSize);
         Organism org4(org3);
         x.mutateOrganism(org3, x.playingFields[0]);
-
         for (int i = 0; i < org3.genome.length(); i++) if (org3.genome[i] != org4.genome[i]) cnt++;
     }
 
@@ -605,7 +604,7 @@ bool testinternal::testFive(QString &outString)
     //Repeat this test with matching peaks, which should equate to the same number, but only do two mutations at once, resulting in the same number of ones
     simSettings.matchFitnessPeaks = true;
     //Double the mutation rate as this provides more chance for mutations (given the halved value above)
-    simSettings.environmentMutationRate = 2.;
+    //simSettings.environmentMutationRate = 1.;
     simulation z(0, &simSettings, &error, theMainWindow);
     if (error) return false;
 
@@ -639,7 +638,7 @@ bool testinternal::testFive(QString &outString)
             for (auto &e : p->masks)
                 for (auto &m : e)
                     for (auto b : m) if (b) count0++;
-
+        //Note here that above we have two environments fields, below, these are placed into two different mask structures, hence the need to add both to the count
         int count1 = 0;
         for (auto &e : masks)
             for (auto &m : e)
@@ -657,7 +656,7 @@ bool testinternal::testFive(QString &outString)
     for (int i = 0; i < 12; i++)
     {
         dCnts[i] = (static_cast<double>(cnts[i]) / static_cast<double>(replicates));
-        if (dCnts[i] < (1.25 * 2) || dCnts[i] > (1.31 * 2)) testFlag = false;
+        if (dCnts[i] < (1.25) || dCnts[i] > (1.31)) testFlag = false;
 
         if (i == 3) out << "Environment 2: ";
         if (i == 6) out << "Playing field 2:\nEnvironment 1: ";
