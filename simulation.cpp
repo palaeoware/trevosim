@@ -1009,10 +1009,6 @@ void simulation::mutateEnvironment()
     //Set our mutation rate
     double localMutationRate = simSettings->environmentMutationRate;
 
-    //Create lists of those columns separated by one bit which will be used if we are matching peaks
-    QList <int> pairOne;
-    QList <int> pairTwo;
-
     //If we are matching peaks, we want the mutation rate to be halved because we will need to switch a zero to a one and one to a zero or vice versa.
     if (simSettings->matchFitnessPeaks) localMutationRate /= 2;
 
@@ -1033,31 +1029,30 @@ void simulation::mutateEnvironment()
         for (int k = 0; k < numberEnvironmentMutationsInteger; k++) //How many mutations?
             for (int j = 0; j < simSettings->environmentNumber; j++) //Treat environments separately
             {
+                //Create lists of those columns separated by one bit which will be used if we are matching peaks
+                QList <int> pairOne;
+                QList <int> pairTwo;
+
                 //If we are matching peaks, it's best to think of bit positions as columns. We want to shuffle around columns in the 'x' direction to achieve two bit changes (hence the half rate above - it is impossible to do this without swapping two bits)
                 //The way this is organised, we want to do this within each environment
                 //reminder: masks[environment #][mask #][bit #]
                 if (simSettings->matchFitnessPeaks)
                 {
-                    //First create a count of the number of ones, column-wise
-                    int oneCount[runFitnessSize];
-                    for (int l = 0; l < runFitnessSize; l++)
-                    {
-                        int count = 0;
-                        for (int m = 0; m < runMaskNumber; m++)
-                        {
-                            if (pf->masks[j][m][l]) count++;
-                        }
-                        oneCount[l] = count;
-                    }
-
-                    //Then do a pair wise comparison of all columns to select those that are one bit apart
+                    //Create a list of all columns that are one bit apart by doing an XOR on them and counting the ones in this
+                    //Do this through a pair wise comparison of all columns
                     for (int l = 0; l < runFitnessSize; l++)
                         for (int m = l + 1; m < runFitnessSize; m++)
-                            if (abs(oneCount[l] - oneCount[m]) == 1)
+                        {
+                            int count = 0;
+                            for (int n = 0; n < runMaskNumber; n++)
+                                if (pf->masks[j][n][l] != pf->masks[j][n][m]) count++;
+
+                            if (count == 1)
                             {
                                 pairOne.append(l);
                                 pairTwo.append(m);
                             }
+                        }
                     //Add warning if there are no columns to swap: with any decent size genome, I don't expect this to happen all that much
                     if (pairOne.length() == 0)
                     {

@@ -471,7 +471,7 @@ bool testinternal::testFive(QString &outString)
     out << "Testing mutation rates.\n\n";
 
     //How many times do we want to run these tests?
-    int replicates = 5000;
+    int replicates = 50000;
 
     if (theMainWindow)
     {
@@ -600,15 +600,13 @@ bool testinternal::testFive(QString &outString)
         out << "Fail at ones count with matching peaks off";
     }
 
-
     //Repeat this test with matching peaks, which should equate to the same number, but only do two mutations at once, resulting in the same number of ones
     simSettings.matchFitnessPeaks = true;
-    //Double the mutation rate as this provides more chance for mutations (given the halved value above)
-    //simSettings.environmentMutationRate = 1.;
+
     simulation z(0, &simSettings, &error, theMainWindow);
     if (error) return false;
 
-    out << "Now testing environment mutation across two playing fields (mode independent), and two environments for each, with double the mutation rate, and matching peaks turned on. Same test for each as above. \nPlaying field 1:\nEnvironment 1:\t";
+    out << "Now testing environment mutation across two playing fields (mode independent), and two environments for each, with matching peaks turned on. Same test for each as above. \nPlaying field 1:\nEnvironment 1:\t";
 
     //Reset counts
     for (auto &i : cnts) i = 0;
@@ -669,13 +667,13 @@ bool testinternal::testFive(QString &outString)
 
     flagString = testFlag ? "true" : "false";
 
-    out << "TREvoSim expects all above to be between 2.5 and 2.62 and returned " << flagString << "\n";
+    out << "TREvoSim expects all above to be between 1.25 and 1.32 and returned " << flagString << "\n";
 
     //Here the one count should be the same
     if (maxDiff != 0)
     {
         testFlag = false;
-        out << "Fail at ones count with matching peaks on";
+        out << "\n\n**Fail at ones count with matching peaks on**\n\n";
     }
     else
     {
