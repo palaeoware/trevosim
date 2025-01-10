@@ -1068,7 +1068,7 @@ void simulation::mutateEnvironment()
         for (auto pf : std::as_const(playingFields)) // Treat playing fields separately
             for (int k = 0; k < numberEnvironmentMutationsInteger; k++) //How many mutations?
                 for (int j = 0; j < simSettings->environmentNumber; j++) //Treat environments separately
-
+                    //If not matching peaks, we need to do this for n masks and treat each eindependently to provide the rate given in the docs, which is per basepair
                     for (int i = 0; i < runMaskNumber; i++)
                     {
                         //Scale random number to genome size
