@@ -1002,6 +1002,127 @@ void simulation::mutateOrganism(Organism &progeny, const playingFieldStructure *
     }
 }
 
+
+
+void simulation::mutateEnvironment()
+{
+    //Set our mutation rate
+    double localMutationRate = simSettings->environmentMutationRate;
+    //If we are matching peaks, we want the mutation rate to be halved because we will need to switch a zero to a one and one to a zero or vice versa.
+    //So every mutation is two bit changes
+    if (simSettings->matchFitnessPeaks) localMutationRate /= 2;
+
+    //As per docs, mutations are set per 100 bits in the genome - calculate this for each environment, as environments treated separately
+    //How many bits? Use run fitness size here because there are only environmental bits for the bits of the genome that contribute to fitness
+    int totalBitsPerEnvironment = runFitnessSize * runMaskNumber;
+
+    //Calculate mutation # as previously, and using same variables for ease - this is the number of mutations total for each mask
+    double numberEnvironmentMutationsDouble = (static_cast<double>(totalBitsPerEnvironment) / 100.) * localMutationRate;
+    //This will be used to store the integral part of the above sum - it needs to be a double as this is what is passed to the modf function
+    double numberEnvironmentMutationsIntegral = numberEnvironmentMutationsDouble;
+
+    //Sort out the probabilities of extra mutation given remainder
+    double numberEnvironmentMutationsFractional = modf(numberEnvironmentMutationsDouble, &numberEnvironmentMutationsIntegral);
+    int numberEnvironmentMutationsInteger = (static_cast<int>(numberEnvironmentMutationsIntegral));
+
+    //note that due to saturation / multiple hits on one site, the number of recoreded mutations in e.g. our tests may sneak in under the expected value
+    if (static_cast<double>(QRandomGenerator::global()->generate()) < (numberEnvironmentMutationsFractional * static_cast<double>(maxRand))) numberEnvironmentMutationsInteger++;
+
+    if (simSettings->matchFitnessPeaks)
+    {
+        //If we are matching peaks, it's best to think of bit positions as columns. We want to shuffle around columns in the 'x' direction to achieve on swapped bit (= two bit changes, hence the half rate above - it is impossible to do this without swapping two bits)
+        //The way this is organised, we want to do this within each environment
+        //reminder: masks[environment #][mask #][bit #]
+
+        for (auto pf : std::as_const(playingFields)) // Treat playing fields separately
+            for (int j = 0; j < simSettings->environmentNumber; j++) //Treat environments separately
+            {
+                //Create lists of those columns separated by one bit which will be used to match peaks
+                QList <int> pairOne;
+                QList <int> pairTwo;
+
+                //First create a list of all columns that are one bit apart by doing an XOR on them and counting the ones in this
+                //Used to do the exhaustively, but this was massive overkill for most settings, and made the tests slooooow
+                //Now use heuristic approach with an appopriate escape and error message
+                int count = 0;
+                do
+                {
+                    int firstBit = QRandomGenerator::global()->bounded(runFitnessSize);
+                    int secondBit = QRandomGenerator::global()->bounded(runFitnessSize);
+                    if (firstBit == secondBit) continue;
+
+                    int bitDifference = 0;
+                    for (int n = 0; n < runMaskNumber; n++)
+                        if (pf->masks[j][n][firstBit] != pf->masks[j][n][secondBit]) bitDifference++;
+
+                    if (bitDifference == 1)
+                        if (!pairOne.contains(firstBit) && !pairTwo.contains(secondBit))
+                        {
+                            pairOne.append(firstBit);
+                            pairTwo.append(secondBit);
+                        }
+                    count++;
+                }
+                while (pairOne.length() < numberEnvironmentMutationsInteger && count < 10000);
+
+                //Add warning if there are not enough columns to swap: with any decent size genome, I don't expect this to happen all that much
+                if (pairOne.length() < numberEnvironmentMutationsInteger)
+                {
+                    warning("Oops", "There has been an error at mutating the environment with matching peaks - not enough pairs. Returning with no mutations made.");
+                    return;
+                }
+                else
+                {
+                    //Easiest way to apply swap to n members of these two lists (pair one, pair two), is to shuffle these hen loop down n members
+                    //Given there are two lists, the lets instead create a list of incrementing integers and shuffle this to use for access
+                    //Note I'm doing this using STL just because I'd like to get more experience of this. I'm sure Qt structure can do it too.
+                    //Using a vector as std::shuffle cannot be applied to a list directly
+                    std::vector<int> list(pairOne.length());
+                    std::iota(list.begin(), list.end(), 0);
+                    //Shuffle using a Mersenne Twister random number from the standard library
+                    std::shuffle(list.begin(), list.end(), std::mt19937{std::random_device{}()});
+
+                    //Now apply the correct number of mutations
+                    for (int x = 0; x < numberEnvironmentMutationsInteger; x++) //How many mutations?
+                    {
+                        //Swap one pair of columns
+                        int chosenPair = list[x];
+                        int swap1 = pairOne[chosenPair];
+                        int swap2 = pairTwo[chosenPair];
+                        for (int m = 0; m < runMaskNumber; m++)
+                        {
+                            bool storeBit = pf->masks[j][m][swap1];
+                            pf->masks[j][m][swap1] = pf->masks[j][m][swap2];
+                            pf->masks[j][m][swap2] = storeBit;
+                        }
+                    }
+                }
+
+                pairOne.clear();
+                pairTwo.clear();
+            }
+    }
+    else
+    {
+        for (auto pf : std::as_const(playingFields)) // Treat playing fields separately
+            for (int j = 0; j < simSettings->environmentNumber; j++) //Treat environments separately
+                for (int x = 0; x < numberEnvironmentMutationsInteger; x++) //How many mutations?
+                {
+                    //Scale random number to genome size
+                    int mutationPosition = QRandomGenerator::global()->bounded(runFitnessSize);
+                    int maskNumber = QRandomGenerator::global()->bounded(runMaskNumber);
+                    pf->masks[j][maskNumber][mutationPosition] = !pf->masks[j][maskNumber][mutationPosition];
+                }
+    }
+
+
+    //Copy between PFs if they are set to be identical
+    if ( simSettings->playingfieldNumber > 1 && simSettings->playingfieldMasksMode == MASKS_MODE_IDENTICAL)
+        for (int p = 1; p < simSettings->playingfieldNumber; p++)
+            playingFields[p]->masks = playingFields[0]->masks;
+}
+
+
 void simulation::updateTNTstring(QString &TNTstring, int progParentSpeciesID, int progSpeciesID)
 {
     QString progenySpeciesID;
@@ -1081,35 +1202,6 @@ int simulation::calculateOverwrite(const playingFieldStructure *pf, const int sp
         }
     }
     return overwrite;
-}
-
-void simulation::mutateEnvironment()
-{
-    //Calculate mutation # as previously, and using same variables for ease - this is the number of mutations total for each mask
-    double numberEnvironmentMutationsDouble = (static_cast<double>(runFitnessSize) / 100.) * simSettings->environmentMutationRate;
-    double numberEnvironmentMutationsIntegral = static_cast<int>(numberEnvironmentMutationsDouble);
-
-    //Sort out the probabilities of extra mutation given remainder
-    double numberEnvironmentMutationsFractional = modf(numberEnvironmentMutationsDouble, &numberEnvironmentMutationsIntegral);
-    int numberEnvironmentMutationsInteger = (static_cast<int>(numberEnvironmentMutationsIntegral));
-    //Due to rounding the above always results in fewer mutations than would be expected - the -150 below equates to an average of 1 mutation per 100 base pairs
-    if (static_cast<double>(QRandomGenerator::global()->generate()) < (numberEnvironmentMutationsFractional * static_cast<double>(maxRand - 150))) numberEnvironmentMutationsInteger++;
-
-    //Mutate irrespective of playing field mode settings if there are multiple ones
-    for (auto pf : std::as_const(playingFields))
-        for (int k = 0; k < numberEnvironmentMutationsInteger; k++)
-            for (int j = 0; j < simSettings->environmentNumber; j++)
-                for (int i = 0; i < runMaskNumber; i++)
-                {
-                    //Scale random number to genome size
-                    int mutationPosition = QRandomGenerator::global()->bounded(runFitnessSize);
-                    pf->masks[j][i][mutationPosition] = !pf->masks[j][i][mutationPosition];
-                }
-
-    //Copy between PFs if they are set to be identical
-    if ( simSettings->playingfieldNumber > 1 && simSettings->playingfieldMasksMode == MASKS_MODE_IDENTICAL)
-        for (int p = 1; p < simSettings->playingfieldNumber; p++)
-            playingFields[p]->masks = playingFields[0]->masks;
 }
 
 void simulation::applyPerturbation()

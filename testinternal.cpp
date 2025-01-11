@@ -31,6 +31,7 @@ testinternal::testinternal(MainWindow *theMainWindowCon)
     testList.insert(17, "Ecosystem engineers");
     testList.insert(18, "Playing field mixing");
     testList.insert(19, "Match Peaks");
+    testList.insert(20, "Organism operators");
 }
 
 QString testinternal::testDescription(int testNumber)
@@ -469,9 +470,12 @@ bool testinternal::testFive(QString &outString)
     QTextStream out(&outString);
     out << "Testing mutation rates.\n\n";
 
+    //How many times do we want to run these tests?
+    int replicates = 10000;
+
     if (theMainWindow)
     {
-        theMainWindow->addProgressBar(0, 10000);
+        theMainWindow->addProgressBar(0, replicates);
         theMainWindow->setStatus("Doing organism mutation tests");
     }
 
@@ -484,10 +488,9 @@ bool testinternal::testFive(QString &outString)
     Organism org1(simSettings.genomeSize, false);
     int cnt = 0;
 
-    for (int j = 0; j < 10000; j++)
+    for (int j = 0; j < replicates; j++)
     {
-        if (theMainWindow)
-            theMainWindow->setProgressBar(j);
+        if (theMainWindow) theMainWindow->setProgressBar(j);
         org1.initialise(simSettings.genomeSize);
         Organism org2(org1);
         x.mutateOrganism(org1, x.playingFields[0]);
@@ -495,7 +498,7 @@ bool testinternal::testFive(QString &outString)
         for (int i = 0; i < org1.genome.length(); i++)if (org1.genome[i] != org2.genome[i]) cnt++;
     }
 
-    double mean = static_cast<double>(cnt) / 10000;
+    double mean = static_cast<double>(cnt) / static_cast<double>(replicates);
     if (mean < 1.25 || mean > 1.31) testFlag = false;
     QString flagString = testFlag ? "true" : "false";
     out << "Ran 10000 iterations on a 128 bit organism. At a rate of " << simSettings.organismMutationRate << " mutation per hundred characters per iteration this resulted in a mean of ";
@@ -506,27 +509,29 @@ bool testinternal::testFive(QString &outString)
     Organism org3(simSettings.genomeSize, false);
     cnt = 0;
 
-    for (int j = 0; j < 10000; j++)
+    for (int j = 0; j < replicates; j++)
     {
-        if (theMainWindow)
-            theMainWindow->setProgressBar(j);
+        if (theMainWindow) theMainWindow->setProgressBar(j);
         org3.initialise(simSettings.genomeSize);
         Organism org4(org3);
         x.mutateOrganism(org3, x.playingFields[0]);
-
         for (int i = 0; i < org3.genome.length(); i++) if (org3.genome[i] != org4.genome[i]) cnt++;
     }
 
-    mean = static_cast<double>(cnt) / 10000;
+    mean = static_cast<double>(cnt) / static_cast<double>(replicates);
     if (mean < 2.5 || mean > 2.62) testFlag = false;
     flagString = testFlag ? "true" : "false";
     out << "Ran 10000 iterations on a 128 bit organism. At a rate of " << simSettings.organismMutationRate << " mutations per hundred characters per iteration this resulted in a mean of ";
-    out << mean << " mutations. TREvoSim expects this to be between 2.5 and 2.62 and returned " << flagString << "\n";
+    out << mean << " mutations. TREvoSim expects this to be between 2.5 and 2.62 and returned " << flagString;
+    out << " (Note that due to the possibility of multiple hits on a single site, we will expect this to be marginally smaller than the expected mean).\n";
 
+    if (theMainWindow) theMainWindow->setStatus("Doing environment mutation tests without mathcing peaks.");
+    out << "Now testing environment mutation across two playing fields (mode independent), and two environments for each. Same test for each as above."
+        "Below you can see a table showing the mean mutations per 128 bits. \nPlaying field 1:\nEnvironment 1:\t";
 
     simSettings.environmentNumber = 2;
     simSettings.playingfieldNumber = 2;
-    simSettings.playingfieldMasksMode = MASKS_MODE_IDENTICAL_START;
+    simSettings.playingfieldMasksMode = MASKS_MODE_INDEPENDENT;
     simulation y(0, &simSettings, &error, theMainWindow);
     if (error) return false;
 
@@ -534,37 +539,51 @@ bool testinternal::testFive(QString &outString)
     QVector <QVector <QVector <bool> > > masks2;
     int cnts[12] = {0};
 
-    if (theMainWindow)
-        theMainWindow->setStatus("Doing environment mutation tests");
-
-    for (int i = 0; i < 10000; i++)
+    //Count the number of ones - this may change if we do not match peaks
+    int maxDiff = 0;
+    for (int i = 0; i < replicates; i++)
     {
-        if (theMainWindow)
-            theMainWindow->setProgressBar(i);
+        if (theMainWindow) theMainWindow->setProgressBar(i);
         masks = y.playingFields[0]->masks;
         masks2 =  y.playingFields[1]->masks;
         y.mutateEnvironment();
 
+        //Count the differences - i.e. the number of mutations
         for (int k = 0; k < masks[0][0].length(); k++)
         {
             for (int j = 0; j < 3; j++) if (y.playingFields[0]->masks[0][j][k] != masks[0][j][k])cnts[j]++;
             for (int j = 0; j < 3; j++) if (y.playingFields[0]->masks[1][j][k] != masks[1][j][k])cnts[j + 3]++;
             for (int j = 0; j < 3; j++) if (y.playingFields[1]->masks[0][j][k] != masks2[0][j][k])cnts[j + 6]++;
             for (int j = 0; j < 3; j++) if (y.playingFields[1]->masks[1][j][k] != masks2[1][j][k])cnts[j + 9]++;
-
         }
+
+        //Now count the ones
+        int count0 = 0;
+        for (auto p : std::as_const(y.playingFields))
+            for (auto &e : p->masks)
+                for (auto &m : e)
+                    for (auto b : m) if (b) count0++;
+
+        int count1 = 0;
+        for (auto &e : masks)
+            for (auto &m : e)
+                for (auto b : m) if (b) count1++;
+        for (auto &e : masks2)
+            for (auto &m : e)
+                for (auto b : m) if (b) count1++;
+
+        int difference = abs(count0 - count1);
+        if (difference > maxDiff)maxDiff = difference;
     }
 
-    if (theMainWindow)
-        theMainWindow->hideProgressBar();
-
-    out << "Now testing environment mutation across two playing fields (mode independent), and two environments for each. Same test for each as above. \nPlaying field 1:\nEnvironment 1:\t";
-
     double dCnts[12] = {0.};
+    double dCntsSum = 0.;
+
     for (int i = 0; i < 12; i++)
     {
-        dCnts[i] = (static_cast<double>(cnts[i]) / 10000.);
+        dCnts[i] = (static_cast<double>(cnts[i]) / static_cast<double>(replicates));
         if (dCnts[i] < 1.25 || dCnts[i] > 1.31) testFlag = false;
+        dCntsSum += dCnts[i];
 
         if (i == 3) out << "Environment 2: ";
         if (i == 6) out << "Playing field 2:\nEnvironment 1: ";
@@ -577,7 +596,99 @@ bool testinternal::testFive(QString &outString)
 
     flagString = testFlag ? "true" : "false";
 
-    out << "TREvoSim expects all above to be between 1.25 and 1.31 and returned " << flagString << "\n";
+    out << "The mean of these values is " << dCntsSum / 12. << ".\n";
+    out << "TREvoSim expects all above to be between 1.25 and 1.31 and returned " << flagString << ".\n";
+
+    if (maxDiff == 0)
+    {
+        testFlag = false;
+        out << "Fail at ones count with matching peaks off";
+    }
+
+    //Repeat this test with matching peaks, which should equate to the same number, but only do two mutations at once, resulting in the same number of ones
+    simSettings.matchFitnessPeaks = true;
+
+    simulation z(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
+
+    out << "Now testing environment mutation across two playing fields (mode independent), and two environments for each, with matching peaks turned on. Same test for each as above. \nPlaying field 1:\nEnvironment 1:\t";
+
+    //Reset counts
+    for (auto &i : cnts) i = 0;
+    maxDiff = 0;
+    dCntsSum = 0;
+
+    if (theMainWindow) theMainWindow->setStatus("Doing environment mutation tests with matching peaks.");
+
+    for (int i = 0; i < replicates; i++)
+    {
+        if (theMainWindow) theMainWindow->setProgressBar(i);
+        masks = z.playingFields[0]->masks;
+        masks2 = z.playingFields[1]->masks;
+        z.mutateEnvironment();
+
+        //Calculate rates
+        for (int k = 0; k < masks[0][0].length(); k++)
+        {
+            for (int j = 0; j < 3; j++) if (z.playingFields[0]->masks[0][j][k] != masks[0][j][k])cnts[j]++;
+            for (int j = 0; j < 3; j++) if (z.playingFields[0]->masks[1][j][k] != masks[1][j][k])cnts[j + 3]++;
+            for (int j = 0; j < 3; j++) if (z.playingFields[1]->masks[0][j][k] != masks2[0][j][k])cnts[j + 6]++;
+            for (int j = 0; j < 3; j++) if (z.playingFields[1]->masks[1][j][k] != masks2[1][j][k])cnts[j + 9]++;
+        }
+
+        //Now count the ones
+        int count0 = 0;
+        for (auto p : std::as_const(z.playingFields))
+            for (auto &e : p->masks)
+                for (auto &m : e)
+                    for (auto b : m) if (b) count0++;
+        //Note here that above we have two environments fields, below, these are placed into two different mask structures, hence the need to add both to the count
+        int count1 = 0;
+        for (auto &e : masks)
+            for (auto &m : e)
+                for (auto b : m) if (b) count1++;
+        for (auto &e : masks2)
+            for (auto &m : e)
+                for (auto b : m) if (b) count1++;
+
+        int difference = abs(count0 - count1);
+        if (difference > maxDiff)maxDiff = difference;
+    }
+
+    if (theMainWindow) theMainWindow->hideProgressBar();
+
+    for (int i = 0; i < 12; i++)
+    {
+        dCnts[i] = (static_cast<double>(cnts[i]) / static_cast<double>(replicates));
+        dCntsSum += dCnts[i];
+
+        if (i == 3) out << "Environment 2: ";
+        if (i == 6) out << "Playing field 2:\nEnvironment 1: ";
+        if (i == 9) out << "Environment 2: ";
+
+        out << dCnts[i] << "\t";
+
+        if ((i + 1) % 3 == 0) out << "\n";
+    }
+    double dCntsMean = dCntsSum / 12;
+    if (dCntsMean < (1.25) || dCntsMean > (1.31)) testFlag = false;
+    flagString = testFlag ? "true" : "false";
+    out << "The mean of these values is " << dCntsMean << ".\n";
+    out << "In this case, the mean values per mask will be more variable as it depends on the distribution of 1s across masks.\n";
+    out << "TREvoSim thus expects the mean of the above to be between 1.25 and 1.32 and has returned " << flagString << "\n";
+    out << "In all cases, due to the possibility of multiple hits on a single site, this mean values will be marginally below the expected value of 1.28";
+
+    //Here the one count should be the same
+    if (maxDiff != 0)
+    {
+        testFlag = false;
+        out << "\n\n**Fail at ones count with matching peaks on**\n\n";
+    }
+    else
+    {
+        out << "TREvoSim has also counted the number of ones before and after mutation process - these should be identical when matching peaks is enabled, and this is the case.";
+    }
+
 
     if (testFlag) out << "\nMutation tests passed.\n";
 
@@ -1968,13 +2079,13 @@ bool testinternal::testSixteen(QString &outString)
     if (error) return false;
     QString tree(x.printNewickWithBranchLengths(0, speciesList, true));
     tree.replace("S_0", "Species_");
-    out << "Tree from R:\n((Species_1:8,((Species_6:10,Species_4:7):9,(((Species_8:7,Species_5:10):6,Species_7:8):7,Species_3:6):2):6):10,Species_2:9);\nPrinted using function:\n" <<
+    out << "Tree from R:\n((Species_01:8,((Species_06:10,Species_04:7):9,(((Species_08:7,Species_05:10):6,Species_07:8):7,Species_03:6):2):6):10,Species_02:9);\nPrinted using function:\n" <<
         tree << ";\n";
 
     out << "\nTo check these are idential, paste the following into R (tree2 is printed using function):\n\n";
 
     out << "library(ape);\n";
-    out << "tree&lt;-read.tree(text = \"((Species_1:8,((Species_6:10,Species_4:7):9,(((Species_8:7,Species_5:10):6,Species_7:8):7,Species_3:6):2):6):10,Species_2:9);\")\n";
+    out << "tree&lt;-read.tree(text = \"((Species_01:8,((Species_06:10,Species_04:7):9,(((Species_08:7,Species_05:10):6,Species_07:8):7,Species_03:6):2):6):10,Species_02:9);\")\n";
     out << "tree2&lt;-read.tree(text = \"" << tree << ";\");\n";
     out << "plot(tree);\n";
     out << "edgelabels(tree$edge.length, bg = \"black\", col = \"white\", font = 2);\n";
@@ -2313,7 +2424,7 @@ bool testinternal::testNineteen(QString &outString)
     simulationVariables simSettings;
     //First check behviour when it is not enabled
     simSettings.matchFitnessPeaks = false;
-    simSettings.genomeSize = 5;
+    simSettings.genomeSize = 8;
     simSettings.fitnessSize = simSettings.genomeSize;
     simSettings.speciesSelectSize = simSettings.genomeSize;
     //Resize grid to avoid crashes on writing to GUI
@@ -2321,7 +2432,7 @@ bool testinternal::testNineteen(QString &outString)
 
     if (theMainWindow)
     {
-        theMainWindow->addProgressBar(0, 24);
+        theMainWindow->addProgressBar(0, 27);
         theMainWindow->setStatus("Testing match peaks");
         theMainWindow->resizeGrid(1, simSettings.genomeSize);
     }
@@ -2363,25 +2474,48 @@ bool testinternal::testNineteen(QString &outString)
     out << "\nMatch fitness peaks is now on.\n\n";
     simSettings.matchFitnessPeaks = true;
     identical.clear();
-
+    //for (int x = 0; x < 50; x++)
     for (int j = 3; j < 6; j++)
     {
+        QString errorString;
+        QTextStream outError(&errorString);
+
         QList <int> bestFitnesses;
         simSettings.environmentNumber = j;
         simulation x(0, &simSettings, &error, theMainWindow);
         if (error) return false;
-        out << "Number of environments is " << j << "\n";
+        out << "\nNumber of environments is " << j << "\n";
         //Send count peak for each environment
         for (int k = 0; k < j; k++)
         {
             int minFitness = x.countPeaks(simSettings.genomeSize, -1, k);
-            if (!bestFitnesses.contains(minFitness ))bestFitnesses.append(minFitness);
+            if (!bestFitnesses.contains(minFitness))bestFitnesses.append(minFitness);
             out << "Testing environment " << k << ". Best fitness for this environment is " << minFitness << "\n";
             count++;
             if (theMainWindow) theMainWindow->setProgressBar(count);
         }
+        out << "Now mutating environment, and repeating the above: all peaks should still match!\n";
+        outError << x.printMasks(x.playingFields);
+        x.mutateEnvironment();
 
-        if (bestFitnesses.count() > 1) identical.append(false);
+        for (int k = 0; k < j; k++)
+        {
+            int minFitness = x.countPeaks(simSettings.genomeSize, -1, k);
+            if (!bestFitnesses.contains(minFitness))bestFitnesses.append(minFitness);
+            out << "Testing mutated environment " << k << ". Best fitness for this environment is " << minFitness << "\n";
+            count++;
+            if (theMainWindow) theMainWindow->setProgressBar(count);
+        }
+
+        if (bestFitnesses.count() > 1)
+        {
+            identical.append(false);
+            out << "Test failed at j " << j << "";
+            out << "Before mutation, masks were: \n\n";
+            out << errorString;
+            out << "Now they are: ";
+            out << x.printMasks(x.playingFields);
+        }
         else identical.append(true);
     }
 
@@ -2410,7 +2544,65 @@ bool testinternal::testTwenty(QString &outString)
     bool testFlag = true;
     QTextStream out(&outString);
 
-    //testcopyofgenomehere - and also == operator! Anything else in organism?
+    out << "Testing organism operators - creatng new organism of genome size 50.\n";
+
+    int genomeSize = 50;
+
+    Organism newOrganism(genomeSize, true);
+    for (auto &b : newOrganism.genome)
+        if (QRandomGenerator::global()->bounded(1) == 1) b = true;
+        else b = false;
+
+    for (int i = 0; i < 2; i++)
+    {
+        QList <bool> exampleGenome(genomeSize);
+        for (auto &b : exampleGenome)
+            if (QRandomGenerator::global()->bounded(1) == 1) b = true;
+            else b = false;
+        newOrganism.parentGenomes.append(exampleGenome);
+    }
+
+    for (auto &b : newOrganism.stochasticGenome)
+        if (QRandomGenerator::global()->bounded(1) == 1) b = true;
+        else b = false;
+
+    newOrganism.speciesID = QRandomGenerator::global()->bounded(256);
+    newOrganism.parentSpeciesID = QRandomGenerator::global()->bounded(256);
+    newOrganism.fitness = QRandomGenerator::global()->bounded(256);
+    newOrganism.born = QRandomGenerator::global()->bounded(256);
+    newOrganism.extinct = QRandomGenerator::global()->bounded(256);
+    newOrganism.cladogenesis = QRandomGenerator::global()->bounded(256);
+    newOrganism.ecosystemEngineer = true;
+
+    Organism newOrganism2(genomeSize, true);
+
+    if (newOrganism == newOrganism2)
+    {
+        testFlag = false;
+        out << "Fail at equality operator - 1.";
+    }
+    else
+    {
+        out << "Have tested equality operator on different organisms, and this report false as expected.\n";
+    }
+    newOrganism2 = newOrganism;
+    if (!(newOrganism == newOrganism2))
+    {
+        testFlag = false;
+        out << "Fail at equality operator - 2.";
+    }
+    else
+    {
+        out << "Have tested equality operator on the same organisms, and this report true as expected.\n";
+    }
+    newOrganism.speciesID++;
+    if (newOrganism == newOrganism2)
+    {
+        testFlag = false;
+        out << "Fail at equality operator - 3.";
+    }
 
     return testFlag;
 }
+
+//When adding more tests, be sure to include these in testsuite.cpp

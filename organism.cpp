@@ -85,6 +85,7 @@ void Organism::operator = (const Organism &O)
     // Copy all attributes
     genome = O.genome;
     parentGenomes = O.parentGenomes;
+    stochasticLayer = O.stochasticLayer;
     if (stochasticLayer) stochasticGenome = O.stochasticGenome;
     speciesID = O.speciesID;
     parentSpeciesID = O.parentSpeciesID;
@@ -93,12 +94,14 @@ void Organism::operator = (const Organism &O)
     extinct = O.extinct;
     cladogenesis = O.cladogenesis;
     ecosystemEngineer = O.ecosystemEngineer;
+    children = O.children; // Note this is only used in the species list.
 }
 
 bool Organism::operator == (const Organism &O)
 {
     if (genome != O.genome) return false;
     if (parentGenomes != O.parentGenomes) return false;
+    if (stochasticLayer != O.stochasticLayer) return false;
     if (stochasticLayer && (stochasticGenome != O.stochasticGenome)) return false;
     if (speciesID != O.speciesID) return false;
     if (parentSpeciesID != O.parentSpeciesID) return false;
@@ -107,6 +110,7 @@ bool Organism::operator == (const Organism &O)
     if (extinct != O.extinct) return false;
     if (cladogenesis != O.cladogenesis) return false;
     if (ecosystemEngineer != O.ecosystemEngineer) return false;
+    if (children != O.children) return false;
     return true;
 }
 

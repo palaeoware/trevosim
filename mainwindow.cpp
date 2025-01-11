@@ -901,7 +901,7 @@ void MainWindow::doTests()
     //Create this here so we can use QMap list of tests to populate drop downs
     testinternal testObject(this);
 
-    int testCount = 20;
+    int testCount = 21;
     int testStart = 0;
 
     QStringList items;
