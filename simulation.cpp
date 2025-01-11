@@ -1041,9 +1041,34 @@ void simulation::mutateEnvironment()
                 QList <int> pairOne;
                 QList <int> pairTwo;
 
-                //first create a list of all columns that are one bit apart by doing an XOR on them and counting the ones in this
+                //First create a list of all columns that are one bit apart by doing an XOR on them and counting the ones in this
+                //Used to do the exhaustively, but this was massive overkill for most settings, and made the tests slooooow
+                //Now use heuristic approach with an appopriate escape and error message
+                int count = 0;
+                do
+                {
+                    int firstBit = QRandomGenerator::global()->bounded(runFitnessSize);
+                    int secondBit = QRandomGenerator::global()->bounded(runFitnessSize);
+                    if (firstBit == secondBit) continue;
+
+                    int bitDifference = 0;
+                    for (int n = 0; n < runMaskNumber; n++)
+                        if (pf->masks[j][n][firstBit] != pf->masks[j][n][secondBit]) bitDifference++;
+
+                    if (bitDifference == 1)
+                        if (!pairOne.contains(firstBit) && !pairTwo.contains(secondBit))
+                        {
+                            pairOne.append(firstBit);
+                            pairTwo.append(secondBit);
+                        }
+                    count++;
+                }
+                while (pairOne.length() < numberEnvironmentMutationsInteger && count < 10000);
+
+
+
                 //Do this through a pair wise comparison of all columns
-                for (int l = 0; l < runFitnessSize; l++)
+                /*for (int l = 0; l < runFitnessSize; l++)
                     for (int m = l + 1; m < runFitnessSize; m++)
                     {
                         int count = 0;
@@ -1055,7 +1080,7 @@ void simulation::mutateEnvironment()
                             pairOne.append(l);
                             pairTwo.append(m);
                         }
-                    }
+                    }*/
                 //Add warning if there are not enough columns to swap: with any decent size genome, I don't expect this to happen all that much
                 if (pairOne.length() < numberEnvironmentMutationsInteger)
                 {
