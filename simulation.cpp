@@ -1052,16 +1052,41 @@ void simulation::mutateEnvironment()
                             pairTwo.append(m);
                         }
                     }
+                //Add warning if there are not enough columns to swap: with any decent size genome, I don't expect this to happen all that much
+                if (pairOne.length() < numberEnvironmentMutationsInteger)
+                {
+                    warning("Oops", "There has been an error at mutating the environment with matching peaks - not enough pairs. Returning with no mutations made.");
+                    return;
+                }
+                else
+                {
+                    //Easiest way to apply swap to n members of these two lists (pair one, pair two), is to shuffle these hen loop down n members
+                    //Given there are two lists, the lets instead create a list of incrementing integers and shuffle this to use for access
+                    //Note I'm doing this using STL just because I'd like to get more experience of this. I'm sure Qt structure can do it too.
+                    //Using a vector as std::shuffle cannot be applied to a list directly
+                    std::vector<int> list(pairOne.length());
+                    std::iota(list.begin(), list.end(), 0);
+                    //Shuffle using a Mersenne Twister random number from the standard library
+                    std::shuffle(list.begin(), list.end(), std::mt19937{std::random_device{}()});
 
-                //Now check number of mutations and apply this many
+                    //Now apply the correct number of mutations
+                    for (int x = 0; x < numberEnvironmentMutationsInteger; x++) //How many mutations?
+                        for (int i = 0; i < runMaskNumber; i++)
+                        {
 
+                            //Swap one pair of columns
+                            int chosenPair = list[x];
+                            int swap1 = pairOne[chosenPair];
+                            int swap2 = pairTwo[chosenPair];
+                            for (int m = 0; m < runMaskNumber; m++)
+                            {
+                                bool storeBit = pf->masks[j][m][swap1];
+                                pf->masks[j][m][swap1] = pf->masks[j][m][swap2];
+                                pf->masks[j][m][swap2] = storeBit;
+                            }
+                        }
+                }
             }
-        //Add warning if there are no columns to swap: with any decent size genome, I don't expect this to happen all that much
-        if (pairOne.length() == 0)
-        {
-            warning("Oops", "There has been an error at mutating the environment with matching peaks. Returning with no mutations made.");
-            return;
-        }
     }
     else
     {
