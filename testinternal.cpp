@@ -471,7 +471,7 @@ bool testinternal::testFive(QString &outString)
     out << "Testing mutation rates.\n\n";
 
     //How many times do we want to run these tests?
-    int replicates = 5000;
+    int replicates = 10000;
 
     if (theMainWindow)
     {
@@ -526,7 +526,8 @@ bool testinternal::testFive(QString &outString)
     out << " (Note that due to the possibility of multiple hits on a single site, we will expect this to be marginally smaller than the expected mean).\n";
 
     if (theMainWindow) theMainWindow->setStatus("Doing environment mutation tests without mathcing peaks.");
-    out << "Now testing environment mutation across two playing fields (mode independent), and two environments for each. Same test for each as above. \nPlaying field 1:\nEnvironment 1:\t";
+    out << "Now testing environment mutation across two playing fields (mode independent), and two environments for each. Same test for each as above."
+        "Below you can see a table showing the mean mutations per 128 bits. \nPlaying field 1:\nEnvironment 1:\t";
 
     simSettings.environmentNumber = 2;
     simSettings.playingfieldNumber = 2;
@@ -576,10 +577,13 @@ bool testinternal::testFive(QString &outString)
     }
 
     double dCnts[12] = {0.};
+    double dCntsSum = 0.;
+
     for (int i = 0; i < 12; i++)
     {
         dCnts[i] = (static_cast<double>(cnts[i]) / static_cast<double>(replicates));
         if (dCnts[i] < 1.25 || dCnts[i] > 1.31) testFlag = false;
+        dCntsSum += dCnts[i];
 
         if (i == 3) out << "Environment 2: ";
         if (i == 6) out << "Playing field 2:\nEnvironment 1: ";
@@ -592,7 +596,8 @@ bool testinternal::testFive(QString &outString)
 
     flagString = testFlag ? "true" : "false";
 
-    out << "TREvoSim expects all above to be between 1.25 and 1.31 and returned " << flagString << "\n";
+    out << "The mean of these values is " << dCntsSum / 12. << ".\n";
+    out << "TREvoSim expects all above to be between 1.25 and 1.31 and returned " << flagString << ".\n";
 
     if (maxDiff == 0)
     {
@@ -611,6 +616,7 @@ bool testinternal::testFive(QString &outString)
     //Reset counts
     for (auto &i : cnts) i = 0;
     maxDiff = 0;
+    dCntsSum = 0;
 
     if (theMainWindow) theMainWindow->setStatus("Doing environment mutation tests with matching peaks.");
 
@@ -654,7 +660,7 @@ bool testinternal::testFive(QString &outString)
     for (int i = 0; i < 12; i++)
     {
         dCnts[i] = (static_cast<double>(cnts[i]) / static_cast<double>(replicates));
-        if (dCnts[i] < (1.25) || dCnts[i] > (1.31)) testFlag = false;
+        dCntsSum += dCnts[i];
 
         if (i == 3) out << "Environment 2: ";
         if (i == 6) out << "Playing field 2:\nEnvironment 1: ";
@@ -664,10 +670,13 @@ bool testinternal::testFive(QString &outString)
 
         if ((i + 1) % 3 == 0) out << "\n";
     }
-
+    double dCntsMean = dCntsSum / 12;
+    if (dCntsMean < (1.25) || dCntsMean > (1.31)) testFlag = false;
     flagString = testFlag ? "true" : "false";
-
-    out << "TREvoSim expects all above to be between 1.25 and 1.32 and returned " << flagString << "\n";
+    out << "The mean of these values is " << dCntsMean << ".\n";
+    out << "In this case, the mean values per mask will be more variable as it depends on the distribution of 1s across masks.\n";
+    out << "TREvoSim thus expects the mean of the above to be between 1.25 and 1.32 and has returned " << flagString << "\n";
+    out << "In all cases, due to the possibility of multiple hits on a single site, this mean values will be marginally below the expected value of 1.28";
 
     //Here the one count should be the same
     if (maxDiff != 0)

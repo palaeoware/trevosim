@@ -1065,22 +1065,6 @@ void simulation::mutateEnvironment()
                 }
                 while (pairOne.length() < numberEnvironmentMutationsInteger && count < 10000);
 
-
-
-                //Do this through a pair wise comparison of all columns
-                /*for (int l = 0; l < runFitnessSize; l++)
-                    for (int m = l + 1; m < runFitnessSize; m++)
-                    {
-                        int count = 0;
-                        for (int n = 0; n < runMaskNumber; n++)
-                            if (pf->masks[j][n][l] != pf->masks[j][n][m]) count++;
-
-                        if (count == 1)
-                        {
-                            pairOne.append(l);
-                            pairTwo.append(m);
-                        }
-                    }*/
                 //Add warning if there are not enough columns to swap: with any decent size genome, I don't expect this to happen all that much
                 if (pairOne.length() < numberEnvironmentMutationsInteger)
                 {
