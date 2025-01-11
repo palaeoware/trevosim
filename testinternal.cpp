@@ -530,7 +530,7 @@ bool testinternal::testFive(QString &outString)
 
     simSettings.environmentNumber = 2;
     simSettings.playingfieldNumber = 2;
-    simSettings.playingfieldMasksMode = MASKS_MODE_IDENTICAL_START;
+    simSettings.playingfieldMasksMode = MASKS_MODE_INDEPENDENT;
     simulation y(0, &simSettings, &error, theMainWindow);
     if (error) return false;
 

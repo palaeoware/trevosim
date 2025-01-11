@@ -1026,10 +1026,6 @@ void simulation::mutateEnvironment()
 
     if (simSettings->matchFitnessPeaks)
     {
-        //Create lists of those columns separated by one bit which will be used to match peaks
-        QList <int> pairOne;
-        QList <int> pairTwo;
-
         //If we are matching peaks, it's best to think of bit positions as columns. We want to shuffle around columns in the 'x' direction to achieve on swapped bit (= two bit changes, hence the half rate above - it is impossible to do this without swapping two bits)
         //The way this is organised, we want to do this within each environment
         //reminder: masks[environment #][mask #][bit #]
@@ -1039,6 +1035,11 @@ void simulation::mutateEnvironment()
         for (auto pf : std::as_const(playingFields)) // Treat playing fields separately
             for (int j = 0; j < simSettings->environmentNumber; j++) //Treat environments separately
             {
+                //Create lists of those columns separated by one bit which will be used to match peaks
+                QList <int> pairOne;
+                QList <int> pairTwo;
+
+
                 for (int l = 0; l < runFitnessSize; l++)
                     for (int m = l + 1; m < runFitnessSize; m++)
                     {
@@ -1086,6 +1087,9 @@ void simulation::mutateEnvironment()
                             }
                         }
                 }
+
+                pairOne.clear();
+                pairTwo.clear();
             }
     }
     else
