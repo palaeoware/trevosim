@@ -471,7 +471,7 @@ bool testinternal::testFive(QString &outString)
     out << "Testing mutation rates.\n\n";
 
     //How many times do we want to run these tests?
-    int replicates = 1000;
+    int replicates = 5000;
 
     if (theMainWindow)
     {

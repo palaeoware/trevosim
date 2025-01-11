@@ -1008,12 +1008,16 @@ void simulation::mutateEnvironment()
 {
     //Set our mutation rate
     double localMutationRate = simSettings->environmentMutationRate;
-
     //If we are matching peaks, we want the mutation rate to be halved because we will need to switch a zero to a one and one to a zero or vice versa.
+    //So every mutation is two bit changes
     if (simSettings->matchFitnessPeaks) localMutationRate /= 2;
 
+    //As per docs, mutations are set per 100 bits in the genome - calculate this for each environment, as environments treated separately
+    //How many bits? Use run fitness size here because there are only environmental bits for the bits of the genome that contribute to fitness
+    int totalBitsPerEnvironment = runFitnessSize * runMaskNumber;
+
     //Calculate mutation # as previously, and using same variables for ease - this is the number of mutations total for each mask
-    double numberEnvironmentMutationsDouble = (static_cast<double>(runFitnessSize) / 100.) * localMutationRate;
+    double numberEnvironmentMutationsDouble = (static_cast<double>(totalBitsPerEnvironment) / 100.) * localMutationRate;
     //This will be used to store the integral part of the above sum - it needs to be a double as this is what is passed to the modf function
     double numberEnvironmentMutationsIntegral = numberEnvironmentMutationsDouble;
 
@@ -1030,8 +1034,6 @@ void simulation::mutateEnvironment()
         //The way this is organised, we want to do this within each environment
         //reminder: masks[environment #][mask #][bit #]
 
-        //first create a list of all columns that are one bit apart by doing an XOR on them and counting the ones in this
-        //Do this through a pair wise comparison of all columns
         for (auto pf : std::as_const(playingFields)) // Treat playing fields separately
             for (int j = 0; j < simSettings->environmentNumber; j++) //Treat environments separately
             {
@@ -1039,7 +1041,8 @@ void simulation::mutateEnvironment()
                 QList <int> pairOne;
                 QList <int> pairTwo;
 
-
+                //first create a list of all columns that are one bit apart by doing an XOR on them and counting the ones in this
+                //Do this through a pair wise comparison of all columns
                 for (int l = 0; l < runFitnessSize; l++)
                     for (int m = l + 1; m < runFitnessSize; m++)
                     {
@@ -1072,20 +1075,18 @@ void simulation::mutateEnvironment()
 
                     //Now apply the correct number of mutations
                     for (int x = 0; x < numberEnvironmentMutationsInteger; x++) //How many mutations?
-                        for (int i = 0; i < runMaskNumber; i++)
+                    {
+                        //Swap one pair of columns
+                        int chosenPair = list[x];
+                        int swap1 = pairOne[chosenPair];
+                        int swap2 = pairTwo[chosenPair];
+                        for (int m = 0; m < runMaskNumber; m++)
                         {
-
-                            //Swap one pair of columns
-                            int chosenPair = list[x];
-                            int swap1 = pairOne[chosenPair];
-                            int swap2 = pairTwo[chosenPair];
-                            for (int m = 0; m < runMaskNumber; m++)
-                            {
-                                bool storeBit = pf->masks[j][m][swap1];
-                                pf->masks[j][m][swap1] = pf->masks[j][m][swap2];
-                                pf->masks[j][m][swap2] = storeBit;
-                            }
+                            bool storeBit = pf->masks[j][m][swap1];
+                            pf->masks[j][m][swap1] = pf->masks[j][m][swap2];
+                            pf->masks[j][m][swap2] = storeBit;
                         }
+                    }
                 }
 
                 pairOne.clear();
@@ -1095,15 +1096,14 @@ void simulation::mutateEnvironment()
     else
     {
         for (auto pf : std::as_const(playingFields)) // Treat playing fields separately
-            for (int k = 0; k < numberEnvironmentMutationsInteger; k++) //How many mutations?
-                for (int j = 0; j < simSettings->environmentNumber; j++) //Treat environments separately
-                    //If not matching peaks, we need to do this for n masks and treat each eindependently to provide the rate given in the docs, which is per basepair
-                    for (int i = 0; i < runMaskNumber; i++)
-                    {
-                        //Scale random number to genome size
-                        int mutationPosition = QRandomGenerator::global()->bounded(runFitnessSize);
-                        pf->masks[j][i][mutationPosition] = !pf->masks[j][i][mutationPosition];
-                    }
+            for (int j = 0; j < simSettings->environmentNumber; j++) //Treat environments separately
+                for (int x = 0; x < numberEnvironmentMutationsInteger; x++) //How many mutations?
+                {
+                    //Scale random number to genome size
+                    int mutationPosition = QRandomGenerator::global()->bounded(runFitnessSize);
+                    int maskNumber = QRandomGenerator::global()->bounded(runMaskNumber);
+                    pf->masks[j][maskNumber][mutationPosition] = !pf->masks[j][maskNumber][mutationPosition];
+                }
     }
 
 
