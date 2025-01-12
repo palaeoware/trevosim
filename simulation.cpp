@@ -1037,12 +1037,11 @@ void simulation::mutateEnvironment()
         for (auto pf : std::as_const(playingFields)) // Treat playing fields separately
             for (int j = 0; j < simSettings->environmentNumber; j++) //Treat environments separately
             {
-                //Create lists of those columns separated by one bit which will be used to match peaks
+                //Create lists of columns separated by one bit to do swap
                 QList <int> pairOne;
                 QList <int> pairTwo;
 
-                //First create a list of all columns that are one bit apart by doing an XOR on them and counting the ones in this
-                //Used to do the exhaustively, but this was massive overkill for most settings, and made the tests slooooow
+                //Used to do the exhaustively, but this was massive overkill for most settings, and made the function slooooow
                 //Now use heuristic approach with an appopriate escape and error message
                 int count = 0;
                 do
@@ -1056,7 +1055,7 @@ void simulation::mutateEnvironment()
                         if (pf->masks[j][n][firstBit] != pf->masks[j][n][secondBit]) bitDifference++;
 
                     if (bitDifference == 1)
-                        if (!pairOne.contains(firstBit) && !pairTwo.contains(secondBit))
+                        if (!pairOne.contains(firstBit) && !pairOne.contains(secondBit) && !pairTwo.contains(firstBit) && !pairTwo.contains(secondBit))
                         {
                             pairOne.append(firstBit);
                             pairTwo.append(secondBit);
@@ -1073,22 +1072,12 @@ void simulation::mutateEnvironment()
                 }
                 else
                 {
-                    //Easiest way to apply swap to n members of these two lists (pair one, pair two), is to shuffle these hen loop down n members
-                    //Given there are two lists, the lets instead create a list of incrementing integers and shuffle this to use for access
-                    //Note I'm doing this using STL just because I'd like to get more experience of this. I'm sure Qt structure can do it too.
-                    //Using a vector as std::shuffle cannot be applied to a list directly
-                    std::vector<int> list(pairOne.length());
-                    std::iota(list.begin(), list.end(), 0);
-                    //Shuffle using a Mersenne Twister random number from the standard library
-                    std::shuffle(list.begin(), list.end(), std::mt19937{std::random_device{}()});
-
-                    //Now apply the correct number of mutations
+                    //Now apply the mutations
                     for (int x = 0; x < numberEnvironmentMutationsInteger; x++) //How many mutations?
                     {
                         //Swap one pair of columns
-                        int chosenPair = list[x];
-                        int swap1 = pairOne[chosenPair];
-                        int swap2 = pairTwo[chosenPair];
+                        int swap1 = pairOne[x];
+                        int swap2 = pairTwo[x];
                         for (int m = 0; m < runMaskNumber; m++)
                         {
                             bool storeBit = pf->masks[j][m][swap1];
@@ -1097,9 +1086,6 @@ void simulation::mutateEnvironment()
                         }
                     }
                 }
-
-                pairOne.clear();
-                pairTwo.clear();
             }
     }
     else
@@ -1108,7 +1094,7 @@ void simulation::mutateEnvironment()
             for (int j = 0; j < simSettings->environmentNumber; j++) //Treat environments separately
                 for (int x = 0; x < numberEnvironmentMutationsInteger; x++) //How many mutations?
                 {
-                    //Scale random number to genome size
+                    //Select random mask and random bit
                     int mutationPosition = QRandomGenerator::global()->bounded(runFitnessSize);
                     int maskNumber = QRandomGenerator::global()->bounded(runMaskNumber);
                     pf->masks[j][maskNumber][mutationPosition] = !pf->masks[j][maskNumber][mutationPosition];

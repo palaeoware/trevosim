@@ -676,7 +676,7 @@ bool testinternal::testFive(QString &outString)
     out << "The mean of these values is " << dCntsMean << ".\n";
     out << "In this case, the mean values per mask will be more variable as it depends on the distribution of 1s across masks.\n";
     out << "TREvoSim thus expects the mean of the above to be between 1.25 and 1.32 and has returned " << flagString << "\n";
-    out << "In all cases, due to the possibility of multiple hits on a single site, this mean values will be marginally below the expected value of 1.28";
+    out << "In all cases, due to the possibility of multiple hits on a single site, the mean values can be marginally below the expected value of 1.28.\n";
 
     //Here the one count should be the same
     if (maxDiff != 0)
