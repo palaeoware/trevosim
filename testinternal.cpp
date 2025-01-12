@@ -526,7 +526,7 @@ bool testinternal::testFive(QString &outString)
     out << " (Note that due to the possibility of multiple hits on a single site, we will expect this to be marginally smaller than the expected mean).\n";
 
     if (theMainWindow) theMainWindow->setStatus("Doing environment mutation tests without mathcing peaks.");
-    out << "Now testing environment mutation across two playing fields (mode independent), and two environments for each. Same test for each as above."
+    out << "Now testing environment mutation across two playing fields (mode independent), and two environments for each. Same test for each as above. "
         "Below you can see a table showing the mean mutations per 128 bits. \nPlaying field 1:\nEnvironment 1:\t";
 
     simSettings.environmentNumber = 2;
