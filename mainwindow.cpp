@@ -506,7 +506,7 @@ void MainWindow::runForTriggered(int runBatchFor)
     if (!errorStart)
     {
         bool stopRuns = escapePressed;
-        label = "It looks like the simulation failed.\nWould you like continue?";
+        label = "It looks like this initial simulation failed. If this is, for example, caused by too many identical terminals, you can choose to continue running the rest of the batch, and TREvoSim will run simulations until the desired number has been achieved. If the failure is not stochastic, do not choose this option.\nWould you like continue?";
         if (!stopRuns)
             if (QMessageBox::question(this, "Error", label, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::No)
                 stopRuns = true;
