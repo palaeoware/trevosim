@@ -1666,7 +1666,7 @@ bool simulation::checkForUnresolvableTaxa(QVector<Organism *> &speciesList, QStr
                     unresolvableCount));
         }
 
-        if (!simSettings->test && theMainWindow != nullptr) QMessageBox::warning(theMainWindow, "Warning - Unresolvable clades", message, QMessageBox::Ok, QMessageBox::Ok);
+        if (!simSettings->test && theMainWindow != nullptr) warning("Warning - Unresolvable clades", message);
 
         if (simSettings->workingLog) workLogTextStream << message;
     }
@@ -2218,7 +2218,7 @@ QString simulation::printEcosystemEngineers(const QVector <Organism *> &speciesL
 void simulation::warning(QString header, QString message)
 {
     if (theMainWindow != nullptr && !theMainWindow->runFromCommand) QMessageBox::warning(theMainWindow, header, message);
-    if (theMainWindow != nullptr && theMainWindow->runFromCommand) qInfo () << "Warning - message: " << message;
+    if (theMainWindow != nullptr && theMainWindow->runFromCommand) qInfo().noquote() << "\n****Warning - message****: " << message;
 }
 
 bool simulation::setupSaveDirectory(QString subFolder)
@@ -2228,9 +2228,7 @@ bool simulation::setupSaveDirectory(QString subFolder)
 
     if (!savePathDirectory.exists())
     {
-        if (theMainWindow != nullptr)
-            if (QMessageBox::warning(theMainWindow, "Error!", "The program doesn't think the save directory exists, so is going to default back to the direcctory in which the executable is.",
-                                     QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel) return false;
+        if (theMainWindow != nullptr) warning("Error!", "The program doesn't think the save directory exists, so is going to default back to the direcctory in which the executable is.");
         QString savePathString(QCoreApplication::applicationDirPath());
         savePathString.append(QDir::separator());
         if (theMainWindow != nullptr) theMainWindow->setPath(savePathString);
