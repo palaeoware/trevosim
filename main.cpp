@@ -55,7 +55,12 @@ int main(int argc, char *argv[])
     {
         //Sort out command line option
         QCommandLineParser *parser = new QCommandLineParser();
-        parser->setApplicationDescription("TREvoSim is an individual-based evolutionary model. You are using the command line option. See documentation and associated publications for description of software.");
+        QString message("TREvoSim is an individual-based evolutionary model. You are using the command line option. See documentation and associated publications for description of software. This is ");
+        QString version = QString(PRODUCTNAME) + " v" + QString("%1.%2.%3").arg(MAJORVERSION).arg(MINORVERSION).arg(PATCHVERSION);
+        message.append(version);
+        message.append(QString(" it was compiled on ") + __DATE__ + QString("."));
+
+        parser->setApplicationDescription(message);
         parser->addHelpOption();
         parser->addVersionOption();
         parser->setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
