@@ -275,7 +275,7 @@ void MainWindow::runFromCommandLine(QHash<QString, QString> parsedOptions)
         else error = theSimulation.run();
 
         if (!error) qInfo().noquote() << QString(PRODUCTNAME) + " has encountered an error. If the nature of this error is not obvious, please file an issue or contact the coders.";
-        else qInfo().noquote() << QString(PRODUCTNAME) + " has finished its run, and will now quit.";
+        else qInfo().noquote() << QString(PRODUCTNAME) + " has finished its run (or you cancelled), and will now quit.";
     }
     else
     {
@@ -285,7 +285,7 @@ void MainWindow::runFromCommandLine(QHash<QString, QString> parsedOptions)
         qInfo() << "-- If you select to cancel runs, the program will exit, otherwise you can continue, but the software may run your simulation forevermore.";
         qInfo().noquote() << "-- If there is no error after the first replicate, " + QString(PRODUCTNAME) + " will then run all subsequent replicates in parallel.";
         runForTriggered(batchReplicates);
-        qInfo().noquote() << QString(PRODUCTNAME) + " has finished its replicates, and will now quit.";
+        qInfo().noquote() << QString(PRODUCTNAME) + " has finished its replicates (or you cancelled), and will now quit.";
     }
 
     exit(0);
@@ -513,11 +513,14 @@ void MainWindow::runForTriggered(int runBatchFor)
             if (!runFromCommand && QMessageBox::question(this, "Error", label, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::No) stopRuns = true;
             else
             {
+                setStatus("Please respond to query in the console.");
+                qApp->processEvents();
                 qInfo().noquote() << label;
                 qInfo().noquote() << "Respond y/n";
                 QTextStream s(stdin);
                 QString response = s.readLine();
                 if (!(response.toLower() == QString("y")) || !(response.toLower() != QString("yes"))) stopRuns = true;
+                setStatus("");
             }
         }
         if (stopRuns)
