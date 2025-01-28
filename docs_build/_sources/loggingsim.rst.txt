@@ -144,6 +144,9 @@ Settings
     
     variables : genomeSize 128 speciesSelectSize 128 fitnessSize 128 runForTaxa 64 runForIterations 1000 playingfieldSize 20 speciesDifference 4 environmentMutationRate 1 organismMutationRate 5 unresolvableCutoff 5 environmentNumber 1 maskNumber 3 runMode 1 stripUninformative 0 writeTree 1 writeRunningLog 0 writeFileOne 1 writeFileTwo 1 writeEE 0 noSelection 0 randomSeed 0 sansomianSpeciation 1 discardDeleterious 0 fitnessTarget 0 playingfieldNumber 1 mixing 0 mixingProbabilityZeroToOne 0 mixingProbabilityOneToZero 0 playingfieldMasksMode 0 selection 10 randomOverwrite 0 ecosystemEngineers 0 ecosystemEngineersArePersistent 0 ecosystemEngineeringFrequency 10 ecosystemEngineersAddMask 0 runningLogFrequency 50 replicates 25 expandingPlayingfield0 stochasticLayer 0 stochasticDepth 1 matchFitnessPeaks 0 stochasticMap 0000000000000000
 
+Stochastic_Matrix
+  This writes the matrix in the format introduced above, but writes the stochastic layer for each taxon. (see :ref:`Organisms`).
+
 TNT_Tree
   This writes a tree, if required, in TNT format (i.e. only brackets and terminal labels):
 
