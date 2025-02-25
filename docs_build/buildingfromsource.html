@@ -1,20 +1,18 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>3. Compiling from Source and Development Testing &mdash; TREvoSim 3.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=86f27845" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
+  
+        <script src="_static/documentation_options.js?v=acc74ff5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -27,15 +25,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> TREvoSim
-            <img src="_static/TREvoSim.jpg" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            TREvoSim
+              <img src="_static/TREvoSim.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 3.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -88,8 +90,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><span class="section-number">3. </span>Compiling from Source and Development Testing</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">3. </span>Compiling from Source and Development Testing</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/buildingfromsource.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -100,17 +102,17 @@
            <div itemprop="articleBody">
              
   <span class="target" id="buildingfromsource"></span><section id="compiling-from-source-and-development-testing">
-<h1><span class="section-number">3. </span>Compiling from Source and Development Testing<a class="headerlink" href="#compiling-from-source-and-development-testing" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">3. </span>Compiling from Source and Development Testing<a class="headerlink" href="#compiling-from-source-and-development-testing" title="Link to this heading">¶</a></h1>
 <section id="compiling-from-source">
-<h2><span class="section-number">3.1. </span>Compiling from Source<a class="headerlink" href="#compiling-from-source" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.1. </span>Compiling from Source<a class="headerlink" href="#compiling-from-source" title="Link to this heading">¶</a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Unless you would like to modify the software you <em>do not</em> need to build it – you can install or run it using the binaries provided with releases. See <a class="reference internal" href="requirementsinstallation.html#requirements-and-installation-from-binaries"><span class="std std-ref">Requirements and Installation from Binaries</span></a> for further information.</p>
 </div>
 <section id="windows-10">
-<h3><span class="section-number">3.1.1. </span>Windows 10<a class="headerlink" href="#windows-10" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">3.1.1. </span>Windows 10<a class="headerlink" href="#windows-10" title="Link to this heading">¶</a></h3>
 <section id="compiling-v3-x">
-<h4><span class="section-number">3.1.1.1. </span>Compiling v3.X<a class="headerlink" href="#compiling-v3-x" title="Permalink to this headline">¶</a></h4>
+<h4><span class="section-number">3.1.1.1. </span>Compiling v3.X<a class="headerlink" href="#compiling-v3-x" title="Link to this heading">¶</a></h4>
 <p>QT Creator + QT v6.x using Qt installer and MSVC2019 (64-bit).</p>
 <ol class="arabic">
 <li><p>Install Microsoft Visual Studio 2019 (VS2019). See <a class="reference external" href="https://visualstudio.microsoft.com/vs/older-downloads/">https://visualstudio.microsoft.com/vs/older-downloads/</a>.</p></li>
@@ -198,7 +200,7 @@
 </div>
 </section>
 <section id="compiling-v1-x-2-x">
-<h4><span class="section-number">3.1.1.2. </span>Compiling v1.X, 2.X<a class="headerlink" href="#compiling-v1-x-2-x" title="Permalink to this headline">¶</a></h4>
+<h4><span class="section-number">3.1.1.2. </span>Compiling v1.X, 2.X<a class="headerlink" href="#compiling-v1-x-2-x" title="Link to this heading">¶</a></h4>
 <p>QT Creator + QT v5.x using MSYS2 (64-bit) and MinGW (64-bit).</p>
 <p>We recommend you install and use MSYS2 (64-bit) a Windows package manager, based on modern Cygwin (POSIX compatibility layer) and MinGW-w64, that allows easy installation of QT v5.x 64-bit.</p>
 <ol class="arabic">
@@ -224,9 +226,9 @@
 </section>
 </section>
 <section id="ubuntu">
-<h3><span class="section-number">3.1.2. </span>Ubuntu<a class="headerlink" href="#ubuntu" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">3.1.2. </span>Ubuntu<a class="headerlink" href="#ubuntu" title="Link to this heading">¶</a></h3>
 <section id="compiling-v3-x-using-command-line">
-<h4><span class="section-number">3.1.2.1. </span>Compiling v3.X using command line<a class="headerlink" href="#compiling-v3-x-using-command-line" title="Permalink to this headline">¶</a></h4>
+<h4><span class="section-number">3.1.2.1. </span>Compiling v3.X using command line<a class="headerlink" href="#compiling-v3-x-using-command-line" title="Link to this heading">¶</a></h4>
 <p>This has been tested on Ubuntu 22.04 64-bit with QT v6.x using GCC (64-bit).</p>
 <ol class="arabic">
 <li><p>Install GCC and Qt using system packages:</p>
@@ -257,7 +259,7 @@
 </ol>
 </section>
 <section id="compiling-v1-x-v2-x-using-command-line">
-<h4><span class="section-number">3.1.2.2. </span>Compiling v1.X &amp; v2.X using command line<a class="headerlink" href="#compiling-v1-x-v2-x-using-command-line" title="Permalink to this headline">¶</a></h4>
+<h4><span class="section-number">3.1.2.2. </span>Compiling v1.X &amp; v2.X using command line<a class="headerlink" href="#compiling-v1-x-v2-x-using-command-line" title="Link to this heading">¶</a></h4>
 <p>This has been tested on Ubuntu 18.04 and 2204, with QT v5.x using GCC (64-bit).</p>
 <ol class="arabic">
 <li><p>Install GCC and Qt using system packages:</p>
@@ -294,7 +296,7 @@
 </ol>
 </section>
 <section id="compiling-v1-x-v2-x-v3-x-using-qt-creator">
-<h4><span class="section-number">3.1.2.3. </span>Compiling v1.X, v2.X, v3.X using Qt Creator<a class="headerlink" href="#compiling-v1-x-v2-x-v3-x-using-qt-creator" title="Permalink to this headline">¶</a></h4>
+<h4><span class="section-number">3.1.2.3. </span>Compiling v1.X, v2.X, v3.X using Qt Creator<a class="headerlink" href="#compiling-v1-x-v2-x-v3-x-using-qt-creator" title="Link to this heading">¶</a></h4>
 <ol class="arabic simple">
 <li><p>Install Qt 5.X (v1.X, v2.X) or Qt 6.X (v3.X) on your system by running the installer from Qt: <a class="reference external" href="https://www.qt.io/download">https://www.qt.io/download</a></p></li>
 <li><p>Download source code, launch Qt Creator, and open the CMakeLists.txt file. Configure build and follow standard debug/release procedure.</p></li>
@@ -302,15 +304,15 @@
 </section>
 </section>
 <section id="macos">
-<h3><span class="section-number">3.1.3. </span>MacOS<a class="headerlink" href="#macos" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">3.1.3. </span>MacOS<a class="headerlink" href="#macos" title="Link to this heading">¶</a></h3>
 <p>QT Creator + QT v6.x using Clang and Xcode.</p>
 <section id="for-v1-x-2-x-v3-x">
-<h4><span class="section-number">3.1.3.1. </span>For v1.X, 2.X, v3.X<a class="headerlink" href="#for-v1-x-2-x-v3-x" title="Permalink to this headline">¶</a></h4>
+<h4><span class="section-number">3.1.3.1. </span>For v1.X, 2.X, v3.X<a class="headerlink" href="#for-v1-x-2-x-v3-x" title="Link to this heading">¶</a></h4>
 <ol class="arabic">
 <li><p>Xcode can be downloaded from the Apple Store or Apple’s developer website (including older versions of Xcode): <a class="reference external" href="https://developer.apple.com/download/">https://developer.apple.com/download/</a>. We recommend always using the latest Xcode available from Apple that has been tested with the Qt version you are using.</p></li>
 <li><p>Install Qt 6.X and QT Creator on your system by running the open source development installer from Qt: <a class="reference external" href="https://www.qt.io/download-open-source">https://www.qt.io/download-open-source</a>. An alternative may be to install via homebrew:</p>
 <blockquote>
-<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>brew install qt
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>brew<span class="w"> </span>install<span class="w"> </span>qt
 </pre></div>
 </div>
 </div></blockquote>
@@ -324,7 +326,7 @@
 <li><p>First step is to copy the newly generated binaries (TREvoSim.app and TREvoSimTest.app) from your build folder to a new one (we called ours ‘deploy’ and will refer to this by name). The build folder should be called ‘build\Desktop_Qt_6_6_2_for-macOS-Release’ if using the QT defaults, where Qt_6_6_2 will change to match your current QT 6 version.</p></li>
 <li><p>From the terminal command line ‘’’cd’’’ into the ‘{path to your QT installation}/{QT 6 version}/macos/bin/’ folder containing the macdeployqt6 binary and run the following commands:</p>
 <blockquote>
-<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./macdeployqt6 <span class="o">{</span>full path to TREvoSim binary<span class="o">}</span>/TREvoSim.app -verbose<span class="o">=</span><span class="m">2</span>
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./macdeployqt6<span class="w"> </span><span class="o">{</span>full<span class="w"> </span>path<span class="w"> </span>to<span class="w"> </span>TREvoSim<span class="w"> </span>binary<span class="o">}</span>/TREvoSim.app<span class="w"> </span>-verbose<span class="o">=</span><span class="m">2</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -342,7 +344,7 @@
 <li><p>[optional] You can now generate a .dmg package to aid distribution of the TREvoSim.app. There are two ways to do this:</p>
 <ol class="arabic">
 <li><p>Adding the -dmg flag to the macdeployqt6 command as part of the previous step:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./macdeployqt6 <span class="o">{</span>full path to TREvoSim binary<span class="o">}</span>/TREvoSim.app -dmg -verbose<span class="o">=</span><span class="m">2</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./macdeployqt6<span class="w"> </span><span class="o">{</span>full<span class="w"> </span>path<span class="w"> </span>to<span class="w"> </span>TREvoSim<span class="w"> </span>binary<span class="o">}</span>/TREvoSim.app<span class="w"> </span>-dmg<span class="w"> </span>-verbose<span class="o">=</span><span class="m">2</span>
 </pre></div>
 </div>
 </li>
@@ -352,15 +354,15 @@
 <div><ul>
 <li><p>We recommend create-dmg (<a class="reference external" href="https://github.com/create-dmg/create-dmg">https://github.com/create-dmg/create-dmg</a>), which can be installed via Homebrew using:</p>
 <blockquote>
-<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>brew install create-dmg
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>brew<span class="w"> </span>install<span class="w"> </span>create-dmg
 </pre></div>
 </div>
 </div></blockquote>
 </li>
 <li><p>The .dmg installer package can then be generated by running the following commands:</p>
 <blockquote>
-<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span> <span class="o">{</span>full path to TREvoSim repo<span class="o">}</span>/build_utils/macos/
-<span class="gp">$ </span>chmod <span class="m">755</span> generate_dmg
+<div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="o">{</span>full<span class="w"> </span>path<span class="w"> </span>to<span class="w"> </span>TREvoSim<span class="w"> </span>repo<span class="o">}</span>/build_utils/macos/
+<span class="gp">$ </span>chmod<span class="w"> </span><span class="m">755</span><span class="w"> </span>generate_dmg
 <span class="gp">$ </span>./generate_dmg
 </pre></div>
 </div>
@@ -380,7 +382,7 @@
 </section>
 </section>
 <section id="development-testing">
-<h2><span class="section-number">3.2. </span>Development Testing<a class="headerlink" href="#development-testing" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.2. </span>Development Testing<a class="headerlink" href="#development-testing" title="Link to this heading">¶</a></h2>
 <p>TREvoSim &gt; = v3 come with a suite of development tests that verify the core simulator/generator code. These can be called via one of two methods during the development phase:</p>
 <ol class="arabic">
 <li><p>As a standalone program - for this we leverage the GoogleTest Mocking and Testing Framework (<a class="reference external" href="https://github.com/google/googletest">https://github.com/google/googletest</a>) which is pulled in automatically by CMake and built alongside the TREvoSim main program - creating a separate standalone test program called TREvoSimTest. This program can be called from the command line on Mac/Linux/Windows, or run by double clicking in Windows.</p>

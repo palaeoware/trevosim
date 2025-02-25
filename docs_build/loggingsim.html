@@ -1,20 +1,18 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>8. Logging the Simulation &mdash; TREvoSim 3.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=86f27845" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
+  
+        <script src="_static/documentation_options.js?v=acc74ff5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -27,15 +25,19 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> TREvoSim
-            <img src="_static/TREvoSim.jpg" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            TREvoSim
+              <img src="_static/TREvoSim.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
                 3.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -78,8 +80,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li><span class="section-number">8. </span>Logging the Simulation</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">8. </span>Logging the Simulation</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/loggingsim.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -90,16 +92,16 @@
            <div itemprop="articleBody">
              
   <section id="logging-the-simulation">
-<span id="loggingsim"></span><h1><span class="section-number">8. </span>Logging the Simulation<a class="headerlink" href="#logging-the-simulation" title="Permalink to this headline">¶</a></h1>
+<span id="loggingsim"></span><h1><span class="section-number">8. </span>Logging the Simulation<a class="headerlink" href="#logging-the-simulation" title="Link to this heading">¶</a></h1>
 <section id="logging-system">
-<h2><span class="section-number">8.1. </span>Logging system<a class="headerlink" href="#logging-system" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">8.1. </span>Logging system<a class="headerlink" href="#logging-system" title="Link to this heading">¶</a></h2>
 <section id="end-run-log">
-<h3><span class="section-number">8.1.1. </span>End run log<a class="headerlink" href="#end-run-log" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">8.1.1. </span>End run log<a class="headerlink" href="#end-run-log" title="Link to this heading">¶</a></h3>
 <p>TREvoSim has a versatile logging system which allows the user to define outputs in a range of formats required for phylogenetic inference packages, or e.g. R, provided these allow plain text inputs. Clicking on the output button of the toolbar will launch the output dialogue, which has two tabs. The first is a log that is output at the end of the run:</p>
 <figure class="align-center" id="id1">
 <img alt="The output settings page for the end run log in TREvoSim" src="_images/output_01.png" />
 <figcaption>
-<p><span class="caption-text">The TREvoSim End Run Log settings</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+<p><span class="caption-text">The TREvoSim End Run Log settings</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
 <p>A typical use case for this is when you would like to use the outputs of a finished simulation to do downstream analyses for e.g. phylogenetic methods. This tab provides options for two custom log files, which are placed, after a run, within the <em>TREvoSim_output</em> folder created on the save path. Basename defines the start of the filename, and if you so wish, this can include forward slashes before the start of the file name to denote a path, that TREvoSim will create for you. TREvoSim then adds a number to the start of the filename you have suggested, and this number iterates with subsequent runs. The file extension is also defined in this dialogue in a separate text box.</p>
@@ -111,12 +113,12 @@
 </div>
 </section>
 <section id="running-log">
-<h3><span class="section-number">8.1.2. </span>Running log<a class="headerlink" href="#running-log" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">8.1.2. </span>Running log<a class="headerlink" href="#running-log" title="Link to this heading">¶</a></h3>
 <p>The other tab is a running log which is output during a run:</p>
 <figure class="align-center" id="id2">
 <img alt="The output settings page for the running log in TREvoSim" src="_images/output_02.png" />
 <figcaption>
-<p><span class="caption-text">The TREvoSim Running Log settings</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+<p><span class="caption-text">The TREvoSim Running Log settings</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
 <p>This is of utility for studying processes as they occur during a run, as it is output on a regular basis as the simulation progresses. Any text entered into the Custom running log text box is output to a new file (appended with an iterator) at the requested frequency. This can be used to record anything in the state of the simulation required to study a process of interest. At the top of the dialogue are two options:</p>
@@ -137,7 +139,7 @@
 </section>
 </section>
 <section id="keywords">
-<h2><span class="section-number">8.2. </span>Keywords<a class="headerlink" href="#keywords" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">8.2. </span>Keywords<a class="headerlink" href="#keywords" title="Link to this heading">¶</a></h2>
 <p>Keywords within two vertical bars ( e.g. ||Matrix|| ) are replaced as a file is written as follows:</p>
 <dl>
 <dt>Character_Number</dt><dd><p>This outputs the character number.</p>
@@ -215,7 +217,7 @@
 </pre></div>
 </div>
 </dd>
-<dt>Stochastic_Matrix</dt><dd><p>This writes the matrix in the format introduced above, but writes the stochastic layer for each taxon. (see <a class="reference internal" href="settings.html#organisms"><span class="std std-ref">Organisms</span></a>).</p>
+<dt>Stochastic_Matrix</dt><dd><p>This writes the matrix in the format introduced above, but writes the stochastic layer for each taxon (see <a class="reference internal" href="settings.html#organisms"><span class="std std-ref">Organisms</span></a>).</p>
 </dd>
 <dt>TNT_Tree</dt><dd><p>This writes a tree, if required, in TNT format (i.e. only brackets and terminal labels):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(((</span><span class="mi">00</span> <span class="mi">03</span><span class="p">)</span> <span class="mi">02</span><span class="p">)</span> <span class="mi">01</span><span class="p">)</span>
@@ -239,7 +241,7 @@
 </dd>
 </dl>
 <section id="keywords-example">
-<h3><span class="section-number">8.2.1. </span>Keywords example<a class="headerlink" href="#keywords-example" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">8.2.1. </span>Keywords example<a class="headerlink" href="#keywords-example" title="Link to this heading">¶</a></h3>
 <p>As an example, the following – entered as one of the custom files at the end of the run – would output a block of text that could be run as a macro in tnt:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mxram</span> <span class="mi">100</span><span class="p">;</span>
 <span class="n">NSTATES</span> <span class="n">nogaps</span><span class="p">;</span>
