@@ -38,7 +38,9 @@ Run to taxon number
 Run for iterations number
     If run mode is iteration number, a simulation will run until this number of iterations, and then terminate.
 Species difference
-    The Hamming distance between a selected organism, post mutation, and either the character string when the species originated, or the last species to originate within the lineage (see Keating et al. (`2020 <https://doi.org/10.1093/sysbio/syaa012>`_) for rationale) is used within the TREvoSim species concept. This setting defines the required Hamming distance for a speciation to have occurred.
+    The Hamming distance between a selected organism, post mutation, and the character string defined by the speciation mode setting (below) is used by the TREvoSim species concept. This setting defines the required Hamming distance for a speciation to have occurred.
+Species mode
+    From v3.1.0 TREvoSim offers three different speciation modes: when assessing whether a new species has appeared within a lineage, these mode differ in the genome comparisons made -- the genome at species birth, the last speciation from the lineage, or all the origin and all speciating genomes that have occurred. See `Issue #59 for discussion <https://github.com/palaeoware/trevosim/issues/59>`_.
 Unresolvable cut off
     With low character numbers, especially when TREvoSim is set to strip out uninformative characters, terminals can have the same character string within a matrix, and thus be unresolvable. This setting defines upper limit for identical terminals. If there are more unresolvable taxa than this number in a single run, output files are not written and a warning is provided. If batch mode is underway, the current run is discarded and started again.
 Fitness target

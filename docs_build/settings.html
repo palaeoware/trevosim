@@ -87,10 +87,10 @@
   <section id="settings-organisms-and-simulation">
 <span id="settings"></span><h1><span class="section-number">6. </span>Settings - Organisms and simulation<a class="headerlink" href="#settings-organisms-and-simulation" title="Link to this heading">¶</a></h1>
 <p>Clicking on the settings button of the toolbar will launch a settings dialogue which has two tabs - one with settings for the organisms in the simulation, and one controlling the environment for the simulation.</p>
-<figure class="align-center" id="id2">
+<figure class="align-center" id="id1">
 <a class="reference internal image-reference" href="_images/settings_01.png"><img alt="A screenshot of the TREvoSim settings panel for Organisms and simulation" src="_images/settings_01.png" style="width: 550px;" /></a>
 <figcaption>
-<p><span class="caption-text">The TREvoSim Organisms and Simulations settings panel</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
+<p><span class="caption-text">The TREvoSim Organisms and Simulations settings panel</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
 </figcaption>
 </figure>
 <section id="organisms">
@@ -119,7 +119,9 @@
 </dd>
 <dt>Run for iterations number</dt><dd><p>If run mode is iteration number, a simulation will run until this number of iterations, and then terminate.</p>
 </dd>
-<dt>Species difference</dt><dd><p>The Hamming distance between a selected organism, post mutation, and either the character string when the species originated, or the last species to originate within the lineage (see Keating et al. (<a class="reference external" href="https://doi.org/10.1093/sysbio/syaa012">2020</a>) for rationale) is used within the TREvoSim species concept. This setting defines the required Hamming distance for a speciation to have occurred.</p>
+<dt>Species difference</dt><dd><p>The Hamming distance between a selected organism, post mutation, and the character string defined by the speciation mode setting (below) is used by the TREvoSim species concept. This setting defines the required Hamming distance for a speciation to have occurred.</p>
+</dd>
+<dt>Species mode</dt><dd><p>From v3.1.0 TREvoSim offers three different speciation modes: when assessing whether a new species has appeared within a lineage, these mode differ in the genome comparisons made – the genome at species birth, the last speciation from the lineage, or all the origin and all speciating genomes that have occurred. See <a class="reference external" href="https://github.com/palaeoware/trevosim/issues/59">Issue #59 for discussion</a>.</p>
 </dd>
 <dt>Unresolvable cut off</dt><dd><p>With low character numbers, especially when TREvoSim is set to strip out uninformative characters, terminals can have the same character string within a matrix, and thus be unresolvable. This setting defines upper limit for identical terminals. If there are more unresolvable taxa than this number in a single run, output files are not written and a warning is provided. If batch mode is underway, the current run is discarded and started again.</p>
 </dd>
