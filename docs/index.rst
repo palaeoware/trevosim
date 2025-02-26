@@ -31,7 +31,9 @@ Mongiardino Koch, N., Garwood, R.J. and Parry, L.A. 2021. Fossils improve phylog
 
 Mongiardino Koch, N., Garwood, R.J. and Parry, L.A. 2023. Inaccurate fossil placement does not compromise tip-dated divergence times. Palaeontology 66 (6): e12680. `DOI: 10.1111/pala.12680 <https://doi.org/10.1111/pala.12680>`_ (utilises TREvoSim v2.0.0)
 
-Garwood, R.J., Spencer, A.R.T., Bates, C.T.M., Callender-Crowe, L.M., Dunn, F.S., Halliday, T.J.D., Keating, J.N., Mongiardino Koch, N., Parry, L.A., Sansom, R.S., Smith, T.J., Sutton, M.D., and Vanteghem, T. 2024. TREvoSim v3: An individual based simulation tool for generating trees and morphological data. Journal Of Open Source Software (describes v3.0.0)
+Garwood, R.J., Spencer, A.R.T., Bates, C.T.M., Callender-Crowe, L.M., Dunn, F.S., Halliday, T.J.D., Keating, J.N., Mongiardino Koch, N., Parry, L.A., Sansom, R.S., Smith, T.J., Sutton, M.D., and Vanteghem, T. 2024. TREvoSim v3: An individual based simulation tool for generating trees and morphological data. Journal Of Open Source Software 9(101): 6722. `DOI: 10.21105/joss.06722 <https://doi.org/10.21105/joss.06722>`_ (describes v3.0.0)
+
+Smith, T.J., Parry, L.A., Dunn, F.S. and Garwood, R.J. 2024. Exploring the macroevolutionary impact of ecosystem engineers using an individual-based eco-evolutionary simulation. Palaeontology, 67(5): e12701. `DOI: 10.1111/pala.12701 <https://doi.org/10.1111/pala.12701>`_ (utilises v3.0.0)
 
 Table of Contents
 =================
