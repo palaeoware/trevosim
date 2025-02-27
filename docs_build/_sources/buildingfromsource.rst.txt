@@ -127,7 +127,7 @@ Ubuntu
 Compiling v3.X using command line
 """""""""""""""""""""""""""""""""
 
-This has been tested on Ubuntu 22.04 64-bit with QT v6.x using GCC (64-bit).
+This has been tested on Ubuntu 22.04 and 24.04 64-bit with QT v6.x using GCC (64-bit).
 
 #. Install GCC and Qt using system packages:
 
@@ -153,6 +153,28 @@ This has been tested on Ubuntu 22.04 64-bit with QT v6.x using GCC (64-bit).
 
 #. Launch the software by double clicking on the TREvoSim binary that has been created in this folder, or run the binary from the command line.
 
+Compiling v3.X remotely using command line
+""""""""""""""""""""""""""""""""""""""""""
+
+If building and running TREvoSim via SSH on Linux is required (e.g. on a cluster), this can be achieved, after installing packages and cloning the source code (see above) as follows:
+
+#. Generate a buildsystem by specifying the source and build directories -- this command, updated to specify the source and build directories, will build a release, and assumes the default path for Qt using Ubuntu system packages:
+
+    .. code-block:: console
+
+      cmake -DCMAKE_PREFIX_PATH=/usr/lib/qt6/ -DCMAKE_BUILD_TYPE=Release -S YOUR_SOURCE_DIRECTORY -B YOUR_BUILD_DIRECTORY
+
+#. Then build the software:
+
+    .. code-block:: console
+
+      cmake --build YOUR_BUILD_DIRECTORY
+
+This will create a binary, which can be run from the command line. If no GUI is required (or the system doesn't allow one), TREvoSim can be launched by rendering to an offscreen buffer:
+
+    .. code-block:: console
+
+      ./TREvoSim --platform offscreen 
 
 Compiling v1.X & v2.X using command line
 """"""""""""""""""""""""""""""""""""""""
