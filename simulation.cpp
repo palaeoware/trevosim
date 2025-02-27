@@ -516,6 +516,10 @@ bool simulation::run()
             logTextOut.replace("||Settings||", simSettings->printSettings(), Qt::CaseInsensitive);
             logTextOut.replace("||Iteration||", QString::number(iterations), Qt::CaseInsensitive);
             logTextOut.replace("||Root||", printGenomeString(&bestOrganism), Qt::CaseInsensitive);
+            logTextOut.replace("||Print_PF||", printPlayingField(playingFields), Qt::CaseInsensitive);
+            logTextOut.replace("||Print_PF_semiconcise||", printPlayingFieldSemiconcise(playingFields), Qt::CaseInsensitive);
+            logTextOut.replace("||Print_PF_concise||", printPlayingFieldConcise(playingFields), Qt::CaseInsensitive);
+            logTextOut.replace("||Masks||", printMasks(playingFields), Qt::CaseInsensitive);
 
             bool writeRunningLogSuccess = writeRunningLog(iterations, logTextOut);
 
