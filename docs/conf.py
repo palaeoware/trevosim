@@ -243,7 +243,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'TREvoSim', 'TREvoSim Documentation',
-     author, 'TREvoSim', 'One line description of project.',
+     author, 'TREvoSim', 'An individual based evolutionary simulation.',
      'Miscellaneous'),
 ]
 

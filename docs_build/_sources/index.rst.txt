@@ -38,7 +38,7 @@ Smith, T.J., Parry, L.A., Dunn, F.S. and Garwood, R.J. 2024. Exploring the macro
 Table of Contents
 =================
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
    :numbered:
 
    introduction
@@ -46,6 +46,7 @@ Table of Contents
    buildingfromsource
    algorithmconcepts
    windowlayout
+   commandline
    settings
    settings2
    loggingsim

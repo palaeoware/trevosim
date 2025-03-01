@@ -5,5 +5,5 @@
 #Before 24.04 - sudo pip3 install sphinx_rtd_theme
 #24.04 and after: sudo apt-get -y install python3-sphinx-rtd-theme
 echo "Now building trevosim doc"
-sphinx-build ./ ../docs_build
-
+sphinx-build -E ./ ../docs_build
+#2025 - added -E switch as this forces updates - cache/environment was causing issues adding new files
