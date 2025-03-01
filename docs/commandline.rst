@@ -1,11 +1,21 @@
 .. _commandline:
 
-Command Line Interface 
-=======================
+Command Line Options 
+====================
 
-TREvoSim has a command line interface. 
+TREvoSim has command line options that allow simulations to be launched from a terminal or from batch files. 
 
-Launching 
 ---------
 
 Details coming soon.
+
+Running via SSH
+---------------
+
+ TREvoSim can be launched by rendering to an offscreen buffer:
+
+    .. code-block:: console
+
+      ./TREvoSim --platform offscreen 
+
+Note: Much of this section 

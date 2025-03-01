@@ -46,9 +46,9 @@ Table of Contents
    buildingfromsource
    algorithmconcepts
    windowlayout
-   commandline
    settings
    settings2
    loggingsim
    filecommands
+   commandline
    software_tests

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>9. Logging the Simulation &mdash; TREvoSim 3.0.0 documentation</title>
+  <title>8. Logging the Simulation &mdash; TREvoSim 3.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=86f27845" />
 
@@ -16,8 +16,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="10. Menu commands" href="filecommands.html" />
-    <link rel="prev" title="8. Settings - Environment, events and playing fields" href="settings2.html" /> 
+    <link rel="next" title="9. Menu commands" href="filecommands.html" />
+    <link rel="prev" title="7. Settings - Environment, events and playing fields" href="settings2.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -49,22 +49,22 @@
 <li class="toctree-l1"><a class="reference internal" href="buildingfromsource.html">3. Compiling from Source and Development Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="algorithmconcepts.html">4. Algorithm, Concepts, and Experimental Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="windowlayout.html">5. Window Layout</a></li>
-<li class="toctree-l1"><a class="reference internal" href="commandline.html">6. Command Line Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="settings.html">7. Settings - Organisms and simulation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="settings2.html">8. Settings - Environment, events and playing fields</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">9. Logging the Simulation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#logging-system">9.1. Logging system</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#end-run-log">9.1.1. End run log</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#running-log">9.1.2. Running log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html">6. Settings - Organisms and simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings2.html">7. Settings - Environment, events and playing fields</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">8. Logging the Simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#logging-system">8.1. Logging system</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#end-run-log">8.1.1. End run log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#running-log">8.1.2. Running log</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#keywords">9.2. Keywords</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#keywords-example">9.2.1. Keywords example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#keywords">8.2. Keywords</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#keywords-example">8.2.1. Keywords example</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="filecommands.html">10. Menu commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="filecommands.html">9. Menu commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commandline.html">10. Command Line Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="software_tests.html">11. Tests</a></li>
 </ul>
 
@@ -82,7 +82,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active"><span class="section-number">9. </span>Logging the Simulation</li>
+      <li class="breadcrumb-item active"><span class="section-number">8. </span>Logging the Simulation</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/loggingsim.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -93,11 +93,11 @@
            <div itemprop="articleBody">
              
   <section id="logging-the-simulation">
-<span id="loggingsim"></span><h1><span class="section-number">9. </span>Logging the Simulation<a class="headerlink" href="#logging-the-simulation" title="Link to this heading">¶</a></h1>
+<span id="loggingsim"></span><h1><span class="section-number">8. </span>Logging the Simulation<a class="headerlink" href="#logging-the-simulation" title="Link to this heading">¶</a></h1>
 <section id="logging-system">
-<h2><span class="section-number">9.1. </span>Logging system<a class="headerlink" href="#logging-system" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">8.1. </span>Logging system<a class="headerlink" href="#logging-system" title="Link to this heading">¶</a></h2>
 <section id="end-run-log">
-<h3><span class="section-number">9.1.1. </span>End run log<a class="headerlink" href="#end-run-log" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">8.1.1. </span>End run log<a class="headerlink" href="#end-run-log" title="Link to this heading">¶</a></h3>
 <p>TREvoSim has a versatile logging system which allows the user to define outputs in a range of formats required for phylogenetic inference packages, or e.g. R, provided these allow plain text inputs. Clicking on the output button of the toolbar will launch the output dialogue, which has two tabs. The first is a log that is output at the end of the run:</p>
 <figure class="align-center" id="id1">
 <img alt="The output settings page for the end run log in TREvoSim" src="_images/output_01.png" />
@@ -114,7 +114,7 @@
 </div>
 </section>
 <section id="running-log">
-<h3><span class="section-number">9.1.2. </span>Running log<a class="headerlink" href="#running-log" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">8.1.2. </span>Running log<a class="headerlink" href="#running-log" title="Link to this heading">¶</a></h3>
 <p>The other tab is a running log which is output during a run:</p>
 <figure class="align-center" id="id2">
 <img alt="The output settings page for the running log in TREvoSim" src="_images/output_02.png" />
@@ -140,7 +140,7 @@
 </section>
 </section>
 <section id="keywords">
-<h2><span class="section-number">9.2. </span>Keywords<a class="headerlink" href="#keywords" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">8.2. </span>Keywords<a class="headerlink" href="#keywords" title="Link to this heading">¶</a></h2>
 <p>Keywords within two vertical bars ( e.g. ||Matrix|| ) are replaced as a file is written as follows:</p>
 <dl>
 <dt>Character_Number</dt><dd><p>This outputs the character number.</p>
@@ -242,7 +242,7 @@
 </dd>
 </dl>
 <section id="keywords-example">
-<h3><span class="section-number">9.2.1. </span>Keywords example<a class="headerlink" href="#keywords-example" title="Link to this heading">¶</a></h3>
+<h3><span class="section-number">8.2.1. </span>Keywords example<a class="headerlink" href="#keywords-example" title="Link to this heading">¶</a></h3>
 <p>As an example, the following – entered as one of the custom files at the end of the run – would output a block of text that could be run as a macro in tnt:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mxram</span> <span class="mi">100</span><span class="p">;</span>
 <span class="n">NSTATES</span> <span class="n">nogaps</span><span class="p">;</span>
@@ -268,8 +268,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="settings2.html" class="btn btn-neutral float-left" title="8. Settings - Environment, events and playing fields" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="filecommands.html" class="btn btn-neutral float-right" title="10. Menu commands" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="settings2.html" class="btn btn-neutral float-left" title="7. Settings - Environment, events and playing fields" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="filecommands.html" class="btn btn-neutral float-right" title="9. Menu commands" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
