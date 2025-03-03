@@ -170,11 +170,7 @@ If building and running TREvoSim via SSH on Linux is required (e.g. on a cluster
 
       cmake --build YOUR_BUILD_DIRECTORY
 
-This will create a binary, which can be run from the command line. If no GUI is required (or the system doesn't allow one), TREvoSim can be launched by rendering to an offscreen buffer:
-
-    .. code-block:: console
-
-      ./TREvoSim --platform offscreen 
+This will create a binary, which can be run from the command line. See :ref:`Command Line Options` for more details on running this binary remotely.  
 
 Compiling v1.X & v2.X using command line
 """"""""""""""""""""""""""""""""""""""""
