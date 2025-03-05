@@ -516,9 +516,9 @@ bool simulation::run()
             logTextOut.replace("||Settings||", simSettings->printSettings(), Qt::CaseInsensitive);
             logTextOut.replace("||Iteration||", QString::number(iterations), Qt::CaseInsensitive);
             logTextOut.replace("||Root||", printGenomeString(&bestOrganism), Qt::CaseInsensitive);
-            logTextOut.replace("||Print_PF||", printPlayingField(playingFields), Qt::CaseInsensitive);
-            logTextOut.replace("||Print_PF_semiconcise||", printPlayingFieldSemiconcise(playingFields), Qt::CaseInsensitive);
-            logTextOut.replace("||Print_PF_concise||", printPlayingFieldConcise(playingFields), Qt::CaseInsensitive);
+            logTextOut.replace("||PlayingField||", printPlayingField(playingFields), Qt::CaseInsensitive);
+            logTextOut.replace("||PlayingField_semiconcise||", printPlayingFieldSemiconcise(playingFields), Qt::CaseInsensitive);
+            logTextOut.replace("||PlayingField_concise||", printPlayingFieldConcise(playingFields), Qt::CaseInsensitive);
             logTextOut.replace("||Masks||", printMasks(playingFields), Qt::CaseInsensitive);
 
             bool writeRunningLogSuccess = writeRunningLog(iterations, logTextOut);
@@ -2326,9 +2326,9 @@ bool simulation::writeFile(const QString logFileNameBase, const QString logFileE
     fileStringWrite.replace("||Taxon_Number||",  outValues["Taxon_Number"], Qt::CaseInsensitive);
     fileStringWrite.replace("||Count||", outValues["Count"], Qt::CaseInsensitive);
     fileStringWrite.replace("||Root||", outValues["Root"], Qt::CaseInsensitive);
-    fileStringWrite.replace("||Print_PF||", printPlayingField(playingFields), Qt::CaseInsensitive);
-    fileStringWrite.replace("||Print_PF_semiconcise||", printPlayingFieldSemiconcise(playingFields), Qt::CaseInsensitive);
-    fileStringWrite.replace("||Print_PF_concise||", printPlayingFieldConcise(playingFields), Qt::CaseInsensitive);
+    fileStringWrite.replace("||PlayingField||", printPlayingField(playingFields), Qt::CaseInsensitive);
+    fileStringWrite.replace("||PlayingField_semiconcise||", printPlayingFieldSemiconcise(playingFields), Qt::CaseInsensitive);
+    fileStringWrite.replace("||PlayingField_concise||", printPlayingFieldConcise(playingFields), Qt::CaseInsensitive);
     fileStringWrite.replace("||Masks||", printMasks(playingFields), Qt::CaseInsensitive);
 
     fileTextStream << fileStringWrite;

@@ -105,8 +105,14 @@ Ecosystem_Engineers
     0,3,0,0,0111101101
     0,4,0,0,0111110101
 
+Identical
+  This outputs the number of identical taxa in a run. 
+
 Iteration
   This outputs the current iteration number. 
+
+Masks
+
 
 Matrix
   This is replaced with the matrix from the run. For example:
@@ -129,6 +135,53 @@ MrBayes_Tree
 
   .. note:: 
     The mechanism used for tree writing differs between TNT and MrBayes outputs -- the tree topology is the same, but the taxon order differs.
+
+PlayingField, PlayingField_semiconcise,PlayingField_concise
+  These commands print the current state of the playing fields in expansive, through to concise, formats. The first option, PlayingField, will output the following details for every organism in every playing field:
+
+  ::
+
+    Playingfield pos: 0 
+    Species ID: 35
+    Genome:	01111100111010111100110001011100
+    Parent genomes:
+    Genome 0	01111100111110111100110001011100
+    Genome 1	01111010101011111111110001111100
+    
+    Fitness:	45
+    Ecosystem engineer:	0
+
+  Using PlayingField_semiconcise, the playing field will be printedd as follows:
+  
+  ::
+
+    Playing field number,Playingfield position,Species ID,Ecosystem engineer,Genome
+    0,0,35,0,01111100111010111100110001011100
+    0,1,36,0,01001010101110111111110001101101
+    0,2,32,0,00010010011110011101110001011100
+    0,3,31,0,01111010101110111111110001101101
+    0,4,35,0,01111100111110111100110001011100
+    0,5,28,0,01111100011111111100110001011100
+    0,6,9,0,01011010101110111111111001111100
+    0,7,24,0,00011010011110011101110001011100
+    0,8,0,0,01111010101110111101110001111101
+    0,9,9,0,01011110101110110111111001111100
+
+  And using PlayingField_concise, the format will be:
+
+  ::
+
+    Playing field number,Playingfield position,Species ID,Ecosystem engineer
+    0,0,35,0
+    0,1,36,0
+    0,2,32,0
+    0,3,31,0
+    0,4,35,0
+    0,5,28,0
+    0,6,9,0
+    0,7,24,0
+    0,8,0,0
+    0,9,9,0
 
 Root
   Writes the genome of the organism used to seed the simulation, thereby allowing characters to be polarised correctly with respect to the root of the tree (see :ref:`algorithmconcepts`):
@@ -170,6 +223,10 @@ Unresolvable
   This prints a list of unresolvable taxa (or a notice that there are none if required).
 Uninformative
   Writes the number of uninformative characters.
+
+
+
+
 
 Keywords example 
 ^^^^^^^^^^^^^^^^

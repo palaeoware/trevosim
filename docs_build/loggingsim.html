@@ -64,7 +64,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="filecommands.html">9. Menu commands</a></li>
-<li class="toctree-l1"><a class="reference internal" href="commandline.html">10. Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commandline.html">10. Command Line Options</a></li>
 <li class="toctree-l1"><a class="reference internal" href="software_tests.html">11. Tests</a></li>
 </ul>
 
@@ -187,8 +187,13 @@
 </pre></div>
 </div>
 </dd>
+<dt>Identical</dt><dd><p>This outputs the number of identical taxa in a run.</p>
+</dd>
 <dt>Iteration</dt><dd><p>This outputs the current iteration number.</p>
 </dd>
+</dl>
+<p>Masks</p>
+<dl>
 <dt>Matrix</dt><dd><p>This is replaced with the matrix from the run. For example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Species_00</span>  <span class="mi">0111011110</span>
 <span class="n">Species_01</span>  <span class="mi">0101011011</span>
@@ -206,6 +211,47 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The mechanism used for tree writing differs between TNT and MrBayes outputs – the tree topology is the same, but the taxon order differs.</p>
+</div>
+</dd>
+<dt>PlayingField, PlayingField_semiconcise,PlayingField_concise</dt><dd><p>These commands print the current state of the playing fields in expansive, through to concise, formats. The first option, PlayingField, will output the following details for every organism in every playing field:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Playingfield</span> <span class="n">pos</span><span class="p">:</span> <span class="mi">0</span>
+<span class="n">Species</span> <span class="n">ID</span><span class="p">:</span> <span class="mi">35</span>
+<span class="n">Genome</span><span class="p">:</span>     <span class="mi">01111100111010111100110001011100</span>
+<span class="n">Parent</span> <span class="n">genomes</span><span class="p">:</span>
+<span class="n">Genome</span> <span class="mi">0</span>    <span class="mi">01111100111110111100110001011100</span>
+<span class="n">Genome</span> <span class="mi">1</span>    <span class="mi">01111010101011111111110001111100</span>
+
+<span class="n">Fitness</span><span class="p">:</span>    <span class="mi">45</span>
+<span class="n">Ecosystem</span> <span class="n">engineer</span><span class="p">:</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>Using PlayingField_semiconcise, the playing field will be printedd as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Playing</span> <span class="n">field</span> <span class="n">number</span><span class="p">,</span><span class="n">Playingfield</span> <span class="n">position</span><span class="p">,</span><span class="n">Species</span> <span class="n">ID</span><span class="p">,</span><span class="n">Ecosystem</span> <span class="n">engineer</span><span class="p">,</span><span class="n">Genome</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">35</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">01111100111010111100110001011100</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">36</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">01001010101110111111110001101101</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">00010010011110011101110001011100</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">31</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">01111010101110111111110001101101</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">35</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">01111100111110111100110001011100</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">28</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">01111100011111111100110001011100</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">01011010101110111111111001111100</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">24</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">00011010011110011101110001011100</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">01111010101110111101110001111101</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">01011110101110110111111001111100</span>
+</pre></div>
+</div>
+<p>And using PlayingField_concise, the format will be:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Playing</span> <span class="n">field</span> <span class="n">number</span><span class="p">,</span><span class="n">Playingfield</span> <span class="n">position</span><span class="p">,</span><span class="n">Species</span> <span class="n">ID</span><span class="p">,</span><span class="n">Ecosystem</span> <span class="n">engineer</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">35</span><span class="p">,</span><span class="mi">0</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">36</span><span class="p">,</span><span class="mi">0</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">0</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">31</span><span class="p">,</span><span class="mi">0</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">35</span><span class="p">,</span><span class="mi">0</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">28</span><span class="p">,</span><span class="mi">0</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">0</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">24</span><span class="p">,</span><span class="mi">0</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span>
+<span class="mi">0</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">0</span>
+</pre></div>
 </div>
 </dd>
 <dt>Root</dt><dd><p>Writes the genome of the organism used to seed the simulation, thereby allowing characters to be polarised correctly with respect to the root of the tree (see <a class="reference internal" href="algorithmconcepts.html#algorithmconcepts"><span class="std std-ref">Algorithm, Concepts, and Experimental Design</span></a>):</p>
