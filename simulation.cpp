@@ -516,9 +516,12 @@ bool simulation::run()
             logTextOut.replace("||Settings||", simSettings->printSettings(), Qt::CaseInsensitive);
             logTextOut.replace("||Iteration||", QString::number(iterations), Qt::CaseInsensitive);
             logTextOut.replace("||Root||", printGenomeString(&bestOrganism), Qt::CaseInsensitive);
+            logTextOut.replace("||PlayingField_Number||", QString::number(simSettings->playingfieldNumber), Qt::CaseInsensitive);
+            logTextOut.replace("||PlayingField_Size||", QString::number(simSettings->playingfieldSize), Qt::CaseInsensitive);
             logTextOut.replace("||PlayingField||", printPlayingField(playingFields), Qt::CaseInsensitive);
             logTextOut.replace("||PlayingField_semiconcise||", printPlayingFieldSemiconcise(playingFields), Qt::CaseInsensitive);
             logTextOut.replace("||PlayingField_concise||", printPlayingFieldConcise(playingFields), Qt::CaseInsensitive);
+            logTextOut.replace("||PlayingField_genomes_concise||", printPlayingFieldGenomesConcise(playingFields), Qt::CaseInsensitive);
             logTextOut.replace("||Masks||", printMasks(playingFields), Qt::CaseInsensitive);
 
             bool writeRunningLogSuccess = writeRunningLog(iterations, logTextOut);
@@ -658,6 +661,8 @@ bool simulation::run()
     outValues["Taxon_Number"] = QString::number(speciesList.length());
     outValues["Count"] = doPadding(runs, 3);
     outValues["Root"] = printGenomeString(&bestOrganism);
+    outValues["PlayingField_Number"] = QString::number(simSettings->playingfieldNumber);
+    outValues["||PlayingField_Size||"] = QString::number(simSettings->playingfieldSize);
 
     if (simSettings->writeFileOne && simSettings->test == 0)
         if (!writeFile(simSettings->logFileNameBase01, simSettings->logFileExtension01, simSettings->logFileString01, outValues, speciesList))
@@ -1941,7 +1946,6 @@ QString simulation::printPlayingFieldSemiconcise(const QVector <playingFieldStru
     for (auto pf : playingFields)
     {
         int cnt = 0;
-        //out << "\nPlaying field number,Playingfield position,Species ID,Genome,Ecosystem engineer\n";
         out << "\nPlaying field number,Playingfield position,Species ID,Ecosystem engineer,Genome\n";
         for (auto o : std::as_const(pf->playingField))
         {
@@ -1965,17 +1969,26 @@ QString simulation::printPlayingFieldConcise(const QVector <playingFieldStructur
     for (auto pf : playingFields)
     {
         int cnt = 0;
-        //out << "\nPlaying field number,Playingfield position,Species ID,Genome,Ecosystem engineer\n";
         out << "\nPlaying field number,Playingfield position,Species ID,Ecosystem engineer\n";
         for (auto o : std::as_const(pf->playingField))
         {
             out << p << "," << cnt << "," << o->speciesID << "," << o->ecosystemEngineer << "\n";
-            //for (auto i : std::as_const(o->genome)) i ? out << 1 : out << 0 ;
-            //out << "," << o->ecosystemEngineer << "\n";
             cnt++;
         }
         p++;
     }
+    return pfText;
+}
+
+QString simulation::printPlayingFieldGenomesConcise(const QVector <playingFieldStructure *> &playingFields)
+{
+    QString pfText;
+    QTextStream out(&pfText);
+
+    for (auto pf : playingFields)
+        for (auto o : std::as_const(pf->playingField))
+            for (auto i : std::as_const(o->genome)) i ? out << 1 : out << 0 ;
+
     return pfText;
 }
 
@@ -2326,9 +2339,12 @@ bool simulation::writeFile(const QString logFileNameBase, const QString logFileE
     fileStringWrite.replace("||Taxon_Number||",  outValues["Taxon_Number"], Qt::CaseInsensitive);
     fileStringWrite.replace("||Count||", outValues["Count"], Qt::CaseInsensitive);
     fileStringWrite.replace("||Root||", outValues["Root"], Qt::CaseInsensitive);
+    fileStringWrite.replace("||PlayingField_Size||", outValues["PlayingField_Size"], Qt::CaseInsensitive);
+    fileStringWrite.replace("||PlayingField_Number||", outValues["PlayingField_Number"], Qt::CaseInsensitive);
     fileStringWrite.replace("||PlayingField||", printPlayingField(playingFields), Qt::CaseInsensitive);
     fileStringWrite.replace("||PlayingField_semiconcise||", printPlayingFieldSemiconcise(playingFields), Qt::CaseInsensitive);
     fileStringWrite.replace("||PlayingField_concise||", printPlayingFieldConcise(playingFields), Qt::CaseInsensitive);
+    fileStringWrite.replace("||PlayingField_genomes_concise||", printPlayingFieldGenomesConcise(playingFields), Qt::CaseInsensitive);
     fileStringWrite.replace("||Masks||", printMasks(playingFields), Qt::CaseInsensitive);
 
     fileTextStream << fileStringWrite;

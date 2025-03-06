@@ -73,6 +73,7 @@ private:
     QString printPlayingField(const QVector <playingFieldStructure *> &playingFields);
     QString printPlayingFieldSemiconcise(const QVector <playingFieldStructure *> &playingFields);
     QString printPlayingFieldConcise(const QVector <playingFieldStructure *> &playingFields);
+    QString printPlayingFieldGenomesConcise(const QVector <playingFieldStructure *> &playingFields);
     QString printSpeciesList(const QVector <Organism *> &speciesList);
     QString printMasks(const QVector <playingFieldStructure *> &playingFields, int playingfield);
     QString printMasks(const QVector <playingFieldStructure *> &playingFields);
