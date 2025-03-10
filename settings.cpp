@@ -68,6 +68,7 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
     ui->c_expanding_playingfield->setChecked(settings->expandingPlayingfield);
     ui->c_match_fitness_peaks->setChecked(settings->matchFitnessPeaks);
     ui->c_ecosystem_engineers->setChecked(settings->ecosystemEngineers);
+    ui->c_increment_environments->setChecked(settings->incrementEnvironments);
 
     //Set sensible maxima
     ui->s_select_size->setMaximum(settings->genomeSize);
@@ -160,6 +161,7 @@ void Settings::on_buttonBox_accepted()
     settings->expandingPlayingfield = ui->c_expanding_playingfield->isChecked();
     settings->matchFitnessPeaks = ui->c_match_fitness_peaks->isChecked();
     settings->ecosystemEngineers = ui->c_ecosystem_engineers->isChecked();
+    settings->incrementEnvironments = ui->c_increment_environments->isChecked();
 
     //Modify variables - environment tab
     settings->playingfieldSize = ui->s_playingfield_size->value();
