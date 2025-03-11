@@ -405,6 +405,14 @@ void Settings::slotEngineersChanged()
         ui->EE_Label_2->setEnabled(true);
         ui->EE_Label_3->setEnabled(true);
 
+        ui->r_once_EE->setVisible(true);
+        ui->r_persistent_EE->setVisible(true);
+        ui->r_add_mask->setVisible(true);
+        ui->r_overwrite_mask->setVisible(true);
+        ui->s_EE_frequency->setVisible(true);
+        ui->EE_Label->setVisible(true);
+        ui->EE_Label_2->setVisible(true);
+        ui->EE_Label_3->setVisible(true);
     }
     else
     {
@@ -416,6 +424,15 @@ void Settings::slotEngineersChanged()
         ui->EE_Label->setEnabled(false);
         ui->EE_Label_2->setEnabled(false);
         ui->EE_Label_3->setEnabled(false);
+
+        ui->r_once_EE->setVisible(false);
+        ui->r_persistent_EE->setVisible(false);
+        ui->r_add_mask->setVisible(false);
+        ui->r_overwrite_mask->setVisible(false);
+        ui->s_EE_frequency->setVisible(false);
+        ui->EE_Label->setVisible(false);
+        ui->EE_Label_2->setVisible(false);
+        ui->EE_Label_3->setVisible(false);
     }
 }
 
