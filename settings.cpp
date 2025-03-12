@@ -31,6 +31,7 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
     QObject::connect(ui->s_select_size, QOverload<int>::of(&QSpinBox::valueChanged), this, &Settings::slotSelectSizeChanged);
     QObject::connect(ui->s_fitness_size, QOverload<int>::of(&QSpinBox::valueChanged), this, &Settings::slotFitnessSizeChanged);
     QObject::connect(ui->s_taxon_number, QOverload<int>::of(&QSpinBox::valueChanged), this, &Settings::slotrunForTaxaChanged);
+    QObject::connect(ui->s_environment_number, QOverload<int>::of(&QSpinBox::valueChanged), this, &Settings::slotEnvironmentNumberChanged);
     QObject::connect(ui->s_multiple, QOverload<int>::of(&QSpinBox::valueChanged), this, &Settings::slotPlayingfieldNumberChanged);
     QObject::connect(ui->c_expanding_playingfield, &QCheckBox::stateChanged, this, &Settings::slotExpandingPlayingfieldChanged);
     QObject::connect(ui->c_random_overwrite, &QCheckBox::stateChanged, this, &Settings::slotRandomOverwriteChanged);
@@ -41,7 +42,6 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
     QObject::connect(ui->docs_pushButton_02, &QPushButton::clicked, this, &Settings::docs2);
     QObject::connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &Settings::accept);
     QObject::connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &Settings::reject);
-
 
     ui->s_genome_size->setValue(settings->genomeSize);
     ui->s_select_size->setValue(settings->speciesSelectSize);
@@ -285,6 +285,20 @@ void Settings::slotrunForTaxaChanged()
 void Settings::slotFitnessSizeChanged()
 {
     ui->s_fitness_target->setMaximum(ui->s_fitness_size->value()*settings->maskNumber);
+}
+
+void Settings::slotEnvironmentNumberChanged()
+{
+    if (ui->s_environment_number->value() == 1)
+    {
+        ui->combo_environments->setVisible(false);
+        ui->label_fitness->setVisible(false);
+    }
+    else
+    {
+        ui->combo_environments->setVisible(true);
+        ui->label_fitness->setVisible(true);
+    }
 }
 
 //Sort GUI

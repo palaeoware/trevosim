@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="settingsTabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="organism_tab">
       <attribute name="title">
@@ -316,68 +316,62 @@
        <string>Environment, events and playing fields</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="7" column="1">
-        <widget class="QCheckBox" name="c_increment_environments">
+       <item row="22" column="0" colspan="2">
+        <widget class="QCheckBox" name="c_mixing_perturbation">
          <property name="text">
-          <string>Increment environments</string>
+          <string>Increase mixing for perturbation period </string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0" colspan="2">
-        <widget class="QLabel" name="docs_label_02">
+       <item row="26" column="0">
+        <widget class="QLabel" name="label_23">
          <property name="text">
-          <string>TextLabel</string>
+          <string>Selection coin toss</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="0" colspan="2">
-        <widget class="QPushButton" name="docs_pushButton_02">
+       <item row="16" column="0">
+        <widget class="QLabel" name="EE_Label">
          <property name="text">
-          <string>See documentation</string>
+          <string>EE frequency</string>
          </property>
         </widget>
        </item>
-       <item row="30" column="0">
-        <widget class="QLabel" name="label_16">
-         <property name="text">
-          <string>Playing field masks:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QDoubleSpinBox" name="s_environment_mutation">
-         <property name="decimals">
+       <item row="24" column="1">
+        <widget class="QSpinBox" name="s_playingfield_size">
+         <property name="minimum">
           <number>2</number>
          </property>
-         <property name="singleStep">
-          <double>0.010000000000000</double>
+         <property name="maximum">
+          <number>10000</number>
          </property>
          <property name="value">
-          <double>1.000000000000000</double>
+          <number>50</number>
          </property>
         </widget>
        </item>
-       <item row="19" column="0">
-        <widget class="QLabel" name="label_22">
-         <property name="font">
-          <font>
-           <bold>true</bold>
-           <underline>true</underline>
-          </font>
-         </property>
+       <item row="25" column="1">
+        <widget class="QCheckBox" name="c_random_overwrite">
          <property name="text">
-          <string>Events </string>
+          <string>Random Overwrite</string>
          </property>
         </widget>
        </item>
-       <item row="28" column="1">
+       <item row="29" column="1">
         <widget class="QSpinBox" name="s_mixing_1_to_0">
          <property name="maximum">
           <number>100</number>
          </property>
         </widget>
        </item>
-       <item row="17" column="0" colspan="2">
+       <item row="5" column="1">
+        <widget class="QSpinBox" name="s_environment_number">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+        </widget>
+       </item>
+       <item row="18" column="0" colspan="2">
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
           <widget class="QRadioButton" name="r_overwrite_mask">
@@ -401,150 +395,48 @@
          </item>
         </layout>
        </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_7">
+       <item row="31" column="0">
+        <widget class="QLabel" name="label_16">
          <property name="text">
-          <string>Rate of environmental mutation</string>
+          <string>Playing field masks:</string>
          </property>
         </widget>
        </item>
-       <item row="15" column="0">
-        <widget class="QLabel" name="EE_Label">
+       <item row="2" column="0" colspan="2">
+        <widget class="QPushButton" name="docs_pushButton_02">
          <property name="text">
-          <string>EE frequency</string>
+          <string>See documentation</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="0">
-        <widget class="QCheckBox" name="c_match_fitness_peaks">
+       <item row="24" column="0">
+        <widget class="QLabel" name="label_18">
          <property name="text">
-          <string>Match fitness peaks</string>
-         </property>
-        </widget>
-       </item>
-       <item row="22" column="0">
-        <widget class="QLabel" name="label_20">
-         <property name="font">
-          <font>
-           <pointsize>11</pointsize>
-           <bold>true</bold>
-           <underline>true</underline>
-          </font>
-         </property>
-         <property name="text">
-          <string>Playing field(s)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="QSpinBox" name="s_environment_number">
-         <property name="minimum">
-          <number>1</number>
+          <string>Playing field size</string>
          </property>
         </widget>
        </item>
        <item row="21" column="0" colspan="2">
-        <widget class="QCheckBox" name="c_mixing_perturbation">
-         <property name="text">
-          <string>Increase mixing for perturbation period </string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="label_17">
-         <property name="text">
-          <string>Masks per environment</string>
-         </property>
-        </widget>
-       </item>
-       <item row="12" column="0" colspan="2">
-        <widget class="QLabel" name="EE_Label_3">
-         <property name="text">
-          <string>EE mode:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="20" column="0" colspan="2">
         <widget class="QCheckBox" name="c_extinction">
          <property name="text">
           <string>Apply environmental perturbation during run</string>
          </property>
         </widget>
        </item>
-       <item row="26" column="0">
-        <widget class="QLabel" name="label_playingfieldNumber">
-         <property name="text">
-          <string>Number of playing fields</string>
+       <item row="4" column="1">
+        <widget class="QDoubleSpinBox" name="s_environment_mutation">
+         <property name="decimals">
+          <number>2</number>
+         </property>
+         <property name="singleStep">
+          <double>0.010000000000000</double>
+         </property>
+         <property name="value">
+          <double>1.000000000000000</double>
          </property>
         </widget>
        </item>
-       <item row="14" column="0" colspan="2">
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <item>
-          <widget class="QRadioButton" name="r_once_EE">
-           <property name="text">
-            <string>Single shot EE</string>
-           </property>
-           <attribute name="buttonGroup">
-            <string notr="true">button_group_once_pers</string>
-           </attribute>
-          </widget>
-         </item>
-         <item>
-          <widget class="QRadioButton" name="r_persistent_EE">
-           <property name="text">
-            <string>Persistent EE</string>
-           </property>
-           <attribute name="buttonGroup">
-            <string notr="true">button_group_once_pers</string>
-           </attribute>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="28" column="0">
-        <widget class="QLabel" name="label_15">
-         <property name="text">
-          <string>Percent chance of mixing - PF2 to PF1</string>
-         </property>
-        </widget>
-       </item>
-       <item row="24" column="0">
-        <widget class="QCheckBox" name="c_expanding_playingfield">
-         <property name="text">
-          <string>Expanding playing field</string>
-         </property>
-        </widget>
-       </item>
-       <item row="11" column="0">
-        <widget class="QCheckBox" name="c_ecosystem_engineers">
-         <property name="text">
-          <string>Ecosystem engineers (EE)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="26" column="1">
-        <widget class="QSpinBox" name="s_multiple">
-         <property name="minimum">
-          <number>1</number>
-         </property>
-        </widget>
-       </item>
-       <item row="16" column="0">
-        <widget class="QLabel" name="EE_Label_2">
-         <property name="text">
-          <string>EE mechanism:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="label_19">
-         <property name="text">
-          <string>Number of environments</string>
-         </property>
-        </widget>
-       </item>
-       <item row="15" column="1">
+       <item row="16" column="1">
         <widget class="QSpinBox" name="s_EE_frequency">
          <property name="minimum">
           <number>1</number>
@@ -554,62 +446,14 @@
          </property>
         </widget>
        </item>
-       <item row="27" column="0">
-        <widget class="QCheckBox" name="c_mixing">
-         <property name="text">
-          <string>Playing field mixing</string>
-         </property>
-        </widget>
-       </item>
-       <item row="25" column="0">
-        <widget class="QLabel" name="label_23">
-         <property name="text">
-          <string>Selection coin toss</string>
-         </property>
-        </widget>
-       </item>
-       <item row="29" column="0">
-        <widget class="QLabel" name="label_21">
-         <property name="text">
-          <string>Percent chance of mixing - PF1 to PF2</string>
-         </property>
-        </widget>
-       </item>
-       <item row="29" column="1">
-        <widget class="QSpinBox" name="s_mixing_0_to_1">
-         <property name="maximum">
-          <number>100</number>
-         </property>
-        </widget>
-       </item>
-       <item row="24" column="1">
-        <widget class="QCheckBox" name="c_random_overwrite">
-         <property name="text">
-          <string>Random Overwrite</string>
-         </property>
-        </widget>
-       </item>
-       <item row="25" column="1">
-        <widget class="QDoubleSpinBox" name="s_selection">
-         <property name="decimals">
-          <number>1</number>
-         </property>
-         <property name="minimum">
-          <double>1.000000000000000</double>
-         </property>
-         <property name="value">
-          <double>2.000000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
-        <widget class="QSpinBox" name="s_masks_per_environment">
+       <item row="27" column="1">
+        <widget class="QSpinBox" name="s_multiple">
          <property name="minimum">
           <number>1</number>
          </property>
         </widget>
        </item>
-       <item row="31" column="0" colspan="2">
+       <item row="32" column="0" colspan="2">
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
           <widget class="QRadioButton" name="r_identical">
@@ -634,16 +478,86 @@
          </item>
         </layout>
        </item>
-       <item row="23" column="1">
-        <widget class="QSpinBox" name="s_playingfield_size">
-         <property name="minimum">
-          <number>2</number>
+       <item row="8" column="1">
+        <widget class="QCheckBox" name="c_increment_environments">
+         <property name="text">
+          <string>Increment environments</string>
          </property>
-         <property name="maximum">
-          <number>10000</number>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="QSpinBox" name="s_masks_per_environment">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="0" colspan="2">
+        <widget class="QLabel" name="EE_Label_3">
+         <property name="text">
+          <string>EE mode:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="17" column="0">
+        <widget class="QLabel" name="EE_Label_2">
+         <property name="text">
+          <string>EE mechanism:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="26" column="1">
+        <widget class="QDoubleSpinBox" name="s_selection">
+         <property name="decimals">
+          <number>1</number>
+         </property>
+         <property name="minimum">
+          <double>1.000000000000000</double>
          </property>
          <property name="value">
-          <number>50</number>
+          <double>2.000000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>Rate of environmental mutation</string>
+         </property>
+        </widget>
+       </item>
+       <item row="30" column="1">
+        <widget class="QSpinBox" name="s_mixing_0_to_1">
+         <property name="maximum">
+          <number>100</number>
+         </property>
+        </widget>
+       </item>
+       <item row="29" column="0">
+        <widget class="QLabel" name="label_15">
+         <property name="text">
+          <string>Percent chance of mixing - PF2 to PF1</string>
+         </property>
+        </widget>
+       </item>
+       <item row="28" column="0">
+        <widget class="QCheckBox" name="c_mixing">
+         <property name="text">
+          <string>Playing field mixing</string>
+         </property>
+        </widget>
+       </item>
+       <item row="30" column="0">
+        <widget class="QLabel" name="label_21">
+         <property name="text">
+          <string>Percent chance of mixing - PF1 to PF2</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QCheckBox" name="c_match_fitness_peaks">
+         <property name="text">
+          <string>Match fitness peaks</string>
          </property>
         </widget>
        </item>
@@ -661,10 +575,117 @@
          </property>
         </widget>
        </item>
-       <item row="23" column="0">
-        <widget class="QLabel" name="label_18">
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_19">
          <property name="text">
-          <string>Playing field size</string>
+          <string>Number of environments</string>
+         </property>
+        </widget>
+       </item>
+       <item row="20" column="0">
+        <widget class="QLabel" name="label_22">
+         <property name="font">
+          <font>
+           <bold>true</bold>
+           <underline>true</underline>
+          </font>
+         </property>
+         <property name="text">
+          <string>Events </string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="0">
+        <widget class="QCheckBox" name="c_ecosystem_engineers">
+         <property name="text">
+          <string>Ecosystem engineers (EE)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="27" column="0">
+        <widget class="QLabel" name="label_playingfieldNumber">
+         <property name="text">
+          <string>Number of playing fields</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="label_17">
+         <property name="text">
+          <string>Masks per environment</string>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="0" colspan="2">
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QRadioButton" name="r_once_EE">
+           <property name="text">
+            <string>Single shot EE</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">button_group_once_pers</string>
+           </attribute>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="r_persistent_EE">
+           <property name="text">
+            <string>Persistent EE</string>
+           </property>
+           <attribute name="buttonGroup">
+            <string notr="true">button_group_once_pers</string>
+           </attribute>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QLabel" name="docs_label_02">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item row="23" column="0">
+        <widget class="QLabel" name="label_20">
+         <property name="font">
+          <font>
+           <pointsize>11</pointsize>
+           <bold>true</bold>
+           <underline>true</underline>
+          </font>
+         </property>
+         <property name="text">
+          <string>Playing field(s)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="25" column="0">
+        <widget class="QCheckBox" name="c_expanding_playingfield">
+         <property name="text">
+          <string>Expanding playing field</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QComboBox" name="combo_environments">
+         <item>
+          <property name="text">
+           <string>Minimum</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Mean</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_fitness">
+         <property name="text">
+          <string>Assigned Fitness</string>
          </property>
         </widget>
        </item>
