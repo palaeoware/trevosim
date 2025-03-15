@@ -2190,8 +2190,8 @@ QString simulation::printEcosystemEngineers(const QVector <Organism *> &speciesL
     QString ecosystemEngineersList;
     QTextStream ecosystemEngineersTextStream(&ecosystemEngineersList);
     ecosystemEngineersTextStream << "Species,Ecosystem engineer\n";
-
-    for (int i = 0; i < speciesList.length(); i++) ecosystemEngineersTextStream << "Species_" << i << "," << speciesList[i]->ecosystemEngineer << "\n";
+    int totalSpeciesNumber = speciesList.length();
+    for (int i = 0; i < totalSpeciesNumber; i++) ecosystemEngineersTextStream << "Species_" << doPadding(i, paddingAmount(totalSpeciesNumber)) << "," << speciesList[i]->ecosystemEngineer << "\n";
 
     return ecosystemEngineersList;
 }
