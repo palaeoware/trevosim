@@ -79,6 +79,7 @@ private:
     QString printMasks(const QVector <playingFieldStructure *> &playingFields);
     QString printEcosystemEngineers(const QVector <Organism *> &speciesList);
     QString doPadding(int number, int significantFigures);
+    int paddingAmount(int taxonNumber);
     void printCountPeaks(int genomeSize, QVector <quint64> &totals, QVector <QVector <quint64> > &genomes, int repeat);
 
     //Deal with data
@@ -107,7 +108,7 @@ private:
     void writeGUI(QVector<Organism *> &speciesList);
 
     //Simulation calculations
-    int fitness(const Organism *org, const QVector<QVector<QVector<bool> > > &masks, int runFitnessSize, int runFitnessTarget, int runMaskNumber, int environment = -1);
+    int fitness(const Organism *org, const QVector<QVector<QVector<bool> > > &masks, int runFitnessSize, int runFitnessTarget, int runMaskNumber, int fitnessMode, int environment = -1);
     int genomeDifference(const Organism *organismOne, const Organism *organismTwo, const int selectSize = -1);
     QHash<QString, QVector<int> > checkForExtinct(const QVector <Organism *> &speciesList);
     void speciesExtinction(Organism *speciesListOrganism, const Organism *playingFieldOrganism, int extinctIteration, bool samsonian, bool stochastic, bool test = false);

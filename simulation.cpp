@@ -705,21 +705,10 @@ bool simulation::run()
         logFileString03Tmp.replace("||Settings||", simSettings->printSettings());
 
         file03TextStream << logFileString03Tmp;
-
-        //Zero padding
-        int totalSpeciesCount = speciesList.length();
-        int padding = 0;
-        if (totalSpeciesCount < 100) padding = 2;
-        else if (totalSpeciesCount < 1000) padding = 3;
-        else padding = 4;
-
         for (int i = 0; i < speciesList.count(); i++)
         {
             file03TextStream << (QString("%1").arg(i + 1));
-            //if (simSettings->runForTaxa < 100)file03TextStream << (QString("%1").arg(i + 1));
-            //else file03TextStream << (QString("S_%1").arg(i + 1, 3, 10, QChar('0')));
-
-            file03TextStream << "\t\t" << "Species_" << doPadding(i, padding) << ",\n";
+            file03TextStream << "\t\t" << "Species_" << doPadding(i, paddingAmount(speciesList.length())) << ",\n";
         }
 
         file03TextStream << "\t\t;\n\ntree tree1 = [&R]";
@@ -1121,13 +1110,11 @@ void simulation::mutateEnvironment()
 void simulation::updateTNTstring(QString &TNTstring, int progParentSpeciesID, int progSpeciesID)
 {
     QString progenySpeciesID;
-    if (simSettings->runForTaxa < 100 && simSettings->runMode == RUN_MODE_TAXON) progenySpeciesID = doPadding(progParentSpeciesID, 2);
-    else if (simSettings->runForTaxa < 1000 && simSettings->runMode == RUN_MODE_TAXON) progenySpeciesID = doPadding(progParentSpeciesID, 3);
+    if (simSettings->runMode == RUN_MODE_TAXON) progenySpeciesID = doPadding(progParentSpeciesID, paddingAmount(simSettings->runForTaxa));
     else progenySpeciesID = doPadding(progParentSpeciesID, 4);
 
     QString speciesID;
-    if (simSettings->runForTaxa < 100  && simSettings->runMode == RUN_MODE_TAXON) speciesID = doPadding(progSpeciesID, 2);
-    else if (simSettings->runForTaxa < 1000 && simSettings->runMode == RUN_MODE_TAXON) speciesID = doPadding(progSpeciesID, 3);
+    if (simSettings->runMode == RUN_MODE_TAXON) speciesID = doPadding(progSpeciesID, paddingAmount(simSettings->runForTaxa));
     else speciesID = doPadding(progSpeciesID, 4);
 
     //Then write string
@@ -1754,13 +1741,14 @@ void simulation::speciesExtinction(Organism *speciesListOrganism, const Organism
 }
 
 //Masks passed as a const reference.
-int simulation::fitness(const Organism *org, const QVector<QVector<QVector<bool> > > &masks, int runFitnessSize, int runFitnessTarget, int runMaskNumber, int environment)
+int simulation::fitness(const Organism *org, const QVector<QVector<QVector<bool> > > &masks, int runFitnessSize, int runFitnessTarget, int runMaskNumber, int fitnessMode, int environment)
 {
     //Send mask number to function, as in some cases (i.e. ecosystem engineering), we don't want to include all masks.
     int maskNumber = runMaskNumber;
     int environmentNumber = masks.length();
 
     int fitness = (runFitnessSize * maskNumber);
+    double doubleFitness = 0.;
 
     //Environment defaults to -1 (used to allow this to be called throughout simulation without defining environment number).
     //If this is the case check fitness for all environments
@@ -1774,7 +1762,8 @@ int simulation::fitness(const Organism *org, const QVector<QVector<QVector<bool>
 
             //Define fitness as the distance away from fitness target
             temporaryFitness = qAbs(counts - runFitnessTarget);
-            if (temporaryFitness < fitness)fitness = temporaryFitness;
+            if (fitnessMode == FITNESS_MODE_MINIMUM && temporaryFitness < fitness)fitness = temporaryFitness;
+            if (fitnessMode == FITNESS_MODE_MEAN) doubleFitness += (static_cast<double>(temporaryFitness) / static_cast<double>(environmentNumber));
         }
     //Alteranatively, we can calculate fitness for a specific environment
     else
@@ -2063,17 +2052,9 @@ QString simulation::printMatrix(const QVector <Organism *> &speciesList)
     QTextStream matrixTextStream(&matrixString);
 
     int totalSpeciesCount = speciesList.length();
-
-    //Zero padding
-    int padding = 0;
-    if (totalSpeciesCount < 100) padding = 2;
-    else if (totalSpeciesCount < 1000) padding = 3;
-    else padding = 4;
-
-
     for (int i = 0; i < totalSpeciesCount; i++)
     {
-        matrixTextStream << "Species_" << doPadding(i, padding) << "\t";
+        matrixTextStream << "Species_" << doPadding(i, totalSpeciesCount) << "\t";
         for (auto j : std::as_const(speciesList[i]->genome)) j ? matrixTextStream << 1 : matrixTextStream << 0 ;
         matrixTextStream << "\n";
     }
@@ -2087,10 +2068,10 @@ QString simulation::printStochasticMatrix(const QVector <Organism *> &speciesLis
 
     QString matrixString;
     QTextStream matrixTextStream(&matrixString);
-
-    for (int i = 0; i < speciesList.length(); i++)
+    int totalSpeciesCount = speciesList.length();
+    for (int i = 0; i < totalSpeciesCount; i++)
     {
-        matrixTextStream << "Species_" << i << "\t";
+        matrixTextStream << "Species_" << doPadding(i, paddingAmount(totalSpeciesCount)) << "\t";
         for (auto j : std::as_const(speciesList[i]->stochasticGenome)) j ? matrixTextStream << 1 : matrixTextStream << 0 ;
         matrixTextStream << "\n";
     }
@@ -2116,10 +2097,7 @@ QString simulation::printNewick(int species, QVector <Organism *> &speciesList)
     int totalSpeciesCount = speciesList.length();
 
     //Zero padding
-    QString speciesID;
-    if (totalSpeciesCount < 100) speciesID = doPadding(speciesList[species]->speciesID, 2);
-    else if (totalSpeciesCount < 1000) speciesID = doPadding(speciesList[species]->speciesID, 3);
-    else speciesID = doPadding(speciesList[species]->speciesID, 4);
+    QString speciesID = doPadding(speciesList[species]->speciesID, paddingAmount(totalSpeciesCount));
 
     if (offspring == 0)
     {
@@ -2149,18 +2127,9 @@ QString simulation::printNewickWithBranchLengths(int species, QVector <Organism 
 
     //Zero padding
     QString speciesID;
-    if (phangornTree)
-    {
-        if (totalSpeciesCount < 100) speciesID = QString("Species_%1").arg(speciesList[species]->speciesID + 1, 2, 10, QChar('0'));
-        else if (totalSpeciesCount < 1000) speciesID = QString("Species_%1").arg(speciesList[species]->speciesID + 1, 3, 10, QChar('0'));
-        else speciesID = QString("Species_%1").arg(speciesList[species]->speciesID + 1, 4, 10, QChar('0'));
-    }
-    else
-    {
-        if (totalSpeciesCount < 100) speciesID = QString("Species_%1").arg(speciesList[species]->speciesID, 2, 10, QChar('0'));
-        else if (totalSpeciesCount < 1000) speciesID = QString("Species_%1").arg(speciesList[species]->speciesID, 3, 10, QChar('0'));
-        else speciesID = QString("Species_%1").arg(speciesList[species]->speciesID, 4, 10, QChar('0'));
-    }
+    if (phangornTree) speciesID = doPadding(speciesList[species]->speciesID + 1, paddingAmount(totalSpeciesCount));
+    else speciesID = doPadding(speciesList[species]->speciesID, paddingAmount(totalSpeciesCount));
+
     //For terminal cases (reused for branches to nodes below)
     int branchLength = speciesList[species]->extinct - speciesList[species]->cladogenesis;
 
@@ -2423,6 +2392,13 @@ void simulation::writeGUI(QVector<Organism *> &speciesList)
     theMainWindow->setStatus(status);
 
     qApp->processEvents();
+}
+
+int paddingAmount(int taxonNumber)
+{
+    if (taxonNumber < 100) return 2;
+    else if (taxonNumber < 1000) return 3;
+    else return 4;
 }
 
 QString simulation::doPadding(int number, int significantFigures)

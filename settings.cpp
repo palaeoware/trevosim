@@ -129,8 +129,10 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
 
     ui->combo_speciation->addItems(comboOptions);
     ui->combo_speciation->setCurrentIndex(simSettings->speciationMode);
-}
 
+    //Set combo box for fitnes mode
+    ui->combo_fitness_mode->setCurrentIndex(simSettings->fitnessMode);
+}
 
 void Settings::on_buttonBox_accepted()
 {
@@ -184,6 +186,7 @@ void Settings::on_buttonBox_accepted()
     else settings->ecosystemEngineersArePersistent = true;
 
     settings->speciationMode = ui->combo_speciation->currentIndex();
+    settings->fitnessMode = ui->combo_fitness_mode->currentIndex();
 
     if (ui->c_stochastic->isChecked())
     {
@@ -291,12 +294,12 @@ void Settings::slotEnvironmentNumberChanged()
 {
     if (ui->s_environment_number->value() == 1)
     {
-        ui->combo_environments->setVisible(false);
+        ui->combo_fitness_mode->setVisible(false);
         ui->label_fitness->setVisible(false);
     }
     else
     {
-        ui->combo_environments->setVisible(true);
+        ui->combo_fitness_mode->setVisible(true);
         ui->label_fitness->setVisible(true);
     }
 }
