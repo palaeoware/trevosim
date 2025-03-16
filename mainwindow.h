@@ -27,7 +27,7 @@
 
 //Multiple environment fitness mode
 #define FITNESS_MODE_MINIMUM 0
-#define FITNESS_MODE_MEAN 0
+#define FITNESS_MODE_MEAN 1
 
 //Forward declaration to avoid circular dependencies in printGenome declaration
 class Organism;

@@ -375,7 +375,7 @@ bool simulation::run()
         if (!simSettings->noSelection)
             for (int p = 0; p < simSettings->playingfieldNumber; p++)
                 for (int i = 0; i < playingFields[p]->playingField.count(); i++)
-                    playingFields[p]->playingField[i]->fitness = fitness(playingFields[p]->playingField[i], playingFields[p]->masks, runFitnessSize, runFitnessTarget, runMaskNumber);
+                    playingFields[p]->playingField[i]->fitness = fitness(playingFields[p]->playingField[i], playingFields[p]->masks, runFitnessSize, simSettings->fitnessMode, runFitnessTarget, runMaskNumber);
 
 
         /************* Playing field mixing *************/
@@ -766,7 +766,7 @@ Organism simulation::initialise()
                     if (simSettings->stochasticLayer) playingFields[0]->playingField[0]->initialise(runGenomeSize, simSettings->stochasticMap);
                     else playingFields[0]->playingField[0]->initialise(runGenomeSize);
 
-                    playingFields[0]->playingField[0]->fitness = fitness(playingFields[0]->playingField[0], playingFields[0]->masks, runFitnessSize, runFitnessTarget, runMaskNumber);
+                    playingFields[0]->playingField[0]->fitness = fitness(playingFields[0]->playingField[0], playingFields[0]->masks, runFitnessSize, runFitnessTarget, simSettings->fitnessMode, runMaskNumber);
 
                     if (static_cast<quint32>(playingFields[0]->playingField[0]->fitness) < minimumFitness)
                     {
@@ -794,7 +794,7 @@ Organism simulation::initialise()
                     for (int i = 0; i < fitnesses.length() - 1; i++) sumOfDifferences += qAbs(fitnesses[i] - fitnesses[i + 1]);
 
                     //Then work out overall fitness
-                    playingFields[0]->playingField[0]->fitness = fitness(playingFields[0]->playingField[0], playingFields[0]->masks, runFitnessSize, runFitnessTarget, runMaskNumber);
+                    playingFields[0]->playingField[0]->fitness = fitness(playingFields[0]->playingField[0], playingFields[0]->masks, runFitnessSize, runFitnessTarget, simSettings->fitnessMode, runMaskNumber);
 
                     //We care most about having similar fitnesses - work towards getting identical fitnesses on all playingfields
                     if (static_cast<quint32>(sumOfDifferences) < minimumSumDifferences)
@@ -833,7 +833,7 @@ Organism simulation::initialise()
             //First organism - initialise and fill playing field with it
             if (simSettings->stochasticLayer) playingFields[0]->playingField[0]->initialise(runGenomeSize, simSettings->stochasticMap);
             else playingFields[0]->playingField[0]->initialise(runGenomeSize);
-            playingFields[0]->playingField[0]->fitness = fitness(playingFields[0]->playingField[0], playingFields[0]->masks, runFitnessSize, runFitnessTarget, runMaskNumber);
+            playingFields[0]->playingField[0]->fitness = fitness(playingFields[0]->playingField[0], playingFields[0]->masks, runFitnessSize, runFitnessTarget, simSettings->fitnessMode, runMaskNumber);
 
             //Given that playing field masks are different, now we need to initialise with the best organism we can for all.
             //Currently implemented using the best mean fitness of all organisms tried
@@ -841,7 +841,7 @@ Organism simulation::initialise()
 
             for (auto p : std::as_const(playingFields))
             {
-                fitnesses.append(fitness(p->playingField[0], p->masks, runFitnessSize, runFitnessTarget, runMaskNumber));
+                fitnesses.append(fitness(p->playingField[0], p->masks, runFitnessSize, runFitnessTarget, simSettings->fitnessMode, runMaskNumber));
             }
 
             double meanFitness = 0;
@@ -986,7 +986,7 @@ void simulation::mutateOrganism(Organism &progeny, const playingFieldStructure *
     }
 
     //Update fitness
-    progeny.fitness = fitness(&progeny, pf->masks, runFitnessSize, runFitnessTarget, runMaskNumber);
+    progeny.fitness = fitness(&progeny, pf->masks, runFitnessSize, runFitnessTarget, simSettings->fitnessMode, runMaskNumber);
 
     //Undo mutations if discard deleterious is on, and new fitness is worse than old
     if (simSettings->discardDeleterious && (temporaryFitness < progeny.fitness))
@@ -1743,6 +1743,13 @@ void simulation::speciesExtinction(Organism *speciesListOrganism, const Organism
 //Masks passed as a const reference.
 int simulation::fitness(const Organism *org, const QVector<QVector<QVector<bool> > > &masks, int runFitnessSize, int runFitnessTarget, int runMaskNumber, int fitnessMode, int environment)
 {
+
+    if (!(fitnessMode == FITNESS_MODE_MEAN || fitnessMode == FITNESS_MODE_MEAN))
+    {
+        warning("Fitness error", "Fitness mode error - contact RJG");
+        return 0;
+    }
+
     //Send mask number to function, as in some cases (i.e. ecosystem engineering), we don't want to include all masks.
     int maskNumber = runMaskNumber;
     int environmentNumber = masks.length();
@@ -2394,7 +2401,7 @@ void simulation::writeGUI(QVector<Organism *> &speciesList)
     qApp->processEvents();
 }
 
-int paddingAmount(int taxonNumber)
+int simulation::paddingAmount(int taxonNumber)
 {
     if (taxonNumber < 100) return 2;
     else if (taxonNumber < 1000) return 3;
@@ -2471,9 +2478,9 @@ int simulation::countPeaks(int genomeSize, int repeat, int environment)
 
         //For now, let's just do this for the first playing field - we expect each playingfield to have the same properties in terms of peaks
         //If repeat is not -1 we have called this from the main window, and we want to use all environments
-        if (repeat != -1) org.fitness = fitness(&org, playingFields[0]->masks, genomeSize, simSettings->fitnessTarget, runMaskNumber);
+        if (repeat != -1) org.fitness = fitness(&org, playingFields[0]->masks, genomeSize, simSettings->fitnessTarget, simSettings->fitnessMode, runMaskNumber);
         //Otherwise we need to specify which environment we want
-        else org.fitness = fitness(&org, playingFields[0]->masks, genomeSize, simSettings->fitnessTarget, runMaskNumber, environment);
+        else org.fitness = fitness(&org, playingFields[0]->masks, genomeSize, simSettings->fitnessTarget, runMaskNumber, simSettings->fitnessMode, environment);
 
         totals[org.fitness]++;
         if (recordGenomes) genomes[org.fitness].append(x);
