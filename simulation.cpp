@@ -70,6 +70,7 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
     runFitnessSize = simSettings->fitnessSize;
     runFitnessTarget = simSettings->fitnessTarget;
     runMaskNumber = simSettings->maskNumber;
+    runEnvironmentNumber = simSettings->environmentNumber;
     runSpeciesDifference = simSettings->speciesDifference;
     runMixingProbabilityOneToZero = simSettings->mixingProbabilityOneToZero;
     runMixingProbabilityZeroToOne = simSettings->mixingProbabilityZeroToOne;
@@ -131,7 +132,7 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
     if (!simSettings->matchFitnessPeaks)
         for (auto p : std::as_const(playingFields))
         {
-            for (int k = 0; k < simSettings->environmentNumber; k++)
+            for (int k = 0; k < runEnvironmentNumber; k++)
             {
                 p->masks.append(QVector <QVector <bool> >());
                 for (int j = 0; j < runMaskNumber; j++)
@@ -154,7 +155,7 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
         //First let's populate them with false / 0 bits
         for (auto p : std::as_const(playingFields))
         {
-            for (int k = 0; k < simSettings->environmentNumber; k++)
+            for (int k = 0; k < runEnvironmentNumber; k++)
             {
                 p->masks.append(QVector <QVector <bool> >());
                 for (int j = 0; j < runMaskNumber; j++)
@@ -170,7 +171,7 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
         for (auto p : std::as_const(playingFields))
         {
             QVector <QVector <bool> > used;
-            for (int i = 0; i < simSettings->environmentNumber; i++)
+            for (int i = 0; i < runEnvironmentNumber; i++)
             {
                 used.append(QVector <bool> ());
                 for (int j = 0; j < runFitnessSize; j++) used[i].append(false);
@@ -181,7 +182,7 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
                 //Note we want to have the number of ones to be the mask number plus one - so that e.g. if we have two masks, because we're looping through less than below, we need to have a limit of two
                 int numberOnes = QRandomGenerator::global()->bounded(runMaskNumber + 1);
 
-                for (int k = 0; k < simSettings->environmentNumber; k++)
+                for (int k = 0; k < runEnvironmentNumber; k++)
                 {
                     bool flag = false;
                     int bitPosition = -1;
@@ -213,7 +214,6 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
     if (simSettings->playingfieldNumber > 1 && simSettings->playingfieldMasksMode != MASKS_MODE_INDEPENDENT)
         for (int p = 1; p < simSettings->playingfieldNumber; p++)
             playingFields[p]->masks = playingFields[0]->masks;
-
 
     //If we are adding as mask for EE, we don't need to do antyhing with this yet
     if (simSettings->ecosystemEngineersAddMask) runMaskNumber--;
@@ -267,6 +267,9 @@ bool simulation::run()
     QElapsedTimer timer;
     timer.start();
     int lastGUIUpdate = 0;
+
+    //If we are incrementing environment numbers, we need to start with 1
+    if (simSettings->incrementEnvironments)runEnvironmentNumber  = 1;
 
     /************* Start simulation *************/
     do
@@ -424,6 +427,24 @@ bool simulation::run()
                     }
             }
             if (ecosystemEngineeringOccurring == 1 || (ecosystemEngineeringOccurring > 1 && simSettings->ecosystemEngineersArePersistent)) applyEcosystemEngineering(speciesList, simSettings->writeEE);
+        }
+
+
+        /************* Increment environments, if requried *************/
+
+        //If we are incrementing environment numbers, we need to change environment numbers alongg the way
+        if (simSettings->incrementEnvironments)
+        {
+            if (simSettings->runMode == RUN_MODE_TAXON)
+                if (speciesList.length() > (runEnvironmentNumber * (simSettings->runForTaxa / simSettings->environmentNumber)))
+                    runEnvironmentNumber++;
+            //TEST whether we need to increase
+            if (simSettings->runMode == RUN_MODE_ITERATION)
+                if (iterations > (runEnvironmentNumber * (simSettings->runForIterations / simSettings->environmentNumber)))
+                {
+                    runEnvironmentNumber++;
+                    qDebug() << "Increasing environment number  - iterations " << iterations << " environments " << runEnvironmentNumber;
+                }
         }
 
         /************* Check if simulation is complete *************/
@@ -789,7 +810,7 @@ Organism simulation::initialise()
                     //Work out fitnesses for all environments - to see if they are the same
                     QVector <int> fitnesses;
 
-                    for (int i = 0; i < simSettings->environmentNumber;
+                    for (int i = 0; i < runEnvironmentNumber;
                             i++) fitnesses.append(fitness(playingFields[0]->playingField[0], playingFields[0]->masks, runFitnessSize, runFitnessTarget, runMaskNumber, simSettings->fitnessMode, i));
                     int sumOfDifferences = 0;
                     for (int i = 0; i < fitnesses.length() - 1; i++) sumOfDifferences += qAbs(fitnesses[i] - fitnesses[i + 1]);
@@ -1034,7 +1055,7 @@ void simulation::mutateEnvironment()
         //reminder: masks[environment #][mask #][bit #]
 
         for (auto pf : std::as_const(playingFields)) // Treat playing fields separately
-            for (int j = 0; j < simSettings->environmentNumber; j++) //Treat environments separately
+            for (int j = 0; j < runEnvironmentNumber; j++) //Treat environments separately
             {
                 //Create lists of columns separated by one bit to do swap
                 QList <int> pairOne;
@@ -1090,7 +1111,7 @@ void simulation::mutateEnvironment()
     else
     {
         for (auto pf : std::as_const(playingFields)) // Treat playing fields separately
-            for (int j = 0; j < simSettings->environmentNumber; j++) //Treat environments separately
+            for (int j = 0; j < runEnvironmentNumber; j++) //Treat environments separately
                 for (int x = 0; x < numberEnvironmentMutationsInteger; x++) //How many mutations?
                 {
                     //Select random mask and random bit
@@ -1198,7 +1219,7 @@ void simulation::applyPerturbation()
             environmentalPerturbationMasksCopy.append(QVector <QVector <QVector <bool> > >());
             environmentalPerturbationMasksCopy[l] = playingFields[l]->masks;
             environmentalPerturbationOverwriting.append(QVector <QVector <QVector <bool> > >());
-            for (int k = 0; k < simSettings->environmentNumber; k++)
+            for (int k = 0; k < runEnvironmentNumber; k++)
             {
                 environmentalPerturbationOverwriting[l].append(QVector <QVector <bool> >());
                 for (int j = 0; j < runMaskNumber; j++)
@@ -1217,7 +1238,7 @@ void simulation::applyPerturbation()
 
         //Bork current masks to create environmental perturbation - makes sense to have these as independent and different unless pf masks set to be identical
         for (auto pf : std::as_const(playingFields))
-            for (int k = 0; k < simSettings->environmentNumber; k++)
+            for (int k = 0; k < runEnvironmentNumber; k++)
                 for (int j = 0; j < runMaskNumber; j++)
                     //I is reference so as to allow us to modify contents
                     for (auto &i : pf->masks[k][j])
@@ -1226,7 +1247,7 @@ void simulation::applyPerturbation()
         //Copy over if identical
         if (simSettings->playingfieldMasksMode == MASKS_MODE_IDENTICAL)
             for (int i = 1; i < simSettings->playingfieldNumber; i++)
-                for (int k = 0; k < simSettings->environmentNumber; k++)
+                for (int k = 0; k < runEnvironmentNumber; k++)
                     for (int j = 0; j < runMaskNumber; j++)
                         for (int l = 0; l < playingFields[i]->masks[k][j].length(); l++)
                             playingFields[i]->masks[k][j][l] = playingFields[0]->masks[k][j][l];
@@ -1254,7 +1275,7 @@ void simulation::applyPerturbation()
         {
             //Random number size of vectors
             int l = QRandomGenerator::global()->bounded(simSettings->playingfieldNumber);
-            int k = QRandomGenerator::global()->bounded(simSettings->environmentNumber);
+            int k = QRandomGenerator::global()->bounded(runEnvironmentNumber);
             int j = QRandomGenerator::global()->bounded(runMaskNumber);
             int i = QRandomGenerator::global()->bounded(runFitnessSize);
 
@@ -1270,7 +1291,7 @@ void simulation::applyPerturbation()
 
         //Copy over masks where dictated by the the overwriting record
         for (int l = 0; l < simSettings->playingfieldNumber; l++)
-            for (int k = 0; k < simSettings->environmentNumber; k++)
+            for (int k = 0; k < runEnvironmentNumber; k++)
                 for (int j = 0; j < runMaskNumber; j++)
                     for (int i = 0; i < runFitnessSize; i++)
                         if (environmentalPerturbationOverwriting[l][k][j][i])
@@ -1279,7 +1300,7 @@ void simulation::applyPerturbation()
         //Copy over if identical
         if (simSettings->playingfieldMasksMode == MASKS_MODE_IDENTICAL)
             for (int i = 1; i < simSettings->playingfieldNumber; i++)
-                for (int k = 0; k < simSettings->environmentNumber; k++)
+                for (int k = 0; k < runEnvironmentNumber; k++)
                     for (int j = 0; j < runMaskNumber; j++)
                         for (int l = 0; l < playingFields[i]->masks[k][j].length(); l++)
                             playingFields[i]->masks[k][j][l] = playingFields[0]->masks[k][j][l];

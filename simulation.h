@@ -29,6 +29,7 @@ private:
     int runFitnessSize;
     int runFitnessTarget;
     int runMaskNumber;
+    int runEnvironmentNumber;
     int runSpeciesDifference;
     int runMixingProbabilityOneToZero;
     int runMixingProbabilityZeroToOne;
