@@ -437,8 +437,10 @@ bool simulation::run()
         {
             if (simSettings->runMode == RUN_MODE_TAXON)
                 if (speciesList.length() > (runEnvironmentNumber * (simSettings->runForTaxa / simSettings->environmentNumber)))
+                {
                     runEnvironmentNumber++;
-            //TEST whether we need to increase
+                    qDebug() << "Increasing environment number  - iterations " << iterations << " taxa " << speciesList.length() << " environments " << runEnvironmentNumber;
+                }
             if (simSettings->runMode == RUN_MODE_ITERATION)
                 if (iterations > (runEnvironmentNumber * (simSettings->runForIterations / simSettings->environmentNumber)))
                 {
@@ -1021,8 +1023,6 @@ void simulation::mutateOrganism(Organism &progeny, const playingFieldStructure *
         else for (int i = 0; i < SNPs.count(); i++)progeny.genome[SNPs[i]] = !progeny.genome[SNPs[i]];
     }
 }
-
-
 
 void simulation::mutateEnvironment()
 {
