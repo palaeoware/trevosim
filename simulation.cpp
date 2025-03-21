@@ -269,7 +269,7 @@ bool simulation::run()
     int lastGUIUpdate = 0;
 
     //If we are incrementing environment numbers, we need to start with 1
-    if (simSettings->incrementEnvironments)runEnvironmentNumber  = 1;
+    if (simSettings->incrementEnvironments && simSettings->test != 19)runEnvironmentNumber  = 1;
 
     /************* Start simulation *************/
     do
@@ -433,7 +433,7 @@ bool simulation::run()
         /************* Increment environments, if requried *************/
 
         //If we are incrementing environment numbers, we need to change environment numbers alongg the way
-        if (simSettings->incrementEnvironments)
+        if (simSettings->incrementEnvironments && simSettings->test != 19)
         {
             if (simSettings->runMode == RUN_MODE_TAXON)
                 if (speciesList.length() > (runEnvironmentNumber * (simSettings->runForTaxa / simSettings->environmentNumber)))

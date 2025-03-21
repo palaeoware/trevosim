@@ -2437,16 +2437,15 @@ bool testinternal::testNineteen(QString &outString)
     simSettings.genomeSize = 8;
     simSettings.fitnessSize = simSettings.genomeSize;
     simSettings.speciesSelectSize = simSettings.genomeSize;
+    simSettings.test = 19;
+
     //Resize grid to avoid crashes on writing to GUI
-
-
     if (theMainWindow)
     {
-        theMainWindow->addProgressBar(0, 27);
+        theMainWindow->addProgressBar(0, 47);
         theMainWindow->setStatus("Testing match peaks");
         theMainWindow->resizeGrid(1, simSettings.genomeSize);
     }
-
 
     int count = 0;
     QList <bool> identical;
@@ -2484,11 +2483,13 @@ bool testinternal::testNineteen(QString &outString)
     out << "\nMatch fitness peaks is now on.\n\n";
     simSettings.matchFitnessPeaks = true;
     identical.clear();
-    //for (int x = 0; x < 50; x++)
+
+    QString errorString;
+    QTextStream outError(&errorString);
+    QList <int> bestFitnesses;
+
     for (int j = 3; j < 6; j++)
     {
-        QString errorString;
-        QTextStream outError(&errorString);
 
         QList <int> bestFitnesses;
         simSettings.environmentNumber = j;
@@ -2528,6 +2529,47 @@ bool testinternal::testNineteen(QString &outString)
         }
         else identical.append(true);
     }
+
+    //Test now with incrementing playing fields
+    //Reset some stuff
+    bestFitnesses.clear();
+    if (theMainWindow)
+    {
+        theMainWindow->setStatus("Still testing match peaks");
+        theMainWindow->resizeGrid(1, simSettings.genomeSize);
+    }
+
+    //Set up to run for iterations, with a high environment number
+    simSettings.environmentNumber = 20;
+    simSettings.runForIterations = 100;
+    simSettings.runMode = RUN_MODE_ITERATION;
+    simSettings.incrementEnvironments = true;
+    simulation x(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
+    //Start simulation halfway through so it terminates with only half the environments being mutated
+    x.runEnvironmentNumber = 10;
+    x.run();
+
+    out << "\nNow testing matching peaks when incrementing playing field is enabled - run half a simulation, so the run environment number is " << x.runEnvironmentNumber  << "/" <<
+        simSettings.environmentNumber << ".\n\n";
+
+    //Send count peak for each environment
+    for (int k = 0; k < 20; k++)
+    {
+        int minFitness = x.countPeaks(simSettings.genomeSize, -1, k);
+        if (!bestFitnesses.contains(minFitness))bestFitnesses.append(minFitness);
+        out << "Testing environment " << k << ". Best fitness for this environment is " << minFitness << "\n";
+        count++;
+        if (theMainWindow) theMainWindow->setProgressBar(count);
+    }
+
+    if (bestFitnesses.count() > 1)
+    {
+        identical.append(false);
+        out << "Test failed at incrementing playing field.";
+        out << x.printMasks(x.playingFields);
+    }
+    else identical.append(true);
 
     if (identical.contains(false))
     {
