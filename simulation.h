@@ -97,6 +97,7 @@ private:
     void applyPerturbation();
     void applyPlayingfieldMixing(QVector<Organism *> &speciesList);
     void applyEcosystemEngineering(QVector<Organism *> &speciesList, bool writeEcosystemEngineers);
+    bool checkForIncrement(int runMode, int currentSpeciesNumber, int runForTaxa, int runForIterations, int environmentNumber, int iterations, int runEnvironmentNumber);
     void checkForUninformative(QVector <Organism *> &speciesList, QList <int> &uninformativeCoding, QList <int> &uninformativeNonCoding);
     bool checkForCharacterNumber(QList <int> &uninformativeCoding, QList <int> &uninformativeNonCoding);
     bool stripUninformativeCharacters(QVector<Organism *> &speciesList, const QList <int> &uninformativeCoding, const QList <int> &uninformativeNonCoding);
@@ -109,7 +110,8 @@ private:
     void writeGUI(QVector<Organism *> &speciesList);
 
     //Simulation calculations
-    int fitness(const Organism *org, const QVector<QVector<QVector<bool> > > &masks, int runFitnessSize, int runFitnessTarget, int runMaskNumber, int fitnessMode, int environment = -1);
+    int fitness(const Organism *org, const QVector<QVector<QVector<bool> > > &masks, int runFitnessSize, int runFitnessTarget, int runMaskNumber, int runEnvironmentNumber, int fitnessMode,
+                int environment = -1);
     int genomeDifference(const Organism *organismOne, const Organism *organismTwo, const int selectSize = -1);
     QHash<QString, QVector<int> > checkForExtinct(const QVector <Organism *> &speciesList);
     void speciesExtinction(Organism *speciesListOrganism, const Organism *playingFieldOrganism, int extinctIteration, bool samsonian, bool stochastic, bool test = false);

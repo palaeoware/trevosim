@@ -32,6 +32,7 @@ testinternal::testinternal(MainWindow *theMainWindowCon)
     testList.insert(18, "Playing field mixing");
     testList.insert(19, "Match Peaks");
     testList.insert(20, "Organism operators");
+    testList.insert(21, "Increment Environments");
 }
 
 QString testinternal::testDescription(int testNumber)
@@ -108,6 +109,21 @@ bool testinternal::callTest(int testNumber, QString &outString)
     case 20:
         pass = testTwenty(outString);
         return pass;
+    case 21:
+        pass = testTwentyOne(outString);
+        return pass;
+    case 22:
+        pass = testTwentyTwo(outString);
+        return pass;
+    case 23:
+        pass = testTwentyThree(outString);
+        return pass;
+    case 24:
+        pass = testTwentyFour(outString);
+        return pass;
+    case 25:
+        pass = testTwentyFive(outString);
+        return pass;
     }
     return false;
 }
@@ -146,18 +162,18 @@ bool testinternal::testZero(QString &outString)
     QStringList l = maskString .split('\n');
     out << "Masks are:\n" << l[2]  << "\n" << l[3] << "\n" << l[4] << "\n";
 
-    int fitness = x.fitness(&org, x.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.fitnessMode);
+    int fitness = x.fitness(&org, x.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.environmentNumber, simSettings.fitnessMode);
     if (fitness != 150) testFlag = false;
     out <<  "Fitness, with fitness target of " << simSettings.fitnessTarget << " is " << fitness << ". It should be 150.\n";
 
     simSettings.fitnessTarget = 75;
-    fitness = x.fitness(&org, x.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.fitnessMode);
+    fitness = x.fitness(&org, x.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.environmentNumber, simSettings.fitnessMode);
     if (fitness != 75) testFlag = false;
     out <<  "Fitness, with fitness target of 75, is " << fitness << ". It should be 75.\n";
 
     for (int i = 0; i < 25; i++)org.genome[i] = true;
     out << "Fitness target is still 75, genome is now: " << x.printGenomeString(&org) << "\n";
-    fitness = x.fitness(&org, x.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.fitnessMode);
+    fitness = x.fitness(&org, x.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.environmentNumber, simSettings.fitnessMode);
     if (fitness != 0) testFlag = false;
     out <<  "Fitness is " << fitness << ". It should be 0.\n";
 
@@ -178,7 +194,7 @@ bool testinternal::testZero(QString &outString)
     l = maskString .split('\n');
     out << "Organism genome is: " << y.printGenomeString(&org) << "\n";
     out << "Masks are:\n" << l[2]  << "\n" << l[3] << "\n";
-    fitness = y.fitness(&org, y.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.fitnessMode);
+    fitness = y.fitness(&org, y.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.environmentNumber, simSettings.fitnessMode);
     if (fitness != 50) testFlag = false;
     out <<  "Fitness is " << fitness << ". It should be 50.\n\n";
 
@@ -207,24 +223,28 @@ bool testinternal::testZero(QString &outString)
     out << "Organism genome is: " << y.printGenomeString(&org) << " fitness target is " << simSettings.fitnessTarget << "\n";
     out << maskString;
 
-    int environmentZeroFitness = z.fitness(&org, z.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.fitnessMode, 0);
+    int environmentZeroFitness =
+        z.fitness(&org, z.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.environmentNumber, simSettings.fitnessMode, 0);
     out << "Environment zero fitness should be 20, it is " <<  environmentZeroFitness << ".\n";
     if (environmentZeroFitness != 20) testFlag = false;
 
-    int environmentOneFitness = z.fitness(&org, z.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.fitnessMode, 1);
+    int environmentOneFitness =
+        z.fitness(&org, z.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.environmentNumber, simSettings.fitnessMode, 1);
     out << "Environment one fitness should be 80, it is " <<  environmentOneFitness << ".\n";
     if (environmentOneFitness != 80) testFlag = false;
     if (environmentOneFitness == environmentZeroFitness) testFlag = false;
 
     //Now let's test with two environments
     out << "Now test that this is, as expected, 20 when minimum environment mode is selected.\n";
-    int environmentBothFitness = z.fitness(&org, z.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.fitnessMode);
+    int environmentBothFitness =
+        z.fitness(&org, z.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.environmentNumber, simSettings.fitnessMode);
     out << "Fitness based on both environments should be 20, it is " <<  environmentBothFitness << ".\n";
     if (environmentBothFitness != 20 || environmentBothFitness != environmentZeroFitness) testFlag = false;
 
-    out << "Change the fitness mode to mean, and then check that the fitness is (80 + 2)/2 == 50.\n";
+    out << "Change the fitness mode to mean, and then check that the fitness is (80 + 20)/2 == 50.\n";
     simSettings.fitnessMode = FITNESS_MODE_MEAN;
-    int environmentBothFitnessMean = z.fitness(&org, z.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.fitnessMode);
+    int environmentBothFitnessMean =
+        z.fitness(&org, z.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.environmentNumber, simSettings.fitnessMode);
     out << "Fitness based on both environments should be 50, it is " <<  environmentBothFitnessMean << ".\n";
     if (environmentBothFitnessMean != 50) testFlag = false;
 
@@ -2653,6 +2673,193 @@ bool testinternal::testTwenty(QString &outString)
         testFlag = false;
         out << "Fail at equality operator - 3.";
     }
+
+    return testFlag;
+}
+
+bool testinternal::testTwentyOne(QString &outString)
+{
+    bool testFlag = true;
+    QTextStream out(&outString);
+
+    out << "Testing increment environments.\n";
+
+    simulationVariables simSettings;
+    //First check behviour when it is not enabled
+    simSettings.incrementEnvironments = true;
+    simSettings.environmentNumber = 20;
+    simSettings.runMode = RUN_MODE_ITERATION;
+
+    simulation x(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
+    //This is set at the start of the run command
+    x.runEnvironmentNumber = 1;
+
+    out << "Using inputs for a simulation in run to iteration mode to 1000 with 20 environments and incrementing environment mode on.\n";
+
+    QVector<int> increments;
+    for (int iterations = 0; iterations < simSettings.runForIterations; iterations++)
+    {
+        //Number of species should not be used int his mode - just send it 10
+        if (x.checkForIncrement(simSettings.runMode, 10, simSettings.runForTaxa, simSettings.runForIterations, simSettings.environmentNumber, iterations, x.runEnvironmentNumber))
+        {
+            x.runEnvironmentNumber++;
+            increments.append(iterations);
+            out << "Incrementing environment at iteration " << iterations << ".\n";
+        }
+    }
+    for (int i = 1; i < increments.length(); i++)
+        if ((increments[i] - increments[i - 1]) != 50)
+        {
+            testFlag = false;
+            out << "Fail at increment " << i << ".\n";
+        }
+    if (testFlag) out << "Increments should occur every fifty environments, and they are - test passed.";
+
+    increments.clear();
+    simSettings.environmentNumber = 32;
+    simSettings.runMode = RUN_MODE_TAXON;
+
+    out << "Using inputs for a simulation in run to  taxon mode to 64 with 32 environments and incrementing environment mode on.\n";
+
+    //This is set at the start of the run command
+    x.runEnvironmentNumber = 1;
+
+    for (int speciesNumber = 0; speciesNumber < simSettings.runForTaxa; speciesNumber++)
+    {
+        //Number of iterations should not be used int his mode - just send it 10
+        if (x.checkForIncrement(simSettings.runMode, speciesNumber, simSettings.runForTaxa, simSettings.runForIterations, simSettings.environmentNumber, 10, x.runEnvironmentNumber))
+        {
+            x.runEnvironmentNumber++;
+            increments.append(speciesNumber);
+            out << "Incrementing environment at iteration " << speciesNumber << ".\n";
+        }
+    }
+    for (int i = 1; i < increments.length(); i++)
+        if ((increments[i] - increments[i - 1]) != 2)
+        {
+            testFlag = false;
+            out << "Fail at species increment " << i << ".\n";
+        }
+    if (testFlag) out << "Increments should occur every two species, and they are - test passed.\n";
+
+    out << "Now checking that the run environent number limit does apply as required - doing this using mean fitness mode.\n";
+    //Create default setting object and then a simulation object for the test
+    simulationVariables simSettings2;
+    simSettings2.genomeSize = 50;
+    simSettings2.fitnessSize = 50;
+    simSettings2.speciesSelectSize = 50;
+    //Test is for three masks and a target of zero (the defaults in v2.0.0)
+    simSettings2.fitnessTarget = 0;
+    simSettings2.environmentNumber = 3;
+    simSettings2.maskNumber = 3;
+    simSettings2.fitnessMode = FITNESS_MODE_MEAN;
+    simulation y(0, &simSettings2, &error, theMainWindow);
+    if (error) return false;
+
+    //Fitness requires an organism - create an organism with 50 bits, no stochastic genome, all bits are initialised to zero
+    Organism org(simSettings2.genomeSize, false);
+    out << "Organism genome is: " << y.printGenomeString(&org) << "\n";
+
+    //Now set masks in simulation to 1
+    for (auto p : std::as_const(y.playingFields))
+        for (int k = 0; k < simSettings2.environmentNumber; k++)
+            for (int j = 0; j < simSettings2.maskNumber; j++)
+                for (auto &i : p->masks[k][j])
+                {
+                    if (k == 0) i = true;
+                    else i = false;
+                }
+
+    QString maskString = y.printMasks(y.playingFields);
+    out << "Masks are:\n" << maskString;
+
+    y.runEnvironmentNumber = 1;
+    out << "runEnvironmentNumber is " << y.runEnvironmentNumber  << ".\n";
+    int fitness = y.fitness(&org, y.playingFields[0]->masks, simSettings2.fitnessSize, simSettings2.fitnessTarget, simSettings2.maskNumber, y.runEnvironmentNumber, simSettings2.fitnessMode);
+    if (fitness != 150) testFlag = false;
+    out <<  "Fitness, with fitness target of " << simSettings2.fitnessTarget << " is " << fitness << ". It should be 150.\n";
+
+    y.runEnvironmentNumber = 2;
+    out << "runEnvironmentNumber is " << y.runEnvironmentNumber  << ".\n";
+    fitness = y.fitness(&org, y.playingFields[0]->masks, simSettings2.fitnessSize, simSettings2.fitnessTarget, simSettings2.maskNumber, y.runEnvironmentNumber, simSettings2.fitnessMode);
+    if (fitness != 75) testFlag = false;
+    out <<  "Fitness, with fitness target of " << simSettings2.fitnessTarget << " is " << fitness << ". It should be 75 ((150+0)/2).\n";
+
+    y.runEnvironmentNumber = 3;
+    out << "runEnvironmentNumber is " << y.runEnvironmentNumber  << ".\n";
+    fitness = y.fitness(&org, y.playingFields[0]->masks, simSettings2.fitnessSize, simSettings2.fitnessTarget, simSettings2.maskNumber, y.runEnvironmentNumber, simSettings2.fitnessMode);
+    if (fitness != 50) testFlag = false;
+    out <<  "Fitness, with fitness target of " << simSettings2.fitnessTarget << " is " << fitness << ". It should be 50 ((150+0+0/3).\n";
+
+
+    simSettings2.fitnessMode = FITNESS_MODE_MINIMUM;
+    out << "Now repeating exercise with ftness mode miinimum, so we should have 150, 0, 0 - let's go.\n";
+    out << "Organism genome is: " << y.printGenomeString(&org) << "\n";
+
+    //Now set masks in simulation to 1
+    for (auto p : std::as_const(y.playingFields))
+        for (int k = 0; k < simSettings2.environmentNumber; k++)
+            for (int j = 0; j < simSettings2.maskNumber; j++)
+                for (auto &i : p->masks[k][j])
+                {
+                    if (k == 0) i = true;
+                    else i = false;
+                }
+
+    maskString = y.printMasks(y.playingFields);
+    out << "Masks are:\n" << maskString;
+
+    y.runEnvironmentNumber = 1;
+    out << "runEnvironmentNumber is " << y.runEnvironmentNumber  << ".\n";
+    fitness = y.fitness(&org, y.playingFields[0]->masks, simSettings2.fitnessSize, simSettings2.fitnessTarget, simSettings2.maskNumber, y.runEnvironmentNumber, simSettings2.fitnessMode);
+    if (fitness != 150) testFlag = false;
+    out <<  "Fitness, with fitness target of " << simSettings2.fitnessTarget << " is " << fitness << ". It should be 150.\n";
+
+    y.runEnvironmentNumber = 2;
+    out << "runEnvironmentNumber is " << y.runEnvironmentNumber  << ".\n";
+    fitness = y.fitness(&org, y.playingFields[0]->masks, simSettings2.fitnessSize, simSettings2.fitnessTarget, simSettings2.maskNumber, y.runEnvironmentNumber, simSettings2.fitnessMode);
+    if (fitness != 0) testFlag = false;
+    out <<  "Fitness, with fitness target of " << simSettings2.fitnessTarget << " is " << fitness << ". It should be 0.\n";
+
+    y.runEnvironmentNumber = 3;
+    out << "runEnvironmentNumber is " << y.runEnvironmentNumber  << ".\n";
+    fitness = y.fitness(&org, y.playingFields[0]->masks, simSettings2.fitnessSize, simSettings2.fitnessTarget, simSettings2.maskNumber, y.runEnvironmentNumber, simSettings2.fitnessMode);
+    if (fitness != 0) testFlag = false;
+    out <<  "Fitness, with fitness target of " << simSettings2.fitnessTarget << " is " << fitness << ". It should be 0.\n";
+
+
+    return testFlag;
+}
+
+bool testinternal::testTwentyTwo(QString &outString)
+{
+    bool testFlag = true;
+    QTextStream out(&outString);
+
+    return testFlag;
+}
+
+bool testinternal::testTwentyThree(QString &outString)
+{
+    bool testFlag = true;
+    QTextStream out(&outString);
+
+    return testFlag;
+}
+
+bool testinternal::testTwentyFour(QString &outString)
+{
+    bool testFlag = true;
+    QTextStream out(&outString);
+
+    return testFlag;
+}
+
+bool testinternal::testTwentyFive(QString &outString)
+{
+    bool testFlag = true;
+    QTextStream out(&outString);
 
     return testFlag;
 }

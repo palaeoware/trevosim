@@ -32,6 +32,12 @@ private:
     bool testEighteen(QString &outString);
     bool testNineteen(QString &outString);
     bool testTwenty(QString &outString);
+    bool testTwentyOne(QString &outString);
+    bool testTwentyTwo(QString &outString);
+    bool testTwentyThree(QString &outString);
+    bool testTwentyFour(QString &outString);
+    bool testTwentyFive(QString &outString);
+
     MainWindow *theMainWindow;
     bool error;
     QMap<int, QString> testList;

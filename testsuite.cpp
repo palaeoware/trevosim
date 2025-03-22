@@ -28,21 +28,24 @@ testsuite::testsuite()
 {
 }
 
-TEST_F(testsuite, TREvoSimTestZero) {
+TEST_F(testsuite, TREvoSimTestZero)
+{
     QString output;
     testinternal internalTestClass(nullptr);
     bool result = internalTestClass.callTest(0, output);
     ASSERT_TRUE(result) << output.toStdString();
 }
 
-TEST_F(testsuite, TREvoSimTestOne) {
+TEST_F(testsuite, TREvoSimTestOne)
+{
     QString output;
     testinternal internalTestClass(nullptr);
     bool result = internalTestClass.callTest(1, output);
     ASSERT_TRUE(result) << output.toStdString();
 }
 
-TEST_F(testsuite, TREvoSimTestTwo) {
+TEST_F(testsuite, TREvoSimTestTwo)
+{
     QString output;
     testinternal internalTestClass(nullptr);
     bool result = internalTestClass.callTest(2, output);
@@ -50,14 +53,16 @@ TEST_F(testsuite, TREvoSimTestTwo) {
 
 }
 
-TEST_F(testsuite, TREvoSimTestThree) {
+TEST_F(testsuite, TREvoSimTestThree)
+{
     QString output;
     testinternal internalTestClass(nullptr);
     bool result = internalTestClass.callTest(3, output);
     ASSERT_TRUE(result) << output.toStdString();
 }
 
-TEST_F(testsuite, TREvoSimTestFour) {
+TEST_F(testsuite, TREvoSimTestFour)
+{
     QString output;
     MainWindow *mainWindow = nullptr;
     testinternal internalTestClass(mainWindow);
@@ -65,7 +70,8 @@ TEST_F(testsuite, TREvoSimTestFour) {
     ASSERT_TRUE(result) << output.toStdString();
 }
 
-TEST_F(testsuite, TREvoSimTestFive) {
+TEST_F(testsuite, TREvoSimTestFive)
+{
     QString output;
     MainWindow *mainWindow = nullptr;
     testinternal internalTestClass(mainWindow);
@@ -73,7 +79,8 @@ TEST_F(testsuite, TREvoSimTestFive) {
     ASSERT_TRUE(result) << output.toStdString();
 }
 
-TEST_F(testsuite, TREvoSimTestSix) {
+TEST_F(testsuite, TREvoSimTestSix)
+{
     QString output;
     MainWindow *mainWindow = nullptr;
     testinternal internalTestClass(mainWindow);
@@ -81,7 +88,8 @@ TEST_F(testsuite, TREvoSimTestSix) {
     ASSERT_TRUE(result) << output.toStdString();
 }
 
-TEST_F(testsuite, TREvoSimTestSeven) {
+TEST_F(testsuite, TREvoSimTestSeven)
+{
     QString output;
     MainWindow *mainWindow = nullptr;
     testinternal internalTestClass(mainWindow);
@@ -89,7 +97,8 @@ TEST_F(testsuite, TREvoSimTestSeven) {
     ASSERT_TRUE(result) << output.toStdString();
 }
 
-TEST_F(testsuite, TREvoSimTestEight) {
+TEST_F(testsuite, TREvoSimTestEight)
+{
     QString output;
     MainWindow *mainWindow = nullptr;
     testinternal internalTestClass(mainWindow);
@@ -97,7 +106,8 @@ TEST_F(testsuite, TREvoSimTestEight) {
     ASSERT_TRUE(result) << output.toStdString();
 }
 
-TEST_F(testsuite, TREvoSimTestNine) {
+TEST_F(testsuite, TREvoSimTestNine)
+{
     QString output;
     MainWindow *mainWindow = nullptr;
     testinternal internalTestClass(mainWindow);
@@ -105,7 +115,8 @@ TEST_F(testsuite, TREvoSimTestNine) {
     ASSERT_TRUE(result) << output.toStdString();
 }
 
-TEST_F(testsuite, TREvoSimTestTen) {
+TEST_F(testsuite, TREvoSimTestTen)
+{
     QString output;
     MainWindow *mainWindow = nullptr;
     testinternal internalTestClass(mainWindow);
@@ -113,7 +124,8 @@ TEST_F(testsuite, TREvoSimTestTen) {
     ASSERT_TRUE(result) << output.toStdString();
 }
 
-TEST_F(testsuite, TREvoSimTestEleven) {
+TEST_F(testsuite, TREvoSimTestEleven)
+{
     QString output;
     MainWindow *mainWindow = nullptr;
     testinternal internalTestClass(mainWindow);
@@ -121,7 +133,8 @@ TEST_F(testsuite, TREvoSimTestEleven) {
     ASSERT_TRUE(result) << output.toStdString();
 }
 
-TEST_F(testsuite, TREvoSimTestTwelve) {
+TEST_F(testsuite, TREvoSimTestTwelve)
+{
     QString output;
     MainWindow *mainWindow = nullptr;
     testinternal internalTestClass(mainWindow);
@@ -129,7 +142,8 @@ TEST_F(testsuite, TREvoSimTestTwelve) {
     ASSERT_TRUE(result) << output.toStdString();
 }
 
-TEST_F(testsuite, TREvoSimTestThirteen) {
+TEST_F(testsuite, TREvoSimTestThirteen)
+{
     QString output;
     MainWindow *mainWindow = nullptr;
     testinternal internalTestClass(mainWindow);
@@ -137,7 +151,8 @@ TEST_F(testsuite, TREvoSimTestThirteen) {
     ASSERT_TRUE(result) << output.toStdString();
 }
 
-TEST_F(testsuite, TREvoSimTestForteen) {
+TEST_F(testsuite, TREvoSimTestForteen)
+{
     QString output;
     MainWindow *mainWindow = nullptr;
     testinternal internalTestClass(mainWindow);
@@ -145,7 +160,8 @@ TEST_F(testsuite, TREvoSimTestForteen) {
     ASSERT_TRUE(result) << output.toStdString();
 }
 
-TEST_F(testsuite, TREvoSimTestFifteen) {
+TEST_F(testsuite, TREvoSimTestFifteen)
+{
     QString output;
     MainWindow *mainWindow = nullptr;
     testinternal internalTestClass(mainWindow);
@@ -153,7 +169,8 @@ TEST_F(testsuite, TREvoSimTestFifteen) {
     ASSERT_TRUE(result) << output.toStdString();
 }
 
-TEST_F(testsuite, TREvoSimTestSixteen) {
+TEST_F(testsuite, TREvoSimTestSixteen)
+{
     QString output;
     MainWindow *mainWindow = nullptr;
     testinternal internalTestClass(mainWindow);
@@ -161,7 +178,8 @@ TEST_F(testsuite, TREvoSimTestSixteen) {
     ASSERT_TRUE(result) << output.toStdString();
 }
 
-TEST_F(testsuite, TREvoSimTestSeventeen) {
+TEST_F(testsuite, TREvoSimTestSeventeen)
+{
     QString output;
     MainWindow *mainWindow = nullptr;
     testinternal internalTestClass(mainWindow);
@@ -169,7 +187,8 @@ TEST_F(testsuite, TREvoSimTestSeventeen) {
     ASSERT_TRUE(result) << output.toStdString();
 }
 
-TEST_F(testsuite, TREvoSimTestEighteen) {
+TEST_F(testsuite, TREvoSimTestEighteen)
+{
     QString output;
     MainWindow *mainWindow = nullptr;
     testinternal internalTestClass(mainWindow);
@@ -177,7 +196,8 @@ TEST_F(testsuite, TREvoSimTestEighteen) {
     ASSERT_TRUE(result) << output.toStdString();
 }
 
-TEST_F(testsuite, TREvoSimTestNineteen) {
+TEST_F(testsuite, TREvoSimTestNineteen)
+{
     QString output;
     MainWindow *mainWindow = nullptr;
     testinternal internalTestClass(mainWindow);
@@ -185,7 +205,17 @@ TEST_F(testsuite, TREvoSimTestNineteen) {
     ASSERT_TRUE(result) << output.toStdString();
 }
 
-TEST_F(testsuite, TREvoSimTestTwenty) {
+TEST_F(testsuite, TREvoSimTestTwenty)
+{
+    QString output;
+    MainWindow *mainWindow = nullptr;
+    testinternal internalTestClass(mainWindow);
+    bool result = internalTestClass.callTest(20, output);
+    ASSERT_TRUE(result) << output.toStdString();
+}
+
+TEST_F(testsuite, TREvoSimTestTwentyOne)
+{
     QString output;
     MainWindow *mainWindow = nullptr;
     testinternal internalTestClass(mainWindow);
