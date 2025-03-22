@@ -30,7 +30,17 @@ Match fitness peaks
 Increment environments 
     From v3.1.0, there is an option in TREvoSim to increment environments. When this option is selected, a simulation will start with a single environment, and increment this as the run progresses, to achieve the environment number dictated above by the end of the run. When a simulation is running until it reaches a set taxon number, increments will be dictated by the speciations (i.e. it will increase every (requested taxon number / requested environment number) speciations, calculated using integer maths). In contrast, if running to a requested number of iterations, increments will occur every (requested iteration number / requested environment number) iterations. This allows the nature of the fitness landscapes to change through a single run.  
 Ecosystem Engineers
-    From v3.0.0 TREvoSim allows organism-environment feedback through an ecosystem engineering functionality. When this option is enabled, ecosystem engineering starts at either half the requested iteration count, or after half the requested species have appeared. The first time EE occurs, a single, randomly-chosen individual is assigned "EE status" (as are any other individuals with identical genomes), and its genome is used as the basis for organism-environment feedback, as outlined below.This status is passed on to all offspring of this individual for the remainder of the run.
+    From v3.0.0 TREvoSim allows organism-environment feedback through an ecosystem engineering functionality. When this option is enabled, ecosystem engineering starts at either half the requested iteration count, or after half the requested species have appeared. The first time EE occurs, a single, randomly-chosen individual is assigned "EE status" (as are any other individuals with identical genomes), and its genome is used as the basis for organism-environment feedback, as outlined below.This status is passed on to all offspring of this individual for the remainder of the run. When this is selected, further options appear, as shown below.
+
+
+.. figure:: _static/settings_EE.png
+    :align: center
+    :width: 550
+    :alt: A screenshot of a section of the TREvoSim settings panel with options for ecosystem engineering
+
+    The options that appear in the TREvoSim Environment, events and playing fields settings panel when ecosystem engineers are enabled.
+
+
 EE mode
     EE can either be applied once or persistently, defined by this pair of radio buttons. In single shot EE, engineers are applied once, half way through a simulation, as outlined above. In contrast, if the persistent EE radio button is selected, then EE is applied repeatedly after its first application. The frequency at which this occurs is user-defined (see below). On reapplication, a random individual is chosen from within those individuals with EE status every reapplication as the basis for organism-environment feedback. If EEs have gone extinct, no action is taken. 
 EE Frequency
@@ -54,7 +64,7 @@ Playing field size
 Expanding playing field
     When this option is enabled, each species only has a single entry in the playing field. This is overwritten by an individual's progeny every time that species is selected for duplication, and at speciation a new species is added to the end of the playing field (which thus expands to accommodate new species - hence the name). This removes intraspecific competition.
 Random overwrite
-    When this is checked, when a new organism is returned to the playing field (see Keating et al. 2020 for algorithm details), it will overwrite an individual at random. When it is not checked it overwrites the organism with the lowest fitness (or one of these at random if multiple individuals share the lowest fitness).
+    When this is checked, when a new organism is returned to the playing field (see :ref:`algorithmconcepts`), it will overwrite an individual at random. When it is not checked it overwrites the organism with the lowest fitness (or one of these at random if multiple individuals share the lowest fitness).
 Selection coin toss
     This dictates the probability of choosing any given individual when moving down the playing field in the coin toss (i.e. the geometric distribution) to select an individual to duplicate. The probability of selecting an individual is the reciprocal of this (i.e. 1 /  this number). If, e.g., this is 2.0 there is a 50% chance of selecting the first organism in the playing field, then 50% selecting the next, and so on.
 Number of playing fields
