@@ -151,7 +151,7 @@ PlayingField, PlayingField_semiconcise,PlayingField_concise
     Fitness:	45
     Ecosystem engineer:	0
 
-  Using PlayingField_semiconcise, the playing field will be printedd as follows:
+  Using PlayingField_semiconcise, the playing field will be printed as follows:
   
   ::
 

@@ -39,7 +39,7 @@ The buttons control the simulation, as well as launching dialogues, whilst the S
 Species list
 ------------
 
-This panel updates as a run of the simulation progresses: it shows the binary string for the species in a simulation (up to the first 128 characters are displayed), once available. The panel starts as blank; once speciation occurs and any given species remains extant (i.e. there is a living representative in the playing field), the species is represented by a series of dashes. Once the species is extinct, and characters have been recorded (see :ref:`algorithmconcepts` for more details), these are printed to the panel.
+This panel updates as a run of the simulation progresses: it shows the binary string for the species in a simulation (up to the first 128 characters are displayed), once available. If the simulation is running to a taxon number, it is presented as a grid at the start of a simulation, in run to iteration it starts as a single line and expands as species originate. For any species that is extant (i.e. there is a living representative in the playing field), the species is represented by a series of dashes. Once the species is extinct, and characters have been recorded (see :ref:`algorithmconcepts` for more details), these are printed to the panel.
 
 Newick string
 -------------

@@ -4,13 +4,13 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>4. Algorithm, Concepts, and Experimental Design &mdash; TREvoSim 3.0.0 documentation</title>
+  <title>4. Algorithm, Concepts, and Experimental Design &mdash; TREvoSim 3.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=86f27845" />
 
   
   
-        <script src="_static/documentation_options.js?v=acc74ff5"></script>
+        <script src="_static/documentation_options.js?v=dd1205ac"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -33,7 +33,7 @@
               <img src="_static/TREvoSim.jpg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                3.0.0
+                3.1.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -155,11 +155,11 @@
 <li><p>The organism selected for duplication has a user-defined chance of mutation (defined as mutations per hundred characters per iteration; default 5.0 mutations per iteration per 100 genome bits). The user can select whether deleterious mutations are accepted.</p></li>
 <li><p>If the duplicated organism, after mutation, is sufficiently different to its character string at origination it is defined as a new species – the amount of difference required is the user defined variable species difference (default 4). Note that if this is not the first speciation in the lineage, distance is measured from the last species to diverge from its lineage – see discussion below. If it is a new species this is recorded, and the tree display on the graphical user interface is updated.</p></li>
 <li><p>The duplicated, mutated organism is then returned to the playing field, overwriting the least fit organism in the playing field by default (or randomly selecting one of the least fit if multiple least fit organisms exist). Alternatively (‘Random overwrite’) a random member of the playing field can be selected for overwriting.</p></li>
-<li><p>Organisms in the playing field typically represent multiple species once a simulation is running. Thus the playing field is checked each iteration, and any species that have become extinct are identified. Dy default the characters of the last surviving organism are appended to the character matrix on extinction (this is the ‘Sansomian speciation’ option, and ensures that if a single lineage has given birth to multiple species, the recorded character set is closest to the most recently branching terminal; when this is turned off, the characters recorded for a species are its genome at origination).</p></li>
+<li><p>Organisms in the playing field typically represent multiple species once a simulation is running. Thus the playing field is checked each iteration, and any species that have become extinct are identified. Dy default the characters of the last surviving organism are appended to the character matrix on extinction (assuming the record genomes on extinction option, the default, is enabled: this ensures that if a single lineage has given birth to multiple species, the recorded character set is closest to the most recently branching terminal; when this is turned off, the characters recorded for a species are its genome at origination).</p></li>
 <li><p>Masks are then mutated (user-defined chance of mutation per hundred bits per iteration, default 1.0), providing environmental change throughout the simulation.</p></li>
-<li><p>Optionally, other operations can occur during the iteration phase. For example, if requested, there can be mixing between playing fields. At half way through the simulation, a perturbation (elevated rates of environmental change) or ecosystem engineering (organism environment feedback) can occur. The operation of these options is described under the relevant settings in the documentation.</p></li>
+<li><p>Optionally, other operations can occur during the iteration phase. For example, if requested, there can be mixing between playing fields, or the number of environments can increase. At half way through the simulation, a perturbation (elevated rates of environmental change) or ecosystem engineering (organism environment feedback) can occur. The operation of these options is described under the relevant settings in the documentation.</p></li>
 </ol>
-<p>Once the requested number of species or iterations has been achieved, the simulation finishes. At this point (assuming the Sansomian speciation option is enabled), the character data of all extant taxa are entered into the character matrix (the fittest organism, or one of these, is selected if multiple organisms within a species are alive). The final character matrix contains all extinct and extant species.</p>
+<p>Once the requested number of species or iterations has been achieved, the simulation finishes. At this point (assuming record genome at extinction is enabled), the character data of all extant taxa are entered into the character matrix (the fittest organism, or one of these, is selected if multiple organisms within a species are alive). The final character matrix contains all extinct and extant species.</p>
 <p>If stripping of uninformative characters is requested, the number of characters, and species difference, are increased at the start of a run and then informative characters are randomly subsampled at this stage to achieve the requested number of characters. A check for identical taxa is also conducted (the data are discarded and simulation repeated if the number of identical terminals is above a user-defined cut off). End of run logs are then written, and the simulation terminates.</p>
 </section>
 <section id="tree-and-speciation">
