@@ -2028,7 +2028,7 @@ QString simulation::printMasks(const QVector <playingFieldStructure *> &playingF
     for (auto p : playingFields)
     {
         out << "Playingfield " << playingfield << "\n";
-        for (int environmentNumber = 0; environmentNumber < p->masks.count(); environmentNumber++)
+        for (int environmentNumber = 0; environmentNumber < runEnvironmentNumber; environmentNumber++)
         {
             out << "Environment " << environmentNumber << "\n";
             for (int maskNumber = 0; maskNumber < runMaskNumber; maskNumber++)
@@ -2049,7 +2049,7 @@ QString simulation::printMasks(const QVector <playingFieldStructure *> &playingF
     QString maskText;
     QTextStream out(&maskText);
 
-    for (int environmentNumber = 0; environmentNumber < playingFields[playingfield]->masks.count(); environmentNumber++)
+    for (int environmentNumber = 0; environmentNumber < runEnvironmentNumber; environmentNumber++)
     {
         out << "Environment " << environmentNumber << "\n";
         for (int maskNumber = 0; maskNumber < runMaskNumber; maskNumber++)

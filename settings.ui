@@ -672,7 +672,7 @@
         <widget class="QComboBox" name="combo_fitness_mode">
          <item>
           <property name="text">
-           <string>Minimum</string>
+           <string>Best</string>
           </property>
          </item>
          <item>
