@@ -1754,10 +1754,24 @@ void simulation::speciesExtinction(Organism *speciesListOrganism, const Organism
     }
 }
 
+int simulation::variableFitness
+(const Organism *org, const QVector<QVector<QVector<bool> > > &masks, int runFitnessSize, int runFitnessTarget, int runMaskNumber, int runEnvironmentNumber, int fitnessMode, int environment)
+{
+    int minFitness = fitness(org, masks, runFitnessSize, runFitnessTarget, runMaskNumber, FITNESS_MODE_MINIMUM, environment);
+    int meanFitness = fitness(org, masks, runFitnessSize, runFitnessTarget, runMaskNumber, FITNESS_MODE_MEAN, environment);
+    (minFitness < meanFitness) ? variableFitnessMode.append(FITNESS_MODE_MINIMUM) : variableFitnessMode.append(FITNESS_MODE_MEAN);
+    return (std::min(minFitness, meanFitness));
+}
+
 //Masks passed as a const reference.
 int simulation::fitness
 (const Organism *org, const QVector<QVector<QVector<bool> > > &masks, int runFitnessSize, int runFitnessTarget, int runMaskNumber, int runEnvironmentNumber, int fitnessMode, int environment)
 {
+    //Use another function to arrange variable fitness
+    if (fitnessMode == FITNESS_MODE_VARIABLE)
+    {
+        return (variableFitness(org, masks, runFitnessSize, runFitnessTarget, runMaskNumber, fitnessMode, environment));
+    }
 
     if (!(fitnessMode == FITNESS_MODE_MINIMUM || fitnessMode == FITNESS_MODE_MEAN))
     {

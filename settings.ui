@@ -680,6 +680,11 @@
            <string>Mean</string>
           </property>
          </item>
+         <item>
+          <property name="text">
+           <string>Variable</string>
+          </property>
+         </item>
         </widget>
        </item>
        <item row="6" column="0">
@@ -705,7 +710,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="button_group_overwrite_add"/>
   <buttongroup name="button_group_once_pers"/>
+  <buttongroup name="button_group_overwrite_add"/>
  </buttongroups>
 </ui>
