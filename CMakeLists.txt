@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16...3.22)
 
-set(TREVOSIM_VERSION 3.0.0)
+set(TREVOSIM_VERSION 3.1.0)
 set(TREVOSIM_APP TREvoSim)
 set(TREVOSIM_UNIT_TEST TREvoSimTest)
 

@@ -23,6 +23,7 @@ private slots:
     void slotGenomeSizeChanged();
     void slotSelectSizeChanged();
     void slotFitnessSizeChanged();
+    void slotEnvironmentNumberChanged();
     void slotrunForTaxaChanged();
     void slotMixingChanged();
     void slotMixingProbabilityChanged();

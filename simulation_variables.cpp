@@ -31,6 +31,7 @@ simulationVariables::simulationVariables()
     test = 0;
     runMode = RUN_MODE_TAXON;
     speciationMode = SPECIES_MODE_LAST_SPECIATION;
+    fitnessMode = FITNESS_MODE_MINIMUM;
     runForIterations = 1000;
     runForTaxa = 64;
     runningLogFrequency = 50;
@@ -106,6 +107,7 @@ QString simulationVariables::printSettings() const
                        << " maskNumber " << maskNumber
                        << " runMode " << runMode
                        << " speciationMode " << speciationMode
+                       << " fitnessMode " << fitnessMode
                        << " stripUninformative " << stripUninformative
                        << " writeTree " << writeTree
                        << " writeRunningLog " << writeRunningLog
@@ -175,6 +177,7 @@ bool simulationVariables::loadSettings(QFile *settingsFile)
             if (settingsFileIn.name().toString() == "stochasticDepth")stochasticDepth = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "runMode")runMode = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "speciationMode")speciationMode = settingsFileIn.readElementText().toInt();
+            if (settingsFileIn.name().toString() == "fitnessMode")fitnessMode = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "ecosystemEngineeringFrequency")ecosystemEngineeringFrequency = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "runningLogFrequency")runningLogFrequency = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "replicates")replicates = settingsFileIn.readElementText().toInt();
@@ -318,6 +321,10 @@ void simulationVariables::saveSettings(QFile *settingsFile)
 
     settingsFileOut.writeStartElement("speciationMode");
     settingsFileOut.writeCharacters(QString("%1").arg(speciationMode));
+    settingsFileOut.writeEndElement();
+
+    settingsFileOut.writeStartElement("fitnessMode");
+    settingsFileOut.writeCharacters(QString("%1").arg(fitnessMode));
     settingsFileOut.writeEndElement();
 
     settingsFileOut.writeStartElement("ecosystemEngineeringFrequency");

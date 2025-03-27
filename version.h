@@ -3,7 +3,7 @@
 
 //Software Versions
 #define MAJORVERSION 3
-#define MINORVERSION 0
+#define MINORVERSION 1
 #define PATCHVERSION 0
 
 //Save File Version

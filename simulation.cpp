@@ -70,6 +70,7 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
     runFitnessSize = simSettings->fitnessSize;
     runFitnessTarget = simSettings->fitnessTarget;
     runMaskNumber = simSettings->maskNumber;
+    runEnvironmentNumber = simSettings->environmentNumber;
     runSpeciesDifference = simSettings->speciesDifference;
     runMixingProbabilityOneToZero = simSettings->mixingProbabilityOneToZero;
     runMixingProbabilityZeroToOne = simSettings->mixingProbabilityZeroToOne;
@@ -131,7 +132,7 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
     if (!simSettings->matchFitnessPeaks)
         for (auto p : std::as_const(playingFields))
         {
-            for (int k = 0; k < simSettings->environmentNumber; k++)
+            for (int k = 0; k < runEnvironmentNumber; k++)
             {
                 p->masks.append(QVector <QVector <bool> >());
                 for (int j = 0; j < runMaskNumber; j++)
@@ -154,7 +155,7 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
         //First let's populate them with false / 0 bits
         for (auto p : std::as_const(playingFields))
         {
-            for (int k = 0; k < simSettings->environmentNumber; k++)
+            for (int k = 0; k < runEnvironmentNumber; k++)
             {
                 p->masks.append(QVector <QVector <bool> >());
                 for (int j = 0; j < runMaskNumber; j++)
@@ -170,7 +171,7 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
         for (auto p : std::as_const(playingFields))
         {
             QVector <QVector <bool> > used;
-            for (int i = 0; i < simSettings->environmentNumber; i++)
+            for (int i = 0; i < runEnvironmentNumber; i++)
             {
                 used.append(QVector <bool> ());
                 for (int j = 0; j < runFitnessSize; j++) used[i].append(false);
@@ -181,7 +182,7 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
                 //Note we want to have the number of ones to be the mask number plus one - so that e.g. if we have two masks, because we're looping through less than below, we need to have a limit of two
                 int numberOnes = QRandomGenerator::global()->bounded(runMaskNumber + 1);
 
-                for (int k = 0; k < simSettings->environmentNumber; k++)
+                for (int k = 0; k < runEnvironmentNumber; k++)
                 {
                     bool flag = false;
                     int bitPosition = -1;
@@ -213,7 +214,6 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
     if (simSettings->playingfieldNumber > 1 && simSettings->playingfieldMasksMode != MASKS_MODE_INDEPENDENT)
         for (int p = 1; p < simSettings->playingfieldNumber; p++)
             playingFields[p]->masks = playingFields[0]->masks;
-
 
     //If we are adding as mask for EE, we don't need to do antyhing with this yet
     if (simSettings->ecosystemEngineersAddMask) runMaskNumber--;
@@ -267,6 +267,9 @@ bool simulation::run()
     QElapsedTimer timer;
     timer.start();
     int lastGUIUpdate = 0;
+
+    //If we are incrementing environment numbers, we need to start with 1
+    if (simSettings->incrementEnvironments && simSettings->test != 19)  runEnvironmentNumber  = 1;
 
     /************* Start simulation *************/
     do
@@ -375,7 +378,8 @@ bool simulation::run()
         if (!simSettings->noSelection)
             for (int p = 0; p < simSettings->playingfieldNumber; p++)
                 for (int i = 0; i < playingFields[p]->playingField.count(); i++)
-                    playingFields[p]->playingField[i]->fitness = fitness(playingFields[p]->playingField[i], playingFields[p]->masks, runFitnessSize, runFitnessTarget, runMaskNumber);
+                    playingFields[p]->playingField[i]->fitness =
+                        fitness(playingFields[p]->playingField[i], playingFields[p]->masks, runFitnessSize, runFitnessTarget, runMaskNumber, runEnvironmentNumber, simSettings->fitnessMode);
 
 
         /************* Playing field mixing *************/
@@ -425,6 +429,14 @@ bool simulation::run()
             }
             if (ecosystemEngineeringOccurring == 1 || (ecosystemEngineeringOccurring > 1 && simSettings->ecosystemEngineersArePersistent)) applyEcosystemEngineering(speciesList, simSettings->writeEE);
         }
+
+
+        /************* Increment environments, if requried *************/
+
+        //If we are incrementing environment numbers, we need to change environment numbers alongg the way
+        if (simSettings->incrementEnvironments && simSettings->test != 19)
+            if (checkForIncrement(simSettings->runMode, speciesList.length(), simSettings->runForTaxa, simSettings->runForIterations, simSettings->environmentNumber, iterations, runEnvironmentNumber))
+                runEnvironmentNumber++;
 
         /************* Check if simulation is complete *************/
         if (simSettings->runMode == RUN_MODE_TAXON && (speciesCount + 1) == simSettings->runForTaxa) simulationComplete = true;
@@ -705,21 +717,10 @@ bool simulation::run()
         logFileString03Tmp.replace("||Settings||", simSettings->printSettings());
 
         file03TextStream << logFileString03Tmp;
-
-        //Zero padding
-        int totalSpeciesCount = speciesList.length();
-        int padding = 0;
-        if (totalSpeciesCount < 100) padding = 2;
-        else if (totalSpeciesCount < 1000) padding = 3;
-        else padding = 4;
-
         for (int i = 0; i < speciesList.count(); i++)
         {
             file03TextStream << (QString("%1").arg(i + 1));
-            //if (simSettings->runForTaxa < 100)file03TextStream << (QString("%1").arg(i + 1));
-            //else file03TextStream << (QString("S_%1").arg(i + 1, 3, 10, QChar('0')));
-
-            file03TextStream << "\t\t" << "Species_" << doPadding(i, padding) << ",\n";
+            file03TextStream << "\t\t" << "Species_" << doPadding(i, paddingAmount(speciesList.length())) << ",\n";
         }
 
         file03TextStream << "\t\t;\n\ntree tree1 = [&R]";
@@ -777,7 +778,8 @@ Organism simulation::initialise()
                     if (simSettings->stochasticLayer) playingFields[0]->playingField[0]->initialise(runGenomeSize, simSettings->stochasticMap);
                     else playingFields[0]->playingField[0]->initialise(runGenomeSize);
 
-                    playingFields[0]->playingField[0]->fitness = fitness(playingFields[0]->playingField[0], playingFields[0]->masks, runFitnessSize, runFitnessTarget, runMaskNumber);
+                    playingFields[0]->playingField[0]->fitness =
+                        fitness(playingFields[0]->playingField[0], playingFields[0]->masks, runFitnessSize, runFitnessTarget, runMaskNumber, runEnvironmentNumber, simSettings->fitnessMode);
 
                     if (static_cast<quint32>(playingFields[0]->playingField[0]->fitness) < minimumFitness)
                     {
@@ -800,12 +802,14 @@ Organism simulation::initialise()
                     //Work out fitnesses for all environments - to see if they are the same
                     QVector <int> fitnesses;
 
-                    for (int i = 0; i < simSettings->environmentNumber; i++) fitnesses.append(fitness(playingFields[0]->playingField[0], playingFields[0]->masks, runFitnessSize, runFitnessTarget, runMaskNumber, i));
+                    for (int i = 0; i < runEnvironmentNumber; i++)
+                        fitnesses.append(fitness(playingFields[0]->playingField[0], playingFields[0]->masks, runFitnessSize, runFitnessTarget, runMaskNumber, runEnvironmentNumber, simSettings->fitnessMode, i));
                     int sumOfDifferences = 0;
                     for (int i = 0; i < fitnesses.length() - 1; i++) sumOfDifferences += qAbs(fitnesses[i] - fitnesses[i + 1]);
 
                     //Then work out overall fitness
-                    playingFields[0]->playingField[0]->fitness = fitness(playingFields[0]->playingField[0], playingFields[0]->masks, runFitnessSize, runFitnessTarget, runMaskNumber);
+                    playingFields[0]->playingField[0]->fitness =
+                        fitness(playingFields[0]->playingField[0], playingFields[0]->masks, runFitnessSize, runFitnessTarget, runMaskNumber, runEnvironmentNumber, simSettings->fitnessMode);
 
                     //We care most about having similar fitnesses - work towards getting identical fitnesses on all playingfields
                     if (static_cast<quint32>(sumOfDifferences) < minimumSumDifferences)
@@ -844,7 +848,8 @@ Organism simulation::initialise()
             //First organism - initialise and fill playing field with it
             if (simSettings->stochasticLayer) playingFields[0]->playingField[0]->initialise(runGenomeSize, simSettings->stochasticMap);
             else playingFields[0]->playingField[0]->initialise(runGenomeSize);
-            playingFields[0]->playingField[0]->fitness = fitness(playingFields[0]->playingField[0], playingFields[0]->masks, runFitnessSize, runFitnessTarget, runMaskNumber);
+            playingFields[0]->playingField[0]->fitness =
+                fitness(playingFields[0]->playingField[0], playingFields[0]->masks, runFitnessSize, runFitnessTarget, runMaskNumber, runEnvironmentNumber, simSettings->fitnessMode);
 
             //Given that playing field masks are different, now we need to initialise with the best organism we can for all.
             //Currently implemented using the best mean fitness of all organisms tried
@@ -852,7 +857,7 @@ Organism simulation::initialise()
 
             for (auto p : std::as_const(playingFields))
             {
-                fitnesses.append(fitness(p->playingField[0], p->masks, runFitnessSize, runFitnessTarget, runMaskNumber));
+                fitnesses.append(fitness(p->playingField[0], p->masks, runFitnessSize, runFitnessTarget, runMaskNumber, runEnvironmentNumber, simSettings->fitnessMode));
             }
 
             double meanFitness = 0;
@@ -997,7 +1002,7 @@ void simulation::mutateOrganism(Organism &progeny, const playingFieldStructure *
     }
 
     //Update fitness
-    progeny.fitness = fitness(&progeny, pf->masks, runFitnessSize, runFitnessTarget, runMaskNumber);
+    progeny.fitness = fitness(&progeny, pf->masks, runFitnessSize, runFitnessTarget, runMaskNumber, runEnvironmentNumber, simSettings->fitnessMode);
 
     //Undo mutations if discard deleterious is on, and new fitness is worse than old
     if (simSettings->discardDeleterious && (temporaryFitness < progeny.fitness))
@@ -1010,8 +1015,6 @@ void simulation::mutateOrganism(Organism &progeny, const playingFieldStructure *
         else for (int i = 0; i < SNPs.count(); i++)progeny.genome[SNPs[i]] = !progeny.genome[SNPs[i]];
     }
 }
-
-
 
 void simulation::mutateEnvironment()
 {
@@ -1044,7 +1047,7 @@ void simulation::mutateEnvironment()
         //reminder: masks[environment #][mask #][bit #]
 
         for (auto pf : std::as_const(playingFields)) // Treat playing fields separately
-            for (int j = 0; j < simSettings->environmentNumber; j++) //Treat environments separately
+            for (int j = 0; j < runEnvironmentNumber; j++) //Treat environments separately
             {
                 //Create lists of columns separated by one bit to do swap
                 QList <int> pairOne;
@@ -1100,7 +1103,7 @@ void simulation::mutateEnvironment()
     else
     {
         for (auto pf : std::as_const(playingFields)) // Treat playing fields separately
-            for (int j = 0; j < simSettings->environmentNumber; j++) //Treat environments separately
+            for (int j = 0; j < runEnvironmentNumber; j++) //Treat environments separately
                 for (int x = 0; x < numberEnvironmentMutationsInteger; x++) //How many mutations?
                 {
                     //Select random mask and random bit
@@ -1121,13 +1124,11 @@ void simulation::mutateEnvironment()
 void simulation::updateTNTstring(QString &TNTstring, int progParentSpeciesID, int progSpeciesID)
 {
     QString progenySpeciesID;
-    if (simSettings->runForTaxa < 100 && simSettings->runMode == RUN_MODE_TAXON) progenySpeciesID = doPadding(progParentSpeciesID, 2);
-    else if (simSettings->runForTaxa < 1000 && simSettings->runMode == RUN_MODE_TAXON) progenySpeciesID = doPadding(progParentSpeciesID, 3);
+    if (simSettings->runMode == RUN_MODE_TAXON) progenySpeciesID = doPadding(progParentSpeciesID, paddingAmount(simSettings->runForTaxa));
     else progenySpeciesID = doPadding(progParentSpeciesID, 4);
 
     QString speciesID;
-    if (simSettings->runForTaxa < 100  && simSettings->runMode == RUN_MODE_TAXON) speciesID = doPadding(progSpeciesID, 2);
-    else if (simSettings->runForTaxa < 1000 && simSettings->runMode == RUN_MODE_TAXON) speciesID = doPadding(progSpeciesID, 3);
+    if (simSettings->runMode == RUN_MODE_TAXON) speciesID = doPadding(progSpeciesID, paddingAmount(simSettings->runForTaxa));
     else speciesID = doPadding(progSpeciesID, 4);
 
     //Then write string
@@ -1210,7 +1211,7 @@ void simulation::applyPerturbation()
             environmentalPerturbationMasksCopy.append(QVector <QVector <QVector <bool> > >());
             environmentalPerturbationMasksCopy[l] = playingFields[l]->masks;
             environmentalPerturbationOverwriting.append(QVector <QVector <QVector <bool> > >());
-            for (int k = 0; k < simSettings->environmentNumber; k++)
+            for (int k = 0; k < runEnvironmentNumber; k++)
             {
                 environmentalPerturbationOverwriting[l].append(QVector <QVector <bool> >());
                 for (int j = 0; j < runMaskNumber; j++)
@@ -1229,7 +1230,7 @@ void simulation::applyPerturbation()
 
         //Bork current masks to create environmental perturbation - makes sense to have these as independent and different unless pf masks set to be identical
         for (auto pf : std::as_const(playingFields))
-            for (int k = 0; k < simSettings->environmentNumber; k++)
+            for (int k = 0; k < runEnvironmentNumber; k++)
                 for (int j = 0; j < runMaskNumber; j++)
                     //I is reference so as to allow us to modify contents
                     for (auto &i : pf->masks[k][j])
@@ -1238,7 +1239,7 @@ void simulation::applyPerturbation()
         //Copy over if identical
         if (simSettings->playingfieldMasksMode == MASKS_MODE_IDENTICAL)
             for (int i = 1; i < simSettings->playingfieldNumber; i++)
-                for (int k = 0; k < simSettings->environmentNumber; k++)
+                for (int k = 0; k < runEnvironmentNumber; k++)
                     for (int j = 0; j < runMaskNumber; j++)
                         for (int l = 0; l < playingFields[i]->masks[k][j].length(); l++)
                             playingFields[i]->masks[k][j][l] = playingFields[0]->masks[k][j][l];
@@ -1266,7 +1267,7 @@ void simulation::applyPerturbation()
         {
             //Random number size of vectors
             int l = QRandomGenerator::global()->bounded(simSettings->playingfieldNumber);
-            int k = QRandomGenerator::global()->bounded(simSettings->environmentNumber);
+            int k = QRandomGenerator::global()->bounded(runEnvironmentNumber);
             int j = QRandomGenerator::global()->bounded(runMaskNumber);
             int i = QRandomGenerator::global()->bounded(runFitnessSize);
 
@@ -1282,7 +1283,7 @@ void simulation::applyPerturbation()
 
         //Copy over masks where dictated by the the overwriting record
         for (int l = 0; l < simSettings->playingfieldNumber; l++)
-            for (int k = 0; k < simSettings->environmentNumber; k++)
+            for (int k = 0; k < runEnvironmentNumber; k++)
                 for (int j = 0; j < runMaskNumber; j++)
                     for (int i = 0; i < runFitnessSize; i++)
                         if (environmentalPerturbationOverwriting[l][k][j][i])
@@ -1291,7 +1292,7 @@ void simulation::applyPerturbation()
         //Copy over if identical
         if (simSettings->playingfieldMasksMode == MASKS_MODE_IDENTICAL)
             for (int i = 1; i < simSettings->playingfieldNumber; i++)
-                for (int k = 0; k < simSettings->environmentNumber; k++)
+                for (int k = 0; k < runEnvironmentNumber; k++)
                     for (int j = 0; j < runMaskNumber; j++)
                         for (int l = 0; l < playingFields[i]->masks[k][j].length(); l++)
                             playingFields[i]->masks[k][j][l] = playingFields[0]->masks[k][j][l];
@@ -1754,17 +1755,27 @@ void simulation::speciesExtinction(Organism *speciesListOrganism, const Organism
 }
 
 //Masks passed as a const reference.
-int simulation::fitness(const Organism *org, const QVector<QVector<QVector<bool> > > &masks, int runFitnessSize, int runFitnessTarget, int runMaskNumber, int environment)
+int simulation::fitness
+(const Organism *org, const QVector<QVector<QVector<bool> > > &masks, int runFitnessSize, int runFitnessTarget, int runMaskNumber, int runEnvironmentNumber, int fitnessMode, int environment)
 {
-    //Send mask number to function, as in some cases (i.e. ecosystem engineering), we don't want to include all masks.
+
+    if (!(fitnessMode == FITNESS_MODE_MINIMUM || fitnessMode == FITNESS_MODE_MEAN))
+    {
+        warning("Fitness error", QString("Fitness mode error - contact RJG - fitness mode is %1").arg(fitnessMode));
+        return 0;
+    }
+
+    //Send both to function, as in some cases (i.e. ecosystem engineering, incrementing environments), we don't want to include all masks/environments.
     int maskNumber = runMaskNumber;
-    int environmentNumber = masks.length();
+    int environmentNumber = runEnvironmentNumber;
 
     int fitness = (runFitnessSize * maskNumber);
+    double doubleFitness = 0.;
 
     //Environment defaults to -1 (used to allow this to be called throughout simulation without defining environment number).
     //If this is the case check fitness for all environments
     if (environment == -1)
+    {
         for (int h = 0; h < environmentNumber; h++)
         {
             int temporaryFitness = ~0, counts = 0;
@@ -1774,8 +1785,11 @@ int simulation::fitness(const Organism *org, const QVector<QVector<QVector<bool>
 
             //Define fitness as the distance away from fitness target
             temporaryFitness = qAbs(counts - runFitnessTarget);
-            if (temporaryFitness < fitness)fitness = temporaryFitness;
+            if (fitnessMode == FITNESS_MODE_MINIMUM && temporaryFitness < fitness)fitness = temporaryFitness;
+            if (fitnessMode == FITNESS_MODE_MEAN) doubleFitness += (static_cast<double>(temporaryFitness) / static_cast<double>(environmentNumber));
         }
+        if (fitnessMode == FITNESS_MODE_MEAN) fitness = static_cast<int>(doubleFitness);
+    }
     //Alteranatively, we can calculate fitness for a specific environment
     else
     {
@@ -1804,6 +1818,17 @@ int simulation::genomeDifference(const Organism *organismOne, const Organism *or
             if (organismOne->genome[j] != organismTwo->genome[j])diff++;
     }
     return diff;
+}
+
+bool simulation::checkForIncrement(int runMode, int currentSpeciesNumber, int runForTaxa, int runForIterations, int environmentNumber, int iterations, int runEnvironmentNumber)
+{
+    if (runMode == RUN_MODE_TAXON)
+        if (currentSpeciesNumber > (runEnvironmentNumber * (runForTaxa / environmentNumber)))
+            return true;
+    if (runMode == RUN_MODE_ITERATION)
+        if (iterations > (runEnvironmentNumber * (runForIterations / environmentNumber)))
+            return true;
+    return false;
 }
 
 bool simulation::checkForSpeciation(const Organism *organismOne, int runSelectSize, int runSpeciesDifference, int speciationMode)
@@ -2003,7 +2028,7 @@ QString simulation::printMasks(const QVector <playingFieldStructure *> &playingF
     for (auto p : playingFields)
     {
         out << "Playingfield " << playingfield << "\n";
-        for (int environmentNumber = 0; environmentNumber < p->masks.count(); environmentNumber++)
+        for (int environmentNumber = 0; environmentNumber < runEnvironmentNumber; environmentNumber++)
         {
             out << "Environment " << environmentNumber << "\n";
             for (int maskNumber = 0; maskNumber < runMaskNumber; maskNumber++)
@@ -2024,7 +2049,7 @@ QString simulation::printMasks(const QVector <playingFieldStructure *> &playingF
     QString maskText;
     QTextStream out(&maskText);
 
-    for (int environmentNumber = 0; environmentNumber < playingFields[playingfield]->masks.count(); environmentNumber++)
+    for (int environmentNumber = 0; environmentNumber < runEnvironmentNumber; environmentNumber++)
     {
         out << "Environment " << environmentNumber << "\n";
         for (int maskNumber = 0; maskNumber < runMaskNumber; maskNumber++)
@@ -2063,17 +2088,9 @@ QString simulation::printMatrix(const QVector <Organism *> &speciesList)
     QTextStream matrixTextStream(&matrixString);
 
     int totalSpeciesCount = speciesList.length();
-
-    //Zero padding
-    int padding = 0;
-    if (totalSpeciesCount < 100) padding = 2;
-    else if (totalSpeciesCount < 1000) padding = 3;
-    else padding = 4;
-
-
     for (int i = 0; i < totalSpeciesCount; i++)
     {
-        matrixTextStream << "Species_" << doPadding(i, padding) << "\t";
+        matrixTextStream << "Species_" << doPadding(i, totalSpeciesCount) << "\t";
         for (auto j : std::as_const(speciesList[i]->genome)) j ? matrixTextStream << 1 : matrixTextStream << 0 ;
         matrixTextStream << "\n";
     }
@@ -2087,10 +2104,10 @@ QString simulation::printStochasticMatrix(const QVector <Organism *> &speciesLis
 
     QString matrixString;
     QTextStream matrixTextStream(&matrixString);
-
-    for (int i = 0; i < speciesList.length(); i++)
+    int totalSpeciesCount = speciesList.length();
+    for (int i = 0; i < totalSpeciesCount; i++)
     {
-        matrixTextStream << "Species_" << i << "\t";
+        matrixTextStream << "Species_" << doPadding(i, paddingAmount(totalSpeciesCount)) << "\t";
         for (auto j : std::as_const(speciesList[i]->stochasticGenome)) j ? matrixTextStream << 1 : matrixTextStream << 0 ;
         matrixTextStream << "\n";
     }
@@ -2116,10 +2133,7 @@ QString simulation::printNewick(int species, QVector <Organism *> &speciesList)
     int totalSpeciesCount = speciesList.length();
 
     //Zero padding
-    QString speciesID;
-    if (totalSpeciesCount < 100) speciesID = doPadding(speciesList[species]->speciesID, 2);
-    else if (totalSpeciesCount < 1000) speciesID = doPadding(speciesList[species]->speciesID, 3);
-    else speciesID = doPadding(speciesList[species]->speciesID, 4);
+    QString speciesID = doPadding(speciesList[species]->speciesID, paddingAmount(totalSpeciesCount));
 
     if (offspring == 0)
     {
@@ -2149,18 +2163,9 @@ QString simulation::printNewickWithBranchLengths(int species, QVector <Organism 
 
     //Zero padding
     QString speciesID;
-    if (phangornTree)
-    {
-        if (totalSpeciesCount < 100) speciesID = QString("Species_%1").arg(speciesList[species]->speciesID + 1, 2, 10, QChar('0'));
-        else if (totalSpeciesCount < 1000) speciesID = QString("Species_%1").arg(speciesList[species]->speciesID + 1, 3, 10, QChar('0'));
-        else speciesID = QString("Species_%1").arg(speciesList[species]->speciesID + 1, 4, 10, QChar('0'));
-    }
-    else
-    {
-        if (totalSpeciesCount < 100) speciesID = QString("Species_%1").arg(speciesList[species]->speciesID, 2, 10, QChar('0'));
-        else if (totalSpeciesCount < 1000) speciesID = QString("Species_%1").arg(speciesList[species]->speciesID, 3, 10, QChar('0'));
-        else speciesID = QString("Species_%1").arg(speciesList[species]->speciesID, 4, 10, QChar('0'));
-    }
+    if (phangornTree) speciesID = doPadding(speciesList[species]->speciesID + 1, paddingAmount(totalSpeciesCount));
+    else speciesID = doPadding(speciesList[species]->speciesID, paddingAmount(totalSpeciesCount));
+
     //For terminal cases (reused for branches to nodes below)
     int branchLength = speciesList[species]->extinct - speciesList[species]->cladogenesis;
 
@@ -2221,8 +2226,8 @@ QString simulation::printEcosystemEngineers(const QVector <Organism *> &speciesL
     QString ecosystemEngineersList;
     QTextStream ecosystemEngineersTextStream(&ecosystemEngineersList);
     ecosystemEngineersTextStream << "Species,Ecosystem engineer\n";
-
-    for (int i = 0; i < speciesList.length(); i++) ecosystemEngineersTextStream << "Species_" << i << "," << speciesList[i]->ecosystemEngineer << "\n";
+    int totalSpeciesNumber = speciesList.length();
+    for (int i = 0; i < totalSpeciesNumber; i++) ecosystemEngineersTextStream << "Species_" << doPadding(i, paddingAmount(totalSpeciesNumber)) << "," << speciesList[i]->ecosystemEngineer << "\n";
 
     return ecosystemEngineersList;
 }
@@ -2425,6 +2430,13 @@ void simulation::writeGUI(QVector<Organism *> &speciesList)
     qApp->processEvents();
 }
 
+int simulation::paddingAmount(int taxonNumber)
+{
+    if (taxonNumber < 100) return 2;
+    else if (taxonNumber < 1000) return 3;
+    else return 4;
+}
+
 QString simulation::doPadding(int number, int significantFigures)
 {
     return QString("%1").arg(number, significantFigures, 10, QChar('0'));
@@ -2495,9 +2507,9 @@ int simulation::countPeaks(int genomeSize, int repeat, int environment)
 
         //For now, let's just do this for the first playing field - we expect each playingfield to have the same properties in terms of peaks
         //If repeat is not -1 we have called this from the main window, and we want to use all environments
-        if (repeat != -1) org.fitness = fitness(&org, playingFields[0]->masks, genomeSize, simSettings->fitnessTarget, runMaskNumber);
+        if (repeat != -1) org.fitness = fitness(&org, playingFields[0]->masks, genomeSize, simSettings->fitnessTarget, runMaskNumber, runEnvironmentNumber, simSettings->fitnessMode);
         //Otherwise we need to specify which environment we want
-        else org.fitness = fitness(&org, playingFields[0]->masks, genomeSize, simSettings->fitnessTarget, runMaskNumber, environment);
+        else org.fitness = fitness(&org, playingFields[0]->masks, genomeSize, simSettings->fitnessTarget, runMaskNumber, runEnvironmentNumber, simSettings->fitnessMode, environment);
 
         totals[org.fitness]++;
         if (recordGenomes) genomes[org.fitness].append(x);

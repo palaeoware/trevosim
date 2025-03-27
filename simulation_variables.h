@@ -32,6 +32,7 @@ public:
     int test;
     int runMode;
     int speciationMode;
+    int fitnessMode;
     int runForIterations;
     int ecosystemEngineeringFrequency;
     int runningLogFrequency;

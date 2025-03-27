@@ -503,7 +503,6 @@ void MainWindow::runForTriggered(int runBatchFor)
     //Then set it running - send pointer to main window for GUI and access functions, and run number
     if (!errorStart) errorStart = theSimulation.run();
 
-    //HERE - need to modify the yes no choice so it asks for input on command line
     if (!errorStart)
     {
         bool stopRuns = escapePressed;
@@ -558,6 +557,7 @@ void MainWindow::runForTriggered(int runBatchFor)
                                QThread::idealThreadCount());
         dialog.setLabelText(message);
         if (runFromCommand) qInfo().noquote() << message;
+        QApplication::processEvents();
 
         //Do the runs using QtConcurrent::filter which modified the sequence in place
         futureWatcher.setFuture(QtConcurrent::filter(runsList, [this](const int &run)
@@ -921,7 +921,7 @@ void MainWindow::doTests()
     //Create this here so we can use QMap list of tests to populate drop downs
     testinternal testObject(this);
 
-    int testCount = 21;
+    int testCount = 22;
     int testStart = 0;
 
     QStringList items;
