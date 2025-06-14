@@ -982,7 +982,7 @@ void simulation::mutateOrganism(Organism &progeny, const playingFieldStructure *
             workLogTextStream << "Now doing stochastic mapping for selected progeny. Post mutation genome is\n" ;
             QString genomeString;
 
-            for (auto i : std::as_const(progeny.genome))
+            for (auto i : progeny.genome)
                 if (i)genomeString.append("1");
                 else genomeString.append("0");
 
@@ -1904,7 +1904,7 @@ void simulation::newSpecies(Organism &progeny, Organism &parent, playingFieldStr
     //Do this independently for each playing field (i.e. only in this playing field this time) - this obviously has implications if after mixing the species are very different in different playing fields - many more speciations, lower diversity in any given PF.
     //To do - revisit this decision //
     std::vector <bool> newSpeciesGenome;
-    for (auto b : std::as_const(progeny.genome))newSpeciesGenome.push_back(b);
+    for (auto b : progeny.genome)newSpeciesGenome.push_back(b);
     for (auto o : std::as_const(pf->playingField))
         if (o->speciesID == parentSpecies) o->parentGenomes.push_back(newSpeciesGenome);
 
@@ -1950,13 +1950,13 @@ QString simulation::printPlayingField(const QVector <playingFieldStructure *> &p
         for (auto o : std::as_const(pf->playingField))
         {
             out << "\nPlayingfield pos: " << cnt << " \nSpecies ID: " << o->speciesID << "\nGenome:\t";
-            for (auto i : std::as_const(o->genome)) i ? out << 1 : out << 0 ;
+            for (auto i : o->genome) i ? out << 1 : out << 0 ;
             out << "\nParent genomes:\n";
             int count = 0;
-            for (auto g : std::as_const(o->parentGenomes))
+            for (auto g : o->parentGenomes)
             {
                 out << "Genome " << count++ << "\t";
-                for (auto i : std::as_const(g))
+                for (auto i : g)
                     i ? out << 1 : out << 0 ;
                 out << "\n";
             }
@@ -2021,7 +2021,7 @@ QString simulation::printPlayingFieldGenomesConcise(const QVector <playingFieldS
 
     for (auto pf : playingFields)
         for (auto o : std::as_const(pf->playingField))
-            for (auto i : std::as_const(o->genome)) i ? out << 1 : out << 0 ;
+            for (auto i : o->genome) i ? out << 1 : out << 0 ;
 
     return pfText;
 }
@@ -2084,7 +2084,7 @@ QString simulation::printSpeciesList(const QVector <Organism *> &speciesList)
     {
         out << "Entry " << cnt << " is species " << o->speciesID << " ";
         cnt++;
-        for (auto i : std::as_const(o->genome)) i ? out << 1 : out << 0 ;
+        for (auto i : o->genome) i ? out << 1 : out << 0 ;
         out << "\tBorn: " << o->born << "\tExtinct: " << o->extinct << "\n";
     }
 
@@ -2100,7 +2100,7 @@ QString simulation::printMatrix(const QVector <Organism *> &speciesList)
     for (int i = 0; i < totalSpeciesCount; i++)
     {
         matrixTextStream << "Species_" << doPadding(i, totalSpeciesCount) << "\t";
-        for (auto j : std::as_const(speciesList[i]->genome)) j ? matrixTextStream << 1 : matrixTextStream << 0 ;
+        for (auto j : speciesList[i]->genome) j ? matrixTextStream << 1 : matrixTextStream << 0 ;
         matrixTextStream << "\n";
     }
 
@@ -2117,7 +2117,7 @@ QString simulation::printStochasticMatrix(const QVector <Organism *> &speciesLis
     for (int i = 0; i < totalSpeciesCount; i++)
     {
         matrixTextStream << "Species_" << doPadding(i, paddingAmount(totalSpeciesCount)) << "\t";
-        for (auto j : std::as_const(speciesList[i]->stochasticGenome)) j ? matrixTextStream << 1 : matrixTextStream << 0 ;
+        for (auto j : speciesList[i]->stochasticGenome) j ? matrixTextStream << 1 : matrixTextStream << 0 ;
         matrixTextStream << "\n";
     }
     return matrixString;
