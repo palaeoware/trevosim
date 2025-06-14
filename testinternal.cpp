@@ -471,20 +471,20 @@ bool testinternal::testFour(QString &outString)
     Organism org(20, true);
     org.initialise(20, simSettings.stochasticMap);
     out << "\nStochastic genome is: ";
-    for (auto i : std::as_const(org.stochasticGenome)) i ? out << "1" : out << "0";
+    for (auto i : org.stochasticGenome) i ? out << "1" : out << "0";
     out << "\nGenome is: ";
-    for (auto i : std::as_const(org.genome)) i ? out << "1" : out << "0";
-    for (auto i : std::as_const(org.genome)) if (i) testFlag = false;
+    for (auto i : org.genome) i ? out << "1" : out << "0";
+    for (auto i : org.genome) if (i) testFlag = false;
 
     out << "\nStochastic map has been updated and is now:\n";
     for (auto &i : simSettings.stochasticMap) i = 1;
     for (auto i : simSettings.stochasticMap) i ? out << "1" : out << "0";
     org.initialise(20, simSettings.stochasticMap);
     out << "\nStochastic genome is: ";
-    for (auto i : std::as_const(org.stochasticGenome)) i ? out << "1" : out << "0";
+    for (auto i : org.stochasticGenome) i ? out << "1" : out << "0";
     out << "\nGenome is: ";
-    for (auto i : std::as_const(org.genome)) i ? out << "1" : out << "0";
-    for (auto i : std::as_const(org.genome)) if (!i) testFlag = false;
+    for (auto i : org.genome) i ? out << "1" : out << "0";
+    for (auto i : org.genome) if (!i) testFlag = false;
 
     QString flagString = testFlag ? "true" : "false";
     out << "\n\nGiven the mapping the first genome should be all zeros, no matter what the stochastic genome, and the second all ones. TRevoSim tested this and returned " << flagString << ".";
@@ -924,21 +924,21 @@ bool testinternal::testSeven(QString &outString)
     out << "Parent cladogenesis at iteration " << parentSpecies.cladogenesis << " (should be 66).\n";
     if (newSpecies.parentSpeciesID != 10)testFlag = false;
     out << "New species parent species ID " << newSpecies.parentSpeciesID << " (should be 10).\n";
-    for (auto i : std::as_const(newSpecies.parentGenomes[0])) if (i != 1)testFlag = false;
+    for (auto i : newSpecies.parentGenomes[0]) if (i != 1)testFlag = false;
     out << "New species parent genome: ";
-    for (auto i : std::as_const(newSpecies.parentGenomes[0])) i ? out << "1" : out << "0";
+    for (auto i : newSpecies.parentGenomes[0]) i ? out << "1" : out << "0";
     out << " (should be all 1s).\n";
-    for (auto i : std::as_const(newSpecies.genome)) if (i != 1)testFlag = false;
+    for (auto i : newSpecies.genome) if (i != 1)testFlag = false;
     out << "New species genome: ";
-    for (auto i : std::as_const(newSpecies.genome)) i ? out << "1" : out << "0";
+    for (auto i : newSpecies.genome) i ? out << "1" : out << "0";
     out << " (should be all 1s).\n";
-    for (auto i : std::as_const(x.playingFields[0]->playingField[8]->parentGenomes[0])) if (i != 0)testFlag = false;
+    for (auto i : x.playingFields[0]->playingField[8]->parentGenomes[0]) if (i != 0)testFlag = false;
     out << "Species 10 parent genome in playing field is now: ";
-    for (auto i :  std::as_const(x.playingFields[0]->playingField[8]->parentGenomes[0])) i ? out << "1" : out << "0";
+    for (auto i :  x.playingFields[0]->playingField[8]->parentGenomes[0]) i ? out << "1" : out << "0";
     out << " (should be all 0s).\n";
-    for (auto i : std::as_const(x.playingFields[0]->playingField[8]->parentGenomes[1])) if (i != 1)testFlag = false;
+    for (auto i : x.playingFields[0]->playingField[8]->parentGenomes[1]) if (i != 1)testFlag = false;
     out << "Species 10 last speciation genome in playing field is now:";
-    for (auto i :  std::as_const(x.playingFields[0]->playingField[8]->parentGenomes[1])) i ? out << "1" : out << "0";
+    for (auto i :  x.playingFields[0]->playingField[8]->parentGenomes[1]) i ? out << "1" : out << "0";
     out << " (should be all 1s).\n";
 
     if (testFlag) out << "\nNew species tests passed.\n";
@@ -1641,7 +1641,7 @@ bool testinternal::testThirteen(QString &outString)
         if (speciesList[i]->extinct != 0)
         {
             out << "Extinct at " << speciesList[i]->extinct << "\nGenome should be all zeros. It is: ";
-            for (auto b : std::as_const(speciesList[i]->genome))
+            for (auto b : speciesList[i]->genome)
             {
                 out << (b ? "1" : "0");
                 if (b)
@@ -1673,7 +1673,7 @@ bool testinternal::testThirteen(QString &outString)
         {
             out << "Extinct at " << speciesList[i]->extinct << "\nGenome should not be all zeros. It is: ";
             int count = 0;
-            for (auto b : std::as_const(speciesList[i]->genome))
+            for (auto b : speciesList[i]->genome)
             {
                 out << (b ? "1" : "0");
                 if (!b) count++;
