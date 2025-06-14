@@ -2174,7 +2174,9 @@ bool testinternal::testSeventeen(QString &outString)
                 for (auto &m : p->masks)
                     for (auto &n : m)
                     {
-                        if (o->genome == n) identical = true;
+                        //When masks are also vectors, this can change to an equals without any reassignment required
+                        std::vector<bool> n2(n.constBegin(), n.constEnd());
+                        if (o->genome == n2) identical = true;
                     }
     out << "Have applied EE and checked that no mask is identical to genome. Check returned: " << identical << ".\n";
     if (identical == true) testFlag = false;
@@ -2208,7 +2210,9 @@ bool testinternal::testSeventeen(QString &outString)
                 for (auto &m : p->masks)
                     for (auto &n : m)
                     {
-                        if (o->genome == n) identical = true;
+                        //When masks are also vectors, this can change to an equals without any reassignment required
+                        std::vector<bool> n2(n.constBegin(), n.constEnd());
+                        if (o->genome == n2) identical = true;
                     }
     out << "Have applied EE and checked that one mask is identical to genome. Check returned: " << identical << ".\n";
     if (identical == false) testFlag = false;
@@ -2229,7 +2233,7 @@ bool testinternal::testSeventeen(QString &outString)
     for (auto p : std::as_const(x.playingFields))
         for (auto o : p->playingField)
             if (o->ecosystemEngineer)
-                for (auto &g : o->genome)
+                for (auto g : o->genome)
                     g = false;
 
     x.applyEcosystemEngineering(speciesList, false);
@@ -2241,7 +2245,9 @@ bool testinternal::testSeventeen(QString &outString)
                 for (auto &m : p->masks)
                     for (auto &n : m)
                     {
-                        if (o->genome == n) identical = true;
+                        //When masks are also vectors, this can change to an equals without any reassignment required
+                        std::vector<bool> n2(n.constBegin(), n.constEnd());
+                        if (o->genome == n2) identical = true;
                     }
     out << "Have applied EE and checked that one mask is identical to genome. Check returned: " << identical << ".\n";
     if (identical == false) testFlag = false;
@@ -2285,7 +2291,7 @@ bool testinternal::testEighteen(QString &outString)
     {
         base = !base;
         for (auto o : p->playingField)
-            for (auto &g : o->genome)
+            for (auto g : o->genome)
                 g = base;
     }
 
@@ -2333,7 +2339,7 @@ bool testinternal::testEighteen(QString &outString)
     {
         base = !base;
         for (auto o : p->playingField)
-            for (auto &g : o->genome)
+            for (auto g : o->genome)
                 g = base;
     }
 
@@ -2383,7 +2389,7 @@ bool testinternal::testEighteen(QString &outString)
     {
         base = !base;
         for (auto o : p->playingField)
-            for (auto &g : o->genome)
+            for (auto g : o->genome)
                 g = base;
     }
 
@@ -2619,20 +2625,20 @@ bool testinternal::testTwenty(QString &outString)
     int genomeSize = 50;
 
     Organism newOrganism(genomeSize, true);
-    for (auto &b : newOrganism.genome)
+    for (auto b : newOrganism.genome)
         if (QRandomGenerator::global()->bounded(1) == 1) b = true;
         else b = false;
 
     for (int i = 0; i < 2; i++)
     {
-        QList <bool> exampleGenome(genomeSize);
-        for (auto &b : exampleGenome)
+        std::vector <bool> exampleGenome(genomeSize);
+        for (auto b : exampleGenome)
             if (QRandomGenerator::global()->bounded(1) == 1) b = true;
             else b = false;
-        newOrganism.parentGenomes.append(exampleGenome);
+        newOrganism.parentGenomes.push_back(exampleGenome);
     }
 
-    for (auto &b : newOrganism.stochasticGenome)
+    for (auto b : newOrganism.stochasticGenome)
         if (QRandomGenerator::global()->bounded(1) == 1) b = true;
         else b = false;
 
