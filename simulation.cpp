@@ -990,7 +990,7 @@ void simulation::mutateOrganism(Organism &progeny, const playingFieldStructure *
 
             genomeString.clear();
 
-            for (int i = 0; i < progeny.stochasticGenome.count() ; i++)
+            for (int i = 0; i < progeny.stochasticGenome.size() ; i++)
             {
                 if (progeny.stochasticGenome[i])genomeString.append("1");
                 else genomeString.append("0");
@@ -1546,14 +1546,16 @@ bool simulation::stripUninformativeCharacters(QVector <Organism *> &speciesList,
     //Delete uninformative characters - both coding and non
     for (int j = 0; j < speciesList.length(); j++)
     {
+        auto startIt = speciesList[j]->genome.begin();
+
         //Start with noncoding, from end, and work back, to avoid numbering issues post-deletion
         if (runGenomeSize != runFitnessSize)
-            for (int h = uninformativeNonCoding.size() - 1; h >= 0; h--) speciesList[j]->genome.removeAt(uninformativeNonCoding[h]);
+            for (int h = uninformativeNonCoding.size() - 1; h >= 0; h--) speciesList[j]->genome.erase(startIt + uninformativeNonCoding[h]);
 
         //Now do coding, start at end and work back to avoid numbering issues post-deletion.
         for (int i = uninformativeCoding.size() - 1; i >= 0; i--)
         {
-            speciesList[j]->genome.removeAt(uninformativeCoding[i]);
+            speciesList[j]->genome.erase(startIt + uninformativeCoding[i]);
             if (j == 0) codingGenomeEnd--;
         }
     }
@@ -1573,10 +1575,14 @@ bool simulation::stripUninformativeCharacters(QVector <Organism *> &speciesList,
     {
         //This has been checked, but let's check again
         if (codingGenomeEnd < runFitnessSize) return false;
+
         //Subsample coding genome here to requested size
         for (int j = 0; j < speciesList.length(); j++)
+        {
+            auto startIt = speciesList[j]->genome.begin();
             for (int k = codingGenomeEnd; k > runFitnessSize; k--)
-                speciesList[j]->genome.removeAt(k);
+                speciesList[j]->genome.erase(startIt + k);
+        }
     }
 
     //This has been checked, but let's check again
@@ -1586,8 +1592,11 @@ bool simulation::stripUninformativeCharacters(QVector <Organism *> &speciesList,
     if (speciesList[0]->genome.size() > runGenomeSize)
     {
         for (int j = 0; j < speciesList.length(); j++)
+        {
+            auto startIt = speciesList[j]->genome.begin();
             for (int i = speciesList[j]->genome.size() - 1; i >= runGenomeSize; i--)
-                speciesList[j]->genome.removeAt(i);
+                speciesList[j]->genome.erase(startIt + i);
+        }
     }
 
 
@@ -1809,7 +1818,7 @@ int simulation::genomeDifference(const Organism *organismOne, const Organism *or
     int diff = 0;
     if (selectSize == -1)
     {
-        for (int j = 0; j < organismOne->genome.length(); j++)
+        for (int j = 0; j < organismOne->genome.size(); j++)
             if (organismOne->genome[j] != organismTwo->genome[j])diff++;
     }
     else
@@ -1841,7 +1850,7 @@ bool simulation::checkForSpeciation(const Organism *organismOne, int runSelectSi
     //SPECIES_MODE_ALL 2
     //SPECIES_MODE_MAYR 3 - not currently implemented
 
-    int genomeCount = organismOne->parentGenomes.count();
+    int genomeCount = organismOne->parentGenomes.size();
     if (speciationMode == SPECIES_MODE_ORIGIN)
     {
         //Loop to select size to allow decoupling of species definition from genome size: also can't just use the count difference function above as this operates on organisms, not their genomes.
@@ -1894,10 +1903,10 @@ void simulation::newSpecies(Organism &progeny, Organism &parent, playingFieldStr
     //Add this species to list of children species for all members of this species currently alive in the simulation
     //Do this independently for each playing field (i.e. only in this playing field this time) - this obviously has implications if after mixing the species are very different in different playing fields - many more speciations, lower diversity in any given PF.
     //To do - revisit this decision //
-    QList <bool> newSpeciesGenome;
-    for (auto b : std::as_const(progeny.genome))newSpeciesGenome.append(b);
+    std::vector <bool> newSpeciesGenome;
+    for (auto b : std::as_const(progeny.genome))newSpeciesGenome.push_back(b);
     for (auto o : std::as_const(pf->playingField))
-        if (o->speciesID == parentSpecies) o->parentGenomes.append(newSpeciesGenome);
+        if (o->speciesID == parentSpecies) o->parentGenomes.push_back(newSpeciesGenome);
 
     parent.cladogenesis = iterations;
 

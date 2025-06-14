@@ -12,9 +12,9 @@ public:
 
     //Genome of species and ancestors
     //Do as vectors in order to make genome size easily scaleable - speed not much of an issue here
-    QList <bool> genome; //Organisms genome
-    QList <QList <bool> > parentGenomes;//Gnome of any parents, and also any other speciation from within this lineage
-    QList <bool> stochasticGenome;//Used for many to one mapping of a genome
+    std::vector<bool> genome; //Organisms genome
+    std::vector<std::vector <bool> > parentGenomes;//Gnome of any parents, and also any other speciation from within this lineage
+    std::vector <bool> stochasticGenome;//Used for many to one mapping of a genome
 
     // ID of species and parent
     int speciesID;
@@ -40,7 +40,7 @@ public:
     void initialise (int genomeSize);
     void initialise (int genomeSize, const int *stochasticMap);
     void mapFromStochastic(const int *stochasticMap);
-    void setGenome(QList<bool> genome);
+    void setGenome(std::vector<bool> genome);
 };
 
 #endif // ORGANISM_H

@@ -7,16 +7,10 @@ Organism::Organism(int genomeSize, bool stochastic)
     stochasticLayer = stochastic;
 
     // Initialise everything to false/-1 to make it obvious if it has not been changed.
-    parentGenomes.append(QList <bool>());
-    for (int i = 0; i < genomeSize; i++)
-    {
-        genome.append(false);
-        parentGenomes[0].append(false);
-    }
-
-    if (stochasticLayer)
-        for (int i = 0; i < genomeSize * 4; i++)
-            stochasticGenome.append(false);
+    parentGenomes.push_back(std::vector <bool>());
+    genome.assign(genomeSize, false);
+    parentGenomes[0].assign(genomeSize, false);
+    if (stochasticLayer) stochasticGenome.assign(genomeSize * 4, false);
 
     ecosystemEngineer = false;
 
@@ -129,7 +123,7 @@ void Organism::mapFromStochastic(const int *stochasticMap)
 
     int genomePosition = 0;
 
-    for (int i = 0; i < stochasticGenome.count(); i += 4)
+    for (int i = 0; i < stochasticGenome.size(); i += 4)
     {
         quint16 map = 0;
         if (stochasticGenome[i]) map  = map | lookups[0];
@@ -171,7 +165,7 @@ void Organism::mapFromStochastic(const int *stochasticMap)
     */
 }
 
-void Organism::setGenome(QList<bool> genome)
+void Organism::setGenome(std::vector <bool> genome)
 {
     this->genome = genome;
 }

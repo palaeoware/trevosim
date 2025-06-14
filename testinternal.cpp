@@ -525,7 +525,7 @@ bool testinternal::testFive(QString &outString)
         Organism org2(org1);
         x.mutateOrganism(org1, x.playingFields[0]);
 
-        for (int i = 0; i < org1.genome.length(); i++)if (org1.genome[i] != org2.genome[i]) cnt++;
+        for (int i = 0; i < org1.genome.size(); i++)if (org1.genome[i] != org2.genome[i]) cnt++;
     }
 
     double mean = static_cast<double>(cnt) / static_cast<double>(replicates);
@@ -545,7 +545,7 @@ bool testinternal::testFive(QString &outString)
         org3.initialise(simSettings.genomeSize);
         Organism org4(org3);
         x.mutateOrganism(org3, x.playingFields[0]);
-        for (int i = 0; i < org3.genome.length(); i++) if (org3.genome[i] != org4.genome[i]) cnt++;
+        for (int i = 0; i < org3.genome.size(); i++) if (org3.genome[i] != org4.genome[i]) cnt++;
     }
 
     mean = static_cast<double>(cnt) / static_cast<double>(replicates);
@@ -896,11 +896,11 @@ bool testinternal::testSeven(QString &outString)
     Organism newSpecies(50, false);
     newSpecies.initialise(50);
     newSpecies.speciesID = 10;
-    for (auto &i : newSpecies.genome) i = true;
+    std::fill(newSpecies.genome.begin(), newSpecies.genome.end(), true);
 
     Organism parentSpecies(50, false);
-    for (auto &i : parentSpecies.genome)i = true;
-    for (auto &i : parentSpecies.parentGenomes[0])i = true;
+    std::fill(parentSpecies.genome.begin(), parentSpecies.genome.end(), true);
+    std::fill(parentSpecies.parentGenomes[0].begin(), parentSpecies.parentGenomes[0].end(), true);
     parentSpecies.speciesID = 10;
     parentSpecies.parentSpeciesID = 9;
     parentSpecies.born = 15;
@@ -1258,19 +1258,19 @@ bool testinternal::testTen(QString &outString)
     for (int i = 0; i < 20; i++)
     {
         Organism *org = new Organism(50, false);
-        QList<bool> genome;
+        std::vector<bool> genome;
 
         for (int j = 0; j < 50; j++)
         {
-            if (j > count) genome.append(false);
-            else genome.append(true);
+            if (j > count) genome.push_back(false);
+            else genome.push_back(true);
         }
         org->setGenome(genome);
         speciesList.append(org);
         count++;
     }
 
-    out << "Stripping uninformative characters from matrix below with " << speciesList[0]->genome.length() << " characters.\n";
+    out << "Stripping uninformative characters from matrix below with " << speciesList[0]->genome.size() << " characters.\n";
     out << x.printMatrix(speciesList);
     x.runFitnessSize = 50;
     x.runGenomeSize = 50;
@@ -1282,8 +1282,8 @@ bool testinternal::testTen(QString &outString)
     x.checkForUninformative(speciesList, uninformativeCoding, uninformativeNonCoding);
     x.stripUninformativeCharacters(speciesList, uninformativeCoding, uninformativeNonCoding);
     out << "\nThere should be 17 informative characters.\n";
-    if (speciesList[0]->genome.length() != 17) testFlag = false;
-    out << "Stripped of uninformative characters, this matrix has " << speciesList[0]->genome.length() << " characters.\n";
+    if (speciesList[0]->genome.size() != 17) testFlag = false;
+    out << "Stripped of uninformative characters, this matrix has " << speciesList[0]->genome.size() << " characters.\n";
     out << x.printMatrix(speciesList);
 
 
@@ -1292,8 +1292,7 @@ bool testinternal::testTen(QString &outString)
     for (int i = 0; i < 20; i++)
     {
         Organism *org = new Organism(100, false);
-        QList<bool> genome;
-        for (int j = 0; j < 100; j++) genome.append(false);
+        std::vector<bool> genome(100, false);
         org->setGenome(genome);
         speciesList2.append(org);
         speciesList2Size++;
@@ -1313,7 +1312,7 @@ bool testinternal::testTen(QString &outString)
 
         //Blank genome
         for (auto species : speciesList2)
-            for (auto &genomeBit : species->genome)
+            for (auto genomeBit : species->genome)
                 genomeBit = false;
 
         int genomeSize = speciesList2[0]->genome.size();
@@ -1368,8 +1367,7 @@ bool testinternal::testTen(QString &outString)
     for (int i = 0; i < 20; i++)
     {
         Organism *org = new Organism(250, false);
-        QList<bool> genome;
-        for (int j = 0; j < 250; j++) genome.append(false);
+        std::vector<bool> genome(250, false);
         org->setGenome(genome);
         speciesList3.append(org);
         speciesList3Size++;
@@ -1401,7 +1399,7 @@ bool testinternal::testTen(QString &outString)
     informativeNonCoding = 24;
 
     for (auto species : speciesList3)
-        for (auto &genomeBit : species->genome)
+        for (auto genomeBit : species->genome)
             genomeBit = false;
 
     for (int character = 0; character < informativeCoding; character++)
@@ -1430,7 +1428,7 @@ bool testinternal::testTen(QString &outString)
     informativeNonCoding = 11;
 
     for (auto species : speciesList3)
-        for (auto &genomeBit : species->genome)
+        for (auto genomeBit : species->genome)
             genomeBit = false;
 
     for (int character = 0; character < informativeCoding; character++)
@@ -1460,7 +1458,7 @@ bool testinternal::testTen(QString &outString)
 
 
     for (auto species : speciesList3)
-        for (auto &genomeBit : species->genome)
+        for (auto genomeBit : species->genome)
             genomeBit = false;
 
     for (int character = 0; character < informativeCoding; character++)
@@ -1608,8 +1606,7 @@ bool testinternal::testThirteen(QString &outString)
     if (theMainWindow)
         theMainWindow->resizeGrid(simSettings.runForTaxa, simSettings.genomeSize);
 
-    QList <bool> genome;
-    for (int i = 0; i < 50; i++) genome.append(false);
+    std::vector<bool> genome(50, false);
     x.playingFields[0]->playingField[10]->speciesID = 1;
     x.playingFields[0]->playingField[10]->setGenome(genome);
     x.playingFields[1]->playingField[6]->speciesID = 1;
@@ -1718,7 +1715,7 @@ bool testinternal::testFourteen(QString &outString)
     //First, let's try with just one parent
     //Organism of genome size 50, initialised to false, no stochastic layer
     Organism org(50, false);
-    for (auto &p : org.parentGenomes[0]) p = false;
+    for (auto p : org.parentGenomes[0]) p = false;
     //Test with species difference of five, so five true to take over this value - we should ID a new species
     for (int i = 0; i < 5; i++)
     {
@@ -1756,8 +1753,8 @@ bool testinternal::testFourteen(QString &outString)
     if (testFlag) out << "All species mode tests with single ancestor passed.\n\n";
 
     //Next we need to do tests when we have more than one ancestral genome
-    org.parentGenomes.append(QList <bool>());
-    for (int i = 0; i < 50; i++)org.parentGenomes[1].append(false);
+    org.parentGenomes.push_back(std::vector <bool>());
+    org.parentGenomes[1].assign(50, false);
 
     //At the moment, parent genome has four trues - everything should still be below species differemce no new species
     for (int i = 0; i < 3; i++)
@@ -1829,11 +1826,12 @@ bool testinternal::testFourteen(QString &outString)
     if (testFlag) out << "All species mode tests with two ancestors passed.\n\n";
 
     //Finally, we need to do tests when we have more than two ancestral genome
-    org.parentGenomes.append(QList <bool>());
-    for (int i = 0; i < 50; i++)org.parentGenomes[2].append(false);
+    org.parentGenomes.push_back(std::vector <bool>());
+    org.parentGenomes[2].assign(50, false);
+
     //Set all others to fales too
-    for (auto &p : org.parentGenomes[0]) p = false;
-    for (auto &p : org.parentGenomes[1]) p = false;
+    for (auto p : org.parentGenomes[0]) p = false;
+    for (auto p : org.parentGenomes[1]) p = false;
 
     //No new species expected
     newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ORIGIN);
@@ -1888,7 +1886,7 @@ bool testinternal::testFourteen(QString &outString)
     }
 
     //Test with middle as new species, reset original
-    for (auto &p : org.parentGenomes[0]) p = false;
+    for (auto p : org.parentGenomes[0]) p = false;
     for (int i = 0; i < 5; i++)
     {
         org.parentGenomes[1][i] = true;
@@ -1917,7 +1915,7 @@ bool testinternal::testFourteen(QString &outString)
     }
 
     //Test with last five on, reset middle
-    for (auto &p : org.parentGenomes[1]) p = false;
+    for (auto p : org.parentGenomes[1]) p = false;
     for (int i = 0; i < 5; i++)
     {
         org.parentGenomes[2][i] = true;
@@ -1977,7 +1975,7 @@ bool testinternal::testFourteen(QString &outString)
     }
 
     //Test with first and middle, not last
-    for (auto &p : org.parentGenomes[2]) p = false;
+    for (auto p : org.parentGenomes[2]) p = false;
     for (int i = 0; i < 5; i++)
     {
         org.parentGenomes[0][i] = true;
