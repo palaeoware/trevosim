@@ -2090,7 +2090,7 @@ QString simulation::printMatrix(const QVector <Organism *> &speciesList)
     int totalSpeciesCount = speciesList.length();
     for (int i = 0; i < totalSpeciesCount; i++)
     {
-        matrixTextStream << "Species_" << doPadding(i, totalSpeciesCount) << "\t";
+        matrixTextStream << "Species_" << doPadding(i, paddingAmount(totalSpeciesCount)) << "\t";
         for (auto j : std::as_const(speciesList[i]->genome)) j ? matrixTextStream << 1 : matrixTextStream << 0 ;
         matrixTextStream << "\n";
     }
