@@ -61,6 +61,7 @@ public:
     bool writeFileTwo;
     bool writeEE;
     bool incrementEnvironments;
+    bool skipInput;
 
     //Doubles
     double environmentMutationRate;

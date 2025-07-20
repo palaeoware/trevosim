@@ -66,6 +66,7 @@ simulationVariables::simulationVariables()
     writeFileTwo = true;
     writeEE = false;
     incrementEnvironments = false;
+    skipInput = false; //For now only used with command line and set from there - not saved or loaded
 
     //Strings
     QString base = (QString(PRODUCTNAME) + "_");

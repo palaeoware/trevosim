@@ -67,13 +67,18 @@ int main(int argc, char *argv[])
 
         QCommandLineOption opt_o(QStringList() << "o" << "open",
                                  QCoreApplication::translate("main", "Settings file to load on start."),
-                                 QCoreApplication::translate("main", "Path to file (string)"));
+                                 QCoreApplication::translate("main", "Path to file (string)."));
         parser->addOption(opt_o);
 
         QCommandLineOption opt_b(QStringList() << "b" << "batch",
                                  QCoreApplication::translate("main", "Run in batch mode."),
-                                 QCoreApplication::translate("main", "An integer representing the required number of replicates"));
+                                 QCoreApplication::translate("main", "An integer representing the required number of replicates."));
         parser->addOption(opt_b);
+
+        QCommandLineOption opt_s(QStringList() << "s" << "skipInput",
+                                 QCoreApplication::translate("main", "Skip requests for user input."));
+        //QCoreApplication::translate("main", "A bool set to true to skip user input (the presence of the switch alone is evaluated to true)."));
+        parser->addOption(opt_s);
 
         parser->process(a);
 
@@ -90,6 +95,11 @@ int main(int argc, char *argv[])
             QString fileFromCommandLine = QString();
             fileFromCommandLine = parser->value(opt_o);
             if (!fileFromCommandLine.isNull()) parsedOptions.insert("fileFromCommandLine", parser->value(opt_o));
+        }
+
+        if (parser->isSet(opt_s))
+        {
+            parsedOptions.insert("skipInput", "skipInputEnabled");
         }
 
         w->runFromCommandLine(parsedOptions);
