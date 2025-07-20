@@ -33,11 +33,12 @@ These can be used as either in single letter form (-o) or long form (\--open - n
 - \--batch 30
 
 
-A full list of switches (also available using switch -h, help):
+A full list of switches (also available using switch -h, help); only those with <> expect an input value:
 
 -  -h, --help                                        Displays help on commandline options.
 - --help-all                                         Displays help including Qt specific options.
 - -v, --version                                      Displays version information.
+- -s, --skipInput                                    In a limited number of circumstances TREvoSim requests user input: the inclusion of this switch skips these. 
 - -o, --open <Path to file (string)>                 Settings file to load on start.
 - -b, --batch <Number of replicates (integer)>       Run in batch mode.
 
