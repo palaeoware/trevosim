@@ -2133,7 +2133,8 @@ QString simulation::printNewick(int species, QVector <Organism *> &speciesList)
     int totalSpeciesCount = speciesList.length();
 
     //Zero padding
-    QString speciesID = doPadding(speciesList[species]->speciesID, paddingAmount(totalSpeciesCount));
+    QString speciesID = "Species_";
+    speciesID.append(doPadding(speciesList[species]->speciesID, paddingAmount(totalSpeciesCount)));
 
     if (offspring == 0)
     {
@@ -2162,9 +2163,9 @@ QString simulation::printNewickWithBranchLengths(int species, QVector <Organism 
     int totalSpeciesCount = speciesList.length();
 
     //Zero padding
-    QString speciesID;
-    if (phangornTree) speciesID = doPadding(speciesList[species]->speciesID + 1, paddingAmount(totalSpeciesCount));
-    else speciesID = doPadding(speciesList[species]->speciesID, paddingAmount(totalSpeciesCount));
+    QString speciesID = "Species_";
+    if (phangornTree) speciesID.append(doPadding(speciesList[species]->speciesID + 1, paddingAmount(totalSpeciesCount)));
+    else speciesID.append(doPadding(speciesList[species]->speciesID, paddingAmount(totalSpeciesCount)));
 
     //For terminal cases (reused for branches to nodes below)
     int branchLength = speciesList[species]->extinct - speciesList[species]->cladogenesis;
