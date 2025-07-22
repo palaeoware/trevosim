@@ -14,7 +14,7 @@ Due to the framework used to create the TREvoSim user interface, launching the s
     
     ./trevosim -platform offscreen
 
-This co-opts a Qt platform plugin to render to an offscreen buffer. Another option is to install XVFB - this is an “X server that can run on machines with no display hardware and no physical input device”  (`More information <https://www.x.org/releases/X11R7.6/doc/man/man1/Xvfb.1.xhtml>`_). Once installed, you can launch revosim as follows:
+This co-opts a Qt platform plugin to render to an offscreen buffer. Another option is to install XVFB - this is an “X server that can run on machines with no display hardware and no physical input device”  (`More information <https://www.x.org/releases/X11R7.6/doc/man/man1/Xvfb.1.xhtml>`_). Once installed, you can launch TREvoSim as follows:
 
 .. code-block:: console
     
