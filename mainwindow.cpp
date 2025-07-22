@@ -602,7 +602,7 @@ void MainWindow::runForTriggered(int runBatchFor)
     //Run up to 50 times so this cannot get caught in an infinite loop
     while (runsList.count() > 0 && count < simSettings->skipInput  && batchRunning == true);
 
-    if (count == 5000) qInfo().noquote() << "To avoid an infinite loop, TREvoSim is terminating after 500 attempts. Perhaps check your settings and try again.";
+    if (count == simSettings->skipInput) qInfo().noquote() << "To avoid an infinite loop, TREvoSim is terminating after 500 attempts. Perhaps check your settings and try again.";
 
     runs += runBatchFor;
 
