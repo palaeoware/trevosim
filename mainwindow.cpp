@@ -252,9 +252,19 @@ void MainWindow::runFromCommandLine(QHash<QString, QString> parsedOptions)
 
     if (parsedOptions.contains("skipInput"))
     {
-        qInfo().noquote() <<
-                          "TREvoSim will not ask you for any input during the run. The software will attempt batches 500 times and if it still can't complete the requested number of replicates, will terminate. If it looks like this has happened you may want to modify your settings. Good luck.";
-        simSettings->skipInput = true;
+        int skipInputValue = parsedOptions.value("skipInput").toInt();
+        if (skipInputValue < 1 || skipInputValue > 1000000 )
+        {
+            qInfo().noquote() << "skipInputValue out of bounds. Please retry with a value between 1 and 1 million";
+            exit(0);
+        }
+        else
+        {
+            qInfo().noquote() << "TREvoSim will not ask you for any input during the run. The software will attempt batches " <<
+                              skipInputValue << "times and if it still can't complete the requested number of replicates, will terminate. "
+                              "If it looks like this has happened you may want to modify your settings. Good luck.";
+            simSettings->skipInput = skipInputValue;
+        }
     }
 
     int batchReplicates = 0;
@@ -517,7 +527,7 @@ void MainWindow::runForTriggered(int runBatchFor)
         if (!stopRuns)
         {
             if (!runFromCommand && QMessageBox::question(this, "Error", label, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::No) stopRuns = true;
-            else if (!simSettings->skipInput)
+            else if (simSettings->skipInput == -1)
             {
                 setStatus("Please respond to query in the console.");
                 qApp->processEvents();
@@ -530,8 +540,8 @@ void MainWindow::runForTriggered(int runBatchFor)
             }
             else
             {
-                qInfo().noquote() <<
-                                  "Given that you have selected skipInput when launching from the command line, TREvoSim will continue  - it will try with these setting 500 times, and if these all fail, will terminate.";
+                qInfo().noquote() << "Given that you have selected skipInput when launching from the command line, TREvoSim will continue - it will try with these setting " <<
+                                  simSettings->skipInput << "times, and if these all fail, will terminate.";
             }
         }
         if (stopRuns)
@@ -590,7 +600,7 @@ void MainWindow::runForTriggered(int runBatchFor)
         count++;
     }
     //Run up to 50 times so this cannot get caught in an infinite loop
-    while (runsList.count() > 0 && count < 500 && batchRunning == true);
+    while (runsList.count() > 0 && count < simSettings->skipInput  && batchRunning == true);
 
     if (count == 5000) qInfo().noquote() << "To avoid an infinite loop, TREvoSim is terminating after 500 attempts. Perhaps check your settings and try again.";
 

@@ -36,6 +36,7 @@ simulationVariables::simulationVariables()
     runForTaxa = 64;
     runningLogFrequency = 50;
     replicates = 25;
+    skipInput = -1; //For now only used with command line and set from there - not saved or loaded
 
     //Doubles
     environmentMutationRate = 1.0;
@@ -66,7 +67,6 @@ simulationVariables::simulationVariables()
     writeFileTwo = true;
     writeEE = false;
     incrementEnvironments = false;
-    skipInput = false; //For now only used with command line and set from there - not saved or loaded
 
     //Strings
     QString base = (QString(PRODUCTNAME) + "_");

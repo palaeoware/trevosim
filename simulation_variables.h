@@ -37,6 +37,7 @@ public:
     int ecosystemEngineeringFrequency;
     int runningLogFrequency;
     int replicates;
+    int skipInput;
 
     //Bools
     bool discardDeleterious;
@@ -61,7 +62,6 @@ public:
     bool writeFileTwo;
     bool writeEE;
     bool incrementEnvironments;
-    bool skipInput;
 
     //Doubles
     double environmentMutationRate;

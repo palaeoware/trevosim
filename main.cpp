@@ -76,8 +76,8 @@ int main(int argc, char *argv[])
         parser->addOption(opt_b);
 
         QCommandLineOption opt_s(QStringList() << "s" << "skipInput",
-                                 QCoreApplication::translate("main", "Skip requests for user input."));
-        //QCoreApplication::translate("main", "A bool set to true to skip user input (the presence of the switch alone is evaluated to true)."));
+                                 QCoreApplication::translate("main", "Skip requests for user input."),
+                                 QCoreApplication::translate("main", " An integer of value between 1 and 1000000 that dictates the number of attempts to reach requested replicate number in batch mode."));
         parser->addOption(opt_s);
 
         parser->process(a);
@@ -85,21 +85,14 @@ int main(int argc, char *argv[])
         MainWindow *w = new MainWindow;
 
         QHash<QString, QString> parsedOptions;
-        if (parser->isSet(opt_b))
-        {
-            if (parser->isSet(opt_b)) parsedOptions.insert("batchReplicates", parser->value(opt_b));
-        }
 
+        if (parser->isSet(opt_b)) parsedOptions.insert("batchReplicates", parser->value(opt_b));
+        if (parser->isSet(opt_s)) parsedOptions.insert("skipInput", parser->value(opt_s));
         if (parser->isSet(opt_o))
         {
             QString fileFromCommandLine = QString();
             fileFromCommandLine = parser->value(opt_o);
             if (!fileFromCommandLine.isNull()) parsedOptions.insert("fileFromCommandLine", parser->value(opt_o));
-        }
-
-        if (parser->isSet(opt_s))
-        {
-            parsedOptions.insert("skipInput", "skipInputEnabled");
         }
 
         w->runFromCommandLine(parsedOptions);
