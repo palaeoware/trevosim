@@ -2010,10 +2010,14 @@ QString simulation::printPlayingFieldGenomesConcise(const QVector <playingFieldS
     QString pfText;
     QTextStream out(&pfText);
 
+    if (speciesCount > 9999) return QString("Because of zero padding, this won't work. Sorry. Please raise an issue on github to request increased padding.");
+
     for (auto pf : playingFields)
         for (auto o : std::as_const(pf->playingField))
+        {
+            out << "S" << doPadding(o->speciesID, 4) << "_";
             for (auto i : std::as_const(o->genome)) i ? out << 1 : out << 0 ;
-
+        }
     return pfText;
 }
 
