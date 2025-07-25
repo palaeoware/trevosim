@@ -120,9 +120,8 @@
 <li><p>Install Microsoft Visual Studio 2019 (VS2019). See <a class="reference external" href="https://visualstudio.microsoft.com/vs/older-downloads/">https://visualstudio.microsoft.com/vs/older-downloads/</a>.</p></li>
 <li><p>Install Qt 6.X and QT Creator on your system by running the open source development installer from Qt: <a class="reference external" href="https://www.qt.io/download-open-source">https://www.qt.io/download-open-source</a></p>
 <ul class="simple">
-<li><p>During the installation you will need to select the ‘MSVC 2019 64-bit’ and ‘Qt 5 Compatability Module’ components under the QT 6.x.x sub-category.</p></li>
-<li><p>During the installation you will need to select the ‘MSVC 2019 64-bit’ component under the QT 6.x.x sub-category.</p></li>
-<li><p>During the installation check that under the ‘Development and Designer Tools’ sub-category that ‘QT Creator X.X.X’, ‘Debugging Tools for Windows’, ‘CMake X.X.X’, and ‘Ninja X.X.X’ are selected. These should be selected by default.</p></li>
+<li><p>During the installation you will need to select the ‘MSVC 2019 64-bit’ and ‘Qt 5 Compatability Module’ components under the QT 6.7.3 sub-category.</p></li>
+<li><p>During the installation check that under the ‘Development and Designer Tools’ sub-category that ‘QT Creator X.X.X’, ‘Debugging Tools for Windows’, ‘CMake X.X.X’, and ‘Ninja X.X.X’ are selected.</p></li>
 <li><p>If you forget or need to amend/check which components are active you can run the QT Maintenance tool (which gets installed automatically) and add/remove/update them post-installation.</p></li>
 </ul>
 </li>
@@ -142,10 +141,10 @@
 <li><p>Download or clone using Git the TREvoSim source code from the GitHub repository: <a class="reference external" href="https://github.com/palaeoware/trevosim">https://github.com/palaeoware/trevosim</a></p></li>
 <li><p>Run QT Creator and configure the build pipeline. QT Creator should automatically detect your Microsoft Visual Studio 2019 installation and configure the build chain. However, if you have multiple versions installed - or if you get errors in the steps subsequent to this one, you might need to manually change QT creator to use the VisualStudio 2019 Toolkit. To do this, select projects in the left hand toolbar of Qt Creator (ctrl + 5), and then select the kit labelled with the version of Qt you installed, plus “MSVC2019 64bit” under the ‘Build and Run’ section.</p></li>
 <li><p>In QT Creator using the main menu ‘File → Open File or Project…’ navigating to and select the TREvoSim CMakeLists.txt file in the root of the source code folder. This will open the TREvoSim project within the workspace.</p></li>
-<li><p>From QT Creator you can build debug and release version of TREvoSim. The easiest way is via the bottom left ‘Build’ button. Alternatively you can use the ‘Build → Build All Projects…’ from the main menu.</p></li>
+<li><p>From QT Creator you can build debug and release version of TREvoSim. The easiest way is via the bottom left ‘Build’ button. Alternatively you can use the ‘Build → Build All Projects…’ from the main menu.  Check that TREvoSim is selected the deploy configuration (computer monitor icon), rather than TREvoSimTest.</p></li>
 <li><p>Once you have built the release version of TREvoSim through QT Creator, and you if wish to make the binary useable outside of the QT Creator environment (either as a standalone distribution or for use with an installer), you will need to run the Qt Windows Deployment tool. This tool automates the process of creating a deployable folder that contains all QT-related dependencies to make TREvoSim run (e.g., .DLL libraries).</p>
 <ul>
-<li><p>First step is to copy to a new folder (we called ours ‘deploy’ and will refer to this by name) the newly generated binaries (TREvoSim.exe and TREvoSimTest.exe) from your build folder. The build folder should be called ‘build\Desktop_Qt_6_6_1_MSVC2019_64bit-Release’ if using the QT defaults, where Qt_6_6_1 will change to match your current QT 6 version.</p></li>
+<li><p>First step is to copy to a new folder (we called ours ‘deploy’ and will refer to this by name) the newly generated binaries (TREvoSim.exe and TREvoSimTest.exe) from your build folder. The build folder should be called ‘build\Desktop_Qt_6_7_3_MSVC2019_64bit-Release’ if using the QT defaults, where Qt_6_7_3 will change to match your current QT 6 version.</p></li>
 <li><p>From the windows command line ‘’’cd’’’ into the ‘{path to your QT installation}\{QT 6 version}\msvc2019_64\bin\’ folder containing the windeployqt6.exe binary and run the following commands:</p>
 <blockquote>
 <div><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">qtenv2.bat</span>

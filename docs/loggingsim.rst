@@ -136,7 +136,7 @@ MrBayes_Tree
   .. note:: 
     The mechanism used for tree writing differs between TNT and MrBayes outputs -- the tree topology is the same, but the taxon order differs.
 
-PlayingField, PlayingField_semiconcise,PlayingField_concise
+PlayingField, PlayingField_semiconcise,PlayingField_concise, PlayingField_genomes_concise
   These commands print the current state of the playing fields in expansive, through to concise, formats. The first option, PlayingField, will output the following details for every organism in every playing field:
 
   ::
@@ -167,7 +167,7 @@ PlayingField, PlayingField_semiconcise,PlayingField_concise
     0,8,0,0,01111010101110111101110001111101
     0,9,9,0,01011110101110110111111001111100
 
-  And using PlayingField_concise, the format will be:
+  Using PlayingField_concise, the format will be:
 
   ::
 
@@ -182,6 +182,14 @@ PlayingField, PlayingField_semiconcise,PlayingField_concise
     0,7,24,0
     0,8,0,0
     0,9,9,0
+
+  And using PlayingField_genomes_concise, the format will be heavily packed in the form SSpeciesID_genome with no linebreaks, for example:
+
+  ::
+
+    S0034_00000100010011011101011011001110010000100100011110011110011111011111010110111000100110101110010101000101010000001011001011000100S0026_01001110000011011101011011001110110010100000111010001110101111011110000110111000101110100000000101000100010000001011001011000100S0022_00001110010011011100011111001101100010101000011000111110111111011111010110011010101110101000010101000000000000001110100001000101
+
+  Please email the development team if you would like a parser for these data.
 
 Root
   Writes the genome of the organism used to seed the simulation, thereby allowing characters to be polarised correctly with respect to the root of the tree (see :ref:`algorithmconcepts`):

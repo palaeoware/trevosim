@@ -213,7 +213,7 @@
 <p>The mechanism used for tree writing differs between TNT and MrBayes outputs – the tree topology is the same, but the taxon order differs.</p>
 </div>
 </dd>
-<dt>PlayingField, PlayingField_semiconcise,PlayingField_concise</dt><dd><p>These commands print the current state of the playing fields in expansive, through to concise, formats. The first option, PlayingField, will output the following details for every organism in every playing field:</p>
+<dt>PlayingField, PlayingField_semiconcise,PlayingField_concise, PlayingField_genomes_concise</dt><dd><p>These commands print the current state of the playing fields in expansive, through to concise, formats. The first option, PlayingField, will output the following details for every organism in every playing field:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Playingfield</span> <span class="n">pos</span><span class="p">:</span> <span class="mi">0</span>
 <span class="n">Species</span> <span class="n">ID</span><span class="p">:</span> <span class="mi">35</span>
 <span class="n">Genome</span><span class="p">:</span>     <span class="mi">01111100111010111100110001011100</span>
@@ -239,7 +239,7 @@
 <span class="mi">0</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">01011110101110110111111001111100</span>
 </pre></div>
 </div>
-<p>And using PlayingField_concise, the format will be:</p>
+<p>Using PlayingField_concise, the format will be:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Playing</span> <span class="n">field</span> <span class="n">number</span><span class="p">,</span><span class="n">Playingfield</span> <span class="n">position</span><span class="p">,</span><span class="n">Species</span> <span class="n">ID</span><span class="p">,</span><span class="n">Ecosystem</span> <span class="n">engineer</span>
 <span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">35</span><span class="p">,</span><span class="mi">0</span>
 <span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">36</span><span class="p">,</span><span class="mi">0</span>
@@ -253,6 +253,11 @@
 <span class="mi">0</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">0</span>
 </pre></div>
 </div>
+<p>And using PlayingField_genomes_concise, the format will be heavily packed in the form SSpeciesID_genome with no linebreaks, for example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">S0034_00000100010011011101011011001110010000100100011110011110011111011111010110111000100110101110010101000101010000001011001011000100S0026_01001110000011011101011011001110110010100000111010001110101111011110000110111000101110100000000101000100010000001011001011000100S0022_00001110010011011100011111001101100010101000011000111110111111011111010110011010101110101000010101000000000000001110100001000101</span>
+</pre></div>
+</div>
+<p>Please email the development team if you would like a parser for these data.</p>
 </dd>
 <dt>Root</dt><dd><p>Writes the genome of the organism used to seed the simulation, thereby allowing characters to be polarised correctly with respect to the root of the tree (see <a class="reference internal" href="algorithmconcepts.html#algorithmconcepts"><span class="std std-ref">Algorithm, Concepts, and Experimental Design</span></a>):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">01000100000010010000011100001111</span>
