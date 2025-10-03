@@ -38,6 +38,7 @@ public:
     int runningLogFrequency;
     int replicates;
     int skipInput;
+    int fitnessWindowSize;
 
     //Bools
     bool discardDeleterious;

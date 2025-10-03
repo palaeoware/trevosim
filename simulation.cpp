@@ -1755,8 +1755,8 @@ void simulation::speciesExtinction(Organism *speciesListOrganism, const Organism
 }
 
 //Masks passed as a const reference.
-int simulation::fitness
-(const Organism *org, const QVector<QVector<QVector<bool> > > &masks, int runFitnessSize, int runFitnessTarget, int runMaskNumber, int runEnvironmentNumber, int fitnessMode, int environment)
+int simulation::fitness (const Organism *org, const QVector<QVector<QVector<bool> > > &masks, int runFitnessSize, int runFitnessTarget, int runMaskNumber, int runEnvironmentNumber, int fitnessMode,
+                         int environment)
 {
 
     if (!(fitnessMode == FITNESS_MODE_MINIMUM || fitnessMode == FITNESS_MODE_MEAN))

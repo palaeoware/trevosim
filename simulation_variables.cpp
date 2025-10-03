@@ -15,6 +15,7 @@ simulationVariables::simulationVariables()
     speciesSelectSize = 128;
     fitnessSize = 128;
     fitnessTarget = 0;
+    fitnessWindowSize = 5;
     playingfieldSize = 20;
     playingfieldNumber = 1;
     ecosystemEngineeringFrequency = 10;
@@ -96,6 +97,7 @@ QString simulationVariables::printSettings() const
     settingsTextStream << "variables : genomeSize " << genomeSize
                        << " speciesSelectSize " << speciesSelectSize
                        << " fitnessSize " << fitnessSize
+                       << " fitnessWindowSize " << fitnessWindowSize
                        << " runForTaxa " << runForTaxa
                        << " runForIterations " << runForIterations
                        << " playingfieldSize " << playingfieldSize
@@ -163,6 +165,7 @@ bool simulationVariables::loadSettings(QFile *settingsFile)
             if (settingsFileIn.name().toString() == "genomeSize")genomeSize = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "speciesSelectSize")speciesSelectSize = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "fitnessSize")fitnessSize = settingsFileIn.readElementText().toInt();
+            if (settingsFileIn.name().toString() == "fitnessWindowSize")fitnessWindowSize = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "runForTaxa")runForTaxa = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "runForIterations")runForIterations = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "playingfieldSize")playingfieldSize = settingsFileIn.readElementText().toInt();
@@ -262,6 +265,10 @@ void simulationVariables::saveSettings(QFile *settingsFile)
 
     settingsFileOut.writeStartElement("fitnessSize");
     settingsFileOut.writeCharacters(QString("%1").arg(fitnessSize));
+    settingsFileOut.writeEndElement();
+
+    settingsFileOut.writeStartElement("fitnessWindowSize");
+    settingsFileOut.writeCharacters(QString("%1").arg(fitnessWindowSize));
     settingsFileOut.writeEndElement();
 
     settingsFileOut.writeStartElement("runForTaxa");

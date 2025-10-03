@@ -20,7 +20,9 @@ public:
     int speciesID;
     int parentSpeciesID;
 
+    //We need to assign organisms their own fitness, but also keep a record of these if using the mean fitness through time
     int fitness;
+    QList <int> fitnessRecord;
 
     int born;
     int extinct;
