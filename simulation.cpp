@@ -230,6 +230,8 @@ bool simulation::run()
     QString aliveRecordString ("Alive record is taken at the end of each iteration, so any species which have gone extinct during that iteration due to mixing or overwriting from a setling new Organism will not feature on the alive list.\nEach line lists: Iteration\tPlaying field\tSpecies alive\n\n");
     QTextStream aliveRecordTextStream(&aliveRecordString);
     Organism bestOrganism = initialise();
+    //Add current fitness to the fitness record of the organism
+    bestOrganism.fitnessRecord.append(bestOrganism.fitness);
 
     //Populate playing field with clones
     quint32 notFound = static_cast<quint32>(-1);
@@ -380,7 +382,7 @@ bool simulation::run()
                 for (int i = 0; i < playingFields[p]->playingField.count(); i++)
                     playingFields[p]->playingField[i]->fitness =
                         fitness(playingFields[p]->playingField[i], playingFields[p]->masks, runFitnessSize, runFitnessTarget, runMaskNumber, runEnvironmentNumber, simSettings->fitnessMode);
-
+        //This happens every iteration and updates the fitness as the simulation progresses
 
         /************* Playing field mixing *************/
 
