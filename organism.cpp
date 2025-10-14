@@ -106,6 +106,7 @@ bool Organism::operator == (const Organism &O)
     if (speciesID != O.speciesID) return false;
     if (parentSpeciesID != O.parentSpeciesID) return false;
     if (fitness != O.fitness) return false;
+    if (fitnessRecord != O.fitnessRecord) return false;
     if (born != O.born) return false;
     if (extinct != O.extinct) return false;
     if (cladogenesis != O.cladogenesis) return false;
