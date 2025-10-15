@@ -90,6 +90,7 @@ void Organism::operator = (const Organism &O)
     speciesID = O.speciesID;
     parentSpeciesID = O.parentSpeciesID;
     fitness = O.fitness;
+    fitnessRecord = O.fitnessRecord;
     born = O.born;
     extinct = O.extinct;
     cladogenesis = O.cladogenesis;
