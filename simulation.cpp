@@ -380,9 +380,12 @@ bool simulation::run()
         if (!simSettings->noSelection)
             for (int p = 0; p < simSettings->playingfieldNumber; p++)
                 for (int i = 0; i < playingFields[p]->playingField.count(); i++)
-                    playingFields[p]->playingField[i]->fitness =
-                        fitness(playingFields[p]->playingField[i], playingFields[p]->masks, runFitnessSize, runFitnessTarget, runMaskNumber, runEnvironmentNumber, simSettings->fitnessMode);
-        //This happens every iteration and updates the fitness as the simulation progresses
+                {
+                    int newFitness = fitness(playingFields[p]->playingField[i], playingFields[p]->masks, runFitnessSize, runFitnessTarget, runMaskNumber, runEnvironmentNumber, simSettings->fitnessMode);
+                    playingFields[p]->playingField[i]->fitness = newFitness;
+                    //This happens every iteration and updates the fitness as the simulation progresses
+                    playingFields[p]->playingField[i]->fitnessRecord.append(newFitness);
+                }
 
         /************* Playing field mixing *************/
 
