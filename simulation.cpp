@@ -383,7 +383,7 @@ bool simulation::run()
                 {
                     int newFitness = fitness(playingFields[p]->playingField[i], playingFields[p]->masks, runFitnessSize, runFitnessTarget, runMaskNumber, runEnvironmentNumber, simSettings->fitnessMode);
                     playingFields[p]->playingField[i]->fitness = newFitness;
-                    //This happens every iteration and updates the fitness as the simulation progresses
+                    //This happens every iteration and updates the fitness record as the simulation progresses
                     playingFields[p]->playingField[i]->fitnessRecord.append(newFitness);
                 }
 
@@ -1759,11 +1759,11 @@ void simulation::speciesExtinction(Organism *speciesListOrganism, const Organism
     }
 }
 
-//Masks passed as a const reference.
+//Masks passed as a const reference. This returns minimum fitness - deal with mean elsewhere
 int simulation::fitness (const Organism *org, const QVector<QVector<QVector<bool> > > &masks, int runFitnessSize, int runFitnessTarget, int runMaskNumber, int runEnvironmentNumber, int fitnessMode,
                          int environment)
 {
-
+    //Check that fitness mode has not been modified by file loading to an illegal value
     if (!(fitnessMode == FITNESS_MODE_MINIMUM || fitnessMode == FITNESS_MODE_MEAN))
     {
         warning("Fitness error", QString("Fitness mode error - contact RJG - fitness mode is %1").arg(fitnessMode));
@@ -1780,7 +1780,6 @@ int simulation::fitness (const Organism *org, const QVector<QVector<QVector<bool
     //Environment defaults to -1 (used to allow this to be called throughout simulation without defining environment number).
     //If this is the case check fitness for all environments
     if (environment == -1)
-    {
         for (int h = 0; h < environmentNumber; h++)
         {
             int temporaryFitness = ~0, counts = 0;
@@ -1790,11 +1789,8 @@ int simulation::fitness (const Organism *org, const QVector<QVector<QVector<bool
 
             //Define fitness as the distance away from fitness target
             temporaryFitness = qAbs(counts - runFitnessTarget);
-            if (fitnessMode == FITNESS_MODE_MINIMUM && temporaryFitness < fitness)fitness = temporaryFitness;
-            if (fitnessMode == FITNESS_MODE_MEAN) doubleFitness += (static_cast<double>(temporaryFitness) / static_cast<double>(environmentNumber));
+            if (temporaryFitness < fitness) fitness = temporaryFitness;
         }
-        if (fitnessMode == FITNESS_MODE_MEAN) fitness = static_cast<int>(doubleFitness);
-    }
     //Alteranatively, we can calculate fitness for a specific environment
     else
     {
