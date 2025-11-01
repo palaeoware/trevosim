@@ -385,7 +385,8 @@ bool simulation::run()
                     playingFields[p]->playingField[i]->fitness = newFitness;
                     //This happens every iteration and updates the fitness record as the simulation progresses
                     playingFields[p]->playingField[i]->fitnessRecord.append(newFitness);
-                }
+                    if (fitnessMode == FITNESS_MODE_MEAN)
+                    }
 
         /************* Playing field mixing *************/
 
@@ -1800,8 +1801,12 @@ int simulation::fitness (const Organism *org, const QVector<QVector<QVector<bool
                 if (org->genome[j] != masks[environment][i][j]) counts++;
         fitness = qAbs(counts - runFitnessTarget);
     }
-
     return fitness;
+}
+
+int simulation::meanFitness (const Organism *org)
+{
+    //To do.
 }
 
 //Selectsize defaults to -1; currently only used to check for identical organisms in EE algorithm
