@@ -385,9 +385,10 @@ bool simulation::run()
                     playingFields[p]->playingField[i]->fitness = newFitness;
                     //This happens every iteration and updates the fitness record as the simulation progresses
                     playingFields[p]->playingField[i]->fitnessRecord.append(newFitness);
-                    if (fitnessMode == FITNESS_MODE_MEAN)
-                    }
-
+                    if (simSettings->fitnessMode == FITNESS_MODE_MEAN) meanFitness(playingFields[p]->playingField[i]);
+                    //To do - what should this return? just the chosen fitness (already added to record after all), then use that?
+                    //Do I record fitness type - i.e. geometric v.s min? If so I should record that here, but do I need this (can cjust calculate proclivity for output, I guess)s
+                }
         /************* Playing field mixing *************/
 
         //Implement mixing between playing fields if required - do check for extinction at same time
@@ -1806,7 +1807,19 @@ int simulation::fitness (const Organism *org, const QVector<QVector<QVector<bool
 
 int simulation::meanFitness (const Organism *org)
 {
-    //To do.
+    int total = 0, cnt = 0;
+
+    //No way to only refer to existing items in Qlist - check bounds
+    qint32 start = org->fitnessRecord.length() - simSettings->fitnessWindowSize;
+    if (start < 0) start = 0;
+
+    for (int i = start; i < org->fitnessRecord.length(); i++)
+    {
+        total += org->fitnessRecord[i];
+        cnt ++;
+    }
+
+
 }
 
 //Selectsize defaults to -1; currently only used to check for identical organisms in EE algorithm
