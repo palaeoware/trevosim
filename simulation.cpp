@@ -1807,20 +1807,23 @@ int simulation::fitness (const Organism *org, const QVector<QVector<QVector<bool
 
 int simulation::meanFitness (const Organism *org)
 {
-    int total = 0, cnt = 0;
-
     //No way to only refer to existing items in Qlist - check bounds
     qint32 start = org->fitnessRecord.length() - simSettings->fitnessWindowSize;
     if (start < 0) start = 0;
 
+    //Now we need to callculate geometric mean - do this by summing logs, not calculating the nth root of product to avoid potential overflow
+    auto sumLogs = 0.0;
+    int cnt = 0;
+
     for (int i = start; i < org->fitnessRecord.length(); i++)
     {
-        total += org->fitnessRecord[i];
+        sumLogs += std::log(org->fitnessRecord[i]);
         cnt ++;
     }
 
     //We need to deal with the fact that fitness is an integer, but this mean may well be a decimal. Do so using probabilities, as elsewhere
-    double meanDouble = (static_cast<double>(total) / static_cast<double>(total));
+    //note that this is the geometric mean, we have summed the logs, so now need to raise e to the power of that sum over the count
+    double meanDouble = std::exp(sumLogs / cnt);
     //This will be used to store the integral part of the above sum - it needs to be a double as this is what is passed to the modf function
     double meanIntegral = meanDouble;
     //Sort out the probabilities

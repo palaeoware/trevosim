@@ -241,12 +241,20 @@ bool testinternal::testZero(QString &outString)
     out << "Fitness based on both environments should be 20, it is " <<  environmentBothFitness << ".\n";
     if (environmentBothFitness != 20 || environmentBothFitness != environmentZeroFitness) testFlag = false;
 
-    out << "Change the fitness mode to mean, and then check that the fitness is (80 + 20)/2 == 50.\n";
+    out << "Now check fitness mode to mean, and then check that the fitness is correctly calculated - start with fitness history of 5,6,6, expect 5.6462 (the geometric mean) out.\n";
     simSettings.fitnessMode = FITNESS_MODE_MEAN;
-    int environmentBothFitnessMean =
-        z.fitness(&org, z.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.environmentNumber, simSettings.fitnessMode);
-    out << "Fitness based on both environments should be 50, it is " <<  environmentBothFitnessMean << ".\n";
-    if (environmentBothFitnessMean != 50) testFlag = false;
+    //Populate history
+    org.fitnessRecord.append(5);
+    org.fitnessRecord.append(6);
+    org.fitnessRecord.append(6);
+
+    int total = 0, repeats = 100000;
+    for (int i = 0; i < repeats ; i++) total += z.meanFitness(&org);
+
+    double mean = static_cast<double>(total) / static_cast<double>(repeats);
+
+    out << "Mean of " << repeats << " repeats of integer values is calculated as " <<  mean << ".\n";
+    if ((mean - 5.6462) > 0.001 ) testFlag = false;
 
     if (testFlag) out << "\nFitness tests passed.\n";
 
