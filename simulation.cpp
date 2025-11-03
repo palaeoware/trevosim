@@ -1819,7 +1819,18 @@ int simulation::meanFitness (const Organism *org)
         cnt ++;
     }
 
+    //We need to deal with the fact that fitness is an integer, but this mean may well be a decimal. Do so using probabilities, as elsewhere
+    double meanDouble = (static_cast<double>(total) / static_cast<double>(total));
+    //This will be used to store the integral part of the above sum - it needs to be a double as this is what is passed to the modf function
+    double meanIntegral = meanDouble;
+    //Sort out the probabilities
+    double meanFractional = modf(meanDouble, &meanIntegral );
+    int meanInteger = (static_cast<int>(meanIntegral));
 
+    //note that due to saturation / multiple hits on one site, the number of recoreded mutations in e.g. our tests may sneak in under the expected value
+    if (static_cast<double>(QRandomGenerator::global()->generate()) < (meanFractional * static_cast<double>(maxRand))) meanInteger++;
+
+    return meanInteger;
 }
 
 //Selectsize defaults to -1; currently only used to check for identical organisms in EE algorithm
