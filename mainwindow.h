@@ -59,6 +59,7 @@ public:
     void hideProgressBar();
     void printGenome(const Organism *org, int row);
     void printBlank(int row);
+    void scrollToBottom();
     void resizeGrid(const int speciesNumber, const int genomeSize, const int hideFrom = 0);
     void resetDisplays();
     void setTreeDisplay(QString treeString);

@@ -697,6 +697,12 @@ void MainWindow::printGenome(const Organism *org, int row)
     }
 }
 
+void MainWindow::scrollToBottom()
+{
+    ui->character_Display->scrollToBottom();
+}
+
+
 void MainWindow::recalculateStripUniformativeFactor()
 {
     bool tempStripUninformative = simSettings->stripUninformative;

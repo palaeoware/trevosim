@@ -1894,15 +1894,15 @@ bool simulation::checkForSpeciation(const Organism *organismOne, int runSelectSi
     }
     else if (speciationMode == SPECIES_MODE_ALL)
     {
-        //We need to record the maximum level of difference, as the biggest is going to be closest to species difference
-        difference = 0;
+        //We need to record the minimum level of difference - under this speciation mode we would like speciation to occur only when sufficiently different to any past speciation
+        difference = ~0;
         for (int i = 0; i < genomeCount; i++)
         {
             int tempDiff = 0;
             for (int j = 0; j < runSelectSize; j++)
                 if (organismOne->genome[j] != organismOne->parentGenomes[i][j])
                     tempDiff++;
-            if (tempDiff > difference) difference = tempDiff;
+            if (tempDiff < difference) difference = tempDiff;
         }
     }
 
@@ -2478,6 +2478,8 @@ void simulation::writeGUI(QVector<Organism *> &speciesList)
     if (calculateStripUninformativeFactorRunning)status.prepend(QString("Calculating strip uninformative factor. "));
     else if (theMainWindow->batchRunning)status.prepend(QString("Run number: %1; ").arg(runs));
     theMainWindow->setStatus(status);
+
+    theMainWindow->scrollToBottom();
 
     qApp->processEvents();
 }
