@@ -2462,7 +2462,17 @@ void simulation::writeGUI(QVector<Organism *> &speciesList)
         for (int j = speciesList.count(); j < theMainWindow->rowMax(); j++)
             theMainWindow->hideRow(j);
 
-    theMainWindow->setTreeDisplay(printNewick(0, speciesList));
+    int speciesListLength = speciesList.length();
+    if (speciesListLength < 150 ) theMainWindow->setTreeDisplay(printNewick(0, speciesList));
+    else
+    {
+        QString stringToPrint(theMainWindow->treeDisplayString());
+        if (!stringToPrint.contains("[...]"))
+        {
+            stringToPrint.append("[...] GUI updates suspended due to tree size.");
+            theMainWindow->setTreeDisplay(stringToPrint);
+        }
+    }
 
     QString status = QString("Iteration: %1").arg(iterations);
     if (calculateStripUninformativeFactorRunning)status.prepend(QString("Calculating strip uninformative factor. "));

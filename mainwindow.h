@@ -65,6 +65,7 @@ public:
     void hideRow(const int rowNumber);
     void showRow(const int rowNumber);
     int rowMax();
+    QString treeDisplayString();
     bool escapePressed, pauseFlag, batchRunning, runFromCommand;
 
 private:

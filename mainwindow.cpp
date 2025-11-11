@@ -355,6 +355,11 @@ void MainWindow::setTreeDisplay(QString treeString)
     ui->treeDisplay->updateGeometry();
 }
 
+QString MainWindow::treeDisplayString()
+{
+    return (ui->treeDisplay->toPlainText());
+}
+
 void MainWindow::load()
 {
     QFile settingsFile(settingsFileString);
