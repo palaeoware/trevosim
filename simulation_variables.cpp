@@ -135,7 +135,7 @@ QString simulationVariables::printSettings() const
                        << " ecosystemEngineersAddMask " << ecosystemEngineersAddMask
                        << " runningLogFrequency " << runningLogFrequency
                        << " replicates " << replicates
-                       << " expandingPlayingfield" << expandingPlayingfield
+                       << " expandingPlayingfield " << expandingPlayingfield
                        << " stochasticLayer " << stochasticLayer
                        << " stochasticDepth " << stochasticDepth
                        << " matchFitnessPeaks " << matchFitnessPeaks

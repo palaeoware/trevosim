@@ -385,9 +385,13 @@ bool simulation::run()
                     playingFields[p]->playingField[i]->fitness = newFitness;
                     //This happens every iteration and updates the fitness record as the simulation progresses
                     playingFields[p]->playingField[i]->fitnessRecord.append(newFitness);
-                    if (simSettings->fitnessMode == FITNESS_MODE_MEAN) meanFitness(playingFields[p]->playingField[i]);
-                    //To do - what should this return? just the chosen fitness (already added to record after all), then use that?
-                    //Do I record fitness type - i.e. geometric v.s min? If so I should record that here, but do I need this (can cjust calculate proclivity for output, I guess)s
+                    if (simSettings->fitnessMode == FITNESS_MODE_MEAN)
+                    {
+                        //To do - add more tests of this
+                        int geoMean = meanFitness(playingFields[p]->playingField[i]);
+                        //To do - what should this return? just the chosen fitness (already added to record after all), then use that?
+                        //Do I record fitness type - i.e. geometric v.s min? If so I should record that here, but do I need this (can cjust calculate proclivity for output, I guess)s
+                    }
                 }
         /************* Playing field mixing *************/
 
