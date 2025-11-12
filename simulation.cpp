@@ -1870,7 +1870,7 @@ bool simulation::checkForIncrement(int runMode, int currentSpeciesNumber, int ru
 
 bool simulation::checkForSpeciation(const Organism *organismOne, int runSelectSize, int runSpeciesDifference, int speciationMode)
 {
-    int difference = 0;
+    quint32 difference = 0;
 
     //Speciation modes are defined as follows
     //SPECIES_MODE_ORIGIN 0
@@ -1898,10 +1898,13 @@ bool simulation::checkForSpeciation(const Organism *organismOne, int runSelectSi
         difference = ~0;
         for (int i = 0; i < genomeCount; i++)
         {
+
+            // 11 Nov - this currently doesn't seem to allow speciations - check
+
+
             int tempDiff = 0;
             for (int j = 0; j < runSelectSize; j++)
-                if (organismOne->genome[j] != organismOne->parentGenomes[i][j])
-                    tempDiff++;
+                if (organismOne->genome[j] != organismOne->parentGenomes[i][j]) tempDiff++;
             if (tempDiff < difference) difference = tempDiff;
         }
     }
