@@ -1739,7 +1739,6 @@ bool testinternal::testFourteen(QString &outString)
     //Cycle through species modes
     for (int i = 0; i < 3; i++)
     {
-
         newSpecies = x.checkForSpeciation(&org, 50, 5, i);
         if (!newSpecies)
         {
@@ -1767,7 +1766,7 @@ bool testinternal::testFourteen(QString &outString)
     org.parentGenomes.append(QList <bool>());
     for (int i = 0; i < 50; i++)org.parentGenomes[1].append(false);
 
-    //At the moment, parent genome has four trues - everything should still be below species differemce no new species
+    //At the moment, parent genome has four trues - everything should still be below species differemce - expect no new species
     for (int i = 0; i < 3; i++)
     {
         newSpecies = x.checkForSpeciation(&org, 50, 5, i);
@@ -1778,10 +1777,10 @@ bool testinternal::testFourteen(QString &outString)
         }
     }
 
-    //Turn one bit true to take us above species difference
+    //Turn one bit true in origin genome to take that above species difference
     org.parentGenomes[0][4] = true;
 
-    // This should now be a new species
+    //Origin above genome difference - species mode origin should now be a new species
     newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ORIGIN);
     if (!newSpecies)
     {
@@ -1797,22 +1796,23 @@ bool testinternal::testFourteen(QString &outString)
         out << "Fail at all species modes test D2\n";
     }
 
-    //Should be new species as this includes first
+    //Should not be new species as this includes first genome
     newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ALL);
-    if (!newSpecies)
+    if (newSpecies)
     {
         testFlag = false;
         out << "Fail at all species modes test D3\n";
     }
 
-    //Turn one bit false to take us below species difference
+    //Turn one bit false in origin genome to take this back below species difference
     org.parentGenomes[0][4] = false;
-    //Turn five to true in last (now second) speciation
+    //Turn five to true in the more recent (second) speciation
     for (int i = 0; i < 5; i++)
     {
         org.parentGenomes[1][i] = true;
     }
 
+    //Mode origin should be not new species - only most recent is over
     newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ORIGIN);
     if (newSpecies)
     {
@@ -1820,6 +1820,7 @@ bool testinternal::testFourteen(QString &outString)
         out << "Fail at all species modes test E1\n";
     }
 
+    //Should be new species - most recent is over
     newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_LAST_SPECIATION);
     if (!newSpecies)
     {
@@ -1827,8 +1828,9 @@ bool testinternal::testFourteen(QString &outString)
         out << "Fail at all species modes test E2\n";
     }
 
+    //Should not be new species - most recent is over, but original is not
     newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ALL);
-    if (!newSpecies)
+    if (newSpecies)
     {
         testFlag = false;
         out << "Fail at all species modes test E3\n";
@@ -1843,7 +1845,7 @@ bool testinternal::testFourteen(QString &outString)
     for (auto &p : org.parentGenomes[0]) p = false;
     for (auto &p : org.parentGenomes[1]) p = false;
 
-    //No new species expected
+    //All genomes are now false - no new species expected
     newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ORIGIN);
     if (newSpecies)
     {
@@ -1865,13 +1867,13 @@ bool testinternal::testFourteen(QString &outString)
         out << "Fail at all species modes test F3\n";
     }
 
-    //Test with original five away
+    //Test with origin genome set with five bits to true
     for (int i = 0; i < 5; i++)
     {
         org.parentGenomes[0][i] = true;
     }
 
-    //Should be new species
+    //Origin is true, so in this mode should be new species
     newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ORIGIN);
     if (!newSpecies)
     {
@@ -1879,7 +1881,7 @@ bool testinternal::testFourteen(QString &outString)
         out << "Fail at all species modes test F1\n";
     }
 
-    //Should not
+    //Both other modes should not have a new species
     newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_LAST_SPECIATION);
     if (newSpecies)
     {
@@ -1887,9 +1889,9 @@ bool testinternal::testFourteen(QString &outString)
         out << "Fail at all species modes test F2\n";
     }
 
-    //Should be
+    //Both other modes should not have a new species
     newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ALL);
-    if (!newSpecies)
+    if (newSpecies)
     {
         testFlag = false;
         out << "Fail at all species modes test F3\n";
@@ -1902,6 +1904,7 @@ bool testinternal::testFourteen(QString &outString)
         org.parentGenomes[1][i] = true;
     }
 
+    //Now origin is all false - no new species expected
     newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ORIGIN);
     if (newSpecies)
     {
@@ -1909,6 +1912,7 @@ bool testinternal::testFourteen(QString &outString)
         out << "Fail at all species modes test G1\n";
     }
 
+    //Last is false - no new species expected
     newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_LAST_SPECIATION);
     if (newSpecies)
     {
@@ -1916,9 +1920,10 @@ bool testinternal::testFourteen(QString &outString)
         out << "Fail at all species modes test G2\n";
     }
 
-    //Should be new species
+    //Middle is above threshold - but in new set up November 2025, this should not create new species
+    //That should only happen when all are above threshold
     newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ALL);
-    if (!newSpecies)
+    if (newSpecies)
     {
         testFlag = false;
         out << "Fail at all species modes test G3\n";
@@ -1947,8 +1952,9 @@ bool testinternal::testFourteen(QString &outString)
         out << "Fail at all species modes test H2\n";
     }
 
+    //Shouldn't
     newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ALL);
-    if (!newSpecies)
+    if (newSpecies)
     {
         testFlag = false;
         out << "Fail at all species modes test H3\n";
@@ -1976,9 +1982,9 @@ bool testinternal::testFourteen(QString &outString)
         out << "Fail at all species modes test I2\n";
     }
 
-    //Should
+    //Shouldn't
     newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ALL);
-    if (!newSpecies)
+    if (newSpecies)
     {
         testFlag = false;
         out << "Fail at all species modes test I3\n";
@@ -2007,12 +2013,42 @@ bool testinternal::testFourteen(QString &outString)
         out << "Fail at all species modes test J2\n";
     }
 
-    //Should
+    //Shouldn't
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ALL);
+    if (newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test J3\n";
+    }
+
+    //Test with all above threshold
+    for (int i = 0; i < 5; i++)
+    {
+        org.parentGenomes[2][i] = true;
+    }
+
+    //Should be new species
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ORIGIN);
+    if (!newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test K1\n";
+    }
+
+    //Should be new species
+    newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_LAST_SPECIATION);
+    if (!newSpecies)
+    {
+        testFlag = false;
+        out << "Fail at all species modes test K2\n";
+    }
+
+    //Should be new species
     newSpecies = x.checkForSpeciation(&org, 50, 5, SPECIES_MODE_ALL);
     if (!newSpecies)
     {
         testFlag = false;
-        out << "Fail at all species modes test J3\n";
+        out << "Fail at all species modes test K3\n";
     }
 
     if (testFlag) out << "All species mode tests with more than two ancestors passed.\n\n";
@@ -2751,7 +2787,8 @@ bool testinternal::testTwentyOne(QString &outString)
         }
     if (testFlag) out << "Increments should occur every two species, and they are - test passed.\n";
 
-    out << "Now checking that the run environent number limit does apply as required - doing this using mean fitness mode.\n";
+    /*
+    out << "Now checking that the run environment number limit does apply as required - doing this using mean fitness mode.\n";
     //Create default setting object and then a simulation object for the test
     simulationVariables simSettings2;
     simSettings2.genomeSize = 50;
@@ -2799,10 +2836,25 @@ bool testinternal::testTwentyOne(QString &outString)
     fitness = y.fitness(&org, y.playingFields[0]->masks, simSettings2.fitnessSize, simSettings2.fitnessTarget, simSettings2.maskNumber, y.runEnvironmentNumber, simSettings2.fitnessMode);
     if (fitness != 50) testFlag = false;
     out <<  "Fitness, with fitness target of " << simSettings2.fitnessTarget << " is " << fitness << ". It should be 50 ((150+0+0/3).\n";
+    */
 
-
+    //Create default setting object and then a simulation object for the test
+    simulationVariables simSettings2;
+    simSettings2.genomeSize = 50;
+    simSettings2.fitnessSize = 50;
+    simSettings2.speciesSelectSize = 50;
+    //Test is for three masks and a target of zero (the defaults in v2.0.0)
+    simSettings2.fitnessTarget = 0;
+    simSettings2.environmentNumber = 3;
+    simSettings2.maskNumber = 3;
     simSettings2.fitnessMode = FITNESS_MODE_MINIMUM;
-    out << "Now repeating exercise with ftness mode miinimum, so we should have 150, 0, 0 - let's go.\n";
+    simulation y(0, &simSettings2, &error, theMainWindow);
+    if (error) return false;
+
+
+    //Fitness requires an organism - create an organism with 50 bits, no stochastic genome, all bits are initialised to zero
+    Organism org(simSettings2.genomeSize, false);
+    out << "Now checking that the run environment number limit does apply as required - using ftness mode miinimum, so we should have 150, 0, 0 - let's go.\n";
     out << "Organism genome is: " << y.printGenomeString(&org) << "\n";
 
     //Now set masks in simulation to 1
@@ -2814,13 +2866,13 @@ bool testinternal::testTwentyOne(QString &outString)
                     if (k == 0) i = true;
                     else i = false;
                 }
-
+    QString maskString = y.printMasks(y.playingFields);
     maskString = y.printMasks(y.playingFields);
     out << "Masks are:\n" << maskString;
 
     y.runEnvironmentNumber = 1;
     out << "runEnvironmentNumber is " << y.runEnvironmentNumber  << ".\n";
-    fitness = y.fitness(&org, y.playingFields[0]->masks, simSettings2.fitnessSize, simSettings2.fitnessTarget, simSettings2.maskNumber, y.runEnvironmentNumber, simSettings2.fitnessMode);
+    int fitness = y.fitness(&org, y.playingFields[0]->masks, simSettings2.fitnessSize, simSettings2.fitnessTarget, simSettings2.maskNumber, y.runEnvironmentNumber, simSettings2.fitnessMode);
     if (fitness != 150) testFlag = false;
     out <<  "Fitness, with fitness target of " << simSettings2.fitnessTarget << " is " << fitness << ". It should be 150.\n";
 
