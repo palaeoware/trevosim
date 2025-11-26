@@ -383,14 +383,14 @@ bool simulation::run()
                 {
                     int newFitness = fitness(playingFields[p]->playingField[i], playingFields[p]->masks, runFitnessSize, runFitnessTarget, runMaskNumber, runEnvironmentNumber, simSettings->fitnessMode);
                     playingFields[p]->playingField[i]->fitness = newFitness;
-                    //This happens every iteration and updates the fitness record as the simulation progresses
+                    //This happens every iteration and updates the fitness record of the instantaneous fitness as the simulation progresses
                     playingFields[p]->playingField[i]->fitnessRecord.append(newFitness);
+                    //If we have a mean fitness mode, we need to overwrite the fitness with the mean through time
                     if (simSettings->fitnessMode == FITNESS_MODE_MEAN)
                     {
-                        //To do - add more tests of this
                         int geoMean = meanFitness(playingFields[p]->playingField[i]);
-                        //To do - what should this return? just the chosen fitness (already added to record after all), then use that?
-                        //Do I record fitness type - i.e. geometric v.s min? If so I should record that here, but do I need this (can cjust calculate proclivity for output, I guess)s
+                        //Assign the geometric mean if it is better
+                        if (geoMean < playingFields[p]->playingField[i]->fitness)playingFields[p]->playingField[i]->fitness = geoMean;
                     }
                 }
         /************* Playing field mixing *************/
@@ -1898,10 +1898,6 @@ bool simulation::checkForSpeciation(const Organism *organismOne, int runSelectSi
         difference = ~0;
         for (int i = 0; i < genomeCount; i++)
         {
-
-            // 11 Nov - this currently doesn't seem to allow speciations - check
-
-
             int tempDiff = 0;
             for (int j = 0; j < runSelectSize; j++)
                 if (organismOne->genome[j] != organismOne->parentGenomes[i][j]) tempDiff++;
