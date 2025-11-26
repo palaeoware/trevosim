@@ -535,6 +535,7 @@ bool simulation::run()
             logTextOut.replace("||Taxon_Number||",  QString::number(speciesList.length()), Qt::CaseInsensitive);
             logTextOut.replace("||Count||", doPadding(runs, 3));
             logTextOut.replace("||Matrix||", printMatrix(speciesList), Qt::CaseInsensitive);
+            logTextOut.replace("||Matrix_fitness_history||", printMatrixFitnessHistory(speciesList), Qt::CaseInsensitive);
             logTextOut.replace("||Time||", printTime(), Qt::CaseInsensitive);
             logTextOut.replace("||Settings||", simSettings->printSettings(), Qt::CaseInsensitive);
             logTextOut.replace("||Iteration||", QString::number(iterations), Qt::CaseInsensitive);
@@ -545,8 +546,8 @@ bool simulation::run()
             logTextOut.replace("||PlayingField_semiconcise||", printPlayingFieldSemiconcise(playingFields), Qt::CaseInsensitive);
             logTextOut.replace("||PlayingField_concise||", printPlayingFieldConcise(playingFields), Qt::CaseInsensitive);
             logTextOut.replace("||PlayingField_genomes_concise||", printPlayingFieldGenomesConcise(playingFields), Qt::CaseInsensitive);
+            logTextOut.replace("||PlayingField_fitness_history||", printPlayingFieldFitnessHistory(playingFields), Qt::CaseInsensitive);
             logTextOut.replace("||Masks||", printMasks(playingFields), Qt::CaseInsensitive);
-
             bool writeRunningLogSuccess = writeRunningLog(iterations, logTextOut);
 
             if (theMainWindow != nullptr)
@@ -685,7 +686,7 @@ bool simulation::run()
     outValues["Count"] = doPadding(runs, 3);
     outValues["Root"] = printGenomeString(&bestOrganism);
     outValues["PlayingField_Number"] = QString::number(simSettings->playingfieldNumber);
-    outValues["||PlayingField_Size||"] = QString::number(simSettings->playingfieldSize);
+    outValues["PlayingField_Size"] = QString::number(simSettings->playingfieldSize);
 
     if (simSettings->writeFileOne && simSettings->test == 0)
         if (!writeFile(simSettings->logFileNameBase01, simSettings->logFileExtension01, simSettings->logFileString01, outValues, speciesList))
@@ -2057,6 +2058,28 @@ QString simulation::printPlayingFieldGenomesConcise(const QVector <playingFieldS
     return pfText;
 }
 
+QString simulation::printPlayingFieldFitnessHistory(const QVector <playingFieldStructure *> &playingFields)
+{
+    int p = 0;
+
+    QString pfText;
+    QTextStream out(&pfText);
+
+    for (auto pf : playingFields)
+    {
+        int cnt = 0;
+        out << "\nPlaying field number,Playingfield position,Species ID,Fitness history\n";
+        for (auto o : std::as_const(pf->playingField))
+        {
+            out << p << "," << cnt << "," << o->speciesID;
+            for (auto record : o->fitnessRecord) out << "," << record;
+            out << "\n";
+            cnt++;
+        }
+        p++;
+    }
+    return pfText;
+}
 
 QString simulation::printMasks(const QVector <playingFieldStructure *> &playingFields)
 {
@@ -2135,6 +2158,24 @@ QString simulation::printMatrix(const QVector <Organism *> &speciesList)
         matrixTextStream << "\n";
     }
 
+    return matrixString;
+}
+
+QString simulation::printMatrixFitnessHistory(const QVector <Organism *> &speciesList)
+{
+    QString matrixString;
+    QTextStream matrixTextStream(&matrixString);
+
+    int totalSpeciesCount = speciesList.length();
+
+    matrixTextStream << "\nSpecies ID,Fitness history\n";
+
+    for (int i = 0; i < totalSpeciesCount; i++)
+    {
+        matrixTextStream << "Species_" << doPadding(i, paddingAmount(totalSpeciesCount));
+        for (auto record : std::as_const(speciesList[i]->fitnessRecord)) matrixTextStream << "," << record;
+        matrixTextStream << "\n";
+    }
     return matrixString;
 }
 
@@ -2371,6 +2412,7 @@ bool simulation::writeFile(const QString logFileNameBase, const QString logFileE
     QString fileStringWrite = logFileString;
 
     fileStringWrite.replace("||Matrix||", printMatrix(speciesList), Qt::CaseInsensitive);
+    fileStringWrite.replace("||Matrix_fitness_history||", printMatrix(speciesList), Qt::CaseInsensitive);
     fileStringWrite.replace("||Stochastic_Matrix||", outValues["Stochastic_Matrix"], Qt::CaseInsensitive);
     fileStringWrite.replace("||Ecosystem_Engineers||", outValues["Ecosystem_Engineers"], Qt::CaseInsensitive);
     fileStringWrite.replace("||TNT_Tree||", outValues["TNTstring"], Qt::CaseInsensitive);
@@ -2391,6 +2433,7 @@ bool simulation::writeFile(const QString logFileNameBase, const QString logFileE
     fileStringWrite.replace("||PlayingField_semiconcise||", printPlayingFieldSemiconcise(playingFields), Qt::CaseInsensitive);
     fileStringWrite.replace("||PlayingField_concise||", printPlayingFieldConcise(playingFields), Qt::CaseInsensitive);
     fileStringWrite.replace("||PlayingField_genomes_concise||", printPlayingFieldGenomesConcise(playingFields), Qt::CaseInsensitive);
+    fileStringWrite.replace("||PlayingField_fitness_history||", printPlayingFieldFitnessHistory(playingFields), Qt::CaseInsensitive);
     fileStringWrite.replace("||Masks||", printMasks(playingFields), Qt::CaseInsensitive);
 
     fileTextStream << fileStringWrite;

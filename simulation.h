@@ -68,6 +68,7 @@ private:
     QString printNewickWithBranchLengths(int species, QVector<Organism *> &speciesList, bool phangornTree);
     QString printTime();
     QString printMatrix(const QVector<Organism *> &speciesList);
+    QString printMatrixFitnessHistory(const QVector<Organism *> &speciesList);
     QString printStochasticMatrix(const QVector <Organism *> &speciesList, bool stochasticLayer);
     QString printGenomeInteger(quint64 genomeLocal, int genomeSizeLocal, const quint64 *lookupsLocal);
     QString printGenomeString(const Organism *org);
@@ -75,6 +76,7 @@ private:
     QString printPlayingFieldSemiconcise(const QVector <playingFieldStructure *> &playingFields);
     QString printPlayingFieldConcise(const QVector <playingFieldStructure *> &playingFields);
     QString printPlayingFieldGenomesConcise(const QVector <playingFieldStructure *> &playingFields);
+    QString printPlayingFieldFitnessHistory(const QVector <playingFieldStructure *> &playingFields);
     QString printSpeciesList(const QVector <Organism *> &speciesList);
     QString printMasks(const QVector <playingFieldStructure *> &playingFields, int playingfield);
     QString printMasks(const QVector <playingFieldStructure *> &playingFields);
