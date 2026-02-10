@@ -390,7 +390,7 @@ bool simulation::run()
                     {
                         int geoMean = meanFitness(playingFields[p]->playingField[i]);
                         //Assign the geometric mean if it is better
-                        if (geoMean < playingFields[p]->playingField[i]->fitness)playingFields[p]->playingField[i]->fitness = geoMean;
+                        if (geoMean < playingFields[p]->playingField[i]->fitness) playingFields[p]->playingField[i]->fitness = geoMean;
                     }
                 }
         /************* Playing field mixing *************/
@@ -1816,7 +1816,7 @@ int simulation::meanFitness (const Organism *org)
     qint32 start = org->fitnessRecord.length() - simSettings->fitnessWindowSize;
     if (start < 0) start = 0;
 
-    //Now we need to callculate geometric mean - do this by summing logs, not calculating the nth root of product to avoid potential overflow
+    //Now we need to calculate geometric mean - do this by summing logs, not calculating the nth root of product to avoid potential overflow
     auto sumLogs = 0.0;
     int cnt = 0;
 

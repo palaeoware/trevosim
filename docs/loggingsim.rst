@@ -112,7 +112,15 @@ Iteration
   This outputs the current iteration number. 
 
 Masks
+  This prints the masks to the log, for example:
 
+  ::
+
+    Playingfield 0
+    Environment 0
+    Mask number 0 :	000100000110101011010110100
+    Mask number 1 :	111011001011001011110000000
+    Mask number 2 :	001001101111100011001101010
 
 Matrix
   This is replaced with the matrix from the run. For example:
