@@ -4,6 +4,7 @@
 #include "simulation_variables.h"
 #include "organism.h"
 #include "mainwindow.h"
+#include "environment.h"
 
 #include <QDir>
 
@@ -51,7 +52,7 @@ private:
     struct playingFieldStructure
     {
         QVector <Organism *> playingField;
-        QVector <QVector <QVector <bool> > > masks;
+        QVector <Environment> environments;
     };
 
     QVector <playingFieldStructure *> playingFields;
