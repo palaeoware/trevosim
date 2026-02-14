@@ -46,3 +46,11 @@ Environment::Environment(const Environment &constructorEnvironment)
         }
     }
 }
+
+
+
+
+void Environment::operator = (const Environment &E)
+{
+    // Copy all attributes
+}

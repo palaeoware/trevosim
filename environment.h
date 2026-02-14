@@ -9,6 +9,8 @@ public:
     Environment(const int &maskNumber, const int &maskLength, const bool matchingPeaksCon);
     Environment(Environment const &constructorEnvironment);
 
+    void operator = (const Environment &E);
+
 private:
     QVector <QVector <bool> > masks;
     bool matchingPeaks;
