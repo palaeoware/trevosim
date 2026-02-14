@@ -126,94 +126,12 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
     //If we need to add a mask down the line due to EE it makes sense to set it up here
     if (simSettings->ecosystemEngineersAddMask) runMaskNumber++;
 
-    //3 vectors to allow list of bools, with multiple user defined lists per environment, then multiple environments (some structures have fourth for each playing field)
-    //So this is playing field number / environment number / mask number / bits
-    //This will fill the masks using random numbers as requried - if we need to match fitness peaks, we will do so below.
-    if (!simSettings->matchFitnessPeaks)
-        for (auto p : std::as_const(playingFields))
-        {
-            for (int k = 0; k < runEnvironmentNumber; k++)
-            {
-                p->environments.append(Environment(runMaskNumber, runFitnessSize));
-
-                //Here we append environments RJGENV
-                /*
-                p->masks.append(QVector <QVector <bool> >());
-                for (int j = 0; j < runMaskNumber; j++)
-                {
-                    p->masks[k].append(QVector <bool>());
-                    for (int i = 0; i < runFitnessSize; i++)
-                    {
-                        if (QRandomGenerator::global()->generate() > (maxRand / 2)) p->masks[k][j].append(bool(false));
-                        else  p->masks[k][j].append(bool(true));
-                    }
-                }
-                */
-            }
-        }
-
-    //And then if we need to make sure fitness peaks are the same height, we need to initialise with the same number of 1s in any given bit for each environment (i.e. bit zero, then bit one, and so on)
-    //These can be shifted between masks, but the nature of our fitness algorithm means that the minimum will always depend on the number of ones and zeros at a given point
-    //If we have multiple playing fields with independent masks, for now, let's only do this within each playing field
-    else
-    {
-        //First let's populate them with false / 0 bits
-        for (auto p : std::as_const(playingFields))
-        {
-            for (int k = 0; k < runEnvironmentNumber; k++)
-            {
-                p->masks.append(QVector <QVector <bool> >());
-                for (int j = 0; j < runMaskNumber; j++)
-                {
-                    p->masks[k].append(QVector <bool>());
-                    for (int i = 0; i < runFitnessSize; i++) p->masks[k][j].append(bool(false));
-                }
-            }
-        }
-
-        //Now let's do the ones
-        //We need to shuffle their position between environments to allow multiple fitness peaks - keep a record
-        for (auto p : std::as_const(playingFields))
-        {
-            QVector <QVector <bool> > used;
-            for (int i = 0; i < runEnvironmentNumber; i++)
-            {
-                used.append(QVector <bool> ());
-                for (int j = 0; j < runFitnessSize; j++) used[i].append(false);
-            }
-
-            for (int i = 0; i < runFitnessSize; i++)
-            {
-                //Note we want to have the number of ones to be the mask number plus one - so that e.g. if we have two masks, because we're looping through less than below, we need to have a limit of two
-                int numberOnes = QRandomGenerator::global()->bounded(runMaskNumber + 1);
-
-                for (int k = 0; k < runEnvironmentNumber; k++)
-                {
-                    bool flag = false;
-                    int bitPosition = -1;
-                    do
-                    {
-                        bitPosition = QRandomGenerator::global()->bounded(runFitnessSize);
-                        if (used[k][bitPosition] == false) flag = true;
-                    }
-                    while (flag == false);
-
-                    int count = 0;
-                    used[k][bitPosition] = true;
-
-                    while (count < numberOnes)
-                    {
-                        int mask =  QRandomGenerator::global()->bounded(runMaskNumber);
-                        if (p->masks[k][mask][bitPosition] == false)
-                        {
-                            p->masks[k][mask][bitPosition] = true;
-                            count++;
-                        }
-                    }
-                }
-            }
-        }
-    }
+    //Playing field comprise environments - initialise and attach these
+    for (auto p : std::as_const(playingFields))
+        for (int k = 0; k < runEnvironmentNumber; k++)
+            if (k == 0 || !simSettings->matchFitnessPeaks) p->environments.append(Environment(runMaskNumber, runFitnessSize, simSettings->matchFitnessPeaks));
+    //If we need to make sure fitness peaks are the same height, we send the constructor the previously created environment
+            else  p->environments.append(Environment(p->environments[0]));
 
     //If playing field masks should start the same, copy of playing fields over
     if (simSettings->playingfieldNumber > 1 && simSettings->playingfieldMasksMode != MASKS_MODE_INDEPENDENT)
@@ -1054,7 +972,7 @@ void simulation::mutateEnvironment()
     double numberEnvironmentMutationsFractional = modf(numberEnvironmentMutationsDouble, &numberEnvironmentMutationsIntegral);
     int numberEnvironmentMutationsInteger = (static_cast<int>(numberEnvironmentMutationsIntegral));
 
-    //note that due to saturation / multiple hits on one site, the number of recoreded mutations in e.g. our tests may sneak in under the expected value
+    //note that due to saturation / multiple hits on one site, the number of recorded mutations in e.g. our tests may sneak in under the expected value
     if (static_cast<double>(QRandomGenerator::global()->generate()) < (numberEnvironmentMutationsFractional * static_cast<double>(maxRand))) numberEnvironmentMutationsInteger++;
 
     if (simSettings->matchFitnessPeaks)

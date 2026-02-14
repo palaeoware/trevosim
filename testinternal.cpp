@@ -2488,6 +2488,12 @@ bool testinternal::testEighteen(QString &outString)
 }
 
 //Match peaks
+
+/****************
+    *  with new environments need to check - peak heights are the same, but also that peak fitness
+    * Genome is different between environments
+    * and that this is true after mutation
+ *******************/
 bool testinternal::testNineteen(QString &outString)
 {
     bool testFlag = true;

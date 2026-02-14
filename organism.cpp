@@ -116,7 +116,6 @@ bool Organism::operator == (const Organism &O)
     return true;
 }
 
-
 bool Organism::operator < (const Organism &O)
 {
     return (fitness < O.fitness);
