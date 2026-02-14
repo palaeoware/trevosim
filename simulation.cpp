@@ -134,6 +134,10 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
         {
             for (int k = 0; k < runEnvironmentNumber; k++)
             {
+                p->environments.append(Environment(runMaskNumber, runFitnessSize));
+
+                //Here we append environments RJGENV
+                /*
                 p->masks.append(QVector <QVector <bool> >());
                 for (int j = 0; j < runMaskNumber; j++)
                 {
@@ -144,6 +148,7 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
                         else  p->masks[k][j].append(bool(true));
                     }
                 }
+                */
             }
         }
 

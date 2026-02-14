@@ -3,8 +3,8 @@
 
 #include "simulation_variables.h"
 #include "organism.h"
-#include "mainwindow.h"
 #include "environment.h"
+#include "mainwindow.h"
 
 #include <QDir>
 
@@ -79,8 +79,6 @@ private:
     QString printPlayingFieldGenomesConcise(const QVector <playingFieldStructure *> &playingFields);
     QString printPlayingFieldFitnessHistory(const QVector <playingFieldStructure *> &playingFields);
     QString printSpeciesList(const QVector <Organism *> &speciesList);
-    QString printMasks(const QVector <playingFieldStructure *> &playingFields, int playingfield);
-    QString printMasks(const QVector <playingFieldStructure *> &playingFields);
     QString printEcosystemEngineers(const QVector <Organism *> &speciesList);
     QString doPadding(int number, int significantFigures);
     int paddingAmount(int taxonNumber);

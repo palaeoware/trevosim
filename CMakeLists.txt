@@ -88,6 +88,7 @@ set(app_sources
     about.cpp about.h
     darkstyletheme.cpp darkstyletheme.h
     testinternal.cpp testinternal.h
+    environment.cpp environment.h
     .astylerc
 )
 
