@@ -2493,6 +2493,7 @@ bool testinternal::testEighteen(QString &outString)
     *  with new environments need to check - peak heights are the same, but also that peak fitness
     * Genome is different between environments
     * and that this is true after mutation
+    * and that generated environments sytart at ~50% 1s to check randoms
  *******************/
 bool testinternal::testNineteen(QString &outString)
 {
