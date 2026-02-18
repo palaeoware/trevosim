@@ -408,7 +408,6 @@ bool testinternal::testThree(QString &outString)
     simSettings.playingfieldNumber = 3;
     simSettings.runForTaxa = 5;
     simSettings.test = 3;
-    //simSettings.workingLog = true;
 
     if (theMainWindow)
         theMainWindow->resizeGrid(simSettings.runForTaxa, simSettings.genomeSize);

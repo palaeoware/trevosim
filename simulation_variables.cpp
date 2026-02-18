@@ -49,7 +49,6 @@ simulationVariables::simulationVariables()
     stripUninformative = false;
     genomeOnExtinction = true;
     discardDeleterious = false;
-    workingLog = false;
     environmentalPerturbation = false;
     mixing = false;
     mixingPerturbation = false;
