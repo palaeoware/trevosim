@@ -59,7 +59,6 @@ private:
 
     //Other variables
     QDir savePathDirectory;
-    QFile workLogFile;
     MainWindow *theMainWindow;
     QTextStream workLogTextStream;
     quint32 maxRand;

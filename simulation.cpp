@@ -39,27 +39,6 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
             return;
         }
 
-    //To check all works as expected there is a work log that writes everything to a text file
-    QString workLogFilename = (QString(PRODUCTNAME) + "_working_log_");
-    if (theMainWindow == nullptr) workLogFilename.append(doPadding(runs, 3));
-    workLogFilename.append(".txt");
-    workLogFilename.prepend(savePathDirectory.absolutePath() + QDir::separator());
-    workLogFile.setFileName(workLogFilename);
-    if (simSettings->workingLog)
-    {
-        if (!workLogFile.open(QIODevice::QIODevice::WriteOnly | QIODevice::Text))
-        {
-            warning("Error!", "Error opening working log file to write to.");
-            *error = true;
-            return;
-        }
-        else
-        {
-            workLogTextStream.setDevice(&workLogFile);
-            workLogTextStream << "Run initiated\n\nSettings are : " << simSettings->printSettings() << "\n\n";
-        }
-    }
-
     //Get system max rand
     maxRand = QRandomGenerator::max();
 
@@ -133,12 +112,23 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
     //If we need to make sure fitness peaks are the same height, we send the constructor the previously created environment
             else  p->environments.append(Environment(p->environments[0]));
 
+    //Check for error in initialisation
+    bool initialisationError = false;
+    for (auto p : std::as_const(playingFields))
+        for (auto e : std::as_const(p->environments))
+            if (e.error)
+            {
+                warning("Mask initialisation error", "There was an error initialising the masks and the simulation was not able to run. Email RJG.");
+                *error = true;
+                return;
+            }
+
     //If playing field masks should start the same, copy of playing fields over
     if (simSettings->playingfieldNumber > 1 && simSettings->playingfieldMasksMode != MASKS_MODE_INDEPENDENT)
         for (int p = 1; p < simSettings->playingfieldNumber; p++)
             playingFields[p]->environments = playingFields[0]->environments;
 
-    //If we are adding as mask for EE, we don't need to do anything with this yet
+    //If we are adding a mask for EE, we don't need to do anything with this yet
     if (simSettings->ecosystemEngineersAddMask) runMaskNumber--;
 
     /***** Set up stuff for perturbations and ecosystem engineers *****/
@@ -177,8 +167,6 @@ bool simulation::run()
     *speciesList[0] = *playingFields[0]->playingField[0];
     //It is also not extinct
     extinctList.append(false);
-
-    if (simSettings->workingLog)workLogTextStream << "\n\nMasks initiated:\n" <<  printMasks(playingFields) << "\n\n";
 
     //Create string to record tree in parantheses format
     QString TNTstring;

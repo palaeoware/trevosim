@@ -13,10 +13,11 @@ public:
     void operator = (const Environment &E);
     bool  mutate();
 
+    bool error = false;
+
 private:
     QVector <QVector <bool> > masks;
     bool matchingPeaks;
-    bool error = false;
     double mutationRate;
     QRandomGenerator randoms;
 
