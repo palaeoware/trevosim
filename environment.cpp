@@ -7,7 +7,9 @@
 //deal with error bool if true when called from simulation - add relevant message:
 //Constructor - initialisation
 //Mutate - warning("Oops", "There has been an error at mutating the environment with matching peaks - not enough pairs. Returning with no mutations made.");
-
+//Perturnbations
+//Also move mutate organism to organism object - why is this in simulation it makes no sense?
+//check when done that all attributes are correctly copied in equals
 
 // We call this constructor when we want to create a new, random environment
 Environment::Environment(const int &maskNumber, const int &maskLength, const bool matchingPeaksCon, const double mutationRateCon)
@@ -65,6 +67,7 @@ void Environment::operator = (const Environment &E)
     // Copy all attributes
     masks = E.masks;
     matchingPeaks = E.matchingPeaks;
+    mutationRate = E.mutationRate;
 }
 
 bool Environment::mutate()

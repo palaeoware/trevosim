@@ -91,7 +91,6 @@ private:
     Organism initialise();
     int coinToss(const playingFieldStructure *pf);
     void mutateOrganism(Organism &progeny, const playingFieldStructure *pf);
-    void mutateEnvironment();
     void newSpecies(Organism &progeny, Organism &parent, playingFieldStructure *pf);
     void updateTNTstring(QString &TNTstring, int progParentSpeciesID, int progSpeciesID);
     int calculateOverwrite(const playingFieldStructure *pf, const int speciesNumber);
