@@ -11,7 +11,7 @@ public:
     Environment(Environment const &constructorEnvironment);
 
     void operator = (const Environment &E);
-    void mutate();
+    bool  mutate();
 
 private:
     QVector <QVector <bool> > masks;
