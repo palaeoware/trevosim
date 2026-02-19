@@ -200,14 +200,6 @@ bool simulation::run()
                 return false;
             }
 
-        if (simSettings->workingLog)
-        {
-            workLogTextStream << "\n\nSimulation running. Iteration: " << iterations << "\n\n" << printPlayingField(playingFields) << "\n";
-            workLogTextStream << "\nCurrent tree prior to speciation:" << TNTstring << "\n\nCurrent species list:\n";
-            workLogTextStream << "\nSpecies list:" << printSpeciesList(speciesList) << "\n";
-            qApp->processEvents();
-        }
-
         int playingFieldNumber = -1;
         //Do the iteration for all playing fields
         for (auto pf : std::as_const(playingFields))
@@ -246,9 +238,6 @@ bool simulation::run()
             //Assymetry of tree changes with level of difference below, plus balance between rate of mutation of environment and Organism
             if (isNewSpecies)
             {
-                if (simSettings->workingLog) workLogTextStream << "New species has appeared this iteration - species " << progeny.speciesID << " gives birth to " << speciesCount + 1
-                                                                   << " at iteration " << iterations << "\n\n";
-
                 //Update iteration counter on the parent species in the species list
                 speciesList[parentSpecies]->cladogenesis = iterations;
 
@@ -275,9 +264,6 @@ bool simulation::run()
             //Overwrite the thing
             *pf->playingField[overwrite] = progeny;
         }
-
-        //Debugging code for outputting playing field
-        if (simSettings->workingLog) workLogTextStream << "Playing field post placement of new organism/at end of iteration, if new organism not added:\n"  << printPlayingField(playingFields) << "\n";
 
         /************* Update displays etc. *************/
 
@@ -319,8 +305,6 @@ bool simulation::run()
         for (auto s : std::as_const(extinct))
         {
             speciesExtinction(speciesList[s[0]], playingFields[s[1]]->playingField[s[2]], (iterations + 1), simSettings->genomeOnExtinction, simSettings->stochasticLayer);
-            if (simSettings->workingLog) workLogTextStream << "\nFor write genome at extinction, replacing species list species " << speciesList[s[0]]->speciesID <<
-                                                               " that is entry " << s[0] << " with genome of playing field " << s[1] << " " << s[2] << "\n\n";
         }
 
         /************* Work out halfway point *************/
@@ -473,9 +457,6 @@ bool simulation::run()
     }
     while (!simulationComplete);
 
-    if (simSettings->workingLog) workLogTextStream << "\n\nMasks at end of run:\n" << printMasks(playingFields) << "\n";
-
-
     /************* Mop up writing genome for any organisms still alive under genomeOnExtinction and for extinction/branch lengths *************/
     //QVector list for each species ID
     QVector <int> alive;
@@ -514,12 +495,6 @@ bool simulation::run()
     //Everything is extinct now - update this prior to GUI
     for (auto &s : extinctList) s = true;
     if (theMainWindow != nullptr) writeGUI(speciesList);
-
-    if (simSettings->workingLog)
-    {
-        workLogTextStream << "\n\nRun is finished. Now have some cleaning up to do.\n\n";
-        workLogTextStream << "\nCurrent tree: " << TNTstring << "\n\nSpecies list at end is:\n" << printSpeciesList(speciesList) << "\n\n";
-    }
 
     /************* Strip uninformative characters, if required *************/
     //Needed to make a decision here and arbitrarily decide how to deal with partations used for defining fitness, species, and the whole genome.
@@ -563,7 +538,6 @@ bool simulation::run()
                                 "Alternatively, this may be a one off - you could try running a batch of 1, and the program will try repeatedly with these settings - though after ten or more repeats you may want to cancel and change the settings.";
                 warning("Oops", label);
             }
-            if (simSettings->workingLog) workLogTextStream << "Return at !requiredCharacterNumber\n";
             clearVectors(playingFields, speciesList);
             return false;
         }
@@ -656,12 +630,6 @@ bool simulation::run()
 
         file03TextStream << newickString << ";\n\nEND;";
         file03.close();
-    }
-
-    if (simSettings->workingLog)
-    {
-        workLogTextStream << "On exit, " << (QString(PRODUCTNAME)) << " thinks tree is " << printNewickWithBranchLengths(0, speciesList, false) << "\n or in TNT format: " << TNTstring;
-        workLogFile.close();
     }
 
     //Sort memory
@@ -897,32 +865,7 @@ void simulation::mutateOrganism(Organism &progeny, const playingFieldStructure *
         else progeny.genome[mutationPositionInteger] = !progeny.genome[mutationPositionInteger];
     }
 
-    if (simSettings->stochasticLayer)
-    {
-        progeny.mapFromStochastic(simSettings->stochasticMap);
-        if (simSettings->workingLog && simSettings->stochasticLayer)
-        {
-            workLogTextStream << "Now doing stochastic mapping for selected progeny. Post mutation genome is\n" ;
-            QString genomeString;
-
-            for (auto i : std::as_const(progeny.genome))
-                if (i)genomeString.append("1");
-                else genomeString.append("0");
-
-            workLogTextStream << genomeString << "\nAnd this comes from mapping the stochastic layer:\n";
-
-            genomeString.clear();
-
-            for (int i = 0; i < progeny.stochasticGenome.count() ; i++)
-            {
-                if (progeny.stochasticGenome[i])genomeString.append("1");
-                else genomeString.append("0");
-                if ((i + 1) % 4 == 0)genomeString.append(" ");
-            }
-
-            workLogTextStream << genomeString << "\n\n";
-        }
-    }
+    if (simSettings->stochasticLayer) progeny.mapFromStochastic(simSettings->stochasticMap);
 
     //Update fitness
     progeny.fitness = fitness(&progeny, pf->masks, runFitnessSize, runFitnessTarget, runMaskNumber, runEnvironmentNumber, simSettings->fitnessMode);
@@ -1043,9 +986,6 @@ void simulation::applyPerturbation()
             }
         }
 
-
-        if (simSettings->workingLog) workLogTextStream << "\n\nAbout to set up environmental perturbation. Old masks are:\n\n" << printPlayingField(playingFields) << "\n";
-
         //Bork current masks to create environmental perturbation - makes sense to have these as independent and different unless pf masks set to be identical
         for (auto pf : std::as_const(playingFields))
             for (int k = 0; k < runEnvironmentNumber; k++)
@@ -1062,7 +1002,6 @@ void simulation::applyPerturbation()
                         for (int l = 0; l < playingFields[i]->masks[k][j].length(); l++)
                             playingFields[i]->masks[k][j][l] = playingFields[0]->masks[k][j][l];
 
-        if (simSettings->workingLog) workLogTextStream << "\n\nSet up environmental perturbation. New masks are:\n\n" << printPlayingField(playingFields) << "\n";
     }
 
     //Set up mixing perturbation if required
@@ -1070,16 +1009,12 @@ void simulation::applyPerturbation()
     {
         runMixingProbabilityOneToZero *= 10;
         runMixingProbabilityZeroToOne *= 10;
-        if (simSettings->workingLog) workLogTextStream << "\nSet up mixing perturbation.  \n\nsimSettings->mixingProbabilityOneToZero  now " << runMixingProbabilityOneToZero <<
-                                                           "\nmixingProbabilityZeroToOne  " << runMixingProbabilityZeroToOne;
     }
 
     //Do perturbation
     if (perturbationOccurring == 1 && simSettings->environmentalPerturbation)
     {
         int copied = 0;
-        if (simSettings->workingLog)
-            workLogTextStream << "\nNow applying environmental perturbation to masks. Copying over the following to the masks in addition to those (if any) highlighted in previous iterations\n";
 
         do
         {
@@ -1094,7 +1029,6 @@ void simulation::applyPerturbation()
             {
                 environmentalPerturbationOverwriting[l][k][j][i] = true;
                 copied++;
-                if (simSettings->workingLog) workLogTextStream << "\nPlaying field " << l << " Environment number " << k << " Mask number " << j << " Bit number " << i;
             }
         }
         while (copied < environmentalPerturbationCopyRate);
@@ -1121,15 +1055,11 @@ void simulation::applyPerturbation()
     {
         perturbationOccurring++;
 
-        if (simSettings->workingLog) workLogTextStream << "\nPerturbations now ending. Masks will mutate randomly once more, if environmnetal perturbation was selected.\n";
-
         //End mixing as required
         if (simSettings->mixingPerturbation)
         {
             runMixingProbabilityOneToZero = simSettings->mixingProbabilityOneToZero;
             runMixingProbabilityZeroToOne = simSettings->mixingProbabilityZeroToOne;
-            if (simSettings->workingLog) workLogTextStream << "\nMixing perturbation has ended. simSettings->mixingProbabilityOneToZero " << runMixingProbabilityOneToZero <<
-                                                               "\nmixingProbabilityZeroToOne now " << runMixingProbabilityZeroToOne;
         }
     }
 
@@ -1139,15 +1069,12 @@ void simulation::applyPerturbation()
         perturbationStart = iterations;
         perturbationEnd = (iterations / 10) + iterations;
         perturbationOccurring++;
-        if (simSettings->workingLog) workLogTextStream << "\nPerturbations have started this iteration. They will end at iteration " << perturbationEnd << "\n";
         if (simSettings->environmentalPerturbation)
         {
             //Need to copy over 90% of original masks over course of perturbation
             environmentalPerturbationCopyRate = (simSettings->playingfieldNumber * simSettings->environmentNumber * runMaskNumber * runFitnessSize) / (perturbationEnd - perturbationStart);
             environmentalPerturbationCopyRate /= 10;
             environmentalPerturbationCopyRate *= 9;
-            if (simSettings->workingLog) workLogTextStream << "\nCopy rate between mask backup and masks until perturbation end will be " << environmentalPerturbationCopyRate <<
-                                                               " increase copied bits per iteration.\n";
         }
     }
 }
@@ -1172,7 +1099,6 @@ void simulation::applyPlayingfieldMixing(QVector<Organism *> &speciesList)
             speciesExtinction(speciesList[playingFields[0]->playingField[selectOverwrite]->speciesID], playingFields[0]->playingField[selectOverwrite], iterations, simSettings->genomeOnExtinction,
                               simSettings->stochasticLayer);
             *playingFields[0]->playingField[selectOverwrite] = *playingFields[1]->playingField[sourceForOverwrite];
-            if (simSettings->workingLog)workLogTextStream << "\nReplacing entry " << selectOverwrite << " in playing field 0 with entry " << sourceForOverwrite << " from playing field 1.";
         }
 
         if (QRandomGenerator::global()->bounded(100) < runMixingProbabilityZeroToOne)
@@ -1183,7 +1109,6 @@ void simulation::applyPlayingfieldMixing(QVector<Organism *> &speciesList)
             speciesExtinction(speciesList[playingFields[1]->playingField[selectOverwrite]->speciesID], playingFields[1]->playingField[selectOverwrite], iterations, simSettings->genomeOnExtinction,
                               simSettings->stochasticLayer);
             *playingFields[1]->playingField[selectOverwrite] = *playingFields[0]->playingField[sourceForOverwrite];
-            if (simSettings->workingLog)workLogTextStream << "\nReplacing entry " << selectOverwrite << " in playing field 1 with entry " << sourceForOverwrite << " from playing field 0.";
         }
     }
     //Otherwise we do it symetrically - for each organism in each PF there is a user defined chance of copying one of our organisms to another PF each iteration
@@ -1209,8 +1134,6 @@ void simulation::applyPlayingfieldMixing(QVector<Organism *> &speciesList)
 
                 //OVerwerite selected with current organism
                 *playingFields[selectPlayingfield]->playingField[selectOverwrite] = *playingFields[i]->playingField[sourceForOverwrite];
-                if (simSettings->workingLog)workLogTextStream << "\nReplacing playingfield " << selectPlayingfield << " entry " << selectOverwrite << " with entry " << sourceForOverwrite <<
-                                                                  " from playing field " << i << ".\n";
             }
         }
     }
@@ -1227,16 +1150,12 @@ void simulation::applyEcosystemEngineering(QVector <Organism *> &speciesList, bo
     //Select then apply an EE for the first time, halfway through run
     if (ecosystemEngineeringOccurring == 1)
     {
-        if (simSettings->workingLog)workLogTextStream << "\n\nApplying ecosystem engineers on iteration " << iterations << "\nMasks before ecosystem engineers:\n" <<  printMasks(playingFields) << "\n";
-
         //Jul 23 - we want to select a single EE from all playing fields, then apply this across all PFs
         int selectEngineerPlayingfield = QRandomGenerator::global()->bounded(playingFields.size());
         int selectEngineerPosition = QRandomGenerator::global()->bounded(playingFields[selectEngineerPlayingfield]->playingField.size());
         playingFields[selectEngineerPlayingfield]->playingField[selectEngineerPosition]->ecosystemEngineer = true;
         speciesList[playingFields[selectEngineerPlayingfield]->playingField[selectEngineerPosition]->speciesID]->ecosystemEngineer = true;
 
-        if (simSettings->workingLog) workLogTextStream << "Playing field " << selectEngineerPlayingfield << " organism number " << selectEngineerPosition << " selected. Genome is " <<
-                                                           printGenomeString(playingFields[selectEngineerPlayingfield]->playingField[selectEngineerPosition]) << ".\n";
         if (writeEcosystemEngineers) out << "Playing field " << selectEngineerPlayingfield << " organism number " << selectEngineerPosition <<  " selected. Genome is " <<
                                              printGenomeString(playingFields[selectEngineerPlayingfield]->playingField[selectEngineerPosition]) << ".\n";
 
@@ -1259,7 +1178,6 @@ void simulation::applyEcosystemEngineering(QVector <Organism *> &speciesList, bo
                 if (genomeDifference(playingFields[selectEngineerPlayingfield]->playingField[selectEngineerPosition], p->playingField[i]) == 0) p->playingField[i]->ecosystemEngineer = true;
             }
         }
-        if (simSettings->workingLog)workLogTextStream << "Masks after ecosystem engineers:\n" <<  printMasks(playingFields) << "\n\n";
     }
     //Otherwise, we're beyond halfway through. Select a random EE, and then reapply to all PFs
     else if (ecosystemEngineeringOccurring > 1 && simSettings->ecosystemEngineersArePersistent)
@@ -1269,8 +1187,6 @@ void simulation::applyEcosystemEngineering(QVector <Organism *> &speciesList, bo
         //Deleted because this enforces too strong a selective pressure towads the modal genome: not what we want
         //Instead we have chosen to select a random one
         //To recover code block if this changes, just look at git history for commits early on the 31st of July
-
-        if (simSettings->workingLog) workLogTextStream << "Now doing EE again in iteration " << iterations << ".\n";
 
         QList <QList <int> > organismList;
         organismList.append(QList <int>());
@@ -1288,7 +1204,6 @@ void simulation::applyEcosystemEngineering(QVector <Organism *> &speciesList, bo
         //Don't implement if EE have died out
         if (organismList[0].length() == 0)
         {
-            if (simSettings->workingLog) workLogTextStream << "EE have died out.\n";
             if (writeEcosystemEngineers) out << "EE have died out.\n";
             return;
         }
@@ -1300,8 +1215,6 @@ void simulation::applyEcosystemEngineering(QVector <Organism *> &speciesList, bo
 
         //playingFields[selectEngineerPlayingfield]->playingField[selectEngineerPosition]
 
-        if (simSettings->workingLog) workLogTextStream << "Playing field " << selectEngineerPlayingfield << " organism number " << selectEngineerPosition << " selected. Genome is " <<
-                                                           printGenomeString(playingFields[selectEngineerPlayingfield]->playingField[selectEngineerPosition]) << ".\n";
         if (writeEcosystemEngineers) out << "Playing field " << selectEngineerPlayingfield << " organism number " << selectEngineerPosition <<  " selected. Genome is " <<
                                              printGenomeString(playingFields[selectEngineerPlayingfield]->playingField[selectEngineerPosition]) << ".\n";
 
@@ -1310,9 +1223,6 @@ void simulation::applyEcosystemEngineering(QVector <Organism *> &speciesList, bo
                 for (int i = 0; i < p->masks[environmentNumber][runMaskNumber - 1].length(); i++)
                     p->masks[environmentNumber][runMaskNumber - 1][i] = playingFields[selectEngineerPlayingfield]->playingField[selectEngineerPosition]->genome[i];
     }
-
-
-    if (simSettings->workingLog) workLogTextStream << "Masks after ecosystem engineers :\n" <<  printMasks(playingFields) << "\n\n";
 
     //Either way, when we're here, we need to write playingfields if required
     if (writeEcosystemEngineers)
@@ -1355,8 +1265,6 @@ bool simulation::checkForCharacterNumber(QList <int> &uninformativeCoding, QList
 bool simulation::stripUninformativeCharacters(QVector <Organism *> &speciesList, const QList <int> &uninformativeCoding, const QList <int> &uninformativeNonCoding)
 {
     if (!simSettings->stripUninformative) return false;
-
-    if (simSettings->workingLog) workLogTextStream << "Stripping uninformativeCoding characters. Prior to removal:\n" << printSpeciesList(speciesList) << "\n";
 
     //Keep a marker so swtich between coding and non coding is recorded when characters removed (if required).
     int codingGenomeEnd = runFitnessSize;
@@ -1408,9 +1316,6 @@ bool simulation::stripUninformativeCharacters(QVector <Organism *> &speciesList,
                 speciesList[j]->genome.removeAt(i);
     }
 
-
-    if (simSettings->workingLog) workLogTextStream << "After removal:\n" << printSpeciesList(speciesList) << "\n";
-
     return true;
 }
 
@@ -1419,8 +1324,6 @@ bool simulation::checkForUnresolvableTaxa(QVector<Organism *> &speciesList, QStr
     bool unresolvable = false;
     unresolvableCount = 0;
     QVector <QVector <int> > unresolvableSpecies;
-
-    if (simSettings->workingLog) workLogTextStream << "Checking for unresolvable clades";
 
     QString message("A heads up. There are intrinscially unresolvable taxa in this matrix (i.e. at least two taxa have identical genomes); this could affect your results. For more information, check out:\n\nBapst, D.W., 2013. When can clades be potentially resolved with morphology?. PLoS One, 8(4), p.e62312.\n\nThe taxa in question are:");
 
@@ -1495,20 +1398,11 @@ bool simulation::checkForUnresolvableTaxa(QVector<Organism *> &speciesList, QStr
         }
 
         if (!simSettings->test && theMainWindow != nullptr) warning("Warning - Unresolvable clades", message);
+    }
+    else unresolvableTaxonGroups = "There are no unresolvable taxa";
 
-        if (simSettings->workingLog) workLogTextStream << message;
-    }
-    else
-    {
-        unresolvableTaxonGroups = "There are no unresolvable taxa";
-        if (simSettings->workingLog) workLogTextStream << "\n\nNo unresolvable clades";
-    }
+    if (unresolvableCount > simSettings->unresolvableCutoff) return false;
 
-    if (unresolvableCount > simSettings->unresolvableCutoff)
-    {
-        if (simSettings->workingLog) workLogTextStream << "Return at less than unresolvable cutoff\n";
-        return false;
-    }
     return true;
 }
 
