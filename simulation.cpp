@@ -271,6 +271,10 @@ bool simulation::run()
         iterations++;
 
         /************* Mutate environment then update fitness *************/
+        for (auto p : playingFields)
+            for (auto e : p->environments)
+                e.mutate();
+
         mutateEnvironment();
 
         //Calculate fitness
