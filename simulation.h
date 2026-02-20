@@ -79,6 +79,8 @@ private:
     QString printPlayingFieldFitnessHistory(const QVector <playingFieldStructure *> &playingFields);
     QString printSpeciesList(const QVector <Organism *> &speciesList);
     QString printEcosystemEngineers(const QVector <Organism *> &speciesList);
+    QString printMasks(const QVector <playingFieldStructure *> &playingFields, int playingfield);
+    QString printMasks(const QVector <playingFieldStructure *> &playingFields);
     QString doPadding(int number, int significantFigures);
     int paddingAmount(int taxonNumber);
     void printCountPeaks(int genomeSize, QVector <quint64> &totals, QVector <QVector <quint64> > &genomes, int repeat);

@@ -1801,13 +1801,7 @@ QString simulation::printMasks(const QVector <playingFieldStructure *> &playingF
         for (int environmentNumber = 0; environmentNumber < runEnvironmentNumber; environmentNumber++)
         {
             out << "Environment " << environmentNumber << "\n";
-            for (int maskNumber = 0; maskNumber < runMaskNumber; maskNumber++)
-            {
-                out << "Mask number " << maskNumber << " :\t";
-                for (auto i : std::as_const(p->masks[environmentNumber][maskNumber])) i ? out << 1 : out << 0 ;
-                out << "\n";
-
-            }
+            out << p->environments[environmentNumber].printMasks();
         }
         playingfield++;
     }
@@ -1822,12 +1816,8 @@ QString simulation::printMasks(const QVector <playingFieldStructure *> &playingF
     for (int environmentNumber = 0; environmentNumber < runEnvironmentNumber; environmentNumber++)
     {
         out << "Environment " << environmentNumber << "\n";
-        for (int maskNumber = 0; maskNumber < runMaskNumber; maskNumber++)
-        {
-            out << "Mask number " << maskNumber << " :\t";
-            for (auto i : std::as_const(playingFields[playingfield]->masks[environmentNumber][maskNumber])) i ? out << 1 : out << 0 ;
-            out << "\n";
-        }
+        out << playingFields[playingfield]->environments[environmentNumber].printMasks();
+        for (int maskNumber = 0; maskNumber < runMaskNumber; maskNumber++);
     }
 
     return maskText;
