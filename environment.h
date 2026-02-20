@@ -15,6 +15,8 @@ public:
 
     bool error = false;
 
+    QString printMasks ();
+
 private:
     QVector <QVector <bool> > masks;
     bool matchingPeaks;

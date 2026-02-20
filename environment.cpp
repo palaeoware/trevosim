@@ -157,3 +157,29 @@ bool Environment::mutate()
     }
     return true;
 }
+
+QString Environment::printMasks()
+{
+    int playingfield = 0;
+
+    QString maskText;
+    QTextStream out(&maskText);
+
+    for (auto p : playingFields)
+    {
+        out << "Playingfield " << playingfield << "\n";
+        for (int environmentNumber = 0; environmentNumber < runEnvironmentNumber; environmentNumber++)
+        {
+            out << "Environment " << environmentNumber << "\n";
+            for (int maskNumber = 0; maskNumber < runMaskNumber; maskNumber++)
+            {
+                out << "Mask number " << maskNumber << " :\t";
+                for (auto i : std::as_const(p->masks[environmentNumber][maskNumber])) i ? out << 1 : out << 0 ;
+                out << "\n";
+
+            }
+        }
+        playingfield++;
+    }
+    return maskText;
+}

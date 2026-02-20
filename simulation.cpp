@@ -275,7 +275,10 @@ bool simulation::run()
             for (auto e : p->environments)
                 e.mutate();
 
-        mutateEnvironment();
+        //If playing field masks should start the same, copy of playing fields over
+        if (simSettings->playingfieldNumber > 1 && simSettings->playingfieldMasksMode == MASKS_MODE_IDENTICAL)
+            for (int p = 1; p < simSettings->playingfieldNumber; p++)
+                playingFields[p]->environments = playingFields[0]->environments;
 
         //Calculate fitness
         if (!simSettings->noSelection)
