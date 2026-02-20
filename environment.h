@@ -1,6 +1,8 @@
 #ifndef ENVIRONMENT_H
 #define ENVIRONMENT_H
 
+#include "organism.h"
+
 #include <QVector>
 #include <QRandomGenerator>
 
@@ -15,7 +17,8 @@ public:
 
     bool error = false;
 
-    QString printMasks ();
+    QString printMasks();
+    int bitCount(const Organism &o);
 
 private:
     QVector <QVector <bool> > masks;

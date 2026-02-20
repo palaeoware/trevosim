@@ -172,3 +172,8 @@ QString Environment::printMasks()
 
     return maskText;
 }
+
+int Environment::bitCount(const Organism &o)
+{
+
+}

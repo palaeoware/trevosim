@@ -126,7 +126,7 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
     //If playing field masks should start the same, copy of playing fields over
     if (simSettings->playingfieldNumber > 1 && simSettings->playingfieldMasksMode != MASKS_MODE_INDEPENDENT)
         for (int p = 1; p < simSettings->playingfieldNumber; p++)
-            playingFields[p]->environments = playingFields[0]->environments;
+            playingFields[p]->environments = playingFields[0]-> environments;
 
     //If we are adding a mask for EE, we don't need to do anything with this yet
     if (simSettings->ecosystemEngineersAddMask) runMaskNumber--;
