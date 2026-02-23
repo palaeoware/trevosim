@@ -19,6 +19,8 @@ public:
 
     QString printMasks();
     int bitCount(const Organism &o);
+    bool addMask();
+    void overwriteMask(const Organism &o);
 
 private:
     QVector <QVector <bool> > masks;

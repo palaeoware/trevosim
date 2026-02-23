@@ -22,7 +22,7 @@ Environment::Environment(const int &maskNumber, const int &maskLength, const boo
     //Set up vectors that will serve as masks for this environment
     for (int j = 0; j < maskNumber; j++)
     {
-        masks[j].append(QVector <bool>());
+        masks.append(QVector <bool>());
         for (int i = 0; i < maskLength; i++)
         {
             //This will generate a random integer between 0 (inclusive) and 2 (exclusive) - so either 0 or 1. Break it out for clarity
@@ -53,7 +53,7 @@ Environment::Environment(const Environment &constructorEnvironment)
     //Use this to write the new environment based on the incoming one
     for (int j = 0; j < constructorEnvironment.masks.length(); j++)
     {
-        masks[j].append(QVector <bool>());
+        masks.append(QVector <bool>());
         for (int i = 0; i < sites.length(); i++)
         {
             //Here we use the ith entry in the shuffled sites list to define the site we copy over from the incoming mask
@@ -173,9 +173,9 @@ QString Environment::printMasks()
     return maskText;
 }
 
+//Count bits for fitness algorithm
 int Environment::bitCount(const Organism &o)
 {
-    //Actually need to send it the mask number for EE add one - perhaps?
     int counts = 0;
     for (auto m : masks)
     {
@@ -184,4 +184,28 @@ int Environment::bitCount(const Organism &o)
             if (o.genome[j] != m[j]) counts++;
     }
     return counts;
+}
+
+//Need to add mask in some flavours of EE
+bool Environment::addMask()
+{
+    masks.append(QVector <bool>());
+    int newMask = masks.length() - 1;
+
+    for (int i = 0; i < masks[0].length(); i++)
+    {
+        //This will generate a random integer between 0 (inclusive) and 2 (exclusive) - so either 0 or 1. Break it out for clarity
+        int random = randoms.bounded(0, 2);
+        if (random == 0) masks[newMask].append(bool(false));
+        else if (random == 1) masks[newMask].append(bool(true));
+        else return false; //This should never happen
+    }
+
+    return true;
+}
+
+//For EE we need to overwrite a mask
+void Environment::overwriteMask(const Organism &o)
+{
+    for (int i = 0; i < masks[0].length(); i++) masks[0][i] = o.genome[i];
 }
