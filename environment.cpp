@@ -166,7 +166,7 @@ QString Environment::printMasks()
     for (int maskNumber = 0; maskNumber < masks.length(); maskNumber++)
     {
         out << "Mask number " << maskNumber << " :\t";
-        for (auto i : masks[maskNumber]) i ? out << 1 : out << 0 ;
+        for (auto b : masks[maskNumber]) b ? out << 1 : out << 0 ;
         out << "\n";
     }
 
@@ -175,5 +175,13 @@ QString Environment::printMasks()
 
 int Environment::bitCount(const Organism &o)
 {
-
+    //Actually need to send it the mask number for EE add one - perhaps?
+    int counts = 0;
+    for (auto m : masks)
+    {
+        //Check length here
+        for (int j = 0; j < m.length(); j++)
+            if (o.genome[j] != m[j]) counts++;
+    }
+    return counts;
 }
