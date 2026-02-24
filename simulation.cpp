@@ -1473,17 +1473,47 @@ void simulation::speciesExtinction(Organism *speciesListOrganism, const Organism
     }
 }
 
-//Masks passed as a const reference. This returns minimum fitness - deal with mean elsewhere
-int simulation::fitness (const Organism *org, const QVector<QVector<QVector<bool> > > &masks, int runFitnessSize, int runFitnessTarget, int runMaskNumber, int runEnvironmentNumber, int fitnessMode,
-                         int environment)
+//This returns minimum (best) fitness - deal with mean elsewhere
+int simulation::fitness(const playingFieldStructure &playingField, int organismNumber, int runFitnessTarget, int environment)
 {
-    //Check that fitness mode has not been modified by file loading to an illegal value
-    if (!(fitnessMode == FITNESS_MODE_MINIMUM || fitnessMode == FITNESS_MODE_MEAN))
-    {
-        warning("Fitness error", QString("Fitness mode error - contact RJG - fitness mode is %1").arg(fitnessMode));
-        return 0;
-    }
+    playingField.
+    //Send both to function, as in some cases (i.e. ecosystem engineering, incrementing environments), we don't want to include all masks/environments.
+    int maskNumber = playingFields;
+    int environmentNumber = runEnvironmentNumber;
 
+    int fitness = (runFitnessSize * maskNumber);
+    double doubleFitness = 0.;
+
+    //Environment defaults to -1 (used to allow this to be called throughout simulation without defining environment number).
+    //If this is the case check fitness for all environments
+    if (environment == -1)
+        for (int h = 0; h < environmentNumber; h++)
+        {
+            int temporaryFitness = ~0, counts = 0;
+            for (int i = 0; i < maskNumber; i++)
+                for (int j = 0; j < runFitnessSize; j++)
+                    if (org->genome[j] != masks[h][i][j])counts++;
+
+            //Define fitness as the distance away from fitness target
+            temporaryFitness = qAbs(counts - runFitnessTarget);
+            if (temporaryFitness < fitness) fitness = temporaryFitness;
+        }
+    //Alteranatively, we can calculate fitness for a specific environment
+    else
+    {
+        int counts = 0;
+        for (int i = 0; i < maskNumber; i++)
+            for (int j = 0; j < runFitnessSize; j++)
+                if (org->genome[j] != masks[environment][i][j]) counts++;
+        fitness = qAbs(counts - runFitnessTarget);
+    }
+    return fitness;
+}
+
+//Masks passed as a const reference. This returns minimum fitness - deal with mean elsewhere
+int simulation::fitness (const Organism *org, const QVector <playingFieldStructure *> &playingFields, int runFitnessSize, int runFitnessTarget, int runMaskNumber, int runEnvironmentNumber,
+                         int fitnessMode, int environment)
+{
     //Send both to function, as in some cases (i.e. ecosystem engineering, incrementing environments), we don't want to include all masks/environments.
     int maskNumber = runMaskNumber;
     int environmentNumber = runEnvironmentNumber;
