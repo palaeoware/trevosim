@@ -174,14 +174,14 @@ QString Environment::printMasks()
 }
 
 //Count bits for fitness algorithm
-int Environment::bitCount(const Organism &o)
+int Environment::bitCount(const Organism *o)
 {
     int counts = 0;
     for (auto m : masks)
     {
         //Check length here
         for (int j = 0; j < m.length(); j++)
-            if (o.genome[j] != m[j]) counts++;
+            if (o->genome[j] != m[j]) counts++;
     }
     return counts;
 }

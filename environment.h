@@ -18,7 +18,7 @@ public:
     bool error = false;
 
     QString printMasks();
-    int bitCount(const Organism &o);
+    int bitCount(const Organism *o) const;
     bool addMask();
     void overwriteMask(const Organism &o);
 

@@ -111,7 +111,7 @@ private:
     void writeGUI(QVector<Organism *> &speciesList);
 
     //Simulation calculations
-    int fitness(const QVector <playingFieldStructure *> &playingFields, int organismNumber, int runFitnessTarget, int environment = -1);
+    int fitness(const playingFieldStructure &fitnessPlayingField, int playingfieldPosition, int runFitnessTarget, int fitnessEnvironment = -1);
     int fitness(const Organism *org, const QVector <playingFieldStructure *> &playingFields, int runFitnessSize, int runFitnessTarget, int runMaskNumber, int runEnvironmentNumber, int fitnessMode,
                 int environment = -1);
     int meanFitness(const Organism *org);

@@ -1474,33 +1474,29 @@ void simulation::speciesExtinction(Organism *speciesListOrganism, const Organism
 }
 
 //This returns minimum (best) fitness - deal with mean elsewhere
-int simulation::fitness(const playingFieldStructure &playingField, int organismNumber, int runFitnessTarget, int environment)
+int simulation::fitness(const playingFieldStructure &fitnessPlayingField, int playingfieldPosition, int runFitnessTarget, int fitnessEnvironment)
 {
-    playingField.
-    //Send both to function, as in some cases (i.e. ecosystem engineering, incrementing environments), we don't want to include all masks/environments.
-    int maskNumber = playingFields;
-    int environmentNumber = runEnvironmentNumber;
-
-    int fitness = (runFitnessSize * maskNumber);
+    quint32 fitness = ~0;
     double doubleFitness = 0.;
 
     //Environment defaults to -1 (used to allow this to be called throughout simulation without defining environment number).
     //If this is the case check fitness for all environments
-    if (environment == -1)
-        for (int h = 0; h < environmentNumber; h++)
+    if (fitnessEnvironment == -1)
+        for (auto e : fitnessPlayingField.environments)
         {
-            int temporaryFitness = ~0, counts = 0;
-            for (int i = 0; i < maskNumber; i++)
-                for (int j = 0; j < runFitnessSize; j++)
-                    if (org->genome[j] != masks[h][i][j])counts++;
+            quint32 temporaryFitness = ~0;
+            quint32 count = e.bitCount(fitnessPlayingField.playingField[playingfieldPosition]);
 
             //Define fitness as the distance away from fitness target
-            temporaryFitness = qAbs(counts - runFitnessTarget);
+            temporaryFitness = qAbs(count - runFitnessTarget);
             if (temporaryFitness < fitness) fitness = temporaryFitness;
         }
     //Alteranatively, we can calculate fitness for a specific environment
     else
     {
+        //quint32 count =
+        fitnessPlayingField.environments[fitnessEnvironment].bitCount(fitnessPlayingField.playingField[playingfieldPosition]);
+        //fitnessPlayingField.environments[0].error;
         int counts = 0;
         for (int i = 0; i < maskNumber; i++)
             for (int j = 0; j < runFitnessSize; j++)
