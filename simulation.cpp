@@ -1161,8 +1161,7 @@ void simulation::applyEcosystemEngineering(QVector <Organism *> &speciesList, bo
 
         for (auto p : std::as_const(playingFields))
         {
-            for (auto e : p->environments)
-                e.overwriteMask(playingFields[selectEngineerPlayingfield]->playingField[selectEngineerPosition]);
+            for (auto e : p->environments) e.overwriteMask(playingFields[selectEngineerPlayingfield]->playingField[selectEngineerPosition]);
 
             //Now check for identical taxa in playingfield and mark as ecosystem engineer, as these will also benefit
             for (int i = 0; i < p->playingField.count(); i++)
@@ -1213,9 +1212,8 @@ void simulation::applyEcosystemEngineering(QVector <Organism *> &speciesList, bo
                                              printGenomeString(playingFields[selectEngineerPlayingfield]->playingField[selectEngineerPosition]) << ".\n";
 
         for (auto p : std::as_const(playingFields))
-            for (int environmentNumber = 0; environmentNumber < p->masks.count(); environmentNumber++)
-                for (int i = 0; i < p->masks[environmentNumber][runMaskNumber - 1].length(); i++)
-                    p->masks[environmentNumber][runMaskNumber - 1][i] = playingFields[selectEngineerPlayingfield]->playingField[selectEngineerPosition]->genome[i];
+            for (auto e : p->environments)
+                e.overwriteMask(playingFields[selectEngineerPlayingfield]->playingField[selectEngineerPosition]);
     }
 
     //Either way, when we're here, we need to write playingfields if required
