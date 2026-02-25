@@ -957,6 +957,7 @@ int simulation::calculateOverwrite(const playingFieldStructure *pf, const int sp
 
 void simulation::applyPerturbation()
 {
+    /*
     //Set up environmental perturbation if required
     if (simSettings->environmentalPerturbation && perturbationOccurring == 0)
     {
@@ -1071,6 +1072,7 @@ void simulation::applyPerturbation()
             environmentalPerturbationCopyRate *= 9;
         }
     }
+    */
 }
 
 void simulation::applyPlayingfieldMixing(QVector<Organism *> &speciesList)
