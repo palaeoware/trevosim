@@ -134,29 +134,26 @@ bool testinternal::testZero(QString &outString)
 
     bool testFlag = true;
     QTextStream out(&outString);
-    out << "Testing fitness algorithm.\n\n";
+    out << "Testing fitness algorithm.\n\nStart with testing a single environment.";
 
     //Create default setting object and then a simulation object for the test
-    simulationVariables simSettings;
-    simSettings.genomeSize = 50;
-    simSettings.fitnessSize = 50;
-    simSettings.speciesSelectSize = 50;
     //Test is for three masks and a target of zero (the defaults in v2.0.0)
-    simSettings.fitnessTarget = 0;
+    simulationVariables simSettings;
+    simSettings.fitnessSize = 50;
     simSettings.maskNumber = 3;
+    simSettings.matchFitnessPeaks = false;
+    simSettings.fitnessTarget = 0;
     simSettings.fitnessMode = FITNESS_MODE_MINIMUM;
     simulation x(0, &simSettings, &error, theMainWindow);
     if (error) return false;
 
+    //Create a playing field with environments in which all bits are true
+    simulation::playingFieldStructure pTrue;
+    pTrue.environments.append(Environment(simSettings.maskNumber, simSettings.fitnessSize, true));
+
     //Fitness requires an organism - create an organism with 50 bits, no stochastic genome, all bits are initialised to zero
     Organism org(simSettings.genomeSize, false);
     out << "Organism genome is: " << x.printGenomeString(&org) << "\n";
-
-    //Now set masks in simulation to 1
-    for (auto p : std::as_const(x.playingFields))
-        for (int k = 0; k < simSettings.environmentNumber; k++)
-            for (int j = 0; j < simSettings.maskNumber; j++)
-                for (auto &i : p->masks[k][j]) i = true;
 
     QString maskString = x.printMasks(x.playingFields);
     QStringList l = maskString .split('\n');

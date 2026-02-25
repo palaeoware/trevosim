@@ -34,6 +34,17 @@ Environment::Environment(const int &maskNumber, const int &maskLength, const boo
     }
 }
 
+//We call this when we want to initialise to a known state to test the fitness algorithm
+Environment::Environment(const int &maskNumber, const int &maskLength, const bool initialiseState)
+{
+    //Set up vectors that will serve as masks for this environment
+    for (int j = 0; j < maskNumber; j++)
+    {
+        masks.append(QVector <bool>());
+        for (int i = 0; i < maskLength; i++)masks[j].append(bool(initialiseState));
+    }
+}
+
 //We call this one when we want to create an environment with matching peaks - we can always do this off the first created environment
 Environment::Environment(const Environment &constructorEnvironment)
 {
