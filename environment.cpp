@@ -174,7 +174,7 @@ QString Environment::printMasks()
 }
 
 //Count bits for fitness algorithm
-int Environment::bitCount(const Organism *o)
+int Environment::bitCount(Organism const *o) const
 {
     int counts = 0;
     for (auto m : masks)
@@ -205,7 +205,10 @@ bool Environment::addMask()
 }
 
 //For EE we need to overwrite a mask
-void Environment::overwriteMask(const Organism &o)
+void Environment::overwriteMask(Organism const *o)
 {
-    for (int i = 0; i < masks[0].length(); i++) masks[0][i] = o.genome[i];
+    //EE works either by copying over genome to a prexisting mask - thus improving fitness of the EE species - or to the mask added
+    //Either way, we can write over the last mask for each environment (-1 because indexing starts at zero)
+    //We always do this on the last one since this was just added if we're adding a mask rather than just overwriting (makes no difference if not adding one)
+    for (int i = 0; i < masks[masks.length() - 1].length(); i++) masks[masks.length() - 1][i] = o->genome[i];
 }

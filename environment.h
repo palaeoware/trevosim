@@ -18,9 +18,9 @@ public:
     bool error = false;
 
     QString printMasks();
-    int bitCount(const Organism *o) const;
+    int bitCount(Organism const *o) const;
     bool addMask();
-    void overwriteMask(const Organism &o);
+    void overwriteMask(Organism const *o);
 
 private:
     QVector <QVector <bool> > masks;
