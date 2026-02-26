@@ -159,18 +159,18 @@ bool testinternal::testZero(QString &outString)
     QStringList l = maskString .split('\n');
     out << "Masks are:\n" << l[2]  << "\n" << l[3] << "\n" << l[4] << "\n";
 
-    int fitness = x.fitness(&org, x.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.environmentNumber, simSettings.fitnessMode);
+    int fitness = x.fitness(&pTrue, &org, simSettings.fitnessTarget);
     if (fitness != 150) testFlag = false;
     out <<  "Fitness, with fitness target of " << simSettings.fitnessTarget << " is " << fitness << ". It should be 150.\n";
 
     simSettings.fitnessTarget = 75;
-    fitness = x.fitness(&org, x.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.environmentNumber, simSettings.fitnessMode);
+    fitness = x.fitness(&pTrue, &org, simSettings.fitnessTarget);
     if (fitness != 75) testFlag = false;
     out <<  "Fitness, with fitness target of 75, is " << fitness << ". It should be 75.\n";
 
     for (int i = 0; i < 25; i++)org.genome[i] = true;
     out << "Fitness target is still 75, genome is now: " << x.printGenomeString(&org) << "\n";
-    fitness = x.fitness(&org, x.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.environmentNumber, simSettings.fitnessMode);
+    fitness = x.fitness(&pTrue, &org, simSettings.fitnessTarget);
     if (fitness != 0) testFlag = false;
     out <<  "Fitness is " << fitness << ". It should be 0.\n";
 
