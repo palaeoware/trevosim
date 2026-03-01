@@ -82,6 +82,23 @@ void Environment::operator = (const Environment &E)
     mutationRate = E.mutationRate;
 }
 
+bool Environment::operator == (const Environment &E)
+{
+    if (masks != E.masks) return false;
+    if (matchingPeaks != E.matchingPeaks) return false;
+    if (mutationRate != E.mutationRate) return false;
+    return true;
+}
+
+bool Environment::operator != (const Environment &E)
+{
+    if (masks == E.masks) return false;
+    if (matchingPeaks == E.matchingPeaks) return false;
+    if (mutationRate == E.mutationRate) return false;
+    return true;
+}
+
+
 bool Environment::mutate()
 {
     //Set our mutation rate
