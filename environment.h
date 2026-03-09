@@ -11,7 +11,7 @@ class Environment
 public:
     Environment(const int &maskNumber, const int &maskLength, const bool matchingPeaksCon, const double mutationRateCon);
     Environment(const int &maskNumber, const int &maskLength, const bool initialiseState); //used for tests of fitness algorithm
-    Environment(Environment const &constructorEnvironment);
+    Environment(Environment const &constructorEnvironment, int matchingPeaksCon);
 
     void operator = (const Environment &E);
     bool operator == (const Environment &E);
@@ -27,6 +27,9 @@ public:
     void overwriteMask(Organism const *o);
     void setMasksToZero();
     void setMasksToOne();
+    bool compareOrganism(Organism const *o);
+    int countDifferences(Environment const &externalEnvironment);
+    int bitCount();
 
 private:
     QVector <QVector <bool> > masks;

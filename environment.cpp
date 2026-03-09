@@ -7,7 +7,7 @@
 //deal with error bool if true when called from simulation - add relevant message:
 //Constructor - initialisation
 //Mutate - warning("Oops", "There has been an error at mutating the environment with matching peaks - not enough pairs. Returning with no mutations made.");
-//Perturnbations
+//Perturbations
 //Also move mutate organism to organism object - why is this in simulation it makes no sense?
 //check when done that all attributes are correctly copied in equals
 //EE stuff
@@ -46,30 +46,45 @@ Environment::Environment(const int &maskNumber, const int &maskLength, const boo
 }
 
 //We call this one when we want to create an environment with matching peaks - we can always do this off the first created environment
-Environment::Environment(const Environment &constructorEnvironment)
+Environment::Environment(const Environment &constructorEnvironment,  int matchingPeaksCon)
 {
-    //We only call this when we are matching peaks
-    matchingPeaks = true;
-    mutationRate = constructorEnvironment.mutationRate;
-    randoms = QRandomGenerator::securelySeeded();
-
-    //If we need to make sure fitness peaks are the same height, in TREvoSim, we need to initialise with the same number of 1s in each site
-    //An easy way to do this is to shuffle the columns/sites between the incoming environment and the one we are creating
-
-    //First let's create an iota vector and shuffle it, using this to change the sites (i.e. bits)
-    QVector<int> sites(constructorEnvironment.masks[0].length());
-    std::iota(sites.begin(), sites.end(), 0);
-    std::shuffle(sites.begin(), sites.end(), QRandomGenerator::global());
-
-    //Use this to write the new environment based on the incoming one
-    for (int j = 0; j < constructorEnvironment.masks.length(); j++)
+    if (matchingPeaksCon)
     {
-        masks.append(QVector <bool>());
-        for (int i = 0; i < sites.length(); i++)
+        matchingPeaks = true;
+        mutationRate = constructorEnvironment.mutationRate;
+        randoms = QRandomGenerator::securelySeeded();
+
+        //If we need to make sure fitness peaks are the same height, in TREvoSim, we need to initialise with the same number of 1s in each site
+        //An easy way to do this is to shuffle the columns/sites between the incoming environment and the one we are creating
+
+        //First let's create an iota vector and shuffle it, using this to change the sites (i.e. bits)
+        QVector<int> sites(constructorEnvironment.masks[0].length());
+        std::iota(sites.begin(), sites.end(), 0);
+        std::shuffle(sites.begin(), sites.end(), *QRandomGenerator::global());
+
+        //Use this to write the new environment based on the incoming one
+        for (int j = 0; j < constructorEnvironment.masks.length(); j++)
         {
-            //Here we use the ith entry in the shuffled sites list to define the site we copy over from the incoming mask
-            if (constructorEnvironment.masks[j][sites[i]]) masks[j].append(bool(true));
-            else  masks[j].append(bool(false));
+            masks.append(QVector <bool>());
+            for (int i = 0; i < sites.length(); i++)
+            {
+                //Here we use the ith entry in the shuffled sites list to define the site we copy over from the incoming mask
+                if (constructorEnvironment.masks[j][sites[i]]) masks[j].append(bool(true));
+                else  masks[j].append(bool(false));
+            }
+        }
+    }
+    else
+    {
+        for (int j = 0; j < constructorEnvironment.masks.length(); j++)
+        {
+            masks.append(QVector <bool>());
+            for (int i = 0; i < constructorEnvironment.masks[j].length(); i++)
+            {
+                //Here we use the ith entry in the shuffled sites list to define the site we copy over from the incoming mask
+                if (constructorEnvironment.masks[j][i]) masks[j].append(bool(true));
+                else  masks[j].append(bool(false));
+            }
         }
     }
 }
@@ -239,4 +254,34 @@ void Environment::overwriteMask(Organism const *o)
     //Either way, we can write over the last mask for each environment (-1 because indexing starts at zero)
     //We always do this on the last one since this was just added if we're adding a mask rather than just overwriting (makes no difference if not adding one)
     for (int i = 0; i < masks[masks.length() - 1].length(); i++) masks[masks.length() - 1][i] = o->genome[i];
+}
+
+bool Environment::compareOrganism(Organism const *o)
+{
+    for (auto &m : masks)
+        if (o->genome == m) return true;
+
+    return false;
+}
+
+int Environment::countDifferences(Environment const &externalEnvironment)
+{
+    int maskCount = masks.length();
+    int bitCount = masks[0].length();
+    if ((maskCount != externalEnvironment.masks.length()) || (bitCount != externalEnvironment.masks[0].length())) return -1;
+    int count = 0;
+    for (int m = 0; m < masks.length(); m++)
+        for (int b = 0; b < masks[m].length(); b++)
+            if (masks[m][b] != externalEnvironment.masks[m][b]) count++;
+    return count;
+}
+
+int Environment::bitCount()
+{
+    int count = 0;
+    for (auto m : masks)
+        for (auto b : m)
+            if (b) count++;
+
+    return count;
 }

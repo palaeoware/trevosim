@@ -107,7 +107,7 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
         for (int k = 0; k < runEnvironmentNumber; k++)
             if (k == 0 || !simSettings->matchFitnessPeaks) p->environments.append(Environment(runMaskNumber, runFitnessSize, simSettings->matchFitnessPeaks, simSettings->environmentMutationRate));
     //If we need to make sure fitness peaks are the same height, we send the constructor the previously created environment
-            else  p->environments.append(Environment(p->environments[0]));
+            else  p->environments.append(Environment(p->environments[0], true));
 
     //Check for error in initialisation
     bool initialisationError = false;
@@ -2310,16 +2310,9 @@ void simulation::printCountPeaks(int genomeSize, QVector <quint64> &totals, QVec
     peaksTextStream << simSettings->printSettings();
     peaksTextStream << "\n";
 
-    //Remove this for now - if important, I can add an access function to simulation
-    for (int i = 0; i < simSettings->environmentNumber; i++)
-    {
-        peaksTextStream << "\nEnvironment number " << i;
-        for (int j = 0; j < simSettings->maskNumber; j++)
-        {
-            peaksTextStream << "\nMask: " << j << ": ";
-            for (int k = 0; k < genomeSize; k++)peaksTextStream << playingFields[0]->masks[i][j][k];
-        }
-    }
+    for (int i = 0; i < playingFields.length(); i++)
+        for (int j = 0; j < playingFields[i]->environments.length(); j++)
+            peaksTextStream << playingFields[i]->environments[j].printMasks();
 
     quint64 max = static_cast<quint64>(pow(2., static_cast<double>(genomeSize)));
     //Lookups for printing genomes
