@@ -158,7 +158,7 @@ bool Environment::mutate()
             if (firstBit == secondBit) continue;
 
             int bitDifference = 0;
-            for (int n = 0; n < maskLength; n++)
+            for (int n = 0; n < maskNumber; n++)
                 if (masks[n][firstBit] != masks[n][secondBit]) bitDifference++;
 
             if (bitDifference == 1)

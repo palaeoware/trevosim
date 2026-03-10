@@ -209,18 +209,18 @@ bool testinternal::testZero(QString &outString)
     out << "Organism genome is: " << y.printGenomeString(&org) << " fitness target is " << simSettings.fitnessTarget << "\n";
     out << maskString;
 
-    int environmentZeroFitness = z.fitness(&pTrue, &org, simSettings.fitnessTarget, 0);
+    int environmentZeroFitness = z.fitness(&pMixed, &org, simSettings.fitnessTarget, 0);
     out << "Environment zero fitness should be 20, it is " <<  environmentZeroFitness << ".\n";
     if (environmentZeroFitness != 20) testFlag = false;
 
-    int environmentOneFitness = z.fitness(&pTrue, &org, simSettings.fitnessTarget, 1);
+    int environmentOneFitness = z.fitness(&pMixed, &org, simSettings.fitnessTarget, 1);
     out << "Environment one fitness should be 80, it is " <<  environmentOneFitness << ".\n";
     if (environmentOneFitness != 80) testFlag = false;
     if (environmentOneFitness == environmentZeroFitness) testFlag = false;
 
     //Now let's test with two environments
     out << "Now test that this is, as expected, 20 when minimum environment mode is selected.\n";
-    int environmentBothFitness = z.fitness(&pTrue, &org, simSettings.fitnessTarget);
+    int environmentBothFitness = z.fitness(&pMixed, &org, simSettings.fitnessTarget);
     out << "Fitness based on both environments should be 20, it is " <<  environmentBothFitness << ".\n";
     if (environmentBothFitness != 20 || environmentBothFitness != environmentZeroFitness) testFlag = false;
 
@@ -289,7 +289,7 @@ bool testinternal::testOne(QString &outString)
     simSettings.playingfieldMasksMode = MASKS_MODE_IDENTICAL_START;
     simulation z(0, &simSettings, &error, theMainWindow);
     if (error) return false;
-    if (z.playingFields[0]->environments[0] != z.playingFields[1]->environments[0] || z.playingFields[1]->environments[0] != z.playingFields[2]->environments[0]) testFlag = false;
+    if (z.playingFields[0]->environments[0] == z.playingFields[1]->environments[0] || z.playingFields[0]->environments[0] == z.playingFields[2]->environments[0]) testFlag = false;
     flagString = testFlag ? "true" : "false";
 
     masks = (z.printMasks(z.playingFields, 1));
@@ -308,12 +308,11 @@ bool testinternal::testOne(QString &outString)
 
     simulation a(0, &simSettings, &error, theMainWindow);
     if (error) return false;
-    if (a.playingFields[0]->environments[0] != a.playingFields[1]->environments[0] || a.playingFields[1]->environments[0] != a.playingFields[2]->environments[0]) testFlag = false;
-    if (a.playingFields[0]->environments[1] != a.playingFields[1]->environments[1] || a.playingFields[1]->environments[1] != a.playingFields[2]->environments[1]) testFlag = false;
+    if (a.playingFields[0]->environments[0] != a.playingFields[1]->environments[0] || a.playingFields[0]->environments[1] != a.playingFields[1]->environments[1]) testFlag = false;
     flagString = testFlag ? "true" : "false";
 
-    masks = a.printMasks(a.playingFields, 1);
-    masks2 = a.printMasks(a.playingFields, 2);
+    masks = a.printMasks(a.playingFields, 0);
+    masks2 = a.printMasks(a.playingFields, 1);
 
     out << "\nMode identical:\n" << QCryptographicHash::hash(masks.toUtf8(), QCryptographicHash::Md5).toHex() << "\n" << QCryptographicHash::hash(masks2.toUtf8(),
             QCryptographicHash::Md5).toHex() << "\nTREvoSim has tested whether these are identical (they should be) and outputs " << flagString << ".\n";
@@ -322,26 +321,26 @@ bool testinternal::testOne(QString &outString)
     simSettings.playingfieldMasksMode = MASKS_MODE_INDEPENDENT;
     simulation b(0, &simSettings, &error, theMainWindow);
     if (error) return false;
-    if (b.playingFields[0]->environments[0] != b.playingFields[1]->environments[0] || b.playingFields[1]->environments[0] != b.playingFields[2]->environments[0]) testFlag = false;
-    if (b.playingFields[0]->environments[1] != b.playingFields[1]->environments[1] || b.playingFields[1]->environments[1] != b.playingFields[2]->environments[1]) testFlag = false;
+    if (b.playingFields[0]->environments[0] == b.playingFields[1]->environments[0] || b.playingFields[0]->environments[1] != b.playingFields[1]->environments[1]) testFlag = false;
     flagString = testFlag ? "true" : "false";
 
-    masks = (b.printMasks(y.playingFields, 1));
-    masks2 = (b.printMasks(y.playingFields, 2));
+    masks = (b.printMasks(b.playingFields, 0));
+    masks2 = (b.printMasks(b.playingFields, 1));
 
     out << "\nMode independent:\n" << QCryptographicHash::hash(masks.toUtf8(), QCryptographicHash::Md5).toHex() << "\n" << QCryptographicHash::hash(masks2.toUtf8(),
             QCryptographicHash::Md5).toHex() << "\nTREvoSim has tested whether these are not identical and outputs " << flagString  << ".\n";
 
     //Mode identical at start
     simSettings.playingfieldMasksMode = MASKS_MODE_IDENTICAL_START;
+    simSettings.runForTaxa = 3;
     simulation c(0, &simSettings, &error, theMainWindow);
     if (error) return false;
-    if (c.playingFields[0]->environments[0] != c.playingFields[1]->environments[0] || c.playingFields[1]->environments[0] != c.playingFields[2]->environments[0]) testFlag = false;
-    if (c.playingFields[0]->environments[1] != c.playingFields[1]->environments[1] || c.playingFields[1]->environments[1] != c.playingFields[2]->environments[1]) testFlag = false;
+    if (c.playingFields[0]->environments[0] != c.playingFields[1]->environments[0] || c.playingFields[0]->environments[1] != c.playingFields[1]->environments[1]) testFlag = false;
+
     flagString = testFlag ? "true" : "false";
 
-    masks = (c.printMasks(z.playingFields, 1));
-    masks2 = (c.printMasks(z.playingFields, 2));
+    masks = (c.printMasks(c.playingFields, 0));
+    masks2 = (c.printMasks(c.playingFields, 1));
 
     out << "\nMode start identical:\n" << QCryptographicHash::hash(masks.toUtf8(), QCryptographicHash::Md5).toHex() << "\n" << QCryptographicHash::hash(masks2.toUtf8(),
             QCryptographicHash::Md5).toHex() << "\nTREvoSim has tested whether these are identical and outputs " << flagString << ".\n";
@@ -404,7 +403,7 @@ bool testinternal::testTwo(QString &outString)
     simulation z(0, &simSettings, &error, theMainWindow);
     if (error) return false;
     z.run();
-    if (z.playingFields[0]->environments[0] == z.playingFields[1]->environments[0] || z.playingFields[1]->environments[0] == z.playingFields[2]->environments[0]) testFlag = false;
+    if (z.playingFields[0]->environments[0] == z.playingFields[1]->environments[0] || z.playingFields[0]->environments[0] == z.playingFields[2]->environments[0]) testFlag = false;
     flagString = testFlag ? "true" : "false";
 
     masks = (z.printMasks(z.playingFields, 1));
@@ -424,12 +423,11 @@ bool testinternal::testTwo(QString &outString)
     simulation a(0, &simSettings, &error, theMainWindow);
     if (error) return false;
     a.run();
-    if (a.playingFields[0]->environments[0] != a.playingFields[1]->environments[0] || a.playingFields[1]->environments[0] != a.playingFields[2]->environments[0]) testFlag = false;
-    if (a.playingFields[0]->environments[1] != a.playingFields[1]->environments[1] || a.playingFields[1]->environments[1] != a.playingFields[2]->environments[1]) testFlag = false;
+    if (a.playingFields[0]->environments[0] != a.playingFields[1]->environments[0] || a.playingFields[0]->environments[1] != a.playingFields[1]->environments[1]) testFlag = false;
     flagString = testFlag ? "true" : "false";
 
-    masks = a.printMasks(a.playingFields, 1);
-    masks2 = a.printMasks(a.playingFields, 2);
+    masks = a.printMasks(a.playingFields, 0);
+    masks2 = a.printMasks(a.playingFields, 1);
 
     out << "\nMode identical:\n" << QCryptographicHash::hash(masks.toUtf8(), QCryptographicHash::Md5).toHex() << "\n" << QCryptographicHash::hash(masks2.toUtf8(),
             QCryptographicHash::Md5).toHex() << "\nTREvoSim has tested whether these are identical (they should be) and outputs " << flagString << ".\n";
@@ -439,12 +437,11 @@ bool testinternal::testTwo(QString &outString)
     simulation b(0, &simSettings, &error, theMainWindow);
     if (error) return false;
     b.run();
-    if (b.playingFields[0]->environments[0] != b.playingFields[1]->environments[0] || b.playingFields[1]->environments[0] != b.playingFields[2]->environments[0]) testFlag = false;
-    if (b.playingFields[0]->environments[1] != b.playingFields[1]->environments[1] || b.playingFields[1]->environments[1] != b.playingFields[2]->environments[1]) testFlag = false;
+    if (b.playingFields[0]->environments[0] != b.playingFields[1]->environments[0] || b.playingFields[0]->environments[1] != b.playingFields[1]->environments[1]) testFlag = false;
     flagString = testFlag ? "true" : "false";
 
-    masks = (b.printMasks(y.playingFields, 1));
-    masks2 = (b.printMasks(y.playingFields, 2));
+    masks = (b.printMasks(b.playingFields, 0));
+    masks2 = (b.printMasks(b.playingFields, 1));
 
     out << "\nMode independent:\n" << QCryptographicHash::hash(masks.toUtf8(), QCryptographicHash::Md5).toHex() << "\n" << QCryptographicHash::hash(masks2.toUtf8(),
             QCryptographicHash::Md5).toHex() << "\nTREvoSim has tested whether these are not identical and outputs " << flagString  << ".\n";
@@ -454,12 +451,11 @@ bool testinternal::testTwo(QString &outString)
     simulation c(0, &simSettings, &error, theMainWindow);
     if (error) return false;
     c.run();
-    if (c.playingFields[0]->environments[0] == c.playingFields[1]->environments[0] || c.playingFields[1]->environments[0] == c.playingFields[2]->environments[0]) testFlag = false;
-    if (c.playingFields[0]->environments[1] == c.playingFields[1]->environments[1] || c.playingFields[1]->environments[1] == c.playingFields[2]->environments[1]) testFlag = false;
+    if (c.playingFields[0]->environments[0] == c.playingFields[1]->environments[0] || c.playingFields[0]->environments[1] == c.playingFields[1]->environments[1]) testFlag = false;
     flagString = testFlag ? "true" : "false";
 
-    masks = (c.printMasks(z.playingFields, 1));
-    masks2 = (c.printMasks(z.playingFields, 2));
+    masks = (c.printMasks(c.playingFields, 0));
+    masks2 = (c.printMasks(c.playingFields, 1));
 
     out << "\nMode start identical:\n" << QCryptographicHash::hash(masks.toUtf8(), QCryptographicHash::Md5).toHex() << "\n" << QCryptographicHash::hash(masks2.toUtf8(),
             QCryptographicHash::Md5).toHex() << "\nTREvoSim has tested whether these are identical and outputs " << flagString << ".\n";
