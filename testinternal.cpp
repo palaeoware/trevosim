@@ -204,8 +204,8 @@ bool testinternal::testZero(QString &outString)
 
     //Create a playing field with two environments - one all false, one all true
     simulation::playingFieldStructure pMixed;
-    pMixed.environments.append(Environment(simSettings.maskNumber, simSettings.fitnessSize, false));
     pMixed.environments.append(Environment(simSettings.maskNumber, simSettings.fitnessSize, true));
+    pMixed.environments.append(Environment(simSettings.maskNumber, simSettings.fitnessSize, false));
 
     for (int i = 0; i < 10; i++)org.genome[i] = false;
 
