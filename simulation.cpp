@@ -1463,25 +1463,25 @@ void simulation::speciesExtinction(Organism *speciesListOrganism, const Organism
 //This returns minimum (best) fitness - deal with mean elsewhere
 int simulation::fitness(const playingFieldStructure *fitnessPlayingField, const Organism *org, int runFitnessTarget, int fitnessEnvironment)
 {
-    quint32 fitness = ~0;
-    double doubleFitness = 0.;
+    int fitness = std::numeric_limits<int>::max();
 
     //Environment defaults to -1 (used to allow this to be called throughout simulation without defining environment number).
     //If this is the case check fitness for all environments
     if (fitnessEnvironment == -1)
         for (auto e : fitnessPlayingField->environments)
         {
-            quint32 temporaryFitness = ~0;
-            quint32 count = e.bitCount(org);
+            int temporaryFitness = std::numeric_limits<int>::max();
+            int count = e.bitCount(org);
 
             //Define fitness as the distance away from fitness target
             temporaryFitness = qAbs(count - runFitnessTarget);
+
             if (temporaryFitness < fitness) fitness = temporaryFitness;
         }
     //Alteranatively, we can calculate fitness for a specific environment
     else
     {
-        quint32 count = fitnessPlayingField->environments[fitnessEnvironment].bitCount(org);
+        int count = fitnessPlayingField->environments[fitnessEnvironment].bitCount(org);
         fitness = qAbs(count - runFitnessTarget);
     }
     return fitness;

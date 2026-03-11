@@ -217,9 +217,9 @@ QString Environment::printMasks()
 }
 
 //Count bits for fitness algorithm
-int Environment::bitCount(Organism const *o) const
+quint32 Environment::bitCount(Organism const *o) const
 {
-    int counts = 0;
+    quint32 counts = 0;
     for (auto m : masks)
     {
         //Check length here

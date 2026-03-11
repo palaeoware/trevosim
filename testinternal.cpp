@@ -157,7 +157,7 @@ bool testinternal::testZero(QString &outString)
 
     QString maskString = x.printMasks(x.playingFields);
     QStringList l = maskString .split('\n');
-    out << "Masks are:\n" << l[2]  << "\n" << l[3] << "\n" << l[4] << "\n";
+    out << "Masks are:\n" << pTrue.environments[0].printMasks() << "\n";
 
     int fitness = x.fitness(&pTrue, &org, simSettings.fitnessTarget);
     if (fitness != 150) testFlag = false;
@@ -184,9 +184,14 @@ bool testinternal::testZero(QString &outString)
     maskString = y.printMasks(y.playingFields);
     l = maskString .split('\n');
     out << "Organism genome is: " << y.printGenomeString(&org) << "\n";
-    out << "Masks are:\n" << l[2]  << "\n" << l[3] << "\n";
+    out << "Masks are:\n" << pTrue.environments[0].printMasks() << "\n";
+
     fitness = y.fitness(&pTrue, &org, simSettings.fitnessTarget);
-    if (fitness != 50) testFlag = false;
+    if (fitness != 50)
+    {
+        out << "Fail here: \n";
+        testFlag = false;
+    }
     out <<  "Fitness is " << fitness << ". It should be 50.\n\n";
 
     //Now let's test with two environments
