@@ -10,7 +10,7 @@
 //Perturbations
 //Also move mutate organism to organism object - why is this in simulation it makes no sense?
 //check when done that all attributes are correctly copied in equals
-//EE stuff
+//Failing tests 0,1,2,5,17
 
 // We call this constructor when we want to create a new, random environment
 Environment::Environment(const int &maskNumber, const int &maskLength, const bool matchingPeaksCon, const double mutationRateCon)
