@@ -22,7 +22,7 @@ public:
     bool error = false;
 
     QString printMasks();
-    int bitCount(Organism const *o) const;
+    quint32 bitCount(Organism const *o) const;
     bool addMask();
     void overwriteMask(Organism const *o);
     void setMasksToZero();
