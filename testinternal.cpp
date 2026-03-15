@@ -663,18 +663,20 @@ bool testinternal::testFive(QString &outString)
     out << " (Note that due to the possibility of multiple hits on a single site, we will expect this to be marginally smaller than the expected mean).\n";
 
     if (theMainWindow) theMainWindow->setStatus("Doing environment mutation tests without mathcing peaks.");
-    out << "Now testing environment mutation across two playing fields (mode independent), and two environments for each. Same test for each as above. "
-        "Below you can see a table showing the mean mutations per 128 bits. \nPlaying field 1:\nEnvironment 1:\t";
+    out << "\nNow testing environment mutation across two playing fields (mode independent), and two environments for each. Same test for each as above. "
+        "Below you can see the mean mutations per 128 bits for each environment.\n";
 
     simSettings.environmentNumber = 2;
     simSettings.playingfieldNumber = 2;
+    simSettings.environmentMutationRate = 1.0;
     simSettings.playingfieldMasksMode = MASKS_MODE_INDEPENDENT;
     simulation y(0, &simSettings, &error, theMainWindow);
     if (error) return false;
 
     QVector <Environment> testEnvironments;
-    int countVecgtorLength = y.playingFields.length() + y.playingFields[0]->environments.length();
-    QVector <int> differencesCount(countVecgtorLength, 0);
+    int countVectorLength = y.playingFields.length() + y.playingFields[0]->environments.length();
+    QVector <int> differencesCount(countVectorLength, 0);
+
     //Count the number of ones - this may change if we do not match peaks
     int maxDiff = 0;
     for (int i = 0; i < replicates; i++)
@@ -683,7 +685,7 @@ bool testinternal::testFive(QString &outString)
 
         for (auto p : y.playingFields)
             //If this needs to be sent by reference, need to change it in the simulation as well
-            for (auto e : p->environments)
+            for (auto &e : p->environments)
             {
                 //Create a copy of the environment, then mutate it to check differences
                 Environment newEnvironment(e, false);
@@ -696,7 +698,7 @@ bool testinternal::testFive(QString &outString)
         for (int i = 0; i < y.playingFields.length(); i++)
             for (int j = 0; j < y.playingFields[i]->environments.length(); j++)
             {
-                differencesCount[i] += testEnvironments[environmentNumber].countDifferences(y.playingFields[i]->environments[j]);
+                differencesCount[environmentNumber] += testEnvironments[environmentNumber].countDifferences(y.playingFields[i]->environments[j]);
                 bitCount1 += testEnvironments[environmentNumber].bitCount();
                 bitCount2 += y.playingFields[i]->environments[j].bitCount();
                 environmentNumber++;
@@ -704,29 +706,25 @@ bool testinternal::testFive(QString &outString)
 
         int difference = abs(bitCount1 - bitCount2);
         if (difference > maxDiff)maxDiff = difference;
+
+        testEnvironments.clear();
     }
 
-    double dCnts[12] = {0.};
+    QList <double> dCnts;
     double dCntsSum = 0.;
 
     for (int i = 0; i < differencesCount.length(); i++)
     {
-        dCnts[i] = (static_cast<double>(differencesCount[i]) / static_cast<double>(replicates));
+        dCnts.append(static_cast<double>(differencesCount[i]) / (static_cast<double>(replicates * simSettings.maskNumber)));
         if (dCnts[i] < 1.25 || dCnts[i] > 1.31) testFlag = false;
         dCntsSum += dCnts[i];
 
-        if (i == 3) out << "Environment 2: ";
-        if (i == 6) out << "Playing field 2:\nEnvironment 1: ";
-        if (i == 9) out << "Environment 2: ";
-
-        out << dCnts[i] << "\t";
-
-        if ((i + 1) % 3 == 0) out << "\n";
+        out << "Environment " << i << " mean differences per environment " << dCnts[i] << "\n";
     }
 
     flagString = testFlag ? "true" : "false";
 
-    out << "The mean of these values is " << dCntsSum / 12. << ".\n";
+    out << "\nThe mean of these values is " << dCntsSum / dCnts.length() << ".\n";
     out << "TREvoSim expects all above to be between 1.25 and 1.31 and returned " << flagString << ".\n";
 
     if (maxDiff == 0)
@@ -741,16 +739,14 @@ bool testinternal::testFive(QString &outString)
     simulation z(0, &simSettings, &error, theMainWindow);
     if (error) return false;
 
-    out << "Now testing environment mutation across two playing fields (mode independent), and two environments for each, with matching peaks turned on. Same test for each as above. \nPlaying field 1:\nEnvironment 1:\t";
+    out << "\nNow testing environment mutation across two playing fields (mode independent), and two environments for each, with matching peaks turned on. Same test for each as above. \n";
 
     //Reset counts and environments
     for (auto &i : differencesCount) i = 0;
     maxDiff = 0;
     dCntsSum = 0;
     testEnvironments.clear();
-
-    if (theMainWindow) theMainWindow->setStatus("Doing environment mutation tests with matching peaks.");
-
+    dCnts.clear();
 
     for (int i = 0; i < replicates; i++)
     {
@@ -758,7 +754,7 @@ bool testinternal::testFive(QString &outString)
 
         for (auto p : z.playingFields)
             //If this needs to be sent by reference, need to change it in the simulation as well
-            for (auto e : p->environments)
+            for (auto &e : p->environments)
             {
                 //Create a copy of the environment, then mutate it to check differences
                 Environment newEnvironment(e, false);
@@ -771,7 +767,7 @@ bool testinternal::testFive(QString &outString)
         for (int i = 0; i < z.playingFields.length(); i++)
             for (int j = 0; j < z.playingFields[i]->environments.length(); j++)
             {
-                differencesCount[i] += testEnvironments[environmentNumber].countDifferences(z.playingFields[i]->environments[j]);
+                differencesCount[environmentNumber] += testEnvironments[environmentNumber].countDifferences(z.playingFields[i]->environments[j]);
                 bitCount1 += testEnvironments[environmentNumber].bitCount();
                 bitCount2 += z.playingFields[i]->environments[j].bitCount();
                 environmentNumber++;
@@ -779,27 +775,24 @@ bool testinternal::testFive(QString &outString)
 
         int difference = abs(bitCount1 - bitCount2);
         if (difference > maxDiff)maxDiff = difference;
+
+        testEnvironments.clear();
     }
 
     if (theMainWindow) theMainWindow->hideProgressBar();
 
     for (int i = 0; i < differencesCount.length(); i++)
     {
-        dCnts[i] = (static_cast<double>(differencesCount[i]) / static_cast<double>(replicates));
+        dCnts.append(static_cast<double>(differencesCount[i]) / (static_cast<double>(replicates * simSettings.maskNumber)));
         dCntsSum += dCnts[i];
-
-        if (i == 3) out << "Environment 2: ";
-        if (i == 6) out << "Playing field 2:\nEnvironment 1: ";
-        if (i == 9) out << "Environment 2: ";
-
-        out << dCnts[i] << "\t";
-
-        if ((i + 1) % 3 == 0) out << "\n";
+        if (dCnts[i] < 1.25 || dCnts[i] > 1.31) testFlag = false;
+        out << "Environment " << i << " mean differences per environment " << dCnts[i] << "\n";
     }
-    double dCntsMean = dCntsSum / 12;
+
+    double dCntsMean = dCntsSum / static_cast<double>(dCnts.length());
     if (dCntsMean < (1.25) || dCntsMean > (1.31)) testFlag = false;
     flagString = testFlag ? "true" : "false";
-    out << "The mean of these values is " << dCntsMean << ".\n";
+    out << "\nThe mean of these values is " << dCntsMean << ".\n";
     out << "In this case, the mean values per mask will be more variable as it depends on the distribution of 1s across masks.\n";
     out << "TREvoSim thus expects the mean of the above to be between 1.25 and 1.32 and has returned " << flagString << "\n";
     out << "In all cases, due to the possibility of multiple hits on a single site, the mean values can be marginally below the expected value of 1.28.\n";
