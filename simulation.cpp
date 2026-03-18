@@ -266,10 +266,10 @@ bool simulation::run()
 
         /************* Mutate environment then update fitness *************/
         for (auto p : playingFields)
-            for (auto e : p->environments)
+            for (auto &e : p->environments)
                 e.mutate();
 
-        //If playing field masks should start the same, copy of playing fields over
+        //If playing field masks should be the same, copy of playing fields over
         if (simSettings->playingfieldNumber > 1 && simSettings->playingfieldMasksMode == MASKS_MODE_IDENTICAL)
             for (int p = 1; p < simSettings->playingfieldNumber; p++)
                 playingFields[p]->environments = playingFields[0]->environments;

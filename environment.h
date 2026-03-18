@@ -11,7 +11,7 @@ class Environment
 public:
     Environment(const int &maskNumber, const int &maskLength, const bool matchingPeaksCon, const double mutationRateCon);
     Environment(const int &maskNumber, const int &maskLength, const bool initialiseState); //used for tests of fitness algorithm
-    Environment(Environment const &constructorEnvironment, int matchingPeaksCon);
+    Environment(Environment const &constructorEnvironment, bool matchingPeaksCon);
 
     void operator = (const Environment &E);
     bool operator == (const Environment &E);
@@ -35,7 +35,6 @@ private:
     QVector <QVector <bool> > masks;
     bool matchingPeaks;
     double mutationRate;
-    QRandomGenerator randoms;
 };
 
 #endif // ENVIRONMENT_H

@@ -17,7 +17,6 @@ Environment::Environment(const int &maskNumber, const int &maskLength, const boo
 {
     matchingPeaks = matchingPeaksCon;
     mutationRate = mutationRateCon;
-    randoms = QRandomGenerator::securelySeeded();
 
     //Set up vectors that will serve as masks for this environment
     for (int j = 0; j < maskNumber; j++)
@@ -26,7 +25,7 @@ Environment::Environment(const int &maskNumber, const int &maskLength, const boo
         for (int i = 0; i < maskLength; i++)
         {
             //This will generate a random integer between 0 (inclusive) and 2 (exclusive) - so either 0 or 1. Break it out for clarity
-            int random = randoms.bounded(0, 2);
+            int random = QRandomGenerator::global()->bounded(0, 2);
             if (random == 0) masks[j].append(bool(false));
             else if (random == 1) masks[j].append(bool(true));
             else error = true; //This should never happen
@@ -46,13 +45,12 @@ Environment::Environment(const int &maskNumber, const int &maskLength, const boo
 }
 
 //We call this one when we want to create an environment with matching peaks - we can always do this off the first created environment
-Environment::Environment(const Environment &constructorEnvironment,  int matchingPeaksCon)
+Environment::Environment(const Environment &constructorEnvironment,  bool matchingPeaksCon)
 {
     if (matchingPeaksCon)
     {
         matchingPeaks = true;
         mutationRate = constructorEnvironment.mutationRate;
-        randoms = QRandomGenerator::securelySeeded();
 
         //If we need to make sure fitness peaks are the same height, in TREvoSim, we need to initialise with the same number of 1s in each site
         //An easy way to do this is to shuffle the columns/sites between the incoming environment and the one we are creating
@@ -76,6 +74,9 @@ Environment::Environment(const Environment &constructorEnvironment,  int matchin
     }
     else
     {
+        matchingPeaks = constructorEnvironment.matchingPeaks;
+        mutationRate = constructorEnvironment.mutationRate;
+
         for (int j = 0; j < constructorEnvironment.masks.length(); j++)
         {
             masks.append(QVector <bool>());
@@ -135,7 +136,7 @@ bool Environment::mutate()
     //Next sort out the probabilities of extra mutation given remainder
     double numberEnvironmentMutationsFractional = modf(numberEnvironmentMutationsDouble, &numberEnvironmentMutationsIntegral);
     int numberEnvironmentMutationsInteger = (static_cast<int>(numberEnvironmentMutationsIntegral));
-    if (randoms.generateDouble() < numberEnvironmentMutationsFractional) numberEnvironmentMutationsInteger++;
+    if (QRandomGenerator::global()->generateDouble() < numberEnvironmentMutationsFractional) numberEnvironmentMutationsInteger++;
     //note that due to saturation / multiple hits on one site, the number of recorded mutations in e.g. our tests may sneak in under the expected value
 
     if (matchingPeaks)
@@ -153,8 +154,8 @@ bool Environment::mutate()
         int count = 0;
         do
         {
-            int firstBit = randoms.bounded(maskLength);
-            int secondBit = randoms.bounded(maskLength);
+            int firstBit = QRandomGenerator::global()->bounded(maskLength);
+            int secondBit = QRandomGenerator::global()->bounded(maskLength);
             if (firstBit == secondBit) continue;
 
             int bitDifference = 0;
@@ -193,8 +194,9 @@ bool Environment::mutate()
         for (int x = 0; x < numberEnvironmentMutationsInteger; x++)
         {
             //Select random mask and random bit
-            int mutationPosition = randoms.bounded(maskLength);
-            int mutationMask = randoms.bounded(maskNumber);
+            int mutationPosition = QRandomGenerator::global()->bounded(maskLength);
+            int mutationMask = QRandomGenerator::global()->bounded(maskNumber);
+            //qDebug() << "m" << mutationPosition << mutationMask;
             masks[mutationMask ][mutationPosition] = !masks[mutationMask ][mutationPosition];
         }
     }
@@ -238,7 +240,7 @@ bool Environment::addMask()
     for (int i = 0; i < masks[0].length(); i++)
     {
         //This will generate a random integer between 0 (inclusive) and 2 (exclusive) - so either 0 or 1. Break it out for clarity
-        int random = randoms.bounded(0, 2);
+        int random = QRandomGenerator::global()->bounded(0, 2);
         if (random == 0) masks[newMask].append(bool(false));
         else if (random == 1) masks[newMask].append(bool(true));
         else return false; //This should never happen
