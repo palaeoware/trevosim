@@ -452,14 +452,15 @@ bool simulation::run()
 
             QString fitnessHistory("Fitness history of playingfield:,");
             QTextStream out(&fitnessHistory);
-            for (auto org : speciesList)
-            {
-
-                if (org->lastFitnessMode == LAST_FITNESS_MEAN) out << "MEAN,";
-                else out << "MIN,";
-            }
+            for (auto p : std::as_const(playingFields))
+                for (auto org : p->playingField)
+                {
+                    if (org->lastFitnessMode == LAST_FITNESS_MEAN) out << "MEAN,";
+                    else if (org->lastFitnessMode == LAST_FITNESS_MINIMUM) out << "MIN,";
+                    else out << "ERROR,";
+                }
             fitnessHistory.chop(1);
-            logTextOut.replace("||FitnessHistory||", fitnessHistory, Qt::CaseInsensitive);
+            logTextOut.replace("||FitnessHistoryList||", fitnessHistory, Qt::CaseInsensitive);
 
 
             bool writeRunningLogSuccess = writeRunningLog(iterations, logTextOut);

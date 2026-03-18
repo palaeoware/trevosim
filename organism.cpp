@@ -98,6 +98,7 @@ void Organism::operator = (const Organism &O)
     cladogenesis = O.cladogenesis;
     ecosystemEngineer = O.ecosystemEngineer;
     children = O.children; // Note this is only used in the species list.
+    lastFitnessMode = O.lastFitnessMode;
 }
 
 bool Organism::operator == (const Organism &O)
