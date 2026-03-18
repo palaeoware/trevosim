@@ -20,6 +20,8 @@ Organism::Organism(int genomeSize, bool stochastic)
 
     ecosystemEngineer = false;
 
+    lastFitnessMode = -1;
+
     speciesID = -1;
     parentSpeciesID = -1;
 

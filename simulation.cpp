@@ -288,7 +288,12 @@ bool simulation::run()
                     {
                         int geoMean = meanFitness(playingFields[p]->playingField[i]);
                         //Assign the geometric mean if it is better
-                        if (geoMean < playingFields[p]->playingField[i]->fitness) playingFields[p]->playingField[i]->fitness = geoMean;
+                        if (geoMean < playingFields[p]->playingField[i]->fitness)
+                        {
+                            playingFields[p]->playingField[i]->fitness = geoMean;
+                            playingFields[p]->playingField[i]->lastFitnessMode = LAST_FITNESS_MEAN;
+                        }
+                        else playingFields[p]->playingField[i]->lastFitnessMode = LAST_FITNESS_MINIMUM;
                     }
                 }
         /************* Playing field mixing *************/
@@ -444,6 +449,19 @@ bool simulation::run()
             logTextOut.replace("||PlayingField_genomes_concise||", printPlayingFieldGenomesConcise(playingFields), Qt::CaseInsensitive);
             logTextOut.replace("||PlayingField_fitness_history||", printPlayingFieldFitnessHistory(playingFields), Qt::CaseInsensitive);
             logTextOut.replace("||Masks||", printMasks(playingFields), Qt::CaseInsensitive);
+
+            QString fitnessHistory("Fitness history of playingfield:,");
+            QTextStream out(&fitnessHistory);
+            for (auto org : speciesList)
+            {
+
+                if (org->lastFitnessMode == LAST_FITNESS_MEAN) out << "MEAN,";
+                else out << "MIN,";
+            }
+            fitnessHistory.chop(1);
+            logTextOut.replace("||FitnessHistory||", fitnessHistory, Qt::CaseInsensitive);
+
+
             bool writeRunningLogSuccess = writeRunningLog(iterations, logTextOut);
 
             if (theMainWindow != nullptr)
