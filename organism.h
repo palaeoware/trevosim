@@ -26,6 +26,7 @@ public:
 
     int born;
     int extinct;
+    int lastFitnessMode;
 
     bool stochasticLayer;
     bool ecosystemEngineer;

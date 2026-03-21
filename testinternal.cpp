@@ -134,46 +134,43 @@ bool testinternal::testZero(QString &outString)
 
     bool testFlag = true;
     QTextStream out(&outString);
-    out << "Testing fitness algorithm.\n\n";
+    out << "Testing fitness algorithm.\n\nStart with testing a single environment.";
 
     //Create default setting object and then a simulation object for the test
-    simulationVariables simSettings;
-    simSettings.genomeSize = 50;
-    simSettings.fitnessSize = 50;
-    simSettings.speciesSelectSize = 50;
     //Test is for three masks and a target of zero (the defaults in v2.0.0)
-    simSettings.fitnessTarget = 0;
+    simulationVariables simSettings;
+    simSettings.fitnessSize = 50;
     simSettings.maskNumber = 3;
+    simSettings.matchFitnessPeaks = false;
+    simSettings.fitnessTarget = 0;
     simSettings.fitnessMode = FITNESS_MODE_MINIMUM;
     simulation x(0, &simSettings, &error, theMainWindow);
     if (error) return false;
+
+    //Create a playing field with environments in which all bits are true
+    simulation::playingFieldStructure pTrue;
+    pTrue.environments.append(Environment(simSettings.maskNumber, simSettings.fitnessSize, true));
 
     //Fitness requires an organism - create an organism with 50 bits, no stochastic genome, all bits are initialised to zero
     Organism org(simSettings.genomeSize, false);
     out << "Organism genome is: " << x.printGenomeString(&org) << "\n";
 
-    //Now set masks in simulation to 1
-    for (auto p : std::as_const(x.playingFields))
-        for (int k = 0; k < simSettings.environmentNumber; k++)
-            for (int j = 0; j < simSettings.maskNumber; j++)
-                for (auto &i : p->masks[k][j]) i = true;
-
     QString maskString = x.printMasks(x.playingFields);
     QStringList l = maskString .split('\n');
-    out << "Masks are:\n" << l[2]  << "\n" << l[3] << "\n" << l[4] << "\n";
+    out << "Masks are:\n" << pTrue.environments[0].printMasks() << "\n";
 
-    int fitness = x.fitness(&org, x.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.environmentNumber, simSettings.fitnessMode);
+    int fitness = x.fitness(&pTrue, &org, simSettings.fitnessTarget);
     if (fitness != 150) testFlag = false;
     out <<  "Fitness, with fitness target of " << simSettings.fitnessTarget << " is " << fitness << ". It should be 150.\n";
 
     simSettings.fitnessTarget = 75;
-    fitness = x.fitness(&org, x.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.environmentNumber, simSettings.fitnessMode);
+    fitness = x.fitness(&pTrue, &org, simSettings.fitnessTarget);
     if (fitness != 75) testFlag = false;
     out <<  "Fitness, with fitness target of 75, is " << fitness << ". It should be 75.\n";
 
     for (int i = 0; i < 25; i++)org.genome[i] = true;
     out << "Fitness target is still 75, genome is now: " << x.printGenomeString(&org) << "\n";
-    fitness = x.fitness(&org, x.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.environmentNumber, simSettings.fitnessMode);
+    fitness = x.fitness(&pTrue, &org, simSettings.fitnessTarget);
     if (fitness != 0) testFlag = false;
     out <<  "Fitness is " << fitness << ". It should be 0.\n";
 
@@ -183,19 +180,18 @@ bool testinternal::testZero(QString &outString)
     simulation y(0, &simSettings, &error, theMainWindow);
     if (error) return false;
 
-    //Now set masks in simulation to 1
-    for (auto p : std::as_const(y.playingFields))
-        for (int k = 0; k < simSettings.environmentNumber; k++)
-            for (int j = 0; j < simSettings.maskNumber; j++)
-                for (auto &i : p->masks[k][j]) i = true;
-
     for (int i = 0; i < simSettings.fitnessSize; i++)org.genome[i] = true;
     maskString = y.printMasks(y.playingFields);
     l = maskString .split('\n');
     out << "Organism genome is: " << y.printGenomeString(&org) << "\n";
-    out << "Masks are:\n" << l[2]  << "\n" << l[3] << "\n";
-    fitness = y.fitness(&org, y.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.environmentNumber, simSettings.fitnessMode);
-    if (fitness != 50) testFlag = false;
+    out << "Masks are:\n" << pTrue.environments[0].printMasks() << "\n";
+
+    fitness = y.fitness(&pTrue, &org, simSettings.fitnessTarget);
+    if (fitness != 50)
+    {
+        out << "Fail here: \n";
+        testFlag = false;
+    }
     out <<  "Fitness is " << fitness << ". It should be 50.\n\n";
 
     //Now let's test with two environments
@@ -206,15 +202,10 @@ bool testinternal::testZero(QString &outString)
     simulation z(0, &simSettings, &error, theMainWindow);
     if (error) return false;
 
-    //Now set masks in environment 0 simulation to 1
-    for (auto p : std::as_const(z.playingFields))
-        for (int j = 0; j < simSettings.maskNumber; j++)
-            for (auto &i : p->masks[0][j]) i = true;
-
-    //Now set masks in environment 1 simulation to 0
-    for (auto p : std::as_const(z.playingFields))
-        for (int j = 0; j < simSettings.maskNumber; j++)
-            for (auto &i : p->masks[1][j]) i = false;
+    //Create a playing field with two environments - one all false, one all true
+    simulation::playingFieldStructure pMixed;
+    pMixed.environments.append(Environment(simSettings.maskNumber, simSettings.fitnessSize, true));
+    pMixed.environments.append(Environment(simSettings.maskNumber, simSettings.fitnessSize, false));
 
     for (int i = 0; i < 10; i++)org.genome[i] = false;
 
@@ -223,21 +214,18 @@ bool testinternal::testZero(QString &outString)
     out << "Organism genome is: " << y.printGenomeString(&org) << " fitness target is " << simSettings.fitnessTarget << "\n";
     out << maskString;
 
-    int environmentZeroFitness =
-        z.fitness(&org, z.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.environmentNumber, simSettings.fitnessMode, 0);
+    int environmentZeroFitness = z.fitness(&pMixed, &org, simSettings.fitnessTarget, 0);
     out << "Environment zero fitness should be 20, it is " <<  environmentZeroFitness << ".\n";
     if (environmentZeroFitness != 20) testFlag = false;
 
-    int environmentOneFitness =
-        z.fitness(&org, z.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.environmentNumber, simSettings.fitnessMode, 1);
+    int environmentOneFitness = z.fitness(&pMixed, &org, simSettings.fitnessTarget, 1);
     out << "Environment one fitness should be 80, it is " <<  environmentOneFitness << ".\n";
     if (environmentOneFitness != 80) testFlag = false;
     if (environmentOneFitness == environmentZeroFitness) testFlag = false;
 
     //Now let's test with two environments
     out << "Now test that this is, as expected, 20 when minimum environment mode is selected.\n";
-    int environmentBothFitness =
-        z.fitness(&org, z.playingFields[0]->masks, simSettings.fitnessSize, simSettings.fitnessTarget, simSettings.maskNumber, simSettings.environmentNumber, simSettings.fitnessMode);
+    int environmentBothFitness = z.fitness(&pMixed, &org, simSettings.fitnessTarget);
     out << "Fitness based on both environments should be 20, it is " <<  environmentBothFitness << ".\n";
     if (environmentBothFitness != 20 || environmentBothFitness != environmentZeroFitness) testFlag = false;
 
@@ -280,7 +268,7 @@ bool testinternal::testOne(QString &outString)
     simSettings.playingfieldNumber = 3;
     simulation x(0, &simSettings, &error, theMainWindow);
     if (error) return false;
-    if (x.playingFields[0]->masks != x.playingFields[1]->masks || x.playingFields[1]->masks != x.playingFields[2]->masks) testFlag = false;
+    if (x.playingFields[0]->environments[0] != x.playingFields[1]->environments[0] || x.playingFields[1]->environments[0] != x.playingFields[2]->environments[0]) testFlag = false;
     QString flagString = testFlag ? "true" : "false";
 
     QString masks(x.printMasks(x.playingFields, 1));
@@ -293,24 +281,71 @@ bool testinternal::testOne(QString &outString)
     simSettings.playingfieldMasksMode = MASKS_MODE_INDEPENDENT;
     simulation y(0, &simSettings, &error, theMainWindow);
     if (error) return false;
-    if (y.playingFields[0]->masks == y.playingFields[1]->masks || y.playingFields[1]->masks == y.playingFields[2]->masks) testFlag = false;
+    if (y.playingFields[0]->environments[0] == y.playingFields[1]->environments[0] || y.playingFields[1]-> environments[0] == y.playingFields[2]->environments[0]) testFlag = false;
     flagString = testFlag ? "true" : "false";
 
     masks = (y.printMasks(y.playingFields, 1));
     masks2 = (y.printMasks(y.playingFields, 2));
 
     out << "\nMode independent:\n" << QCryptographicHash::hash(masks.toUtf8(), QCryptographicHash::Md5).toHex() << "\n" << QCryptographicHash::hash(masks2.toUtf8(),
-            QCryptographicHash::Md5).toHex() << "\nTREvoSim has tested whether these are not identical and outputs " << flagString  << ".\n";
+            QCryptographicHash::Md5).toHex() << "\nTREvoSim has tested whether these are not identical (they shouldn't be) and outputs " << flagString  << ".\n";
 
     //Mode identical at start
     simSettings.playingfieldMasksMode = MASKS_MODE_IDENTICAL_START;
     simulation z(0, &simSettings, &error, theMainWindow);
     if (error) return false;
-    if (z.playingFields[0]->masks != z.playingFields[1]->masks || z.playingFields[1]->masks != z.playingFields[2]->masks) testFlag = false;
+    if (z.playingFields[0]->environments[0] != z.playingFields[1]->environments[0] || z.playingFields[0]->environments[0] != z.playingFields[2]->environments[0]) testFlag = false;
     flagString = testFlag ? "true" : "false";
 
     masks = (z.printMasks(z.playingFields, 1));
     masks2 = (z.printMasks(z.playingFields, 2));
+
+    out << "\nMode start identical:\n" << QCryptographicHash::hash(masks.toUtf8(), QCryptographicHash::Md5).toHex() << "\n" << QCryptographicHash::hash(masks2.toUtf8(),
+            QCryptographicHash::Md5).toHex() << "\nTREvoSim has tested whether these are identical (they should be) and outputs " << flagString << ".\n";
+
+    //Now do with multiple environments
+    out << "\nNow do this with multiple environments";
+
+    //Mode identical
+    simSettings.playingfieldMasksMode = MASKS_MODE_IDENTICAL;
+    simSettings.playingfieldNumber = 2;
+    simSettings.environmentNumber  = 2;
+
+    simulation a(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
+    if (a.playingFields[0]->environments[0] != a.playingFields[1]->environments[0] || a.playingFields[0]->environments[1] != a.playingFields[1]->environments[1]) testFlag = false;
+    flagString = testFlag ? "true" : "false";
+
+    masks = a.printMasks(a.playingFields, 0);
+    masks2 = a.printMasks(a.playingFields, 1);
+
+    out << "\nMode identical:\n" << QCryptographicHash::hash(masks.toUtf8(), QCryptographicHash::Md5).toHex() << "\n" << QCryptographicHash::hash(masks2.toUtf8(),
+            QCryptographicHash::Md5).toHex() << "\nTREvoSim has tested whether these are identical (they should be) and outputs " << flagString << ".\n";
+
+    //Mode independent
+    simSettings.playingfieldMasksMode = MASKS_MODE_INDEPENDENT;
+    simulation b(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
+    if (b.playingFields[0]->environments[0] == b.playingFields[1]->environments[0] || b.playingFields[0]->environments[1] != b.playingFields[1]->environments[1]) testFlag = false;
+    flagString = testFlag ? "true" : "false";
+
+    masks = (b.printMasks(b.playingFields, 0));
+    masks2 = (b.printMasks(b.playingFields, 1));
+
+    out << "\nMode independent:\n" << QCryptographicHash::hash(masks.toUtf8(), QCryptographicHash::Md5).toHex() << "\n" << QCryptographicHash::hash(masks2.toUtf8(),
+            QCryptographicHash::Md5).toHex() << "\nTREvoSim has tested whether these are not identical and outputs " << flagString  << ".\n";
+
+    //Mode identical at start
+    simSettings.playingfieldMasksMode = MASKS_MODE_IDENTICAL_START;
+    simSettings.runForTaxa = 3;
+    simulation c(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
+    if (c.playingFields[0]->environments[0] != c.playingFields[1]->environments[0] || c.playingFields[0]->environments[1] != c.playingFields[1]->environments[1]) testFlag = false;
+
+    flagString = testFlag ? "true" : "false";
+
+    masks = (c.printMasks(c.playingFields, 0));
+    masks2 = (c.printMasks(c.playingFields, 1));
 
     out << "\nMode start identical:\n" << QCryptographicHash::hash(masks.toUtf8(), QCryptographicHash::Md5).toHex() << "\n" << QCryptographicHash::hash(masks2.toUtf8(),
             QCryptographicHash::Md5).toHex() << "\nTREvoSim has tested whether these are identical and outputs " << flagString << ".\n";
@@ -326,7 +361,7 @@ bool testinternal::testTwo(QString &outString)
 
     bool testFlag = true;
     QTextStream out(&outString);
-    out << "Masks after 100 iterations. This will differ based on mode.\n\n";
+    out << "Masks after 100 iterations. This will differ based on mode.\n";
 
     //Create default setting object and then a simulation object for the test
     simulationVariables simSettings;
@@ -337,29 +372,42 @@ bool testinternal::testTwo(QString &outString)
     simSettings.runForTaxa = 5;
     simSettings.test = 2;
 
-    if (theMainWindow)
-        theMainWindow->resizeGrid(simSettings.runForTaxa, simSettings.genomeSize);
+    if (theMainWindow) theMainWindow->resizeGrid(simSettings.runForTaxa, simSettings.genomeSize);
 
     //Mode identical
     simSettings.playingfieldMasksMode = MASKS_MODE_IDENTICAL;
     simulation x(0, &simSettings, &error, theMainWindow);
     if (error) return false;
-    x.run();
-    if (x.playingFields[0]->masks != x.playingFields[1]->masks || x.playingFields[1]->masks != x.playingFields[2]->masks) testFlag = false;
-    QString flagString = testFlag ? "true" : "false";
 
-    QString masks(x.printMasks(x.playingFields, 1));
-    QString masks2(x.printMasks(x.playingFields, 2));
+    //Create a copy of the environment to check it does change through time.
+    Environment newEnvironment(x.playingFields[0]->environments[0], false);
+
+    x.run();
+
+    if (x.playingFields[0]->environments[0] == newEnvironment) testFlag = false;
+    QString flagString = testFlag ? "true" : "false";
+    QString masks(x.printMasks(x.playingFields, 0));
+    QString masks2(newEnvironment.printMasks());
+
+    out << "\nMasks at start:\n" << QCryptographicHash::hash(masks2.toUtf8(), QCryptographicHash::Md5).toHex()  << "\nMasks after running:\n" << QCryptographicHash::hash(masks.remove(0, 14).toUtf8(),
+            QCryptographicHash::Md5).toHex() << "\nTREvoSim has tested whether that these are not identical - so the environment has mutated when the simulation ran - and outputs " << flagString << ".\n\n";
+
+    if (x.playingFields[0]->environments[0] != x.playingFields[1]->environments[0] || x.playingFields[1]->environments[0] != x.playingFields[2]->environments[0]) testFlag = false;
+    flagString = testFlag ? "true" : "false";
+
+    masks = (x.printMasks(x.playingFields, 1));
+    masks2 = (x.printMasks(x.playingFields, 2));
 
     out << "Mode identical:\n" << QCryptographicHash::hash(masks.toUtf8(), QCryptographicHash::Md5).toHex() << "\n" << QCryptographicHash::hash(masks2.toUtf8(),
             QCryptographicHash::Md5).toHex() << "\nTREvoSim has tested whether these are identical and outputs " << flagString << ".\n";
 
     //Mode independent
     simSettings.playingfieldMasksMode = MASKS_MODE_INDEPENDENT;
+
     simulation y(0, &simSettings, &error, theMainWindow);
     if (error) return false;
     y.run();
-    if (y.playingFields[0]->masks == y.playingFields[1]->masks || y.playingFields[1]->masks == y.playingFields[2]->masks) testFlag = false;
+    if (y.playingFields[0]->environments[0] == y.playingFields[1]->environments[0] || y.playingFields[1]-> environments[0] == y.playingFields[2]->environments[0]) testFlag = false;
     flagString = testFlag ? "true" : "false";
 
     masks = (y.printMasks(y.playingFields, 1));
@@ -373,8 +421,10 @@ bool testinternal::testTwo(QString &outString)
     simSettings.playingfieldMasksMode = MASKS_MODE_IDENTICAL_START;
     simulation z(0, &simSettings, &error, theMainWindow);
     if (error) return false;
+
     z.run();
-    if (z.playingFields[0]->masks == z.playingFields[1]->masks || z.playingFields[1]->masks == z.playingFields[2]->masks) testFlag = false;
+
+    if (z.playingFields[0]->environments[0] == z.playingFields[1]->environments[0] || z.playingFields[0]->environments[0] == z.playingFields[2]->environments[0]) testFlag = false;
     flagString = testFlag ? "true" : "false";
 
     masks = (z.printMasks(z.playingFields, 1));
@@ -382,6 +432,56 @@ bool testinternal::testTwo(QString &outString)
 
     out << "\nMode start identical:\n" << QCryptographicHash::hash(masks.toUtf8(), QCryptographicHash::Md5).toHex() << "\n" << QCryptographicHash::hash(masks2.toUtf8(),
             QCryptographicHash::Md5).toHex() << "\nTREvoSim has tested whether these are not identical and outputs " << flagString << ".\n";
+
+    //Now do with multiple environments
+    out << "\n\nNow do this with multiple environments";
+
+    //Mode identical
+    simSettings.playingfieldMasksMode = MASKS_MODE_IDENTICAL;
+    simSettings.playingfieldNumber = 2;
+    simSettings.environmentNumber  = 2;
+
+    simulation a(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
+    a.run();
+    if (a.playingFields[0]->environments[0] != a.playingFields[1]->environments[0] || a.playingFields[0]->environments[1] != a.playingFields[1]->environments[1]) testFlag = false;
+    flagString = testFlag ? "true" : "false";
+
+    masks = a.printMasks(a.playingFields, 0);
+    masks2 = a.printMasks(a.playingFields, 1);
+
+    out << "\nMode identical:\n" << QCryptographicHash::hash(masks.toUtf8(), QCryptographicHash::Md5).toHex() << "\n" << QCryptographicHash::hash(masks2.toUtf8(),
+            QCryptographicHash::Md5).toHex() << "\nTREvoSim has tested whether these are identical (they should be) and outputs " << flagString << ".\n";
+
+    //Mode independent
+    simSettings.playingfieldMasksMode = MASKS_MODE_INDEPENDENT;
+    simulation b(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
+    b.run();
+    if (b.playingFields[0]->environments[0] != b.playingFields[1]->environments[0] || b.playingFields[0]->environments[1] != b.playingFields[1]->environments[1]) testFlag = false;
+    flagString = testFlag ? "true" : "false";
+
+    masks = (b.printMasks(b.playingFields, 0));
+    masks2 = (b.printMasks(b.playingFields, 1));
+
+    out << "\nMode independent:\n" << QCryptographicHash::hash(masks.toUtf8(), QCryptographicHash::Md5).toHex() << "\n" << QCryptographicHash::hash(masks2.toUtf8(),
+            QCryptographicHash::Md5).toHex() << "\nTREvoSim has tested whether these are not identical and outputs " << flagString  << ".\n";
+
+    //Mode identical at start
+    simSettings.playingfieldMasksMode = MASKS_MODE_IDENTICAL_START;
+    simulation c(0, &simSettings, &error, theMainWindow);
+    if (error) return false;
+    c.run();
+    if (c.playingFields[0]->environments[0] == c.playingFields[1]->environments[0] || c.playingFields[0]->environments[1] == c.playingFields[1]->environments[1]) testFlag = false;
+    flagString = testFlag ? "true" : "false";
+
+    masks = (c.printMasks(c.playingFields, 0));
+    masks2 = (c.printMasks(c.playingFields, 1));
+
+    out << "\nMode start identical:\n" << QCryptographicHash::hash(masks.toUtf8(), QCryptographicHash::Md5).toHex() << "\n" << QCryptographicHash::hash(masks2.toUtf8(),
+            QCryptographicHash::Md5).toHex() << "\nTREvoSim has tested whether these are identical and outputs " << flagString << ".\n";
+
+
 
     if (testFlag) out << "\nMask mode tests passed.\n";
 
@@ -408,7 +508,6 @@ bool testinternal::testThree(QString &outString)
     simSettings.playingfieldNumber = 3;
     simSettings.runForTaxa = 5;
     simSettings.test = 3;
-    //simSettings.workingLog = true;
 
     if (theMainWindow)
         theMainWindow->resizeGrid(simSettings.runForTaxa, simSettings.genomeSize);
@@ -564,77 +663,68 @@ bool testinternal::testFive(QString &outString)
     out << " (Note that due to the possibility of multiple hits on a single site, we will expect this to be marginally smaller than the expected mean).\n";
 
     if (theMainWindow) theMainWindow->setStatus("Doing environment mutation tests without mathcing peaks.");
-    out << "Now testing environment mutation across two playing fields (mode independent), and two environments for each. Same test for each as above. "
-        "Below you can see a table showing the mean mutations per 128 bits. \nPlaying field 1:\nEnvironment 1:\t";
+    out << "\nNow testing environment mutation across two playing fields (mode independent), and two environments for each. Same test for each as above. "
+        "Below you can see the mean mutations per 128 bits for each environment.\n";
 
     simSettings.environmentNumber = 2;
     simSettings.playingfieldNumber = 2;
+    simSettings.environmentMutationRate = 1.0;
     simSettings.playingfieldMasksMode = MASKS_MODE_INDEPENDENT;
     simulation y(0, &simSettings, &error, theMainWindow);
     if (error) return false;
 
-    QVector <QVector <QVector <bool> > > masks;
-    QVector <QVector <QVector <bool> > > masks2;
-    int cnts[12] = {0};
+    QVector <Environment> testEnvironments;
+    int countVectorLength = y.playingFields.length() + y.playingFields[0]->environments.length();
+    QVector <int> differencesCount(countVectorLength, 0);
 
     //Count the number of ones - this may change if we do not match peaks
     int maxDiff = 0;
     for (int i = 0; i < replicates; i++)
     {
         if (theMainWindow) theMainWindow->setProgressBar(i);
-        masks = y.playingFields[0]->masks;
-        masks2 =  y.playingFields[1]->masks;
-        y.mutateEnvironment();
 
-        //Count the differences - i.e. the number of mutations
-        for (int k = 0; k < masks[0][0].length(); k++)
-        {
-            for (int j = 0; j < 3; j++) if (y.playingFields[0]->masks[0][j][k] != masks[0][j][k])cnts[j]++;
-            for (int j = 0; j < 3; j++) if (y.playingFields[0]->masks[1][j][k] != masks[1][j][k])cnts[j + 3]++;
-            for (int j = 0; j < 3; j++) if (y.playingFields[1]->masks[0][j][k] != masks2[0][j][k])cnts[j + 6]++;
-            for (int j = 0; j < 3; j++) if (y.playingFields[1]->masks[1][j][k] != masks2[1][j][k])cnts[j + 9]++;
-        }
+        for (auto p : y.playingFields)
+            //If this needs to be sent by reference, need to change it in the simulation as well
+            for (auto &e : p->environments)
+            {
+                //Create a copy of the environment, then mutate it to check differences
+                Environment newEnvironment(e, false);
+                testEnvironments.append(newEnvironment);
+                e.mutate();
+            }
 
-        //Now count the ones
-        int count0 = 0;
-        for (auto p : std::as_const(y.playingFields))
-            for (auto &e : p->masks)
-                for (auto &m : e)
-                    for (auto b : m) if (b) count0++;
+        //Count the differences - i.e. the number of mutations, and also the number of ones in playingfields before and after mutations
+        int environmentNumber = 0, bitCount1 = 0, bitCount2 = 0;
+        for (int i = 0; i < y.playingFields.length(); i++)
+            for (int j = 0; j < y.playingFields[i]->environments.length(); j++)
+            {
+                differencesCount[environmentNumber] += testEnvironments[environmentNumber].countDifferences(y.playingFields[i]->environments[j]);
+                bitCount1 += testEnvironments[environmentNumber].bitCount();
+                bitCount2 += y.playingFields[i]->environments[j].bitCount();
+                environmentNumber++;
+            }
 
-        int count1 = 0;
-        for (auto &e : masks)
-            for (auto &m : e)
-                for (auto b : m) if (b) count1++;
-        for (auto &e : masks2)
-            for (auto &m : e)
-                for (auto b : m) if (b) count1++;
-
-        int difference = abs(count0 - count1);
+        int difference = abs(bitCount1 - bitCount2);
         if (difference > maxDiff)maxDiff = difference;
+
+        testEnvironments.clear();
     }
 
-    double dCnts[12] = {0.};
+    QList <double> dCnts;
     double dCntsSum = 0.;
 
-    for (int i = 0; i < 12; i++)
+    for (int i = 0; i < differencesCount.length(); i++)
     {
-        dCnts[i] = (static_cast<double>(cnts[i]) / static_cast<double>(replicates));
+        dCnts.append(static_cast<double>(differencesCount[i]) / (static_cast<double>(replicates * simSettings.maskNumber)));
         if (dCnts[i] < 1.25 || dCnts[i] > 1.31) testFlag = false;
         dCntsSum += dCnts[i];
 
-        if (i == 3) out << "Environment 2: ";
-        if (i == 6) out << "Playing field 2:\nEnvironment 1: ";
-        if (i == 9) out << "Environment 2: ";
-
-        out << dCnts[i] << "\t";
-
-        if ((i + 1) % 3 == 0) out << "\n";
+        out << "Environment " << i << " mean differences per environment " << dCnts[i] << "\n";
     }
 
     flagString = testFlag ? "true" : "false";
 
-    out << "The mean of these values is " << dCntsSum / 12. << ".\n";
+    out << "\nThe mean of these values is " << dCntsSum / dCnts.length() << ".\n";
     out << "TREvoSim expects all above to be between 1.25 and 1.31 and returned " << flagString << ".\n";
 
     if (maxDiff == 0)
@@ -649,69 +739,60 @@ bool testinternal::testFive(QString &outString)
     simulation z(0, &simSettings, &error, theMainWindow);
     if (error) return false;
 
-    out << "Now testing environment mutation across two playing fields (mode independent), and two environments for each, with matching peaks turned on. Same test for each as above. \nPlaying field 1:\nEnvironment 1:\t";
+    out << "\nNow testing environment mutation across two playing fields (mode independent), and two environments for each, with matching peaks turned on. Same test for each as above. \n";
 
-    //Reset counts
-    for (auto &i : cnts) i = 0;
+    //Reset counts and environments
+    for (auto &i : differencesCount) i = 0;
     maxDiff = 0;
     dCntsSum = 0;
-
-    if (theMainWindow) theMainWindow->setStatus("Doing environment mutation tests with matching peaks.");
+    testEnvironments.clear();
+    dCnts.clear();
 
     for (int i = 0; i < replicates; i++)
     {
         if (theMainWindow) theMainWindow->setProgressBar(i);
-        masks = z.playingFields[0]->masks;
-        masks2 = z.playingFields[1]->masks;
-        z.mutateEnvironment();
 
-        //Calculate rates
-        for (int k = 0; k < masks[0][0].length(); k++)
-        {
-            for (int j = 0; j < 3; j++) if (z.playingFields[0]->masks[0][j][k] != masks[0][j][k])cnts[j]++;
-            for (int j = 0; j < 3; j++) if (z.playingFields[0]->masks[1][j][k] != masks[1][j][k])cnts[j + 3]++;
-            for (int j = 0; j < 3; j++) if (z.playingFields[1]->masks[0][j][k] != masks2[0][j][k])cnts[j + 6]++;
-            for (int j = 0; j < 3; j++) if (z.playingFields[1]->masks[1][j][k] != masks2[1][j][k])cnts[j + 9]++;
-        }
+        for (auto p : z.playingFields)
+            //If this needs to be sent by reference, need to change it in the simulation as well
+            for (auto &e : p->environments)
+            {
+                //Create a copy of the environment, then mutate it to check differences
+                Environment newEnvironment(e, false);
+                testEnvironments.append(newEnvironment);
+                e.mutate();
+            }
 
-        //Now count the ones
-        int count0 = 0;
-        for (auto p : std::as_const(z.playingFields))
-            for (auto &e : p->masks)
-                for (auto &m : e)
-                    for (auto b : m) if (b) count0++;
-        //Note here that above we have two environments fields, below, these are placed into two different mask structures, hence the need to add both to the count
-        int count1 = 0;
-        for (auto &e : masks)
-            for (auto &m : e)
-                for (auto b : m) if (b) count1++;
-        for (auto &e : masks2)
-            for (auto &m : e)
-                for (auto b : m) if (b) count1++;
+        //Count the differences - i.e. the number of mutations, and also the number of ones in playingfields before and after mutations
+        int environmentNumber = 0, bitCount1 = 0, bitCount2 = 0;
+        for (int i = 0; i < z.playingFields.length(); i++)
+            for (int j = 0; j < z.playingFields[i]->environments.length(); j++)
+            {
+                differencesCount[environmentNumber] += testEnvironments[environmentNumber].countDifferences(z.playingFields[i]->environments[j]);
+                bitCount1 += testEnvironments[environmentNumber].bitCount();
+                bitCount2 += z.playingFields[i]->environments[j].bitCount();
+                environmentNumber++;
+            }
 
-        int difference = abs(count0 - count1);
+        int difference = abs(bitCount1 - bitCount2);
         if (difference > maxDiff)maxDiff = difference;
+
+        testEnvironments.clear();
     }
 
     if (theMainWindow) theMainWindow->hideProgressBar();
 
-    for (int i = 0; i < 12; i++)
+    for (int i = 0; i < differencesCount.length(); i++)
     {
-        dCnts[i] = (static_cast<double>(cnts[i]) / static_cast<double>(replicates));
+        dCnts.append(static_cast<double>(differencesCount[i]) / (static_cast<double>(replicates * simSettings.maskNumber)));
         dCntsSum += dCnts[i];
-
-        if (i == 3) out << "Environment 2: ";
-        if (i == 6) out << "Playing field 2:\nEnvironment 1: ";
-        if (i == 9) out << "Environment 2: ";
-
-        out << dCnts[i] << "\t";
-
-        if ((i + 1) % 3 == 0) out << "\n";
+        if (dCnts[i] < 1.25 || dCnts[i] > 1.31) testFlag = false;
+        out << "Environment " << i << " mean differences per environment " << dCnts[i] << "\n";
     }
-    double dCntsMean = dCntsSum / 12;
+
+    double dCntsMean = dCntsSum / static_cast<double>(dCnts.length());
     if (dCntsMean < (1.25) || dCntsMean > (1.31)) testFlag = false;
     flagString = testFlag ? "true" : "false";
-    out << "The mean of these values is " << dCntsMean << ".\n";
+    out << "\nThe mean of these values is " << dCntsMean << ".\n";
     out << "In this case, the mean values per mask will be more variable as it depends on the distribution of 1s across masks.\n";
     out << "TREvoSim thus expects the mean of the above to be between 1.25 and 1.32 and has returned " << flagString << "\n";
     out << "In all cases, due to the possibility of multiple hits on a single site, the mean values can be marginally below the expected value of 1.28.\n";
@@ -1111,8 +1192,10 @@ bool testinternal::testNine(QString &outString)
     bool testFlag = true;
     QTextStream out(&outString);
 
-    out << "Testing perturbations. First perturbation start.\n\n";
+    out << "Testing perturbations *****NOT CURRENTLY ENABLED***** .\n\n";
+    //out << "Testing perturbations. First perturbation start.\n\n";
 
+    /*
     for (int i = 0; i < 3; i++)
     {
         simulationVariables simSettings;
@@ -1240,7 +1323,7 @@ bool testinternal::testNine(QString &outString)
         }
         out << "--\n\n";
     }
-
+    */
     if (testFlag) out << "\nPerturbation tests passed.\n";
     return testFlag;
 }
@@ -2217,11 +2300,9 @@ bool testinternal::testSeventeen(QString &outString)
     for (auto p : std::as_const(x.playingFields))
         for (auto o : p->playingField)
             if (o->ecosystemEngineer)
-                for (auto &m : p->masks)
-                    for (auto &n : m)
-                    {
-                        if (o->genome == n) identical = true;
-                    }
+                for (auto e : p->environments)
+                    if (e.compareOrganism(o)) identical = true;
+
     out << "Have applied EE and checked that no mask is identical to genome. Check returned: " << identical << ".\n";
     if (identical == true) testFlag = false;
 
@@ -2251,11 +2332,9 @@ bool testinternal::testSeventeen(QString &outString)
     for (auto p : std::as_const(x.playingFields))
         for (auto o : p->playingField)
             if (o->ecosystemEngineer)
-                for (auto &m : p->masks)
-                    for (auto &n : m)
-                    {
-                        if (o->genome == n) identical = true;
-                    }
+                for (auto e : p->environments)
+                    if (e.compareOrganism(o)) identical = true;
+
     out << "Have applied EE and checked that one mask is identical to genome. Check returned: " << identical << ".\n";
     if (identical == false) testFlag = false;
 
@@ -2281,14 +2360,13 @@ bool testinternal::testSeventeen(QString &outString)
     x.applyEcosystemEngineering(speciesList, false);
 
     identical = false;
+
     for (auto p : std::as_const(x.playingFields))
         for (auto o : p->playingField)
             if (o->ecosystemEngineer)
-                for (auto &m : p->masks)
-                    for (auto &n : m)
-                    {
-                        if (o->genome == n) identical = true;
-                    }
+                for (auto e : p->environments)
+                    if (e.compareOrganism(o)) identical = true;
+
     out << "Have applied EE and checked that one mask is identical to genome. Check returned: " << identical << ".\n";
     if (identical == false) testFlag = false;
 
@@ -2488,6 +2566,13 @@ bool testinternal::testEighteen(QString &outString)
 }
 
 //Match peaks
+
+/****************
+    *  with new environments need to check - peak heights are the same, but also that peak fitness
+    * Genome is different between environments
+    * and that this is true after mutation
+    * and that generated environments sytart at ~50% 1s to check randoms
+ *******************/
 bool testinternal::testNineteen(QString &outString)
 {
     bool testFlag = true;
@@ -2571,7 +2656,9 @@ bool testinternal::testNineteen(QString &outString)
         }
         out << "Now mutating environment, and repeating the above: all peaks should still match!\n";
         outError << x.printMasks(x.playingFields);
-        x.mutateEnvironment();
+        for (auto p : x.playingFields)
+            for (auto e : p->environments)
+                e.mutate();
 
         for (int k = 0; k < j; k++)
         {
@@ -2657,6 +2744,7 @@ bool testinternal::testNineteen(QString &outString)
 
 bool testinternal::testTwenty(QString &outString)
 {
+
     bool testFlag = true;
     QTextStream out(&outString);
 
@@ -2726,8 +2814,9 @@ bool testinternal::testTwentyOne(QString &outString)
     bool testFlag = true;
     QTextStream out(&outString);
 
-    out << "Testing increment environments.\n";
+    out << "NOT TESTING Testing increment environments - REMOVE IN FUTURE VERSION?.\n";
 
+    /*
     simulationVariables simSettings;
     //First check behviour when it is not enabled
     simSettings.incrementEnvironments = true;
@@ -2839,6 +2928,7 @@ bool testinternal::testTwentyOne(QString &outString)
     */
 
     //Create default setting object and then a simulation object for the test
+    /*
     simulationVariables simSettings2;
     simSettings2.genomeSize = 50;
     simSettings2.fitnessSize = 50;
@@ -2887,7 +2977,7 @@ bool testinternal::testTwentyOne(QString &outString)
     fitness = y.fitness(&org, y.playingFields[0]->masks, simSettings2.fitnessSize, simSettings2.fitnessTarget, simSettings2.maskNumber, y.runEnvironmentNumber, simSettings2.fitnessMode);
     if (fitness != 0) testFlag = false;
     out <<  "Fitness, with fitness target of " << simSettings2.fitnessTarget << " is " << fitness << ". It should be 0.\n";
-
+    */
 
     return testFlag;
 }

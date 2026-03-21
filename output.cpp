@@ -70,19 +70,12 @@ Output::Output(QWidget *parent, simulationVariables *simSettings) :
 
     ui->running_log_body->insertPlainText(settings->runningLogString);
 
-    ui->c_work_log->setChecked(settings->workingLog);
-
     QObject::connect(ui->c_write_running_log, &QCheckBox::stateChanged, this, &Output::slotWriteRunningLogChanged);
 }
 
 void Output::on_buttonBox_accepted()
 {
     settings->writeTree = ui->c_write_tree->isChecked();
-    settings->workingLog = ui->c_work_log->isChecked();
-
-    if (settings->workingLog)QMessageBox::warning(nullptr, "Heads up",
-                                                      "Work log outputs text every operation the programme performs, allowing its behaviour to be validated. Be aware that this creates very large text files, very quickly. You may want to run your tests with limited taxon and character numbers.");
-
     settings->logFileNameBase01 = ui->file_01_base->text();
     settings->logFileNameBase01.replace(" ", "_");
     settings->logFileNameBase01.replace("\\", "/");

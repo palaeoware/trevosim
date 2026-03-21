@@ -20,6 +20,8 @@ Organism::Organism(int genomeSize, bool stochastic)
 
     ecosystemEngineer = false;
 
+    lastFitnessMode = -1;
+
     speciesID = -1;
     parentSpeciesID = -1;
 
@@ -96,6 +98,7 @@ void Organism::operator = (const Organism &O)
     cladogenesis = O.cladogenesis;
     ecosystemEngineer = O.ecosystemEngineer;
     children = O.children; // Note this is only used in the species list.
+    lastFitnessMode = O.lastFitnessMode;
 }
 
 bool Organism::operator == (const Organism &O)
@@ -115,7 +118,6 @@ bool Organism::operator == (const Organism &O)
     if (children != O.children) return false;
     return true;
 }
-
 
 bool Organism::operator < (const Organism &O)
 {
