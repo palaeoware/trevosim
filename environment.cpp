@@ -117,6 +117,7 @@ bool Environment::operator != (const Environment &E)
 
 bool Environment::mutate()
 {
+    /*
     //Set our mutation rate
     double localMutationRate = mutationRate;
     //If we are matching peaks, we want the mutation rate to be halved because we will need to switch a zero to a one and one to a zero or vice versa.
@@ -200,6 +201,18 @@ bool Environment::mutate()
             masks[mutationMask ][mutationPosition] = !masks[mutationMask ][mutationPosition];
         }
     }
+    */
+
+    for (int j = 0; j < masks.length(); j++)
+        for (int i = 0; i < masks[j].length(); i++)
+        {
+            //This will generate a random integer between 0 (inclusive) and 2 (exclusive) - so either 0 or 1. Break it out for clarity
+            int random = QRandomGenerator::global()->bounded(0, 2);
+            if (random == 0) masks[j][i] = false;
+            else if (random == 1) masks[j][i] = true;
+            else return false; //This should never happen
+        }
+
     return true;
 }
 
