@@ -1,11 +1,11 @@
 /**
  * @file
- * Main REvoSim CSS styling
+ * Main TREvoSim CSS styling
  *
- * All REvoSim code is released under the GNU General Public License.
+ * All TREvoSim code is released under the GNU General Public License.
  * See LICENSE.md files in the programme directory.
  *
- * All REvoSim code is Copyright 2018 by Mark Sutton, Russell Garwood,
+ * All TREvoSim code is Copyright 2018 Russell Garwood,
  * and Alan R.T. Spencer.
  *
  * This program is free software; you can redistribute it and/or modify
@@ -29,6 +29,7 @@ QToolTip{
 QStatusBar{
     background-color:qlineargradient(x1:0,y1:0,x2:0,y2:1,stop:0 rgba(25,25,25,127),stop:1 rgba(53,53,53,75));
     color:palette(mid);
+    color:text(rgba(255,255,255,255));
 }
 
 QMenuBar{
