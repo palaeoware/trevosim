@@ -49,7 +49,6 @@ simulationVariables::simulationVariables()
     stripUninformative = false;
     genomeOnExtinction = true;
     discardDeleterious = false;
-    workingLog = false;
     environmentalPerturbation = false;
     mixing = false;
     mixingPerturbation = false;
@@ -243,6 +242,14 @@ bool simulationVariables::loadSettings(QFile *settingsFile)
     }
     // Error
     if (settingsFileIn.hasError()) return false;
+
+    //Check settings
+    if (!(fitnessMode == FITNESS_MODE_MINIMUM || fitnessMode == FITNESS_MODE_MEAN)) return false;
+    if (playingfieldMasksMode > MASKS_MODE_IDENTICAL_START) return false;
+    if (runMode > RUN_MODE_ITERATION) return false;
+    if (speciationMode > SPECIES_MODE_ALL) return false; //To be updated when Mayr implemented
+    if (fitnessSize > genomeSize) return false;
+
     return true;
 }
 

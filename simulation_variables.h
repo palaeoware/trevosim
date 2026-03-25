@@ -47,7 +47,6 @@ public:
     bool mixingPerturbation;
     bool genomeOnExtinction;
     bool stripUninformative;
-    bool workingLog;
     bool writeTree;
     bool noSelection;
     bool randomSeed;

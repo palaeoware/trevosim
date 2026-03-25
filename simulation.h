@@ -3,6 +3,7 @@
 
 #include "simulation_variables.h"
 #include "organism.h"
+#include "environment.h"
 #include "mainwindow.h"
 
 #include <QDir>
@@ -28,7 +29,6 @@ private:
     int runSelectSize;
     int runFitnessSize;
     int runFitnessTarget;
-    int runMaskNumber;
     int runEnvironmentNumber;
     int runSpeciesDifference;
     int runMixingProbabilityOneToZero;
@@ -51,14 +51,13 @@ private:
     struct playingFieldStructure
     {
         QVector <Organism *> playingField;
-        QVector <QVector <QVector <bool> > > masks;
+        QVector <Environment> environments;
     };
 
     QVector <playingFieldStructure *> playingFields;
 
     //Other variables
     QDir savePathDirectory;
-    QFile workLogFile;
     MainWindow *theMainWindow;
     QTextStream workLogTextStream;
     quint32 maxRand;
@@ -78,9 +77,9 @@ private:
     QString printPlayingFieldGenomesConcise(const QVector <playingFieldStructure *> &playingFields);
     QString printPlayingFieldFitnessHistory(const QVector <playingFieldStructure *> &playingFields);
     QString printSpeciesList(const QVector <Organism *> &speciesList);
+    QString printEcosystemEngineers(const QVector <Organism *> &speciesList);
     QString printMasks(const QVector <playingFieldStructure *> &playingFields, int playingfield);
     QString printMasks(const QVector <playingFieldStructure *> &playingFields);
-    QString printEcosystemEngineers(const QVector <Organism *> &speciesList);
     QString doPadding(int number, int significantFigures);
     int paddingAmount(int taxonNumber);
     void printCountPeaks(int genomeSize, QVector <quint64> &totals, QVector <QVector <quint64> > &genomes, int repeat);
@@ -92,7 +91,6 @@ private:
     Organism initialise();
     int coinToss(const playingFieldStructure *pf);
     void mutateOrganism(Organism &progeny, const playingFieldStructure *pf);
-    void mutateEnvironment();
     void newSpecies(Organism &progeny, Organism &parent, playingFieldStructure *pf);
     void updateTNTstring(QString &TNTstring, int progParentSpeciesID, int progSpeciesID);
     int calculateOverwrite(const playingFieldStructure *pf, const int speciesNumber);
@@ -112,8 +110,7 @@ private:
     void writeGUI(QVector<Organism *> &speciesList);
 
     //Simulation calculations
-    int fitness(const Organism *org, const QVector<QVector<QVector<bool> > > &masks, int runFitnessSize, int runFitnessTarget, int runMaskNumber, int runEnvironmentNumber, int fitnessMode,
-                int environment = -1);
+    int fitness(const playingFieldStructure *fitnessPlayingField, const Organism *org, int runFitnessTarget, int fitnessEnvironment = -1);
     int meanFitness(const Organism *org);
     int genomeDifference(const Organism *organismOne, const Organism *organismTwo, const int selectSize = -1);
     QHash<QString, QVector<int> > checkForExtinct(const QVector <Organism *> &speciesList);
