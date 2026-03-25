@@ -24,6 +24,7 @@ simulationVariables::simulationVariables()
     speciesDifference = 4;
     unresolvableCutoff = 5;
     environmentNumber = 1;
+    environmentType = ENVIRONMENT_TYPE_CONSTANT;
     maskNumber = 3;
     mixingProbabilityZeroToOne = 0;
     mixingProbabilityOneToZero = 0;
@@ -107,6 +108,7 @@ QString simulationVariables::printSettings() const
                        << " organismMutationRate " << organismMutationRate
                        << " unresolvableCutoff " << unresolvableCutoff
                        << " environmentNumber " << environmentNumber
+                       << " environment type " << environmentType
                        << " incrementEnvironments " << incrementEnvironments
                        << " maskNumber " << maskNumber
                        << " runMode " << runMode
@@ -173,6 +175,7 @@ bool simulationVariables::loadSettings(QFile *settingsFile)
             if (settingsFileIn.name().toString() == "speciesDifference")speciesDifference = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "unresolvableCutoff")unresolvableCutoff = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "environmentNumber")environmentNumber = settingsFileIn.readElementText().toInt();
+            if (settingsFileIn.name().toString() == "environmentType")environmentType = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "maskNumber")maskNumber = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "fitnessTarget")fitnessTarget = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "playingfieldNumber")playingfieldNumber = settingsFileIn.readElementText().toInt();
@@ -302,6 +305,10 @@ void simulationVariables::saveSettings(QFile *settingsFile)
 
     settingsFileOut.writeStartElement("environmentNumber");
     settingsFileOut.writeCharacters(QString("%1").arg(environmentNumber));
+    settingsFileOut.writeEndElement();
+
+    settingsFileOut.writeStartElement("environmentType");
+    settingsFileOut.writeCharacters(QString("%1").arg(environmentType));
     settingsFileOut.writeEndElement();
 
     settingsFileOut.writeStartElement("maskNumber");

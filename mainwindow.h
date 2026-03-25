@@ -14,6 +14,10 @@
 #define MASKS_MODE_INDEPENDENT 1
 #define MASKS_MODE_IDENTICAL_START 2
 
+//Environment type
+#define ENVIRONMENT_TYPE_CONSTANT 0
+#define ENVIRONMENT_TYPE_RANDOM 1
+
 //Run mode - i.e. continuous, until taxon number, until iteration number
 #define RUN_MODE_CONTINUOUS 0
 #define RUN_MODE_TAXON 1

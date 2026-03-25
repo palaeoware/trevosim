@@ -14,6 +14,7 @@ public:
 
     //Ints
     int environmentNumber;
+    int environmentType;
     int fitnessSize;
     int fitnessTarget;
     int genomeSize;
