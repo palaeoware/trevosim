@@ -11,12 +11,14 @@
 //Also move mutate organism to organism object - why is this in simulation it makes no sense?
 //check when done that all attributes are correctly copied in equals
 //Failing tests 0,1,2,5,17
+//Environment types - can't do matching peaks and random environments. Either make exclusive, or make matching peaks a type of environment? Also make perturbation and environemnt type
 
-// We call this constructor when we want to create a new, random environment
-Environment::Environment(const int &maskNumber, const int &maskLength, const bool matchingPeaksCon, const double mutationRateCon)
+// We call this constructor when we want to create a new environment from scratch
+Environment::Environment(const int &maskNumber, const int &maskLength, const bool matchingPeaksCon, const double mutationRateCon, const int environmentTypeCon = ENVIRONMENT_TYPE_CONSTANT)
 {
     matchingPeaks = matchingPeaksCon;
     mutationRate = mutationRateCon;
+    environmentType = environmentTypeCon;
 
     //Set up vectors that will serve as masks for this environment
     for (int j = 0; j < maskNumber; j++)
@@ -44,13 +46,14 @@ Environment::Environment(const int &maskNumber, const int &maskLength, const boo
     }
 }
 
-//We call this one when we want to create an environment with matching peaks - we can always do this off the first created environment
+//We call this one when we want to create an environment from another - either shuffled but with matching peaks, or just copying the first
 Environment::Environment(const Environment &constructorEnvironment,  bool matchingPeaksCon)
 {
     if (matchingPeaksCon)
     {
         matchingPeaks = true;
         mutationRate = constructorEnvironment.mutationRate;
+        environmentType = constructorEnvironment.environmentType;
 
         //If we need to make sure fitness peaks are the same height, in TREvoSim, we need to initialise with the same number of 1s in each site
         //An easy way to do this is to shuffle the columns/sites between the incoming environment and the one we are creating
@@ -76,6 +79,7 @@ Environment::Environment(const Environment &constructorEnvironment,  bool matchi
     {
         matchingPeaks = constructorEnvironment.matchingPeaks;
         mutationRate = constructorEnvironment.mutationRate;
+        environmentType = constructorEnvironment.environmentType;
 
         for (int j = 0; j < constructorEnvironment.masks.length(); j++)
         {

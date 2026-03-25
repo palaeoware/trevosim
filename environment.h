@@ -2,6 +2,7 @@
 #define ENVIRONMENT_H
 
 #include "organism.h"
+#include "mainwindow.h"
 
 #include <QVector>
 #include <QRandomGenerator>
@@ -9,7 +10,7 @@
 class Environment
 {
 public:
-    Environment(const int &maskNumber, const int &maskLength, const bool matchingPeaksCon, const double mutationRateCon);
+    Environment(const int &maskNumber, const int &maskLength, const bool matchingPeaksCon, const double mutationRateCon, const int environmentTypeCon);
     Environment(const int &maskNumber, const int &maskLength, const bool initialiseState); //used for tests of fitness algorithm
     Environment(Environment const &constructorEnvironment, bool matchingPeaksCon);
 
@@ -35,6 +36,7 @@ private:
     QVector <QVector <bool> > masks;
     bool matchingPeaks;
     double mutationRate;
+    int environmentType;
 };
 
 #endif // ENVIRONMENT_H
