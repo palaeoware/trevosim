@@ -15,7 +15,7 @@ simulationVariables::simulationVariables()
     speciesSelectSize = 128;
     fitnessSize = 128;
     fitnessTarget = 0;
-    fitnessWindowSize = 5;
+    fitnessWindowSize = 50; //No user interface option for this yet
     playingfieldSize = 20;
     playingfieldNumber = 1;
     ecosystemEngineeringFrequency = 10;
@@ -68,6 +68,8 @@ simulationVariables::simulationVariables()
     writeFileTwo = true;
     writeEE = false;
     incrementEnvironments = false;
+    recordAllFitnesses = false; //No user option for this yet - keeping it here in case it comes in useful, but doing so does slow down the simulation a lot
+    //Also not saved for loaded
 
     //Strings
     QString base = (QString(PRODUCTNAME) + "_");

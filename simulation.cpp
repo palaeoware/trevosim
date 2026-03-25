@@ -383,8 +383,12 @@ bool simulation::run()
                 {
                     int newFitness = fitness(playingFields[p]->playingField[i], playingFields[p]->masks, runFitnessSize, runFitnessTarget, runMaskNumber, runEnvironmentNumber, simSettings->fitnessMode);
                     playingFields[p]->playingField[i]->fitness = newFitness;
+
                     //This happens every iteration and updates the fitness record of the instantaneous fitness as the simulation progresses
                     playingFields[p]->playingField[i]->fitnessRecord.append(newFitness);
+                    if (!simSettings->recordAllFitnesses && playingFields[p]->playingField[i]->fitnessRecord.length() > simSettings->fitnessWindowSize)
+                        playingFields[p]->playingField[i]->fitnessRecord.removeFirst();
+
                     //If we have a mean fitness mode, we need to overwrite the fitness with the mean through time
                     if (simSettings->fitnessMode == FITNESS_MODE_MEAN)
                     {

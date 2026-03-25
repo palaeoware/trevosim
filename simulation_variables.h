@@ -63,6 +63,7 @@ public:
     bool writeFileTwo;
     bool writeEE;
     bool incrementEnvironments;
+    bool recordAllFitnesses;
 
     //Doubles
     double environmentMutationRate;
