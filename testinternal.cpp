@@ -141,7 +141,7 @@ bool testinternal::testZero(QString &outString)
     simulationVariables simSettings;
     simSettings.fitnessSize = 50;
     simSettings.maskNumber = 3;
-    simSettings.matchFitnessPeaks = false;
+    simSettings.environmentType  = ENVIRONMENT_TYPE_CONSTANT;
     simSettings.fitnessTarget = 0;
     simSettings.fitnessMode = FITNESS_MODE_MINIMUM;
     simulation x(0, &simSettings, &error, theMainWindow);
@@ -734,7 +734,7 @@ bool testinternal::testFive(QString &outString)
     }
 
     //Repeat this test with matching peaks, which should equate to the same number, but only do two mutations at once, resulting in the same number of ones
-    simSettings.matchFitnessPeaks = true;
+    simSettings.environmentType = ENVIRONMENT_TYPE_MATCHING_PEAKS;
 
     simulation z(0, &simSettings, &error, theMainWindow);
     if (error) return false;
@@ -2582,7 +2582,7 @@ bool testinternal::testNineteen(QString &outString)
 
     simulationVariables simSettings;
     //First check behviour when it is not enabled
-    simSettings.matchFitnessPeaks = false;
+    simSettings.environmentType = ENVIRONMENT_TYPE_CONSTANT;
     simSettings.genomeSize = 8;
     simSettings.fitnessSize = simSettings.genomeSize;
     simSettings.speciesSelectSize = simSettings.genomeSize;
@@ -2630,7 +2630,7 @@ bool testinternal::testNineteen(QString &outString)
     }
 
     out << "\nMatch fitness peaks is now on.\n\n";
-    simSettings.matchFitnessPeaks = true;
+    simSettings.environmentType  = ENVIRONMENT_TYPE_MATCHING_PEAKS;
     identical.clear();
 
     QString errorString;

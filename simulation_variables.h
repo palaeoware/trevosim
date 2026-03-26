@@ -54,7 +54,6 @@ public:
     bool randomOverwrite;
     bool stochasticLayer;
     bool expandingPlayingfield;
-    bool matchFitnessPeaks;
     bool ecosystemEngineers;
     bool ecosystemEngineersArePersistent;
     bool ecosystemEngineersAddMask;

@@ -58,7 +58,6 @@ simulationVariables::simulationVariables()
     randomOverwrite = false;
     stochasticLayer = false;
     expandingPlayingfield = false;
-    matchFitnessPeaks = false;
     ecosystemEngineers = false;
     ecosystemEngineersArePersistent = false;
     ecosystemEngineersAddMask = false;
@@ -141,7 +140,6 @@ QString simulationVariables::printSettings() const
                        << " expandingPlayingfield " << expandingPlayingfield
                        << " stochasticLayer " << stochasticLayer
                        << " stochasticDepth " << stochasticDepth
-                       << " matchFitnessPeaks " << matchFitnessPeaks
                        << " stochasticMap ";
 
     for (int i = 0; i < 16; i++) settingsTextStream << stochasticMap[i];
@@ -209,7 +207,6 @@ bool simulationVariables::loadSettings(QFile *settingsFile)
             if (settingsFileIn.name().toString() == "randomOverwrite")randomOverwrite = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "stochasticLayer")stochasticLayer = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "expandingPlayingfield ")expandingPlayingfield = settingsFileIn.readElementText().toInt();
-            if (settingsFileIn.name().toString() == "matchFitnessPeaks")matchFitnessPeaks = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "ecosystemEngineers")ecosystemEngineers = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "ecosystemEngineersArePersistent")ecosystemEngineersArePersistent = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "ecosystemEngineersAddMask")ecosystemEngineersAddMask = settingsFileIn.readElementText().toInt();
@@ -427,10 +424,6 @@ void simulationVariables::saveSettings(QFile *settingsFile)
 
     settingsFileOut.writeStartElement("expandingPlayingfield");
     settingsFileOut.writeCharacters(QString("%1").arg(expandingPlayingfield));
-    settingsFileOut.writeEndElement();
-
-    settingsFileOut.writeStartElement("matchFitnessPeaks");
-    settingsFileOut.writeCharacters(QString("%1").arg(matchFitnessPeaks));
     settingsFileOut.writeEndElement();
 
     settingsFileOut.writeStartElement("ecosystemEngineers");

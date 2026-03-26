@@ -66,9 +66,7 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
     ui->c_random_overwrite->setChecked(settings->randomOverwrite);
     ui->c_stochastic->setChecked(settings->stochasticLayer);
     ui->c_expanding_playingfield->setChecked(settings->expandingPlayingfield);
-    ui->c_match_fitness_peaks->setChecked(settings->matchFitnessPeaks);
     ui->c_ecosystem_engineers->setChecked(settings->ecosystemEngineers);
-    ui->c_increment_environments->setChecked(settings->incrementEnvironments);
 
     //Set sensible maxima
     ui->s_select_size->setMaximum(settings->genomeSize);
@@ -131,7 +129,22 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
     ui->combo_speciation->setCurrentIndex(simSettings->speciationMode);
 
     //Set combo box for fitnes mode
+    QStringList comboOptionsFM;
+    comboOptionsFM.insert(FITNESS_MODE_MINIMUM, "Best");
+    comboOptionsFM.insert(FITNESS_MODE_MEAN, "Mean");
+
+    ui->combo_fitness_mode->addItems(comboOptionsFM);
     ui->combo_fitness_mode->setCurrentIndex(simSettings->fitnessMode);
+
+    //Set combo box for environment type
+    QStringList comboOptionsET;
+    comboOptionsET.insert(ENVIRONMENT_TYPE_CONSTANT, "Constant mutation");
+    comboOptionsET.insert(ENVIRONMENT_TYPE_RANDOM, "Random");
+    comboOptionsET.insert(ENVIRONMENT_TYPE_MATCHING_PEAKS, "Matching peaks");
+
+    ui->combo_environment_type->addItems(comboOptionsET);
+    ui->combo_environment_type->setCurrentIndex(simSettings->environmentType);
+
 }
 
 void Settings::on_buttonBox_accepted()
@@ -161,9 +174,7 @@ void Settings::on_buttonBox_accepted()
     settings->randomOverwrite = ui->c_random_overwrite->isChecked();
     settings->stochasticLayer = ui->c_stochastic->isChecked();
     settings->expandingPlayingfield = ui->c_expanding_playingfield->isChecked();
-    settings->matchFitnessPeaks = ui->c_match_fitness_peaks->isChecked();
     settings->ecosystemEngineers = ui->c_ecosystem_engineers->isChecked();
-    settings->incrementEnvironments = ui->c_increment_environments->isChecked();
 
     //Modify variables - environment tab
     settings->playingfieldSize = ui->s_playingfield_size->value();

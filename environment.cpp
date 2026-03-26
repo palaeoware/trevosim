@@ -12,11 +12,11 @@
 //check when done that all attributes are correctly copied in equals
 //Failing tests 0,1,2,5,17
 //Environment types - can't do matching peaks and random environments. Either make exclusive, or make matching peaks a type of environment? Also make perturbation and environemnt type
+//Remove increment environments
 
 // We call this constructor when we want to create a new environment from scratch
-Environment::Environment(const int &maskNumber, const int &maskLength, const bool matchingPeaksCon, const double mutationRateCon, const int environmentTypeCon = ENVIRONMENT_TYPE_CONSTANT)
+Environment::Environment(const int &maskNumber, const int &maskLength, const double mutationRateCon, const int environmentTypeCon = ENVIRONMENT_TYPE_CONSTANT)
 {
-    matchingPeaks = matchingPeaksCon;
     mutationRate = mutationRateCon;
     environmentType = environmentTypeCon;
 
@@ -51,9 +51,8 @@ Environment::Environment(const Environment &constructorEnvironment,  bool matchi
 {
     if (matchingPeaksCon)
     {
-        matchingPeaks = true;
         mutationRate = constructorEnvironment.mutationRate;
-        environmentType = constructorEnvironment.environmentType;
+        environmentType = ENVIRONMENT_TYPE_MATCHING_PEAKS;
 
         //If we need to make sure fitness peaks are the same height, in TREvoSim, we need to initialise with the same number of 1s in each site
         //An easy way to do this is to shuffle the columns/sites between the incoming environment and the one we are creating
@@ -77,7 +76,6 @@ Environment::Environment(const Environment &constructorEnvironment,  bool matchi
     }
     else
     {
-        matchingPeaks = constructorEnvironment.matchingPeaks;
         mutationRate = constructorEnvironment.mutationRate;
         environmentType = constructorEnvironment.environmentType;
 
@@ -98,23 +96,23 @@ void Environment::operator = (const Environment &E)
 {
     // Copy all attributes
     masks = E.masks;
-    matchingPeaks = E.matchingPeaks;
     mutationRate = E.mutationRate;
+    environmentType = E.environmentType;
 }
 
 bool Environment::operator == (const Environment &E)
 {
     if (masks != E.masks) return false;
-    if (matchingPeaks != E.matchingPeaks) return false;
     if (mutationRate != E.mutationRate) return false;
+    if (environmentType != E.environmentType) return false;
     return true;
 }
 
 bool Environment::operator != (const Environment &E)
 {
     if (masks == E.masks) return false;
-    if (matchingPeaks == E.matchingPeaks) return false;
     if (mutationRate == E.mutationRate) return false;
+    if (environmentType == E.environmentType) return false;
     return true;
 }
 
@@ -123,15 +121,24 @@ bool Environment::mutate()
 {
     if (environmentType == ENVIRONMENT_TYPE_RANDOM)
     {
-
+        for (int j = 0; j < masks.length(); j++)
+            for (int i = 0; i < masks[j].length(); i++)
+            {
+                //This will generate a random integer between 0 (inclusive) and 2 (exclusive) - so either 0 or 1. Break it out for clarity
+                int random = QRandomGenerator::global()->bounded(0, 2);
+                if (random == 0) masks[j][i] = false;
+                else if (random == 1) masks[j][i] = true;
+                else return false; //This should never happen
+            }
     }
+    //Treat these together as they require a lot of the same setup - only the mutation process really differs
     else if (environmentType == ENVIRONMENT_TYPE_MATCHING_PEAKS || environmentType == ENVIRONMENT_TYPE_CONSTANT)
     {
         //Set our mutation rate
         double localMutationRate = mutationRate;
         //If we are matching peaks, we want the mutation rate to be halved because we will need to switch a zero to a one and one to a zero or vice versa.
         //So every mutation is two bit changes
-        if (matchingPeaks) localMutationRate /= 2;
+        if (environmentType == ENVIRONMENT_TYPE_MATCHING_PEAKS) localMutationRate /= 2;
 
         //Define the mask length as we will need to use it multiple times
         int maskLength = masks[0].length();

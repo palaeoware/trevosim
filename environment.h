@@ -10,7 +10,7 @@
 class Environment
 {
 public:
-    Environment(const int &maskNumber, const int &maskLength, const bool matchingPeaksCon, const double mutationRateCon, const int environmentTypeCon);
+    Environment(const int &maskNumber, const int &maskLength, const double mutationRateCon, const int environmentTypeCon);
     Environment(const int &maskNumber, const int &maskLength, const bool initialiseState); //used for tests of fitness algorithm
     Environment(Environment const &constructorEnvironment, bool matchingPeaksCon);
 
@@ -34,7 +34,6 @@ public:
 
 private:
     QVector <QVector <bool> > masks;
-    bool matchingPeaks;
     double mutationRate;
     int environmentType;
 };
