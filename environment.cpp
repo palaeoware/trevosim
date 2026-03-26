@@ -121,89 +121,98 @@ bool Environment::operator != (const Environment &E)
 
 bool Environment::mutate()
 {
-    //Set our mutation rate
-    double localMutationRate = mutationRate;
-    //If we are matching peaks, we want the mutation rate to be halved because we will need to switch a zero to a one and one to a zero or vice versa.
-    //So every mutation is two bit changes
-    if (matchingPeaks) localMutationRate /= 2;
-
-    //Define the mask length as we will need to use it multiple times
-    int maskLength = masks[0].length();
-    int maskNumber = masks.length();
-
-    //As per docs, mutations are set per 100 bits in the genome - calculate for this environment, first total bit number
-    int totalBitsPerEnvironment = masks[0].length() * masks.length();
-    //Then calculate mutation # for this environment
-    double numberEnvironmentMutationsDouble = (static_cast<double>(totalBitsPerEnvironment) / 100.) * localMutationRate;
-    //This will be used to store the integral part of the above - it needs to be a double as this is what is passed to the modf function
-    double numberEnvironmentMutationsIntegral = numberEnvironmentMutationsDouble;
-    //Next sort out the probabilities of extra mutation given remainder
-    double numberEnvironmentMutationsFractional = modf(numberEnvironmentMutationsDouble, &numberEnvironmentMutationsIntegral);
-    int numberEnvironmentMutationsInteger = (static_cast<int>(numberEnvironmentMutationsIntegral));
-    if (QRandomGenerator::global()->generateDouble() < numberEnvironmentMutationsFractional) numberEnvironmentMutationsInteger++;
-    //note that due to saturation / multiple hits on one site, the number of recorded mutations in e.g. our tests may sneak in under the expected value
-
-    if (matchingPeaks)
+    if (environmentType == ENVIRONMENT_TYPE_RANDOM)
     {
-        //If we are matching peaks, it's best to think of bit positions as columns. We want to shuffle around columns in the 'x' direction to achieve on swapped bit (= two bit changes, hence the half rate above - it is impossible to do this without swapping two bits)
-        //The way this is organised, we want to do this within each environment
-        //reminder: masks[environment #][mask #][bit #]
 
-        //Create lists of columns separated by one bit to do swap
-        QList <int> pairOne;
-        QList <int> pairTwo;
+    }
+    else if (environmentType == ENVIRONMENT_TYPE_MATCHING_PEAKS || environmentType == ENVIRONMENT_TYPE_CONSTANT)
+    {
+        //Set our mutation rate
+        double localMutationRate = mutationRate;
+        //If we are matching peaks, we want the mutation rate to be halved because we will need to switch a zero to a one and one to a zero or vice versa.
+        //So every mutation is two bit changes
+        if (matchingPeaks) localMutationRate /= 2;
 
-        //Used to do the exhaustively, but this was massive overkill for most settings, and made the function slooooow
-        //Now use heuristic approach with an appopriate escape and error message
-        int count = 0;
-        do
+        //Define the mask length as we will need to use it multiple times
+        int maskLength = masks[0].length();
+        int maskNumber = masks.length();
+
+        //As per docs, mutations are set per 100 bits in the genome - calculate for this environment, first total bit number
+        int totalBitsPerEnvironment = masks[0].length() * masks.length();
+        //Then calculate mutation # for this environment
+        double numberEnvironmentMutationsDouble = (static_cast<double>(totalBitsPerEnvironment) / 100.) * localMutationRate;
+        //This will be used to store the integral part of the above - it needs to be a double as this is what is passed to the modf function
+        double numberEnvironmentMutationsIntegral = numberEnvironmentMutationsDouble;
+        //Next sort out the probabilities of extra mutation given remainder
+        double numberEnvironmentMutationsFractional = modf(numberEnvironmentMutationsDouble, &numberEnvironmentMutationsIntegral);
+        int numberEnvironmentMutationsInteger = (static_cast<int>(numberEnvironmentMutationsIntegral));
+        if (QRandomGenerator::global()->generateDouble() < numberEnvironmentMutationsFractional) numberEnvironmentMutationsInteger++;
+        //note that due to saturation / multiple hits on one site, the number of recorded mutations in e.g. our tests may sneak in under the expected value
+
+        if (environmentType == ENVIRONMENT_TYPE_MATCHING_PEAKS)
         {
-            int firstBit = QRandomGenerator::global()->bounded(maskLength);
-            int secondBit = QRandomGenerator::global()->bounded(maskLength);
-            if (firstBit == secondBit) continue;
+            //If we are matching peaks, it's best to think of bit positions as columns. We want to shuffle around columns in the 'x' direction to achieve on swapped bit (= two bit changes, hence the half rate above - it is impossible to do this without swapping two bits)
+            //The way this is organised, we want to do this within each environment
+            //reminder: masks[environment #][mask #][bit #]
 
-            int bitDifference = 0;
-            for (int n = 0; n < maskNumber; n++)
-                if (masks[n][firstBit] != masks[n][secondBit]) bitDifference++;
+            //Create lists of columns separated by one bit to do swap
+            QList <int> pairOne;
+            QList <int> pairTwo;
 
-            if (bitDifference == 1)
-                if (!pairOne.contains(firstBit) && !pairOne.contains(secondBit) && !pairTwo.contains(firstBit) && !pairTwo.contains(secondBit))
-                {
-                    pairOne.append(firstBit);
-                    pairTwo.append(secondBit);
-                }
-            count++;
-        }
-        while (pairOne.length() < numberEnvironmentMutationsInteger && count < 10000);
-
-        //Add warning if there are not enough columns to swap: with any decent size genome, I don't expect this to happen all that much
-        if (pairOne.length() < numberEnvironmentMutationsInteger) return false;
-        //Otherwisse apply the mutations
-        else for (int x = 0; x < numberEnvironmentMutationsInteger; x++)
+            //Used to do the exhaustively, but this was massive overkill for most settings, and made the function slooooow
+            //Now use heuristic approach with an appopriate escape and error message
+            int count = 0;
+            do
             {
-                //Swap one pair of columns
-                int swap1 = pairOne[x];
-                int swap2 = pairTwo[x];
-                for (int m = 0; m < maskNumber; m++)
-                {
-                    bool storeBit = masks[m][swap1];
-                    masks[m][swap1] = masks[m][swap2];
-                    masks[m][swap2] = storeBit;
-                }
+                int firstBit = QRandomGenerator::global()->bounded(maskLength);
+                int secondBit = QRandomGenerator::global()->bounded(maskLength);
+                if (firstBit == secondBit) continue;
+
+                int bitDifference = 0;
+                for (int n = 0; n < maskNumber; n++)
+                    if (masks[n][firstBit] != masks[n][secondBit]) bitDifference++;
+
+                if (bitDifference == 1)
+                    if (!pairOne.contains(firstBit) && !pairOne.contains(secondBit) && !pairTwo.contains(firstBit) && !pairTwo.contains(secondBit))
+                    {
+                        pairOne.append(firstBit);
+                        pairTwo.append(secondBit);
+                    }
+                count++;
             }
-    }
-    //Or if we don't have matching peaks, we can just do the mutations
-    else
-    {
-        for (int x = 0; x < numberEnvironmentMutationsInteger; x++)
+            while (pairOne.length() < numberEnvironmentMutationsInteger && count < 10000);
+
+            //Add warning if there are not enough columns to swap: with any decent size genome, I don't expect this to happen all that much
+            if (pairOne.length() < numberEnvironmentMutationsInteger) return false;
+            //Otherwisse apply the mutations
+            else for (int x = 0; x < numberEnvironmentMutationsInteger; x++)
+                {
+                    //Swap one pair of columns
+                    int swap1 = pairOne[x];
+                    int swap2 = pairTwo[x];
+                    for (int m = 0; m < maskNumber; m++)
+                    {
+                        bool storeBit = masks[m][swap1];
+                        masks[m][swap1] = masks[m][swap2];
+                        masks[m][swap2] = storeBit;
+                    }
+                }
+        }
+        //Or if we don't have matching peaks, we can just do the mutations
+        else
         {
-            //Select random mask and random bit
-            int mutationPosition = QRandomGenerator::global()->bounded(maskLength);
-            int mutationMask = QRandomGenerator::global()->bounded(maskNumber);
-            //qDebug() << "m" << mutationPosition << mutationMask;
-            masks[mutationMask ][mutationPosition] = !masks[mutationMask ][mutationPosition];
+            for (int x = 0; x < numberEnvironmentMutationsInteger; x++)
+            {
+                //Select random mask and random bit
+                int mutationPosition = QRandomGenerator::global()->bounded(maskLength);
+                int mutationMask = QRandomGenerator::global()->bounded(maskNumber);
+                //qDebug() << "m" << mutationPosition << mutationMask;
+                masks[mutationMask ][mutationPosition] = !masks[mutationMask ][mutationPosition];
+            }
         }
     }
+    else return false;
+
     return true;
 }
 
