@@ -100,8 +100,10 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
     comboOptionsRM.insert(RUN_MODE_TAXON, "Run to taxon number");
     comboOptionsRM.insert(RUN_MODE_ITERATION, "Run to iteration number");
 
-    ui->combo_speciation->addItems(comboOptionsRM);
-    ui->combo_speciation->setCurrentIndex(simSettings->runMode);
+    ui->combo_run_mode->addItems(comboOptionsRM);
+    ui->combo_run_mode->setCurrentIndex(simSettings->runMode);
+
+    QObject::connect(ui->combo_run_mode, QOverload<int>::of(&QComboBox::activated), this, &Settings::slotRunModeChanged);
 
     if (settings->ecosystemEngineersArePersistent)ui->r_persistent_EE->setChecked(true);
     else ui->r_once_EE->setChecked(true);
@@ -487,6 +489,26 @@ void Settings::slotEngineersRadioClicked()
     {
         ui->s_EE_frequency->setEnabled(true);
         ui->EE_Label->setEnabled(true);
+    }
+}
+
+void Settings::slotRunModeChanged()
+{
+    if (ui->combo_run_mode->currentIndex() == RUN_MODE_TAXON)
+    {
+        ui->s_run_for->setDisabled(true);
+        ui->s_taxon_number->setDisabled(false);
+        ui->s_unresolvable_c->setDisabled(false);
+        ui->s_unresolvable_c->setMaximum(ui->s_taxon_number->value());
+        ui->s_unresolvable_c->setValue(ui->s_taxon_number->value());
+    }
+    else
+    {
+        ui->s_run_for->setDisabled(false);
+        ui->s_taxon_number->setDisabled(true);
+        ui->s_unresolvable_c->setDisabled(true);
+        ui->s_unresolvable_c->setMaximum(500);
+        ui->s_unresolvable_c->setValue(500);
     }
 }
 

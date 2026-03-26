@@ -33,6 +33,7 @@ private slots:
     void slotRandomOverwriteChanged();
     void slotEngineersChanged();
     void slotEngineersRadioClicked();
+    void slotRunModeChanged();
     void docs1();
     void docs2();
 
