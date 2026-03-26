@@ -66,7 +66,6 @@ simulationVariables::simulationVariables()
     writeFileOne = true;
     writeFileTwo = true;
     writeEE = false;
-    incrementEnvironments = false;
     recordAllFitnesses = false; //No user option for this yet - keeping it here in case it comes in useful, but doing so does slow down the simulation a lot
     //Also not saved for loaded
 

@@ -61,7 +61,6 @@ public:
     bool writeFileOne;
     bool writeFileTwo;
     bool writeEE;
-    bool incrementEnvironments;
     bool recordAllFitnesses;
 
     //Doubles

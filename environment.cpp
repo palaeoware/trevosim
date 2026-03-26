@@ -7,12 +7,10 @@
 //deal with error bool if true when called from simulation - add relevant message:
 //Constructor - initialisation
 //Mutate - warning("Oops", "There has been an error at mutating the environment with matching peaks - not enough pairs. Returning with no mutations made.");
-//Perturbations
+//Perturbations - make this an environment type
 //Also move mutate organism to organism object - why is this in simulation it makes no sense?
 //check when done that all attributes are correctly copied in equals
 //Failing tests 0,1,2,5,17
-//Environment types - can't do matching peaks and random environments. Either make exclusive, or make matching peaks a type of environment? Also make perturbation and environemnt type
-//Remove increment environments
 
 // We call this constructor when we want to create a new environment from scratch
 Environment::Environment(const int &maskNumber, const int &maskLength, const double mutationRateCon, const int environmentTypeCon = ENVIRONMENT_TYPE_CONSTANT)

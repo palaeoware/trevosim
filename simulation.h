@@ -97,7 +97,6 @@ private:
     void applyPerturbation();
     void applyPlayingfieldMixing(QVector<Organism *> &speciesList);
     void applyEcosystemEngineering(QVector<Organism *> &speciesList, bool writeEcosystemEngineers);
-    bool checkForIncrement(int runMode, int currentSpeciesNumber, int runForTaxa, int runForIterations, int environmentNumber, int iterations, int runEnvironmentNumber);
     void checkForUninformative(QVector <Organism *> &speciesList, QList <int> &uninformativeCoding, QList <int> &uninformativeNonCoding);
     bool checkForCharacterNumber(QList <int> &uninformativeCoding, QList <int> &uninformativeNonCoding);
     bool stripUninformativeCharacters(QVector<Organism *> &speciesList, const QList <int> &uninformativeCoding, const QList <int> &uninformativeNonCoding);
