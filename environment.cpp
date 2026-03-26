@@ -4,13 +4,13 @@
 #include <QDebug>
 
 //To do:
-//deal with error bool if true when called from simulation - add relevant message:
-//Constructor - initialisation
-//Mutate - warning("Oops", "There has been an error at mutating the environment with matching peaks - not enough pairs. Returning with no mutations made.");
-//Perturbations - make this an environment type
+//Perturbations - make this an environment type - and test 17
 //Also move mutate organism to organism object - why is this in simulation it makes no sense?
+//Failing tests 0,1,2,5,17 /  test mean window user set value sticks
+//sort out all sensible settings options are contngent on other options - e.g. fitness window, and also unresolvable cutoff limit
 //check when done that all attributes are correctly copied in equals
-//Failing tests 0,1,2,5,17
+//check gui updates all combo box options properly - make it write out the words, not the number?
+//Add a show settings dualogue to make checking the settings from GUI easier..
 
 // We call this constructor when we want to create a new environment from scratch
 Environment::Environment(const int &maskNumber, const int &maskLength, const double mutationRateCon, const int environmentTypeCon = ENVIRONMENT_TYPE_CONSTANT)

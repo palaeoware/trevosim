@@ -18,7 +18,7 @@ public:
     bool operator == (const Environment &E);
     bool operator != (const Environment &E);
 
-    bool  mutate();
+    bool mutate();
 
     bool error = false;
 

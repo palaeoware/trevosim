@@ -107,7 +107,6 @@ QString simulationVariables::printSettings() const
                        << " unresolvableCutoff " << unresolvableCutoff
                        << " environmentNumber " << environmentNumber
                        << " environment type " << environmentType
-                       << " incrementEnvironments " << incrementEnvironments
                        << " maskNumber " << maskNumber
                        << " runMode " << runMode
                        << " speciationMode " << speciationMode
@@ -213,7 +212,6 @@ bool simulationVariables::loadSettings(QFile *settingsFile)
             if (settingsFileIn.name().toString() == "writeFileOne")writeFileOne = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "writeFileTwo")writeFileTwo = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "writeEE")writeEE = settingsFileIn.readElementText().toInt();
-            if (settingsFileIn.name().toString() == "incrementEnvironments")incrementEnvironments = settingsFileIn.readElementText().toInt();
 
             //Strings
             if (settingsFileIn.name().toString() == "logFileNameBase01")logFileNameBase01 = settingsFileIn.readElementText();
@@ -451,10 +449,6 @@ void simulationVariables::saveSettings(QFile *settingsFile)
 
     settingsFileOut.writeStartElement("writeEE");
     settingsFileOut.writeCharacters(QString("%1").arg(writeEE));
-    settingsFileOut.writeEndElement();
-
-    settingsFileOut.writeStartElement("incrementEnvironments");
-    settingsFileOut.writeCharacters(QString("%1").arg(incrementEnvironments));
     settingsFileOut.writeEndElement();
 
     //Strings

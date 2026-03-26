@@ -20,9 +20,9 @@
 #define ENVIRONMENT_TYPE_MATCHING_PEAKS 2
 
 //Run mode - i.e. continuous, until taxon number, until iteration number
-#define RUN_MODE_CONTINUOUS 0
-#define RUN_MODE_TAXON 1
-#define RUN_MODE_ITERATION 2
+//#define RUN_MODE_CONTINUOUS 0 - could be useful down line?
+#define RUN_MODE_TAXON 0
+#define RUN_MODE_ITERATION 1
 
 //Speciation mode
 #define SPECIES_MODE_ORIGIN 0

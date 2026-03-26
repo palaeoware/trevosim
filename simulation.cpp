@@ -176,13 +176,9 @@ bool simulation::run()
     timer.start();
     int lastGUIUpdate = 0;
 
-    //If we are incrementing environment numbers, we need to start with 1
-    if (simSettings->incrementEnvironments && simSettings->test != 19)  runEnvironmentNumber  = 1;
-
     /************* Start simulation *************/
     do
     {
-
         //Pause if required....
         if (theMainWindow != nullptr)
             while (theMainWindow->pauseFlag == true && !theMainWindow->escapePressed)
@@ -268,7 +264,14 @@ bool simulation::run()
         /************* Mutate environment then update fitness *************/
         for (auto p : playingFields)
             for (auto &e : p->environments)
-                e.mutate();
+            {
+                bool mutateSuccess = e.mutate();
+                if (!mutateSuccess)
+                {
+                    warning("Error in mutate environment", "There has been an error mutating the environment. Please contact RJG.");
+                    return false;
+                }
+            }
 
         //If playing field masks should be the same, copy of playing fields over
         if (simSettings->playingfieldNumber > 1 && simSettings->playingfieldMasksMode == MASKS_MODE_IDENTICAL)
@@ -346,14 +349,6 @@ bool simulation::run()
             }
             if (ecosystemEngineeringOccurring == 1 || (ecosystemEngineeringOccurring > 1 && simSettings->ecosystemEngineersArePersistent)) applyEcosystemEngineering(speciesList, simSettings->writeEE);
         }
-
-
-        /************* Increment environments, if requried *************/
-
-        //If we are incrementing environment numbers, we need to change environment numbers alongg the way
-        if (simSettings->incrementEnvironments && simSettings->test != 19)
-            if (checkForIncrement(simSettings->runMode, speciesList.length(), simSettings->runForTaxa, simSettings->runForIterations, simSettings->environmentNumber, iterations, runEnvironmentNumber))
-                runEnvironmentNumber++;
 
         /************* Check if simulation is complete *************/
         if (simSettings->runMode == RUN_MODE_TAXON && (speciesCount + 1) == simSettings->runForTaxa) simulationComplete = true;
@@ -1557,17 +1552,6 @@ int simulation::genomeDifference(const Organism *organismOne, const Organism *or
             if (organismOne->genome[j] != organismTwo->genome[j])diff++;
     }
     return diff;
-}
-
-bool simulation::checkForIncrement(int runMode, int currentSpeciesNumber, int runForTaxa, int runForIterations, int environmentNumber, int iterations, int runEnvironmentNumber)
-{
-    if (runMode == RUN_MODE_TAXON)
-        if (currentSpeciesNumber > (runEnvironmentNumber * (runForTaxa / environmentNumber)))
-            return true;
-    if (runMode == RUN_MODE_ITERATION)
-        if (iterations > (runEnvironmentNumber * (runForIterations / environmentNumber)))
-            return true;
-    return false;
 }
 
 bool simulation::checkForSpeciation(const Organism *organismOne, int runSelectSize, int runSpeciesDifference, int speciationMode)

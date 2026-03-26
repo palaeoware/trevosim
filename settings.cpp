@@ -7,6 +7,7 @@
 #include <QFormLayout>
 #include <QComboBox>
 #include <QDesktopServices>
+#include <QInputDialog>
 
 Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
     QDialog(parent),
@@ -95,8 +96,12 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
     else if (settings->playingfieldMasksMode == MASKS_MODE_INDEPENDENT)ui->r_independent->setChecked(true);
     else ui->r_start->setChecked(true);
 
-    if (settings->runMode == RUN_MODE_TAXON)ui->r_taxon_number->setChecked(true);
-    else if (settings->runMode == RUN_MODE_ITERATION)ui->r_iterations->setChecked(true);
+    QStringList comboOptionsRM;
+    comboOptionsRM.insert(RUN_MODE_TAXON, "Run to taxon number");
+    comboOptionsRM.insert(RUN_MODE_ITERATION, "Run to iteration number");
+
+    ui->combo_speciation->addItems(comboOptionsRM);
+    ui->combo_speciation->setCurrentIndex(simSettings->runMode);
 
     if (settings->ecosystemEngineersArePersistent)ui->r_persistent_EE->setChecked(true);
     else ui->r_once_EE->setChecked(true);
@@ -118,14 +123,14 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
     ui->s_multiple->setValue(settings->playingfieldNumber);
 
     //Populate speciation mode combo box
-    QStringList comboOptions;
-    comboOptions.insert(SPECIES_MODE_ORIGIN, "Species origin");
-    comboOptions.insert(SPECIES_MODE_LAST_SPECIATION, "Last speciation");
-    comboOptions.insert(SPECIES_MODE_ALL, "Origin and all speciations");
+    QStringList comboOptionsSpecies;
+    comboOptionsSpecies.insert(SPECIES_MODE_ORIGIN, "Species origin");
+    comboOptionsSpecies.insert(SPECIES_MODE_LAST_SPECIATION, "Last speciation");
+    comboOptionsSpecies.insert(SPECIES_MODE_ALL, "Origin and all speciations");
     //Not yet implemented
     //comboOptions.insert(SPECIES_MODE_MAYR, "Mayr");
 
-    ui->combo_speciation->addItems(comboOptions);
+    ui->combo_speciation->addItems(comboOptionsSpecies);
     ui->combo_speciation->setCurrentIndex(simSettings->speciationMode);
 
     //Set combo box for fitnes mode
@@ -144,7 +149,6 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
 
     ui->combo_environment_type->addItems(comboOptionsET);
     ui->combo_environment_type->setCurrentIndex(simSettings->environmentType);
-
 }
 
 void Settings::on_buttonBox_accepted()
@@ -190,14 +194,22 @@ void Settings::on_buttonBox_accepted()
     else if (ui->r_independent->isChecked())settings->playingfieldMasksMode = MASKS_MODE_INDEPENDENT;
     else settings->playingfieldMasksMode = MASKS_MODE_IDENTICAL_START;
 
-    if (ui->r_taxon_number->isChecked())settings->runMode = RUN_MODE_TAXON;
-    else if (ui->r_iterations->isChecked())settings->runMode = RUN_MODE_ITERATION;
+    settings->runMode = ui->combo_run_mode->currentIndex();
 
     if (ui->r_once_EE->isChecked())settings->ecosystemEngineersArePersistent = false;
     else settings->ecosystemEngineersArePersistent = true;
 
     settings->speciationMode = ui->combo_speciation->currentIndex();
     settings->fitnessMode = ui->combo_fitness_mode->currentIndex();
+    if (settings->fitnessMode == FITNESS_MODE_MEAN)
+    {
+        bool error;
+        int newWindowSize = QInputDialog::getInt(this, "Mean fitness mode", "How many past histories would you like to use when calculating the geometric mean?",
+                                                 50, 2, 500, 1, &error);
+        if (!error)settings->fitnessWindowSize = newWindowSize;
+    }
+
+    settings->environmentType = ui->combo_environment_type->currentIndex();
 
     if (ui->c_stochastic->isChecked())
     {
@@ -288,7 +300,6 @@ void Settings::slotSelectSizeChanged()
 {
     ui->s_species_difference->setMaximum(ui->s_select_size->value());
 }
-
 
 void Settings::slotrunForTaxaChanged()
 {
