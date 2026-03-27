@@ -136,7 +136,7 @@
        <item row="24" column="2">
         <widget class="QSpinBox" name="s_unresolvable_c">
          <property name="minimum">
-          <number>2</number>
+          <number>-1</number>
          </property>
         </widget>
        </item>

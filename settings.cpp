@@ -102,8 +102,8 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
 
     ui->combo_run_mode->addItems(comboOptionsRM);
     ui->combo_run_mode->setCurrentIndex(simSettings->runMode);
-
     QObject::connect(ui->combo_run_mode, QOverload<int>::of(&QComboBox::activated), this, &Settings::slotRunModeChanged);
+    slotRunModeChanged();
 
     if (settings->ecosystemEngineersArePersistent)ui->r_persistent_EE->setChecked(true);
     else ui->r_once_EE->setChecked(true);
@@ -498,7 +498,6 @@ void Settings::slotRunModeChanged()
     {
         ui->s_run_for->setDisabled(true);
         ui->s_taxon_number->setDisabled(false);
-        ui->s_unresolvable_c->setDisabled(false);
         ui->s_unresolvable_c->setMaximum(ui->s_taxon_number->value());
         ui->s_unresolvable_c->setValue(ui->s_taxon_number->value());
     }
@@ -506,9 +505,8 @@ void Settings::slotRunModeChanged()
     {
         ui->s_run_for->setDisabled(false);
         ui->s_taxon_number->setDisabled(true);
-        ui->s_unresolvable_c->setDisabled(true);
         ui->s_unresolvable_c->setMaximum(500);
-        ui->s_unresolvable_c->setValue(500);
+        ui->s_unresolvable_c->setValue(-1);
     }
 }
 
