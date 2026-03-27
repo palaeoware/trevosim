@@ -117,6 +117,12 @@ MainWindow::MainWindow(QWidget *parent) :
     new QShortcut(QKeySequence(Qt::Key_Escape), this, SLOT(escape()));
     new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_M), this, SLOT(setMultiplePlayingFields()));
     new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_X), this, SLOT(selectionHistogram()));
+    new QShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_P), this, [this]()
+    {
+        QString messageString ("The current TREvoSim settings are as follows:\n\n");
+        messageString.append(simSettings->printSettings());
+        QMessageBox::information(this, "TREvoSim settings", messageString);
+    });
 
     QDir settingsPath;
     settingsPath.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation));
@@ -131,7 +137,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(path, &QLineEdit::textChanged, this, &MainWindow::pathTextChanged);
     ui->mainToolBar->addWidget(path);
 
-    //Spacer
+//Spacer
     QWidget *empty = new QWidget();
     empty->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     empty->setMaximumWidth(10);
@@ -146,55 +152,55 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mainToolBar->addAction(aboutButton);
     QObject::connect(aboutButton, &QAction::triggered, this, &MainWindow::aboutTriggered);
 
-    //Formatting of table font then colour
+//Formatting of table font then colour
     QFont fnt;
     fnt.setPointSize(10);
     ui->character_Display->setFont(fnt);
 
-    //String display
+//String display
     ui->treeDisplay->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
 
-    //Test text edit
+//Test text edit
     ui->testLog->document()->setDefaultStyleSheet("h1 {text-align: center;} h2 {text-align: left;} h3 {text-align: center;} p {text-align: left; font-size: small;} p.error {font color=#FF00FF;}");
     ui->testLog->setHtml("<h1>TREvoSim test log </h1><p>Below you can find the output of the TREvoSim tests. The long pieces of text - e.g. masks and playing fields - are output as MD5 checksums for space and clarity. If the text is the same, the checksum will be too. Any tests that fail will appear in bright green font with a test failed message at the front.</p>");
     ui->testLog->setVisible(false);
 
-    //Titles
+//Titles
     QStringList labellist;
     for (int i = 0; i < simSettings->runForTaxa; i++)labellist << QString("Species " + QString::number(i));
     ui->character_Display->setVerticalHeaderLabels(labellist);
 
-    //Set selectability
+//Set selectability
     ui->character_Display->setSelectionMode(QAbstractItemView::NoSelection);
 
-    //Progress bar
+//Progress bar
     progress = new QProgressBar(ui->statusBar);
     ui->statusBar->addPermanentWidget(progress);
     progress->hide();
 
-    //Now set variables
+//Now set variables
     escapePressed = false;
     pauseFlag = false;
     batchRunning = false;
     testMode = false;
 
-    //Load settings if previously saved
+//Load settings if previously saved
     load();
 
-    //Ensure grid is right size for loaded settings or defaults
+//Ensure grid is right size for loaded settings or defaults
     if (simSettings->runMode == RUN_MODE_TAXON) resizeGrid(simSettings->runForTaxa, simSettings->genomeSize);
     else resizeGrid(500, simSettings->genomeSize, 1);
 
-    //Maximise window
+//Maximise window
     showMaximized();
 
-    //Start runs at zero
+//Start runs at zero
     runs = 0;
 
-    //Set replicates to the default of 16
+//Set replicates to the default of 16
     countPeaksReplicatesGenomeSize = 16;
 
-    //Loaded from command - assume false
+//Loaded from command - assume false
     runFromCommand = false;
 }
 

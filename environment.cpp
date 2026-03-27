@@ -7,7 +7,6 @@
 //Perturbations - make this an environment type - and test 17
 //Also move mutate organism to organism object - why is this in simulation it makes no sense?
 //Failing tests 0,1,2,5,17 /  test mean window user set value sticks
-//sort out all sensible settings options are contngent on other options - e.g. fitness window, and also unresolvable cutoff limit
 //check when done that all attributes are correctly copied in equals
 //check gui updates all combo box options properly - make it write out the words, not the number?
 //Add a show settings dualogue to make checking the settings from GUI easier..
