@@ -94,6 +94,26 @@ QString simulationVariables::printSettings() const
     QString settingsString;
     QTextStream settingsTextStream(&settingsString);
 
+    QString maskModeString;
+    if (playingfieldMasksMode == MASKS_MODE_IDENTICAL) maskModeString = "MASKS_MODE_IDENTICAL";
+    else if (playingfieldMasksMode == MASKS_MODE_INDEPENDENT) maskModeString = "MASKS_MODE_INDEPENDENT";
+    else if (playingfieldMasksMode == MASKS_MODE_IDENTICAL_START) maskModeString = "MASKS_MODE_IDENTICAL_START";
+
+    QString environmentTypeString;
+    if (environmentType == ENVIRONMENT_TYPE_CONSTANT) environmentTypeString = "ENVIRONMENT_TYPE_CONSTANT";
+    else if (environmentType == ENVIRONMENT_TYPE_RANDOM) environmentTypeString = "ENVIRONMENT_TYPE_RANDOM";
+    else if (environmentType == ENVIRONMENT_TYPE_MATCHING_PEAKS) environmentTypeString = "ENVIRONMENT_TYPE_MATCHING_PEAKS";
+
+    QString runModeString;
+    if (runMode == RUN_MODE_TAXON) runModeString = "RUN_MODE_TAXON";
+    else if (runMode == RUN_MODE_ITERATION) runModeString = "RUN_MODE_ITERATION";
+
+    QString speciationModeString;
+    if (speciationMode == SPECIES_MODE_ORIGIN) speciationModeString = "SPECIES_MODE_ORIGIN";
+    else if (speciationMode  == SPECIES_MODE_LAST_SPECIATION) speciationModeString = "SPECIES_MODE_LAST_SPECIATION";
+    else if (speciationMode == SPECIES_MODE_ALL) speciationModeString = "SPECIES_MODE_ALL";
+    else if (speciationMode == SPECIES_MODE_MAYR) speciationModeString = "SPECIES_MODE_MAYR";
+
     settingsTextStream << "variables : genomeSize " << genomeSize
                        << " speciesSelectSize " << speciesSelectSize
                        << " fitnessSize " << fitnessSize
@@ -101,15 +121,16 @@ QString simulationVariables::printSettings() const
                        << " runForTaxa " << runForTaxa
                        << " runForIterations " << runForIterations
                        << " playingfieldSize " << playingfieldSize
+                       << " playingfieldMaskMode " << maskModeString
                        << " speciesDifference " << speciesDifference
                        << " environmentMutationRate " << environmentMutationRate
                        << " organismMutationRate " << organismMutationRate
                        << " unresolvableCutoff " << unresolvableCutoff
                        << " environmentNumber " << environmentNumber
-                       << " environment type " << environmentType
+                       << " environment type " << environmentTypeString
                        << " maskNumber " << maskNumber
-                       << " runMode " << runMode
-                       << " speciationMode " << speciationMode
+                       << " runMode " << runModeString
+                       << " speciationMode " << speciationModeString
                        << " fitnessMode " << fitnessMode
                        << " stripUninformative " << stripUninformative
                        << " writeTree " << writeTree
