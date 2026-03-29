@@ -114,6 +114,10 @@ QString simulationVariables::printSettings() const
     else if (speciationMode == SPECIES_MODE_ALL) speciationModeString = "SPECIES_MODE_ALL";
     else if (speciationMode == SPECIES_MODE_MAYR) speciationModeString = "SPECIES_MODE_MAYR";
 
+    QString fitnessModeString;
+    if (fitnessMode == FITNESS_MODE_MINIMUM) fitnessModeString = "FITNESS_MODE_MINIMUM";
+    else if (fitnessMode == FITNESS_MODE_MEAN) fitnessModeString = "FITNESS_MODE_MEAN";
+
     settingsTextStream << "variables : genomeSize " << genomeSize
                        << " speciesSelectSize " << speciesSelectSize
                        << " fitnessSize " << fitnessSize
@@ -131,7 +135,8 @@ QString simulationVariables::printSettings() const
                        << " maskNumber " << maskNumber
                        << " runMode " << runModeString
                        << " speciationMode " << speciationModeString
-                       << " fitnessMode " << fitnessMode
+                       << " fitnessMode " << fitnessModeString
+                       << " fitnessWindowSize " << fitnessWindowSize
                        << " stripUninformative " << stripUninformative
                        << " writeTree " << writeTree
                        << " writeRunningLog " << writeRunningLog
