@@ -39,10 +39,6 @@ private:
     int iterations;
     int perturbationStart, perturbationEnd, perturbationOccurring;
     int ecosystemEngineeringOccurring;
-    int environmentalPerturbationCopyRate;
-    //One vector to keep a copy of masks, the other to keep a copy of which elements of the original masks have been copied over the perturbation masks
-    QVector <QVector <QVector <QVector <bool> > > > environmentalPerturbationMasksCopy;
-    QVector <QVector <QVector <QVector <bool> > > > environmentalPerturbationOverwriting;
     //Keep track for printing
     QList <bool> extinctList;
 

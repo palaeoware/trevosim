@@ -18,7 +18,7 @@
 #define ENVIRONMENT_TYPE_CONSTANT 0
 #define ENVIRONMENT_TYPE_RANDOM 1
 #define ENVIRONMENT_TYPE_MATCHING_PEAKS 2
-
+#define ENVIRONMENT_TYPE_PERTURBATION 3
 //Run mode - i.e. continuous, until taxon number, until iteration number
 //#define RUN_MODE_CONTINUOUS 0 - could be useful down line?
 #define RUN_MODE_TAXON 0

@@ -50,7 +50,6 @@ simulationVariables::simulationVariables()
     stripUninformative = false;
     genomeOnExtinction = true;
     discardDeleterious = false;
-    environmentalPerturbation = false;
     mixing = false;
     mixingPerturbation = false;
     noSelection = false;
@@ -103,6 +102,7 @@ QString simulationVariables::printSettings() const
     if (environmentType == ENVIRONMENT_TYPE_CONSTANT) environmentTypeString = "ENVIRONMENT_TYPE_CONSTANT";
     else if (environmentType == ENVIRONMENT_TYPE_RANDOM) environmentTypeString = "ENVIRONMENT_TYPE_RANDOM";
     else if (environmentType == ENVIRONMENT_TYPE_MATCHING_PEAKS) environmentTypeString = "ENVIRONMENT_TYPE_MATCHING_PEAKS";
+    else if (environmentType == ENVIRONMENT_TYPE_PERTURBATION) environmentTypeString = "ENVIRONMENT_TYPE_PERTURBATION";
 
     QString runModeString;
     if (runMode == RUN_MODE_TAXON) runModeString = "RUN_MODE_TAXON";
@@ -225,7 +225,6 @@ bool simulationVariables::loadSettings(QFile *settingsFile)
             if (settingsFileIn.name().toString() == "randomSeed")randomSeed = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "genomeOnExtinction")genomeOnExtinction = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "discardDeleterious")discardDeleterious = settingsFileIn.readElementText().toInt();
-            if (settingsFileIn.name().toString() == "environmentalPerturbation")environmentalPerturbation = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "mixing")mixing = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "mixingPerturbation")mixingPerturbation = settingsFileIn.readElementText().toInt();
             if (settingsFileIn.name().toString() == "randomOverwrite")randomOverwrite = settingsFileIn.readElementText().toInt();
@@ -423,10 +422,6 @@ void simulationVariables::saveSettings(QFile *settingsFile)
 
     settingsFileOut.writeStartElement("discardDeleterious");
     settingsFileOut.writeCharacters(QString("%1").arg(discardDeleterious));
-    settingsFileOut.writeEndElement();
-
-    settingsFileOut.writeStartElement("environmentalPerturbation");
-    settingsFileOut.writeCharacters(QString("%1").arg(environmentalPerturbation));
     settingsFileOut.writeEndElement();
 
     settingsFileOut.writeStartElement("mixing");

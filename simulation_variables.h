@@ -43,7 +43,6 @@ public:
 
     //Bools
     bool discardDeleterious;
-    bool environmentalPerturbation;
     bool mixing;
     bool mixingPerturbation;
     bool genomeOnExtinction;

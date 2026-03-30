@@ -31,11 +31,21 @@ public:
     bool compareOrganism(Organism const *o);
     int countDifferences(Environment const &externalEnvironment);
     int bitCount();
+    void setUpPerturbation(int startIteration, int endIteration);
+    void applyPerturbation(int currentIteration);
 
 private:
     QVector <QVector <bool> > masks;
     double mutationRate;
+    //We have different types of environment - set this on creation
     int environmentType;
+
+    //We need a few data structures if we're doing a perturbation - I could in theory make this inherit environment. Not sure it's worth it for the current setup
+    //One vector to keep a copy of masks, the other to keep a copy of which elements of the original masks have been copied over the perturbation masks
+    QVector <QVector <bool> > environmentalPerturbationMasksCopy;
+    QVector <QVector <bool> > environmentalPerturbationOverwriting;
+    int perturbationStart, perturbationEnd;
+    int environmentalPerturbationCopyRate;
 };
 
 #endif // ENVIRONMENT_H

@@ -179,4 +179,3 @@ void Organism::setGenome(QList<bool> genome)
 {
     this->genome = genome;
 }
-

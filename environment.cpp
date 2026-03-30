@@ -5,11 +5,8 @@
 
 //To do:
 //Perturbations - make this an environment type - and test 17
-//Also move mutate organism to organism object - why is this in simulation it makes no sense?
 //Failing tests 0,1,2,5,17 /  test mean window user set value sticks
 //check when done that all attributes are correctly copied in equals
-//check gui updates all combo box options properly - make it write out the words, not the number?
-//Add a show settings dualogue to make checking the settings from GUI easier..
 
 // We call this constructor when we want to create a new environment from scratch
 Environment::Environment(const int &maskNumber, const int &maskLength, const double mutationRateCon, const int environmentTypeCon = ENVIRONMENT_TYPE_CONSTANT)
@@ -36,11 +33,7 @@ Environment::Environment(const int &maskNumber, const int &maskLength, const dou
 Environment::Environment(const int &maskNumber, const int &maskLength, const bool initialiseState)
 {
     //Set up vectors that will serve as masks for this environment
-    for (int j = 0; j < maskNumber; j++)
-    {
-        masks.append(QVector <bool>());
-        for (int i = 0; i < maskLength; i++)masks[j].append(bool(initialiseState));
-    }
+    for (int j = 0; j < maskNumber; j++) masks.append(QVector <bool>(maskLength, initialiseState));
 }
 
 //We call this one when we want to create an environment from another - either shuffled but with matching peaks, or just copying the first
@@ -303,4 +296,22 @@ int Environment::bitCount()
             if (b) count++;
 
     return count;
+}
+
+void Environment::setUpPerturbation(int startIteration, int endIteration)
+{
+
+    environmentalPerturbationMasksCopy = masks;
+    for (int i = 0; i < masks.length(); i++) environmentalPerturbationOverwriting.append(QVector <bool>(masks[0].length(), "FALSE"));
+    //Need to copy over 90% of original masks over course of perturbation
+    environmentalPerturbationCopyRate  = masks[0].length() * masks.length();
+    environmentalPerturbationCopyRate /= 10;
+    environmentalPerturbationCopyRate *= 9;
+    perturbationStart = startIteration;
+    perturbationEnd = endIteration;
+}
+
+void Environment::applyPerturbation(int currentIteration)
+{
+
 }

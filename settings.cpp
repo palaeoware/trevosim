@@ -60,7 +60,6 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
     ui->c_strip_uninformative->setChecked(settings->stripUninformative);
     ui->c_sansomian->setChecked(settings->genomeOnExtinction);
     ui->c_beneficial_mut->setChecked(settings->discardDeleterious);
-    ui->c_extinction->setChecked(settings->environmentalPerturbation);
     ui->c_mixing_perturbation->setChecked(settings->mixingPerturbation);
     ui->c_noSelection->setChecked(settings->noSelection);
     ui->c_randomSeed->setChecked(settings->randomSeed);
@@ -148,6 +147,7 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
     comboOptionsET.insert(ENVIRONMENT_TYPE_CONSTANT, "Constant mutation");
     comboOptionsET.insert(ENVIRONMENT_TYPE_RANDOM, "Random");
     comboOptionsET.insert(ENVIRONMENT_TYPE_MATCHING_PEAKS, "Matching peaks");
+    comboOptionsET.insert(ENVIRONMENT_TYPE_PERTURBATION, "Constant with perturbation");
 
     ui->combo_environment_type->addItems(comboOptionsET);
     ui->combo_environment_type->setCurrentIndex(simSettings->environmentType);
@@ -172,7 +172,6 @@ void Settings::on_buttonBox_accepted()
     settings->stripUninformative = ui->c_strip_uninformative->isChecked();
     settings->genomeOnExtinction = ui->c_sansomian->isChecked();
     settings->discardDeleterious = ui->c_beneficial_mut->isChecked();
-    settings->environmentalPerturbation = ui->c_extinction->isChecked();
     settings->mixing = ui->c_mixing->isChecked();
     settings->mixingPerturbation = ui->c_mixing->isChecked();
     settings->noSelection = ui->c_noSelection->isChecked();
