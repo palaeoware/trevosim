@@ -205,10 +205,10 @@ void Settings::on_buttonBox_accepted()
     settings->fitnessMode = ui->combo_fitness_mode->currentIndex();
     if (settings->fitnessMode == FITNESS_MODE_MEAN)
     {
-        bool error;
+        bool success;
         int newWindowSize = QInputDialog::getInt(this, "Mean fitness mode", "How many past histories would you like to use when calculating the geometric mean?",
-                                                 50, 2, 500, 1, &error);
-        if (!error)settings->fitnessWindowSize = newWindowSize;
+                                                 50, 2, 500, 1, &success);
+        if (success)settings->fitnessWindowSize = newWindowSize;
     }
 
     settings->environmentType = ui->combo_environment_type->currentIndex();
