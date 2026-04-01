@@ -510,7 +510,7 @@ void MainWindow::runForTriggered(int runBatchFor)
         //Does not modify runBatchFor unless box is accepted
         bDialogue.exec();
         //Return if dialogue cancelled
-        if (runBatchFor == -1) return;
+        if (runBatchFor == 0) return;
         else simSettings->replicates = runBatchFor;
     }
 
@@ -534,10 +534,13 @@ void MainWindow::runForTriggered(int runBatchFor)
     if (!errorStart)
     {
         bool stopRuns = escapePressed;
-        label = "It looks like this initial simulation failed. If this is, for example, caused by too many identical terminals, you can choose to continue running the rest of the batch, and TREvoSim will run simulations until the desired number has been achieved. If the failure is not stochastic, do not choose this option.\n";
+        label = "It looks like this initial simulation failed. If this is, for example, caused by too many identical terminals, you can choose to continue running the rest of the batch by pressing yes below, and TREvoSim will run simulations until the desired number has been achieved. If the failure is not stochastic, do not choose this option - select no below.\n";
         if (!stopRuns)
         {
-            if (!runFromCommand && QMessageBox::question(this, "Error", label, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::No) stopRuns = true;
+            if (!runFromCommand)
+            {
+                if (QMessageBox::question(this, "Error", label, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::No) stopRuns = true;
+            }
             else if (simSettings->skipInput == -1)
             {
                 setStatus("Please respond to query in the console.");
@@ -589,7 +592,11 @@ void MainWindow::runForTriggered(int runBatchFor)
         else message = QString("Starting pass %1 of your remaining batch. Running %2 simulations that failed in pass %3 on %4 cores.").arg(count + 1).arg(runsList.length()).arg(count).arg(
                                QThread::idealThreadCount());
         dialog.setLabelText(message);
+        dialog.show();
+        dialog.setWindowModality(Qt::ApplicationModal);
+
         if (runFromCommand) qInfo().noquote() << message;
+
         QApplication::processEvents();
 
         //Do the runs using QtConcurrent::filter which modified the sequence in place
@@ -602,10 +609,9 @@ void MainWindow::runForTriggered(int runBatchFor)
             return (!theSimulation.run());
         }));
 
+        qApp->processEvents();
         // Display the dialog and start the event loop.
         dialog.exec();
-
-        qApp->processEvents();
 
         if (futureWatcher.isCanceled()) batchRunning = false;
         count++;

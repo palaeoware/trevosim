@@ -1338,7 +1338,7 @@ bool simulation::checkForUnresolvableTaxa(QVector<Organism *> &speciesList, QStr
 
         message.append(unresolvableTaxonGroups);
 
-        if (unresolvableCount > simSettings->unresolvableCutoff)
+        if (unresolvableCount > simSettings->unresolvableCutoff && simSettings->unresolvableCutoff != -1)
         {
             message.append(QString("\n\n"));
             message.append(
@@ -1350,7 +1350,7 @@ bool simulation::checkForUnresolvableTaxa(QVector<Organism *> &speciesList, QStr
     }
     else unresolvableTaxonGroups = "There are no unresolvable taxa";
 
-    if (unresolvableCount > simSettings->unresolvableCutoff && simSettings->unresolvableCutoff != -2) return false;
+    if (unresolvableCount > simSettings->unresolvableCutoff && simSettings->unresolvableCutoff != -1) return false;
 
     return true;
 }
