@@ -88,6 +88,11 @@ void Environment::operator = (const Environment &E)
     masks = E.masks;
     mutationRate = E.mutationRate;
     environmentType = E.environmentType;
+    environmentalPerturbationCopyRate = E.environmentalPerturbationCopyRate;
+    perturbationStart = E.perturbationStart;
+    perturbationEnd = E.perturbationEnd;
+    environmentalPerturbationMasksCopy = E.environmentalPerturbationMasksCopy;
+    environmentalPerturbationOverwriting = E.environmentalPerturbationOverwriting;
 }
 
 bool Environment::operator == (const Environment &E)
@@ -309,9 +314,40 @@ void Environment::setUpPerturbation(int startIteration, int endIteration)
     environmentalPerturbationCopyRate *= 9;
     perturbationStart = startIteration;
     perturbationEnd = endIteration;
+
+    //Bork current masks to create environmental perturbation
+    for (int j = 0; j < masks.length(); j++)
+        for (int i = 0; i < masks[j].length(); i++)
+        {
+            //This will generate a random integer between 0 (inclusive) and 2 (exclusive) - so either 0 or 1. Break it out for clarity
+            int random = QRandomGenerator::global()->bounded(0, 2);
+            if (random == 0) masks[j][i] = false;
+            else if (random == 1) masks[j][i] = true;
+        }
 }
 
 void Environment::applyPerturbation(int currentIteration)
 {
+    int copied = 0;
 
+    do
+    {
+        //Random number size of vectors
+        int j = QRandomGenerator::global()->bounded(masks.length());
+        int i = QRandomGenerator::global()->bounded(masks[0].length());
+
+        //Update
+        if (environmentalPerturbationOverwriting[j][i] == false)
+        {
+            environmentalPerturbationOverwriting[j][i] = true;
+            copied++;
+        }
+    }
+    while (copied < environmentalPerturbationCopyRate);
+
+    //Copy over masks where dictated by the the overwriting record
+    for (int j = 0; j < masks.length(); j++)
+        for (int i = 0; i < masks[0].length(); i++)
+            if (environmentalPerturbationOverwriting[j][i])
+                masks[j][i] = environmentalPerturbationMasksCopy[j][i];
 }

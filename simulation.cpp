@@ -975,14 +975,12 @@ int simulation::calculateOverwrite(const playingFieldStructure *pf, const int sp
 void simulation::applyPerturbation()
 {
 
-    //Sort variables for next round as required
     if (perturbationOccurring == 0)
     {
+        //Sort variables
         perturbationStart = iterations;
         perturbationEnd = (iterations / 10) + iterations;
         perturbationOccurring++;
-
-
 
         //Set up mixing perturbation if required
         if (simSettings->mixingPerturbation)
@@ -990,88 +988,32 @@ void simulation::applyPerturbation()
             runMixingProbabilityOneToZero *= 10;
             runMixingProbabilityZeroToOne *= 10;
         }
-    }
 
-    //Set up environmental perturbation if required
-    if (simSettings->environmentType == ENVIRONMENT_TYPE_PERTURBATION && perturbationOccurring == 0)
-    {
-        /*   //Create copy of masks
-           for (int l = 0; l < simSettings->playingfieldNumber; l++)
-           {
-               environmentalPerturbationMasksCopy.append(QVector <QVector <QVector <bool> > >());
-               environmentalPerturbationMasksCopy[l] = playingFields[l]->masks;
-               environmentalPerturbationOverwriting.append(QVector <QVector <QVector <bool> > >());
-               for (int k = 0; k < runEnvironmentNumber; k++)
-               {
-                   environmentalPerturbationOverwriting[l].append(QVector <QVector <bool> >());
-                   for (int j = 0; j < runMaskNumber; j++)
-                   {
-                       environmentalPerturbationOverwriting[l][k].append(QVector <bool>());
-                       for (int i = 0; i < runFitnessSize; i++)
-                       {
-                           environmentalPerturbationOverwriting[l][k][j].append(bool(false));
-                       }
-                   }
-               }
-           }
+        //Set up environmental perturbation if required
+        if (simSettings->environmentType == ENVIRONMENT_TYPE_PERTURBATION && perturbationOccurring == 0)
+        {
+            for (auto pf : std::as_const(playingFields))
+                for (int k = 0; k < runEnvironmentNumber; k++)
+                    pf->environments[k].setUpPerturbation(perturbationStart, perturbationEnd);
 
-           //Bork current masks to create environmental perturbation - makes sense to have these as independent and different unless pf masks set to be identical
-           for (auto pf : std::as_const(playingFields))
-               for (int k = 0; k < runEnvironmentNumber; k++)
-                   for (int j = 0; j < runMaskNumber; j++)
-                       //I is reference so as to allow us to modify contents
-                       for (auto &i : pf->masks[k][j])
-                           if (QRandomGenerator::global()->generate() > (maxRand / 2)) i = true;
-                           else i = false;
-           //Copy over if identical
-           if (simSettings->playingfieldMasksMode == MASKS_MODE_IDENTICAL)
-               for (int i = 1; i < simSettings->playingfieldNumber; i++)
-                   for (int k = 0; k < runEnvironmentNumber; k++)
-                       for (int j = 0; j < runMaskNumber; j++)
-                           for (int l = 0; l < playingFields[i]->masks[k][j].length(); l++)
-                               playingFields[i]->masks[k][j][l] = playingFields[0]->masks[k][j][l];
-        */
-
+            //Copy over if identical
+            if (simSettings->playingfieldNumber > 1 && simSettings->playingfieldMasksMode == MASKS_MODE_IDENTICAL)
+                for (int p = 1; p < simSettings->playingfieldNumber; p++)
+                    playingFields[p]->environments = playingFields[0]->environments;
+        }
     }
 
     //Do perturbation
     if (perturbationOccurring == 1 && simSettings->environmentType == ENVIRONMENT_TYPE_PERTURBATION)
     {
-        /*int copied = 0;
-
-        do
-        {
-            //Random number size of vectors
-            int l = QRandomGenerator::global()->bounded(simSettings->playingfieldNumber);
-            int k = QRandomGenerator::global()->bounded(runEnvironmentNumber);
-            int j = QRandomGenerator::global()->bounded(runMaskNumber);
-            int i = QRandomGenerator::global()->bounded(runFitnessSize);
-
-            //Update
-            if (environmentalPerturbationOverwriting[l][k][j][i] == false)
-            {
-                environmentalPerturbationOverwriting[l][k][j][i] = true;
-                copied++;
-            }
-        }
-        while (copied < environmentalPerturbationCopyRate);
-
-        //Copy over masks where dictated by the the overwriting record
-        for (int l = 0; l < simSettings->playingfieldNumber; l++)
+        for (auto pf : std::as_const(playingFields))
             for (int k = 0; k < runEnvironmentNumber; k++)
-                for (int j = 0; j < runMaskNumber; j++)
-                    for (int i = 0; i < runFitnessSize; i++)
-                        if (environmentalPerturbationOverwriting[l][k][j][i])
-                            playingFields[l]->masks[k][j][i] = environmentalPerturbationMasksCopy[l][k][j][i];
+                pf->environments[k].applyPerturbation(iterations);
 
         //Copy over if identical
-        if (simSettings->playingfieldMasksMode == MASKS_MODE_IDENTICAL)
-            for (int i = 1; i < simSettings->playingfieldNumber; i++)
-                for (int k = 0; k < runEnvironmentNumber; k++)
-                    for (int j = 0; j < runMaskNumber; j++)
-                        for (int l = 0; l < playingFields[i]->masks[k][j].length(); l++)
-                            playingFields[i]->masks[k][j][l] = playingFields[0]->masks[k][j][l];
-        */
+        if (simSettings->playingfieldNumber > 1 && simSettings->playingfieldMasksMode == MASKS_MODE_IDENTICAL)
+            for (int p = 1; p < simSettings->playingfieldNumber; p++)
+                playingFields[p]->environments = playingFields[0]->environments;
     }
 
     //End perturbations

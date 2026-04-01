@@ -118,7 +118,7 @@ QString simulationVariables::printSettings() const
     if (fitnessMode == FITNESS_MODE_MINIMUM) fitnessModeString = "FITNESS_MODE_MINIMUM";
     else if (fitnessMode == FITNESS_MODE_MEAN) fitnessModeString = "FITNESS_MODE_MEAN";
 
-    settingsTextStream << "variables : genomeSize " << genomeSize
+    settingsTextStream << " genomeSize " << genomeSize
                        << " speciesSelectSize " << speciesSelectSize
                        << " fitnessSize " << fitnessSize
                        << " fitnessWindowSize " << fitnessWindowSize
@@ -155,19 +155,25 @@ QString simulationVariables::printSettings() const
                        << " playingfieldMasksMode " << playingfieldMasksMode
                        << " selection " << selectionCoinToss
                        << " randomOverwrite " << randomOverwrite
-                       << " ecosystemEngineers " << ecosystemEngineers
-                       << " ecosystemEngineersArePersistent " <<  ecosystemEngineersArePersistent
-                       << " ecosystemEngineeringFrequency " << ecosystemEngineeringFrequency
-                       << " ecosystemEngineersAddMask " << ecosystemEngineersAddMask
                        << " runningLogFrequency " << runningLogFrequency
                        << " replicates " << replicates
                        << " expandingPlayingfield " << expandingPlayingfield
                        << " stochasticLayer " << stochasticLayer
-                       << " stochasticDepth " << stochasticDepth
-                       << " stochasticMap ";
+                       << " ecosystemEngineers " << ecosystemEngineers;
 
-    for (int i = 0; i < 16; i++) settingsTextStream << stochasticMap[i];
+    if (ecosystemEngineers)
+    {
+        settingsTextStream << " ecosystemEngineersArePersistent " <<  ecosystemEngineersArePersistent
+                           << " ecosystemEngineeringFrequency " << ecosystemEngineeringFrequency
+                           << " ecosystemEngineersAddMask " << ecosystemEngineersAddMask;
+    }
 
+    if (stochasticLayer)
+    {
+        settingsTextStream << " stochasticDepth " << stochasticDepth
+                           << " stochasticMap ";
+        for (int i = 0; i < 16; i++) settingsTextStream << stochasticMap[i];
+    }
     return settingsString;
 }
 
