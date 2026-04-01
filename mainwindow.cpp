@@ -501,7 +501,7 @@ void MainWindow::resetTriggered()
 void MainWindow::runForTriggered(int runBatchFor)
 {
     /******** Batch mode - multiple runs *****/
-    //As noed above, if called from slot, runBatchFor is zero, and we need to ask user for input (c.f. running from command line)
+    //As noted above, if called from slot, runBatchFor is zero, and we need to ask user for input (c.f. running from command line)
     //Elsewhere we can just use the flag runFromCommand, but here it makes sense to use this since the command line needs to send this the required number of runs
     if (runBatchFor < 1)
     {
@@ -592,12 +592,11 @@ void MainWindow::runForTriggered(int runBatchFor)
         else message = QString("Starting pass %1 of your remaining batch. Running %2 simulations that failed in pass %3 on %4 cores.").arg(count + 1).arg(runsList.length()).arg(count).arg(
                                QThread::idealThreadCount());
         dialog.setLabelText(message);
+
         dialog.show();
         dialog.setWindowModality(Qt::ApplicationModal);
 
         if (runFromCommand) qInfo().noquote() << message;
-
-        QApplication::processEvents();
 
         //Do the runs using QtConcurrent::filter which modified the sequence in place
         futureWatcher.setFuture(QtConcurrent::filter(runsList, [this](const int &run)
@@ -609,7 +608,6 @@ void MainWindow::runForTriggered(int runBatchFor)
             return (!theSimulation.run());
         }));
 
-        qApp->processEvents();
         // Display the dialog and start the event loop.
         dialog.exec();
 
