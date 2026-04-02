@@ -578,7 +578,7 @@ void MainWindow::runForTriggered(int runBatchFor)
         //Hence now do this with a dialogue - first create a dialogue, then QFutureWatcher and connect signals and slots.
         QProgressDialog dialog;
         QFutureWatcher<void> futureWatcher;
-        QObject::connect(&futureWatcher, &QFutureWatcher<void>::finished, &dialog, &QProgressDialog::reset);
+        QObject::connect(&futureWatcher, &QFutureWatcher<void>::finished, &dialog, &QDialog::accept);
         QObject::connect(&dialog, &QProgressDialog::canceled, &futureWatcher, &QFutureWatcher<void>::cancel);
         QObject::connect(&futureWatcher, &QFutureWatcher<void>::progressRangeChanged, &dialog, &QProgressDialog::setRange);
         QObject::connect(&futureWatcher, &QFutureWatcher<void>::progressValueChanged,  &dialog, &QProgressDialog::setValue);
