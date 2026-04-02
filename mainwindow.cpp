@@ -537,7 +537,10 @@ void MainWindow::runForTriggered(int runBatchFor)
         label = "It looks like this initial simulation failed. If this is, for example, caused by too many identical terminals, you can choose to continue running the rest of the batch, and TREvoSim will run simulations until the desired number has been achieved. If the failure is not stochastic, do not choose this option.\n";
         if (!stopRuns)
         {
-            if (!runFromCommand && QMessageBox::question(this, "Error", label, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::No) stopRuns = true;
+            if (!runFromCommand)
+            {
+                if (QMessageBox::question(this, "Error", label, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::No) stopRuns = true;
+            }
             else if (simSettings->skipInput == -1)
             {
                 setStatus("Please respond to query in the console.");
