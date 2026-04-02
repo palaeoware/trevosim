@@ -598,8 +598,14 @@ void MainWindow::runForTriggered(int runBatchFor)
 
         if (runFromCommand) qInfo().noquote() << message;
 
+        int maxThreads = std::max(1, QThread::idealThreadCount() - 2);
+
+        //Set max threads to just below total number to allow GUI some room
+        QThreadPool pool;
+        pool.setMaxThreadCount(maxThreads);
+
         //Do the runs using QtConcurrent::filter which modified the sequence in place
-        futureWatcher.setFuture(QtConcurrent::filter(runsList, [this](const int &run)
+        futureWatcher.setFuture(QtConcurrent::filter(&pool, runsList, [this](const int &run)
         {
             bool error = false;
             simulation theSimulation(run, simSettings, &error);
