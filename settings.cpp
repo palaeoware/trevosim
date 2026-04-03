@@ -148,6 +148,8 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
     comboOptionsET.insert(ENVIRONMENT_TYPE_RANDOM, "Random");
     comboOptionsET.insert(ENVIRONMENT_TYPE_MATCHING_PEAKS, "Matching peaks");
     comboOptionsET.insert(ENVIRONMENT_TYPE_PERTURBATION, "Constant with perturbation");
+    comboOptionsET.insert(ENVIRONMENT_TYPE_PREDICTABLE_WALK, "Predictable walk");
+    comboOptionsET.insert(ENVIRONMENT_TYPE_UNPREDICTABLE_WALK, "Unpredictable walk");
 
     ui->combo_environment_type->addItems(comboOptionsET);
     ui->combo_environment_type->setCurrentIndex(simSettings->environmentType);
