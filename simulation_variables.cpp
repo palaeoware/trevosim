@@ -103,6 +103,8 @@ QString simulationVariables::printSettings() const
     else if (environmentType == ENVIRONMENT_TYPE_RANDOM) environmentTypeString = "ENVIRONMENT_TYPE_RANDOM";
     else if (environmentType == ENVIRONMENT_TYPE_MATCHING_PEAKS) environmentTypeString = "ENVIRONMENT_TYPE_MATCHING_PEAKS";
     else if (environmentType == ENVIRONMENT_TYPE_PERTURBATION) environmentTypeString = "ENVIRONMENT_TYPE_PERTURBATION";
+    else if (environmentType == ENVIRONMENT_TYPE_PREDICTABLE_WALK) environmentTypeString = "ENVIRONMENT_TYPE_PREDICTABLE_WALK";
+    else if (environmentType == ENVIRONMENT_TYPE_UNPREDICTABLE_WALK) environmentTypeString = "ENVIRONMENT_TYPE_UNPREDICTABLE_WALK";
 
     QString runModeString;
     if (runMode == RUN_MODE_TAXON) runModeString = "RUN_MODE_TAXON";
