@@ -64,6 +64,8 @@ public:
 
     //Doubles
     double environmentMutationRate;
+    double environmentMutationJump;
+    double environmentMutationMaxJump;
     double organismMutationRate;
     double stripUninformativeFactor;
     double selectionCoinToss;
