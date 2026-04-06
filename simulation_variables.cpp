@@ -132,6 +132,8 @@ QString simulationVariables::printSettings() const
                        << " playingfieldMaskMode " << maskModeString
                        << " speciesDifference " << speciesDifference
                        << " environmentMutationRate " << environmentMutationRate
+                       << " environmentMutationJump " << environmentMutationJump
+                       << " environmentMutationMaxJump " << environmentMutationMaxJump
                        << " organismMutationRate " << organismMutationRate
                        << " unresolvableCutoff " << unresolvableCutoff
                        << " environmentNumber " << environmentNumber
@@ -225,6 +227,8 @@ bool simulationVariables::loadSettings(QFile *settingsFile)
             //Double
             if (settingsFileIn.name().toString() == "stripUninformativeFactor")stripUninformativeFactor = settingsFileIn.readElementText().toDouble();
             if (settingsFileIn.name().toString() == "environmentMutationRate")environmentMutationRate = settingsFileIn.readElementText().toDouble();
+            if (settingsFileIn.name().toString() == "environmentMutationJump") environmentMutationJump = settingsFileIn.readElementText().toDouble();
+            if (settingsFileIn.name().toString() == "environmentMutationMaxJump") environmentMutationMaxJump = settingsFileIn.readElementText().toDouble();
             if (settingsFileIn.name().toString() == "organismMutationRate")organismMutationRate = settingsFileIn.readElementText().toDouble();
             if (settingsFileIn.name().toString() == "selectionCoinToss")selectionCoinToss = settingsFileIn.readElementText().toDouble();
 
