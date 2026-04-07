@@ -405,6 +405,14 @@ void simulationVariables::saveSettings(QFile *settingsFile)
     settingsFileOut.writeCharacters(QString("%1").arg(environmentMutationRate));
     settingsFileOut.writeEndElement();
 
+    settingsFileOut.writeStartElement("environmentMutationJump");
+    settingsFileOut.writeCharacters(QString("%1").arg(environmentMutationJump));
+    settingsFileOut.writeEndElement();
+
+    settingsFileOut.writeStartElement("environmentMutationMaxJump");
+    settingsFileOut.writeCharacters(QString("%1").arg(environmentMutationMaxJump));
+    settingsFileOut.writeEndElement();
+
     settingsFileOut.writeStartElement("organismMutationRate");
     settingsFileOut.writeCharacters(QString("%1").arg(organismMutationRate));
     settingsFileOut.writeEndElement();
