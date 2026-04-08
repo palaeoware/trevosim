@@ -208,11 +208,25 @@ void Settings::on_buttonBox_accepted()
     {
         bool success;
         int newWindowSize = QInputDialog::getInt(this, "Mean fitness mode", "How many past histories would you like to use when calculating the geometric mean?",
-                                                 50, 2, 500, 1, &success);
+                                                 settings->fitnessWindowSize, 2, 500, 1, &success);
         if (success)settings->fitnessWindowSize = newWindowSize;
     }
 
     settings->environmentType = ui->combo_environment_type->currentIndex();
+    if (settings->environmentType  == ENVIRONMENT_TYPE_PREDICTABLE_WALK)
+    {
+        bool success;
+        double newJumpSize = QInputDialog::getDouble(this, "Predictable random walk of Environment", "How large would you like the change in mutation rate every iteration to be?",
+                                                     settings->environmentMutationJump, 0.0000001, 50., 1, &success, Qt::Dialog, 0.1);
+        if (success)settings->environmentMutationJump  = newJumpSize;
+    }
+    if (settings->environmentType  == ENVIRONMENT_TYPE_UNPREDICTABLE_WALK)
+    {
+        bool success;
+        double newMaxJumpSize = QInputDialog::getDouble(this, "Unpredictable random walk of Environment", "How large would you like the largest possible change in mutation rate every iteration to be?",
+                                                        settings->environmentMutationMaxJump, 0.0000001, 10., 1, &success, Qt::Dialog, 0.1);
+        if (success)settings->environmentMutationMaxJump = newMaxJumpSize;
+    }
 
     if (ui->c_stochastic->isChecked())
     {
