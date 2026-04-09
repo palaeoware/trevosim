@@ -10,7 +10,7 @@
 class Environment
 {
 public:
-    Environment(const int &maskNumber, const int &maskLength, const double mutationRateCon, const int environmentTypeCon);
+    Environment(const simulationVariables &simSettingsCon);
     Environment(const int &maskNumber, const int &maskLength, const bool initialiseState); //used for tests of fitness algorithm
     Environment(Environment const &constructorEnvironment, bool matchingPeaksCon);
 
@@ -46,6 +46,7 @@ private:
     QVector <QVector <bool> > environmentalPerturbationOverwriting;
     int perturbationStart, perturbationEnd;
     int environmentalPerturbationCopyRate;
+    double environmentMutationJump, environmentMutationMaxJump;
 };
 
 #endif // ENVIRONMENT_H

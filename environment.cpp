@@ -9,16 +9,18 @@
 //check when done that all attributes are correctly copied in equals
 
 // We call this constructor when we want to create a new environment from scratch
-Environment::Environment(const int &maskNumber, const int &maskLength, const double mutationRateCon, const int environmentTypeCon = ENVIRONMENT_TYPE_CONSTANT)
+Environment::Environment(const simulationVariables &simSettingsCon)
 {
-    mutationRate = mutationRateCon;
-    environmentType = environmentTypeCon;
+    mutationRate = simSettingsCon.environmentMutationRate;
+    environmentType = simSettingsCon.environmentType;
+    environmentMutationMaxJump = simSettingsCon.environmentMutationMaxJump;
+    environmentMutationJump = simSettingsCon.environmentMutationJump;
 
     //Set up vectors that will serve as masks for this environment
-    for (int j = 0; j < maskNumber; j++)
+    for (int j = 0; j < simSettingsCon.maskNumber; j++)
     {
         masks.append(QVector <bool>());
-        for (int i = 0; i < maskLength; i++)
+        for (int i = 0; i < simSettingsCon.fitnessSize; i++)
         {
             //This will generate a random integer between 0 (inclusive) and 2 (exclusive) - so either 0 or 1. Break it out for clarity
             int random = QRandomGenerator::global()->bounded(0, 2);
@@ -127,8 +129,34 @@ bool Environment::mutate()
             }
     }
     //Treat these together as they require a lot of the same setup - only the mutation process really differs
-    else if (environmentType == ENVIRONMENT_TYPE_MATCHING_PEAKS || environmentType == ENVIRONMENT_TYPE_CONSTANT)
+    else if (environmentType == ENVIRONMENT_TYPE_MATCHING_PEAKS || environmentType == ENVIRONMENT_TYPE_CONSTANT || environmentType == ENVIRONMENT_TYPE_PREDICTABLE_WALK
+             || environmentType == ENVIRONMENT_TYPE_UNPREDICTABLE_WALK)
     {
+        if (environmentType == ENVIRONMENT_TYPE_PREDICTABLE_WALK || environmentType == ENVIRONMENT_TYPE_UNPREDICTABLE_WALK)
+        {
+            if (mutationRate > 50.)
+            {
+                mutationRate = 50.;
+            }
+            if (mutationRate < 0.)
+            {
+                mutationRate = 0.;
+                //In this case, we don't need to do anything further - no mutations required
+                return true;
+            }
+            if (environmentType == ENVIRONMENT_TYPE_PREDICTABLE_WALK)
+            {
+                if (QRandomGenerator::global()->bounded(1) == 1) mutationRate += environmentMutationJump;
+                else mutationRate -= environmentMutationJump;
+            }
+            if (environmentType == ENVIRONMENT_TYPE_UNPREDICTABLE_WALK)
+            {
+                double jump = (QRandomGenerator::global()->bounded(environmentMutationMaxJump));
+                if (QRandomGenerator::global()->bounded(1) == 1) mutationRate += jump;
+                else mutationRate -= jump;
+            }
+        }
+
         //Set our mutation rate
         double localMutationRate = mutationRate;
         //If we are matching peaks, we want the mutation rate to be halved because we will need to switch a zero to a one and one to a zero or vice versa.

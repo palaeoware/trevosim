@@ -106,7 +106,7 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
     for (auto p : std::as_const(playingFields))
         for (int k = 0; k < runEnvironmentNumber; k++)
             if (k == 0 || simSettings->environmentType != ENVIRONMENT_TYPE_MATCHING_PEAKS)
-                p->environments.append(Environment(runMaskNumber, runFitnessSize, simSettings->environmentMutationRate, simSettings->environmentType));
+                p->environments.append(Environment(*simSettings));
     //If we need to make sure fitness peaks are the same height, we send the constructor the previously created environment
             else  p->environments.append(Environment(p->environments[0], true));
 

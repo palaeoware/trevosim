@@ -42,7 +42,7 @@ simulationVariables::simulationVariables()
 
     //Doubles
     environmentMutationRate = 1.0;
-    environmentMutationJump = 1.0;
+    environmentMutationJump = 0.1;
     environmentMutationMaxJump = 1.0;
     organismMutationRate = 5.0;
     selectionCoinToss = 10.0;
