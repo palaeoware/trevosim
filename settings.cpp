@@ -136,7 +136,7 @@ Settings::Settings(QWidget *parent, simulationVariables *simSettings) :
 
     //Set combo box for fitnes mode
     QStringList comboOptionsFM;
-    comboOptionsFM.insert(FITNESS_MODE_MINIMUM, "Best");
+    comboOptionsFM.insert(FITNESS_MODE_MINIMUM, "Instantaneous");
     comboOptionsFM.insert(FITNESS_MODE_MEAN, "Mean");
 
     ui->combo_fitness_mode->addItems(comboOptionsFM);
