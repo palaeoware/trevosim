@@ -2765,6 +2765,28 @@ bool testinternal::testTwentyOne(QString &outString)
     bool testFlag = true;
     QTextStream out(&outString);
 
+    QVector <Environment> testEnvironments;
+    int countVectorLength = 25;
+
+    simulationVariables simSettings;
+    simSettings.fitnessSize = 100;
+    simSettings.maskNumber = 1;
+    simSettings.environmentType  = ENVIRONMENT_TYPE_RANDOM;
+
+    Environment env(simSettings);
+    testEnvironments.append(env);
+    int total = 0;
+    for (int i = 0; i < 250; i++)
+    {
+        env.mutate();
+        out << "Differences: " << env.countDifferences(testEnvironments[i]) << "\n";
+        total += env.countDifferences(testEnvironments[i]);
+        Environment newEnvironment(env, false);
+        testEnvironments.append(newEnvironment);
+    }
+
+    out << "\n\nMean: " << (total / 250);
+
     return testFlag;
 }
 
