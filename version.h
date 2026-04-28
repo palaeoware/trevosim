@@ -10,7 +10,7 @@
 #define FILEVERSION 1
 
 //Legal Stuff
-#define COPYRIGHT "Copyright © 2018-2023 Russell J. Garwood, Mark D. Sutton, Alan R.T. Spencer"
+#define COPYRIGHT "Copyright © 2018-2026 Russell J. Garwood, Mark D. Sutton, Alan R.T. Spencer"
 #define LICENCE "This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under the conditions of the GPL v3  license"
 
 //Programme Name
