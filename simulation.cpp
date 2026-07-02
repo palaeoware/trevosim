@@ -48,7 +48,7 @@ simulation::simulation(int runsCon, const simulationVariables *simSettingsCon, b
     runSelectSize = simSettings->speciesSelectSize;
     runFitnessSize = simSettings->fitnessSize;
     runFitnessTarget = simSettings->fitnessTarget;
-    int runMaskNumber = simSettings->maskNumber;
+    //int runMaskNumber = simSettings->maskNumber;
     runEnvironmentNumber = simSettings->environmentNumber;
     runSpeciesDifference = simSettings->speciesDifference;
     runMixingProbabilityOneToZero = simSettings->mixingProbabilityOneToZero;

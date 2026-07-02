@@ -30,7 +30,7 @@
  * ---- This object has a run and Fitness histogram function, local copies of important settings for the run (which change sometimes during a run)
  * -- There are lots of private functions to aid the simulation such as e.g. fitness, allowing these to tested individually
  * ---- The run function is sent a pointer to mainWindow, which is uses to communicate with the main window when a single run is occurring. When a batch is running, it is not sent this pointer, allowing batches to run in parallel
- * -- Tests are a friend class to simulation, providing under the hood access to the simulation. They are run on compile, and will throw an error if any fail
+ * -- Tests are a friend class to simulation, providing under the hood access to the simulation. They can be accessed through the menu in the software, or can be run on compile and the compiler set to throw an error if any fail
  * -- Simulation variables - this object contains the variables of the simulation. It is sent as a const to the simulation which makes local copies, and modified by the output and simulation classes. It also has functions to load, save and print setings
  * -- MainWindow - This handles the GUI and interacts with the other objects allowing user input etc.
  *

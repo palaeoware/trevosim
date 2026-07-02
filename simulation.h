@@ -23,7 +23,7 @@ public:
 
     friend class testinternal;
 
-private:
+protected:
     //Variables for a run
     int runGenomeSize;
     int runSelectSize;
