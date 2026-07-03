@@ -105,6 +105,8 @@ qt_add_executable(${TREVOSIM_APP}
     ${app_icon_resource_windows}
     resources.qrc
     environment.h environment.cpp
+    phylogenysim.h phylogenysim.cpp
+    ecologysim.h ecologysim.cpp
 )
 
 # Links the required QT libs to the main TREvoSim executable
