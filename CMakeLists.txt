@@ -89,6 +89,8 @@ set(app_sources
     darkstyletheme.cpp darkstyletheme.h
     testinternal.cpp testinternal.h
     environment.cpp environment.h
+    phylogenysim.h phylogenysim.cpp
+    ecologysim.h ecologysim.cpp
     .astylerc
 )
 
@@ -104,9 +106,6 @@ qt_add_executable(${TREVOSIM_APP}
     ${app_icon_macos}
     ${app_icon_resource_windows}
     resources.qrc
-    environment.h environment.cpp
-    phylogenysim.h phylogenysim.cpp
-    ecologysim.h ecologysim.cpp
 )
 
 # Links the required QT libs to the main TREvoSim executable

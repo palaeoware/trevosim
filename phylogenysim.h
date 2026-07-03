@@ -6,7 +6,8 @@
 class phylogenysim : public simulation
 {
 public:
-    phylogenysim();
+    using simulation::simulation;
+    //phylogenysim();
 };
 
 #endif // PHYLOGENYSIM_H

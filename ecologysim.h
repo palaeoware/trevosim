@@ -6,7 +6,8 @@
 class ecologysim : public simulation
 {
 public:
-    ecologysim();
+    using simulation::simulation;
+    //ecologysim();
 };
 
 #endif // ECOLOGYSIM_H
